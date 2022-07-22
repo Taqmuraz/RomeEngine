@@ -5,15 +5,16 @@ namespace OneEngine
 {
 	public sealed class GameObject : Game.GameThreadHandler
 	{
-		public Transform transform { get; private set; }
+		public Transform Transform { get; private set; }
 
-		public string name { get; set; }
+		public string Name { get; set; }
 
 		public GameObject(string name)
 		{
-			this.name = name;
-			transform = AddComponent<Transform>();
+			this.Name = name;
 			componentSearch = components.Concat(inOrderToAdd).Except(inOrderToRemove);
+
+			Transform = AddComponent<Transform>();
 			GameScene.activeScene.AddGameObject(this);
 		}
 
@@ -25,12 +26,15 @@ namespace OneEngine
 
 		public override string ToString()
 		{
-			return name;
+			return Name;
 		}
 
 		public TComponent AddComponent<TComponent>() where TComponent : Component, IInitializable<GameObject>, new()
 		{
 			var component = new TComponent();
+
+			if (component.IsUnary && GetComponent<TComponent>() != null) throw new System.ArgumentException("GameObject cant have two unary Components of the same type");
+
 			component.Initialize(this);
 			inOrderToAdd.Add(component);
 			component.CallEvent("Start");

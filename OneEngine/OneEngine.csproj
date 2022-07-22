@@ -49,6 +49,10 @@
     <Compile Include="Engine\IEngine.cs" />
     <Compile Include="Engine\IEngineRuntine.cs" />
     <Compile Include="Engine\ISystemInfo.cs" />
+    <Compile Include="Game\Animation\Animation.cs" />
+    <Compile Include="Game\Animation\AnimationKey.cs" />
+    <Compile Include="Game\Animation\AnimationLine.cs" />
+    <Compile Include="Game\Animation\Animator.cs" />
     <Compile Include="Game\BehaviourEventAttribute.cs" />
     <Compile Include="Game\BehaviourEventsHandler.cs" />
     <Compile Include="Game\Camera.cs" />
@@ -69,8 +73,12 @@
     <Compile Include="Game\Physics\QuadTree.cs" />
     <Compile Include="Game\Physics\RaycastHit.cs" />
     <Compile Include="Game\Physics\RoomCollider.cs" />
-    <Compile Include="Game\Renderer.cs" />
-    <Compile Include="Game\TextRenderer.cs" />
+    <Compile Include="Game\Rendering\EllipseRenderer.cs" />
+    <Compile Include="Game\Rendering\Line.cs" />
+    <Compile Include="Game\Rendering\LineRenderer.cs" />
+    <Compile Include="Game\Rendering\PolygonRenderer.cs" />
+    <Compile Include="Game\Rendering\Renderer.cs" />
+    <Compile Include="Game\Rendering\TextRenderer.cs" />
     <Compile Include="Game\Time.cs" />
     <Compile Include="Game\Transform.cs" />
     <Compile Include="Graphics\IGraphics.cs" />

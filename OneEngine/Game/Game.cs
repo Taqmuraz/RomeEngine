@@ -12,7 +12,7 @@ namespace OneEngine
 		public abstract class GameThreadHandler : BehaviourEventsHandler
 		{
 			bool m_active;
-			public bool isActive
+			public bool IsActive
 			{
 				get => m_active && !destroyed;
 				set => m_active = value;
@@ -22,7 +22,7 @@ namespace OneEngine
 
 			public GameThreadHandler()
 			{
-				isActive = true;
+				IsActive = true;
 				handlersToAdd.Add(this);
 			}
 

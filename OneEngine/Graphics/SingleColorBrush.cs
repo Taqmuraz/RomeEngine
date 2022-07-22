@@ -2,7 +2,7 @@
 {
     public sealed class SingleColorBrush : IGraphicsBrush
     {
-        public SingleColorBrush(Color32 color, int size)
+        public SingleColorBrush(Color32 color, int size = 5)
         {
             Color = color;
             Size = size;

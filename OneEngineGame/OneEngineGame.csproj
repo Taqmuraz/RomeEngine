@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FpsRenderer.cs" />
+    <Compile Include="HumanAnimation.cs" />
+    <Compile Include="HumanBone.cs" />
+    <Compile Include="HumanModel.cs" />
     <Compile Include="OneEngineGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -49,6 +53,9 @@
       <Project>{BFB7B952-3ABF-4258-9427-07D40FF4C0E1}</Project>
       <Name>OneEngine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Human\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

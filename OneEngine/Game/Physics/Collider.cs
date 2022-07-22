@@ -36,7 +36,7 @@ namespace OneEngine
 				{
 					var other = colliders[j];
 
-					if (collider.gameObject != other.gameObject && collider.GetBounds().IntersectsWith(other.GetBounds()))
+					if (collider.GameObject != other.GameObject && collider.GetBounds().IntersectsWith(other.GetBounds()))
 					{
 						collider.AddContactsWith(other, collision);
 					}
@@ -96,14 +96,14 @@ namespace OneEngine
 		{
 			float minDist2 = a.radius + b.radius;
 			minDist2 *= minDist2;
-			Vector2 dist = a.transform.TransformPoint(a.center) - b.transform.TransformPoint(b.center);
+			Vector2 dist = a.Transform.TransformPoint(a.center) - b.Transform.TransformPoint(b.center);
 			Vector2 dist2 = dist * dist;
 
 			if (minDist2 >= (dist2.x + dist2.y))
 			{
 				var contact = new ContactData();
 				contact.hitNormal = dist;
-				contact.hitPoint = b.transform.TransformPoint(contact.hitNormal * b.radius);
+				contact.hitPoint = b.Transform.TransformPoint(contact.hitNormal * b.radius);
 				data.AddContact(contact);
 				return true;
 			}
@@ -111,11 +111,11 @@ namespace OneEngine
 		}
 		protected static bool Intersection_Box_Circle(BoxCollider box, CircleCollider circle, Collision data)
 		{
-			var boxCenter = box.transform.TransformPoint(box.center);
-			var circleCenter = circle.transform.TransformPoint(circle.center);
+			var boxCenter = box.Transform.TransformPoint(box.center);
+			var circleCenter = circle.Transform.TransformPoint(circle.center);
 
 			Vector2 local_circle_center = circleCenter - boxCenter;
-			local_circle_center = new Vector2(Vector2.Dot(box.transform.right, local_circle_center), Vector2.Dot(box.transform.up, local_circle_center));
+			local_circle_center = new Vector2(Vector2.Dot(box.Transform.LocalRight, local_circle_center), Vector2.Dot(box.Transform.LocalUp, local_circle_center));
 
 			Vector2 diff = local_circle_center;
 			Vector2 hSize = box.size * 0.5f;
@@ -126,8 +126,8 @@ namespace OneEngine
 				float diffAxis = Mathf.Round(diff.ToAngle() / 90f) * 90f;
 
 				var contact = new ContactData();
-				contact.hitPoint = box.transform.TransformPoint(diff);
-				contact.hitNormal = box.transform.TransformVector(-new Vector2(Mathf.Cos(diffAxis), Mathf.Sin(diffAxis)));
+				contact.hitPoint = box.Transform.TransformPoint(diff);
+				contact.hitNormal = box.Transform.TransformVector(-new Vector2(Mathf.Cos(diffAxis), Mathf.Sin(diffAxis)));
 				data.AddContact(contact);
 				return true;
 			}

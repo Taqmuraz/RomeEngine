@@ -19,27 +19,23 @@ namespace OneEngine
         }
 
         public Color32 ClearColor { get; set; } = Color32.blue;
-        public Vector2 OrthographicSize { get; set; } = Vector2.one;
+        public Vector2 OrthographicSize
+        {
+            get => Transform.LocalScale;
+            set => Transform.LocalScale = value;
+        }
 
         public Matrix3x3 Projection
         {
             get
             {
-                Vector2 screenSize = Engine.Instance.Runtime.SystemInfo.ScreenSize / OrthographicSize;
+                Vector2 screenSize = Engine.Instance.Runtime.SystemInfo.ScreenSize;
                 return Matrix3x3.Viewport(screenSize.x, screenSize.y);
             }
         }
 
-        Matrix3x3 ViewMatrix
-        {
-            get
-            {
-                var l2w = transform.localToWorld;
-                l2w.Column_0 *= OrthographicSize.x;
-                l2w.Column_1 *= OrthographicSize.y;
-                return l2w;
-            }
-        }
+        Matrix3x3 ViewMatrix => Transform.LocalToWorld;
+
         public Vector2 WorldToScreen(Vector2 world)
         {
             return WorldToScreenMatrix.MultiplyPoint(world);

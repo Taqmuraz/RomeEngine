@@ -31,7 +31,7 @@ namespace OneEngine
 			for (int i = 0; i < lines.Count; i++)
 			{
 				var line = lines[i];
-				graphics.Brush = new SingleColorBrush(line.color, 5);
+				graphics.Brush = new SingleColorBrush(line.color);
 				graphics.DrawLine(camera.WorldToScreen(line.a), camera.WorldToScreen(line.b));
 			}
 			lines.Clear();

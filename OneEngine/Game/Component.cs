@@ -3,37 +3,46 @@
 	public class Component : BehaviourEventsHandler, IInitializable<GameObject>
 	{
 		bool destroyed;
+		static int id = 0;
+		int localID;
 
-		public string name => gameObject.name;
+		public string Name => GameObject.Name;
+		public virtual bool IsUnary { get; }
 
-		public Transform transform { get; private set; }
+		public virtual Transform Transform => GetTransform();
+		internal protected virtual Transform GetTransform()
+		{
+			return transform;
+		}
+		Transform transform;
 
-		public GameObject gameObject { get; private set; }
+		public GameObject GameObject { get; private set; }
 
 		protected override void OnEventCall(string name)
 		{
 			base.OnEventCall(name);
-			if (gameObject == null) throw new System.Exception("Can't call event on destroyed component");
+			if (GameObject == null) throw new System.Exception("Can't call event on destroyed component");
 		}
 
 		void IInitializable<GameObject>.Initialize(GameObject arg)
 		{
-			gameObject = arg;
-			transform = gameObject.transform;
+			GameObject = arg;
+			transform = GameObject.Transform;
+			localID = id++;
 		}
 
 		public void Destroy()
 		{
 			if (!destroyed)
 			{
-				gameObject.RemoveComponent(this);
+				GameObject.RemoveComponent(this);
 				destroyed = true;
 			}
 		}
 
 		public override string ToString()
 		{
-			return gameObject.name;
+			return GameObject.Name + "_" + localID;
 		}
 	}
 }

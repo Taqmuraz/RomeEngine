@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace OneEngine
 {
     public abstract class Renderer : Component
     {
         static List<Renderer> renderers = new List<Renderer>();
+
+        public int Queue { get; set; }
 
         [BehaviourEvent]
         void Start()
@@ -19,10 +22,16 @@ namespace OneEngine
 
         public static void UpdateGraphics(IGraphics graphics, Camera camera)
         {
+            graphics.Style = graphics.FillStyle;
             graphics.Clear(camera.ClearColor);
-            foreach (var renderer in renderers)
+            camera.Transform.LocalPosition += Input.GetWASD() * Time.deltaTime * 10f;
+
+            if (Input.GetKeyDown(KeyCode.Q)) camera.OrthographicSize *= 2f;
+            if (Input.GetKeyDown(KeyCode.E)) camera.OrthographicSize *= 0.5f;
+
+            foreach (var renderer in renderers.OrderBy(r => r.Queue))
             {
-                graphics.Transform = camera.WorldToScreenMatrix * renderer.transform.localToWorld;
+                graphics.Transform = camera.WorldToScreenMatrix * renderer.Transform.LocalToWorld;
                 renderer.OnGraphicsUpdate(graphics, camera);
             }
         }
