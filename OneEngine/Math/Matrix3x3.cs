@@ -20,6 +20,7 @@ namespace OneEngine
 
         public static Matrix3x3 Viewport(float width, float height)
         {
+			height *= width / height;
 			return new Matrix3x3()
 			{
 				Column_0 = new Vector3(width * 0.5f, 0f, 0f),
