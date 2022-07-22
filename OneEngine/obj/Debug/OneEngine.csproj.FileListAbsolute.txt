@@ -4,3 +4,9 @@ C:\VisualStudioProjects\GameEngine2D\OneEngine\bin\Debug\OneEngine.dll
 C:\VisualStudioProjects\GameEngine2D\OneEngine\bin\Debug\OneEngine.pdb
 C:\VisualStudioProjects\GameEngine2D\OneEngine\obj\Debug\OneEngine.dll
 C:\VisualStudioProjects\GameEngine2D\OneEngine\obj\Debug\OneEngine.pdb
+C:\VisualStudioProjects\OneEngine\OneEngine\obj\Debug\OneEngine.csproj.AssemblyReference.cache
+C:\VisualStudioProjects\OneEngine\OneEngine\obj\Debug\OneEngine.csproj.CoreCompileInputs.cache
+C:\VisualStudioProjects\OneEngine\OneEngine\obj\Debug\OneEngine.dll
+C:\VisualStudioProjects\OneEngine\OneEngine\obj\Debug\OneEngine.pdb
+C:\VisualStudioProjects\OneEngine\OneEngine\bin\Debug\OneEngine.dll
+C:\VisualStudioProjects\OneEngine\OneEngine\bin\Debug\OneEngine.pdb

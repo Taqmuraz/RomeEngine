@@ -1,4 +1,7 @@
-﻿namespace OneEngine
+﻿using System;
+using System.Drawing.Drawing2D;
+
+namespace OneEngine
 {
 	public struct Matrix3x3
 	{
@@ -15,7 +18,17 @@
 			this.row_2 = row_2;
 		}
 
-		public static Matrix3x3 WorldTransform(Vector2 right, Vector2 up, Vector2 translate)
+        public static Matrix3x3 Viewport(float width, float height)
+        {
+			return new Matrix3x3()
+			{
+				Column_0 = new Vector3(width * 0.5f, 0f, 0f),
+				Column_1 = new Vector3(0f, -height * 0.5f, 0f),
+				Column_2 = new Vector3(width * 0.5f, height * 0.5f, 1f)
+			};
+        }
+
+        public static Matrix3x3 WorldTransform(Vector2 right, Vector2 up, Vector2 translate)
 		{
 			return new Matrix3x3()
 			{

@@ -50,7 +50,7 @@ namespace OneEngine
 			return new SizeF(v.x, v.y);
 		}
 
-		public static explicit operator Vector2 (Point v)
+		public static implicit operator Vector2 (Point v)
 		{
 			return new Vector2 (v.X, v.Y);
 		}
@@ -59,7 +59,7 @@ namespace OneEngine
 			return new Vector2 (v.X, v.Y);
 		}
 
-		public static explicit operator Vector2(Size v)
+		public static implicit operator Vector2(Size v)
 		{
 			return new Vector2(v.Width, v.Height);
 		}

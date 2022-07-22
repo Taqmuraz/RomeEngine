@@ -4,6 +4,7 @@ using System.Drawing;
 
 using OneEngine;
 using System.Linq;
+using OneEngineGame;
 
 namespace OneEngineWindowsFormsApplication
 {
@@ -36,30 +37,78 @@ namespace OneEngineWindowsFormsApplication
         {
             canvas.Size = Size;
         }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            canvas.InputHandler.OnKeyDown((KeyCode)(int)e.KeyCode);
+        }
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            canvas.InputHandler.OnKeyUp((KeyCode)(int)e.KeyCode);
+        }
     }
-    class GameCanvas : Panel
+    class GameCanvas : Panel, IEngineRuntine, ISystemInfo
     {
+        IEngine engine;
         CanvasGraphics graphics = new CanvasGraphics();
+
+        public ISystemInfo SystemInfo => this;
+        public Vector2 ScreenSize => new Vector2(Width, Height);
+        public IInputHandler InputHandler { get; private set; }
+
+        public void SetInputHandler(IInputHandler inputHandler)
+        {
+            InputHandler = inputHandler;
+        }
+
+        public void Log(string message)
+        {
+
+        }
 
         public GameCanvas()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
+
+            engine = OneEngineGame.OneEngineGame.StartGame(this);
+
             Timer timer = new Timer();
-            timer.Tick += (s, e) => Refresh();
+            timer.Tick += (s, e) => UpdateEngine();
             timer.Interval = 20;
             timer.Start();
+        }
+
+        void UpdateEngine()
+        {
+            engine.UpdateGameState();
+            Refresh();
+        }
+
+        void OnMouseButton(Vector2 position, MouseButtons buttons, Action<Vector2, int> callback)
+        {
+            if (buttons.HasFlag(MouseButtons.Left)) callback(position, 0);
+            if (buttons.HasFlag(MouseButtons.Right)) callback(position, 1);
+            if (buttons.HasFlag(MouseButtons.Middle)) callback(position, 2);
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            OnMouseButton(e.Location, e.Button, InputHandler.OnMouseDown);
+        }
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            OnMouseButton(e.Location, e.Button, InputHandler.OnMouseUp);
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            OnMouseButton(e.Location, MouseButtons.Left, (pos, button) => InputHandler.OnMouseMove(pos));
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             graphics.Graphics = e.Graphics;
-            graphics.Clear(Color.Black);
-
-            graphics.Style = graphics.FillStyle;
-            graphics.Brush = new CanvasBrush(Color.White, 10);
-            graphics.DrawLine(new Vector2(150f, 150f), new Vector2(150f, 50f), 25f, 50f);
-            graphics.Brush = new CanvasBrush(Color.Gray, 10);
-            graphics.DrawLine(new Vector2(150f, 175f), new Vector2(250f, 250f));
+            graphics.ScreenSize = Size;
+            engine.UpdateGraphics(graphics);
         }
     }
     class CanvasBrush : IGraphicsBrush
@@ -108,13 +157,27 @@ namespace OneEngineWindowsFormsApplication
             nonAllocPoints = new PointF[128][];
             for (int i = 0; i < nonAllocPoints.Length; i++) nonAllocPoints[i] = new PointF[i];
         }
+
+        public void DrawText(Vector2 position, string text, int fontSize)
+        {
+            DrawInReversedScale(() => Graphics.DrawString(text, CanvasGraphics.CreateFont(fontSize), Brush, position));
+        }
+        protected void DrawInReversedScale(Action drawAction)
+        {
+            var transform = Graphics.Transform;
+            var reversed = transform.Clone();
+            reversed.Scale(1f, -1f);
+            Graphics.Transform = reversed;
+            drawAction();
+            Graphics.Transform = transform;
+        }
     }
 
     class CanvasFillStyle : CanvasStyleBase, ICanvasStyle
     {
         public void DrawPoint(Vector2 position, float radius)
         {
-            Graphics.FillEllipse(Brush, position.x - radius, position.y - radius, radius * 2f, radius * 2f);
+            DrawEllipse(new Vector2(position.x - radius, position.y - radius), new Vector2(radius * 2f, radius * 2f));
         }
 
         public void DrawLine(Vector2 a, Vector2 b)
@@ -135,11 +198,6 @@ namespace OneEngineWindowsFormsApplication
             nonAllocLinePoints[2] = lineMatrix.MultiplyPoint(new Vector2(length, -widthB));
             nonAllocLinePoints[3] = lineMatrix.MultiplyPoint(new Vector2(0f, -widthA));
             Graphics.FillPolygon(Brush, nonAllocLinePoints);
-        }
-
-        public void DrawText(Vector2 position, string text, int fontSize)
-        {
-            Graphics.DrawString(text, CanvasGraphics.CreateFont(fontSize), Brush, position);
         }
 
         public void DrawEllipse(Vector2 center, Vector2 size)
@@ -164,7 +222,7 @@ namespace OneEngineWindowsFormsApplication
     {
         public void DrawPoint(Vector2 position, float radius)
         {
-            Graphics.DrawEllipse(Pen, position.x - radius, position.y - radius, radius * 2f, radius * 2f);
+            DrawEllipse(new Vector2(position.x - radius, position.y - radius), new Vector2(radius * 2f, radius * 2f));
         }
 
         public void DrawLine(Vector2 a, Vector2 b)
@@ -187,14 +245,9 @@ namespace OneEngineWindowsFormsApplication
             Graphics.DrawPolygon(Pen, nonAllocLinePoints);
         }
 
-        public void DrawText(Vector2 position, string text, int fontSize)
-        {
-            Graphics.DrawString(text, CanvasGraphics.CreateFont(fontSize), Brush, position);
-        }
-
         public void DrawEllipse(Vector2 center, Vector2 size)
         {
-            Graphics.DrawEllipse(Pen, new RectangleF(center - size * 0.5f, size));
+            DrawInReversedScale(() => Graphics.DrawEllipse(Pen, new RectangleF(center - size * 0.5f, size)));
         }
 
         public void DrawRect(Rect rect)
@@ -212,7 +265,17 @@ namespace OneEngineWindowsFormsApplication
 
     class CanvasGraphics : IGraphics
     {
-        public Matrix3x3 Transform { get; set; } = Matrix3x3.identity;
+        public Matrix3x3 Transform
+        {
+            get => transform;
+            set
+            {
+                transform = value;
+                Graphics.Transform = new System.Drawing.Drawing2D.Matrix(value.Column_0.x, value.Column_0.y, value.Column_1.x, value.Column_1.y, value.Column_2.x, value.Column_2.y);
+            }
+        }
+        Matrix3x3 transform = Matrix3x3.identity;
+
         public IGraphicsBrush Brush { get; set; } = CanvasBrush.Default;
         public IGraphicsStyle Style
         {
@@ -230,6 +293,7 @@ namespace OneEngineWindowsFormsApplication
         ICanvasStyle style;
 
         public Graphics Graphics { get; set; }
+        public Vector2 ScreenSize { get; set; }
 
         public CanvasGraphics()
         {

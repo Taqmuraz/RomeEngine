@@ -71,6 +71,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OneEngineGame\OneEngineGame.csproj">
+      <Project>{3A6C8B9F-4F72-4D65-B53B-E50D2B2F0230}</Project>
+      <Name>OneEngineGame</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OneEngine\OneEngine.csproj">
       <Project>{bfb7b952-3abf-4258-9427-07d40ff4c0e1}</Project>
       <Name>OneEngine</Name>

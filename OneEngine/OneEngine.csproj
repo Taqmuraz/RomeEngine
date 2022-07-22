@@ -42,9 +42,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\ReadOnlyArray.cs" />
+    <Compile Include="Collections\ReadOnlyArrayList.cs" />
+    <Compile Include="Collections\SafeDictionary.cs" />
+    <Compile Include="Engine\Engine.cs" />
+    <Compile Include="Engine\IEngine.cs" />
+    <Compile Include="Engine\IEngineRuntine.cs" />
+    <Compile Include="Engine\ISystemInfo.cs" />
+    <Compile Include="Game\BehaviourEventAttribute.cs" />
+    <Compile Include="Game\BehaviourEventsHandler.cs" />
+    <Compile Include="Game\Camera.cs" />
+    <Compile Include="Game\Component.cs" />
+    <Compile Include="Game\Debug.cs" />
+    <Compile Include="Game\GameObject.cs" />
+    <Compile Include="Game\GameObjectInstancer.cs" />
+    <Compile Include="Game\GameScene.cs" />
+    <Compile Include="Game\GameScenes.cs" />
+    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\IInitializable.cs" />
+    <Compile Include="Game\Physics\BoxCollider.cs" />
+    <Compile Include="Game\Physics\CircleCollider.cs" />
+    <Compile Include="Game\Physics\Collider.cs" />
+    <Compile Include="Game\Physics\Collision.cs" />
+    <Compile Include="Game\Physics\ContactData.cs" />
+    <Compile Include="Game\Physics\ILocatable.cs" />
+    <Compile Include="Game\Physics\QuadTree.cs" />
+    <Compile Include="Game\Physics\RaycastHit.cs" />
+    <Compile Include="Game\Physics\RoomCollider.cs" />
+    <Compile Include="Game\Renderer.cs" />
+    <Compile Include="Game\TextRenderer.cs" />
+    <Compile Include="Game\Time.cs" />
+    <Compile Include="Game\Transform.cs" />
     <Compile Include="Graphics\IGraphics.cs" />
     <Compile Include="Graphics\IGraphicsBrush.cs" />
     <Compile Include="Graphics\IGraphicsStyle.cs" />
+    <Compile Include="Graphics\SingleColorBrush.cs" />
+    <Compile Include="Input\Input.cs" />
     <Compile Include="Math\Color32.cs" />
     <Compile Include="Math\Mathf.cs" />
     <Compile Include="Math\Matrix2x2.cs" />
@@ -57,5 +90,6 @@
     <Compile Include="OneEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
