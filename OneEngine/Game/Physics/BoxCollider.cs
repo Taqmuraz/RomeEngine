@@ -7,10 +7,10 @@
 
 		public override Rect GetBounds()
 		{
-			Vector2 upperRight = Transform.TransformPoint(center + new Vector2(size.x * 0.5f, size.y * 0.5f));
-			Vector2 upperLeft = Transform.TransformPoint(center + new Vector2(-size.x * 0.5f, size.y * 0.5f));
-			Vector2 downRight = Transform.TransformPoint(center + new Vector2(size.x * 0.5f, -size.y * 0.5f));
-			Vector2 downLeft = Transform.TransformPoint(center + new Vector2(-size.x * 0.5f, -size.y * 0.5f));
+			Vector2 upperRight = Transform.TransformPointLocal(center + new Vector2(size.x * 0.5f, size.y * 0.5f));
+			Vector2 upperLeft = Transform.TransformPointLocal(center + new Vector2(-size.x * 0.5f, size.y * 0.5f));
+			Vector2 downRight = Transform.TransformPointLocal(center + new Vector2(size.x * 0.5f, -size.y * 0.5f));
+			Vector2 downLeft = Transform.TransformPointLocal(center + new Vector2(-size.x * 0.5f, -size.y * 0.5f));
 
 			Vector2 uMin = Vector2.Min(upperLeft, upperRight);
 			Vector2 dMin = Vector2.Min(downLeft, downRight);

@@ -74,10 +74,14 @@
     <Compile Include="Game\Physics\RaycastHit.cs" />
     <Compile Include="Game\Physics\RoomCollider.cs" />
     <Compile Include="Game\Rendering\EllipseRenderer.cs" />
+    <Compile Include="Game\Rendering\GraphicsAdapter.cs" />
     <Compile Include="Game\Rendering\Line.cs" />
     <Compile Include="Game\Rendering\LineRenderer.cs" />
+    <Compile Include="Game\Rendering\OutlineRendererPass.cs" />
     <Compile Include="Game\Rendering\PolygonRenderer.cs" />
     <Compile Include="Game\Rendering\Renderer.cs" />
+    <Compile Include="Game\Rendering\RendererPass.cs" />
+    <Compile Include="Game\Rendering\StandardRendererPass.cs" />
     <Compile Include="Game\Rendering\TextRenderer.cs" />
     <Compile Include="Game\Time.cs" />
     <Compile Include="Game\Transform.cs" />

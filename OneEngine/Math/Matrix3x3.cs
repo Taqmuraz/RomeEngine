@@ -259,6 +259,10 @@ namespace OneEngine
 		{
 			return (Vector2)(this * vector);
 		}
+		public Vector2 MultiplyScale(Vector2 scale)
+		{
+			return new Vector2(Column_0.length * scale.x, Column_1.length * scale.y);
+		}
 
 		public override string ToString()
 		{

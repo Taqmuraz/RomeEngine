@@ -18,6 +18,20 @@
 			this.b = (byte)(b * 255f);
 			this.a = (byte)(a * 255f);
 		}
+		public Color32(int argb)
+		{
+			a = (byte)((argb >> 24) & 255);
+			r = (byte)((argb >> 16) & 255);
+			g = (byte)((argb >> 8) & 255);
+			b = (byte)(argb & 255);
+		}
+		public Color32(int rgb, byte alpha)
+		{
+			a = alpha;
+			r = (byte)((rgb >> 16) & 255);
+			g = (byte)((rgb >> 8) & 255);
+			b = (byte)(rgb & 255);
+		}
 
 		public static readonly Color32 red = new Color32 (255, 0, 0, 255);
 		public static readonly Color32 green = new Color32 (0, 255, 0, 255);

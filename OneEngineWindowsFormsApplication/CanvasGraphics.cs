@@ -28,7 +28,7 @@ namespace OneEngineWindowsFormsApplication
                 else throw new ArgumentException("Style must implement the ICanvasStyle interface");
             }
         }
-        public IGraphicsStyle DrawStyle => drawStyle;
+        public IGraphicsStyle OutlineStyle => drawStyle;
         public IGraphicsStyle FillStyle => fillStyle;
         ICanvasStyle drawStyle;
         ICanvasStyle fillStyle;
@@ -39,7 +39,7 @@ namespace OneEngineWindowsFormsApplication
 
         public CanvasGraphics()
         {
-            drawStyle = new CanvasDrawStyle();
+            drawStyle = new CanvasOutlineStyle();
             fillStyle = new CanvasFillStyle();
             style = drawStyle;
         }
@@ -49,6 +49,8 @@ namespace OneEngineWindowsFormsApplication
             style.Brush = new SolidBrush(Brush.Color);
             style.Pen = new Pen(Brush.Color, Brush.Size);
             style.Graphics = Graphics;
+            style.Transform = Transform;
+            style.Setup();
             return style;
         }
 
@@ -62,9 +64,9 @@ namespace OneEngineWindowsFormsApplication
             SetupStyle().DrawLine(a, b);
         }
 
-        public void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB)
+        public void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB, bool smoothEnding)
         {
-            SetupStyle().DrawLine(a, b, widthA, widthB);
+            SetupStyle().DrawLine(a, b, widthA, widthB, smoothEnding);
         }
 
         public void DrawText(Vector2 position, string text, int fontSize)

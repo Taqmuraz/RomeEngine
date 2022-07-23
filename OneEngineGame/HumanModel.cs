@@ -1,5 +1,6 @@
 ﻿using OneEngine;
 using System;
+using System.Collections.Generic;
 
 namespace OneEngineGame
 {
@@ -9,12 +10,52 @@ namespace OneEngineGame
         ReadOnlyArray<HumanAnimation> animations;
         Transform[] skeleton;
         Action<Transform>[] boneBuilders;
+        Color32[] colors;
+        int[] queues;
+        event Action<int> QueueChanged;
+
+        public int Queue
+        {
+            get => queue;
+            set
+            {
+                queue = value;
+                if (QueueChanged != null) QueueChanged(value);
+            }
+        }
+        int queue;
 
         [BehaviourEvent]
         void Start()
         {
             skeleton = new Transform[HumanBone.Count];
             boneBuilders = new Action<Transform>[HumanBone.Count];
+
+            Color32 skin = new Color32(0xf5cfb0, 255);
+            Color32 shirt = new Color32(0xc22828, 255);
+            Color32 pants = new Color32(0x423b7b, 255);
+            colors = new Color32[HumanBone.Count];
+            colors[HumanBone.Body] = shirt;
+            colors[HumanBone.Head] = skin;
+            colors[HumanBone.LeftLeg] = pants;
+            colors[HumanBone.RightLeg] = pants;
+            colors[HumanBone.LeftKnee] = pants;
+            colors[HumanBone.RightKnee] = pants;
+            colors[HumanBone.LeftArm] = shirt;
+            colors[HumanBone.RightArm] = shirt;
+            colors[HumanBone.LeftForearm] = skin;
+            colors[HumanBone.RightForearm] = skin;
+
+            queues = new int[HumanBone.Count];
+
+            queues[HumanBone.LeftArm] = 1;
+            queues[HumanBone.LeftForearm] = 2;
+            queues[HumanBone.RightArm] = -1;
+            queues[HumanBone.RightForearm] = -2;
+            queues[HumanBone.LeftLeg] = 1;
+            queues[HumanBone.RightLeg] = -1;
+            queues[HumanBone.LeftKnee] = 2;
+            queues[HumanBone.RightKnee] = -2;
 
             boneBuilders[HumanBone.Body] = BuildBodyBone;
             boneBuilders[HumanBone.Head] = BuildHeadBone;
@@ -37,6 +78,8 @@ namespace OneEngineGame
             CreateBone(HumanBone.RightLeg);
             CreateBone(HumanBone.LeftKnee);
             CreateBone(HumanBone.RightKnee);
+
+            Queue = 0;
         }
 
         const float HEAD_WIDTH = 0.2f;
@@ -44,7 +87,8 @@ namespace OneEngineGame
         const float NECK_LENGTH = 0.1f;
         const float BODY_LENGTH = 0.5f;
         const float BODY_WIDTH_TOP = 0.25f;
-        const float BODY_WIDTH_BOTTOM = 0.2f;
+        const float BODY_WIDTH_MID = 0.15f;
+        const float BODY_WIDTH_BOTTOM = 0.15f;
         const float ARM_LENGTH = 0.3f;
         const float ARM_WIDTH = 0.075f;
         const float SHOULDER_WIDTH = 0.1f;
@@ -58,8 +102,6 @@ namespace OneEngineGame
         const float KNEE_LENGTH = 0.35f;
         const float KNEE_WIDTH = 0.075f;
 
-        public Color32 Color { get; set; } = Color32.black;
-
         void BuildBodyBone(Transform body)
         {
             body.Transform.Parent = Transform;
@@ -68,9 +110,12 @@ namespace OneEngineGame
             var renderer = body.GameObject.AddComponent<LineRenderer>();
             renderer.SetLines
                 (
-                new Line(Vector2.zero, new Vector2(0f, BODY_LENGTH * 0.5f), Color, BODY_WIDTH_BOTTOM, (BODY_WIDTH_TOP + BODY_WIDTH_BOTTOM) * 0.3f),
-                new Line(new Vector2(0f, BODY_LENGTH * 0.5f), new Vector2(0f, BODY_LENGTH), Color, (BODY_WIDTH_TOP + BODY_WIDTH_BOTTOM) * 0.3f, BODY_WIDTH_TOP)
+                new Line(new Vector2(0f, BODY_WIDTH_BOTTOM * 0.5f), new Vector2(0f, BODY_LENGTH * 0.5f), colors[HumanBone.Body], BODY_WIDTH_BOTTOM, BODY_WIDTH_MID),
+                new Line(new Vector2(0f, BODY_LENGTH * 0.5f), new Vector2(0f, BODY_LENGTH - BODY_WIDTH_BOTTOM * 0.5f), colors[HumanBone.Body], BODY_WIDTH_MID, BODY_WIDTH_TOP)
                 );
+            renderer.SmoothEnding = true;
+
+            QueueChanged += q => renderer.Queue = q + queues[HumanBone.Body];
         }
         void BuildHeadBone(Transform head)
         {
@@ -81,10 +126,14 @@ namespace OneEngineGame
             ellipse.Transform.Parent = head;
             ellipse.Transform.LocalScale = new Vector2(HEAD_WIDTH, HEAD_HEIGHT);
             ellipse.Transform.LocalPosition = new Vector2(0f, NECK_LENGTH * 0.5f + HEAD_HEIGHT * 0.5f);
+            ellipse.Color = colors[HumanBone.Head];
 
             var neck = new GameObject("Head_Neck").AddComponent<LineRenderer>();
             neck.Transform.Parent = head;
-            neck.SetLines(new Line(Vector2.zero, new Vector2(0f, NECK_LENGTH), Color));
+            neck.SetLines(new Line(Vector2.zero, new Vector2(0f, NECK_LENGTH), colors[HumanBone.Head]));
+            neck.SmoothEnding = true;
+
+            QueueChanged += q => ellipse.Queue = neck.Queue = q + queues[HumanBone.Head];
         }
         void BuildArm(Transform arm, bool left)
         {
@@ -98,9 +147,13 @@ namespace OneEngineGame
             armShoulder.Transform.LocalScale = new Vector2(SHOULDER_LENGTH, SHOULDER_WIDTH);
             armShoulder.Transform.LocalPosition = new Vector2(SHOULDER_LENGTH * 0.5f, 0f);
 
+            armEllipse.Color = armShoulder.Color = colors[left ? HumanBone.LeftArm : HumanBone.RightArm];
+
             arm.Transform.LocalRotation = -100f + (left ? -10 : 10);
             arm.Transform.Parent = skeleton[HumanBone.Body];
             arm.Transform.LocalPosition = new Vector2(BODY_WIDTH_TOP * (left ? -0.5f : 0.5f), BODY_LENGTH);
+
+            QueueChanged += q => armEllipse.Queue = armShoulder.Queue = q + queues[left ? HumanBone.LeftArm : HumanBone.RightArm];
         }
         void BuildForearm(Transform forearm, bool left)
         {
@@ -114,29 +167,39 @@ namespace OneEngineGame
             forearmElbow.Transform.LocalScale = new Vector2(ELBOW_LENGTH, ELBOW_WIDTH);
             forearmElbow.Transform.LocalPosition = new Vector2(0f, 0f);
 
+            forearmEllipse.Color = forearmElbow.Color = colors[left ? HumanBone.LeftForearm : HumanBone.RightForearm];
+
             forearm.Transform.Parent = skeleton[left ? HumanBone.LeftArm : HumanBone.RightArm];
             forearm.LocalPosition = new Vector2(ARM_LENGTH, 0f);
             forearm.Transform.LocalRotation = 25f;
+
+            QueueChanged += q => forearmEllipse.Queue = forearmElbow.Queue = q + queues[left ? HumanBone.LeftForearm : HumanBone.RightForearm];
         }
         void BuildLeg(Transform leg, bool left)
         {
             var legLine = new GameObject("Leg_Line").AddComponent<LineRenderer>();
             legLine.Transform.Parent = leg;
-            legLine.SetLines(new Line(Vector2.zero, new Vector2(LEG_LENGTH, 0f), Color, LEG_WIDTH, KNEE_WIDTH));
+            legLine.SetLines(new Line(Vector2.zero, new Vector2(LEG_LENGTH, 0f), colors[left ? HumanBone.LeftLeg : HumanBone.RightLeg], LEG_WIDTH, KNEE_WIDTH));
+            legLine.SmoothEnding = true;
 
             leg.Transform.Parent = skeleton[HumanBone.Body];
-            leg.Transform.LocalPosition = new Vector2((BODY_WIDTH_BOTTOM * 0.5f - LEG_WIDTH * 0.5f) * (left ? -1f : 1f), LEG_WIDTH * 0.5f);
+            leg.Transform.LocalPosition = new Vector2((BODY_WIDTH_BOTTOM * 0.5f) * (left ? -1f : 1f), 0f);
             leg.Transform.LocalRotation = -90f + (left ? -15f : 30f);
+
+            QueueChanged += q => legLine.Queue = q + queues[left ? HumanBone.LeftLeg : HumanBone.RightLeg];
         }
         void BuildKnee(Transform knee, bool left)
         {
-            var legLine = new GameObject("Knee_Line").AddComponent<LineRenderer>();
-            legLine.Transform.Parent = knee;
-            legLine.SetLines(new Line(Vector2.zero, new Vector2(KNEE_LENGTH, 0f), Color, KNEE_WIDTH, KNEE_WIDTH));
+            var kneeLine = new GameObject("Knee_Line").AddComponent<LineRenderer>();
+            kneeLine.Transform.Parent = knee;
+            kneeLine.SetLines(new Line(Vector2.zero, new Vector2(KNEE_LENGTH, 0f), colors[left ? HumanBone.LeftKnee : HumanBone.RightKnee], KNEE_WIDTH, KNEE_WIDTH));
+            kneeLine.SmoothEnding = true;
 
             knee.Transform.Parent = skeleton[left ? HumanBone.LeftLeg : HumanBone.RightLeg];
             knee.Transform.LocalPosition = new Vector2(LEG_LENGTH, 0f);
             knee.Transform.LocalRotation = left ? -30f : -15f;
+
+            QueueChanged += q => kneeLine.Queue = q + queues[left ? HumanBone.LeftKnee : HumanBone.RightKnee];
         }
 
         Transform CreateBone(int humanBone)

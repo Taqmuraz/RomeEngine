@@ -7,7 +7,7 @@
 
 		public override Rect GetBounds()
 		{
-			return Rect.FromCenterAndSize(Transform.TransformPoint(center), new Vector2(radius * 2f, radius * 2f));
+			return Rect.FromCenterAndSize(Transform.TransformPointLocal(center), new Vector2(radius * 2f, radius * 2f));
 		}
 
 		protected override bool AddContactsWith(Collider collider, Collision data)

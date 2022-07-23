@@ -20,14 +20,15 @@
 		{
 			get
 			{
-				var local = Matrix3x3.WorldTransform(LocalRight * LocalScale.x, LocalUp * LocalScale.y, LocalPosition);
 				if (Parent != null)
 				{
-					return Parent.LocalToWorld * local;
+					return Parent.LocalToWorld * LocalMatrix;
 				}
-				return local;
+				return LocalMatrix;
 			}
 		}
+
+		public Matrix3x3 LocalMatrix => Matrix3x3.WorldTransform(LocalRight * LocalScale.x, LocalUp * LocalScale.y, LocalPosition);
 
 		public Transform Parent
 		{
@@ -43,11 +44,11 @@
 		}
 		Transform parent;
 
-		public Vector2 TransformPoint(Vector2 point)
+		public Vector2 TransformPointLocal(Vector2 point)
 		{
 			return LocalPosition + LocalRight * LocalScale.x * point.x + LocalUp * LocalScale.y * point.y;
 		}
-		public Vector2 TransformVector(Vector2 point)
+		public Vector2 TransformVectorLocal(Vector2 point)
 		{
 			return LocalRight * LocalScale.x * point.x + LocalUp * LocalScale.y * point.y;
 		}

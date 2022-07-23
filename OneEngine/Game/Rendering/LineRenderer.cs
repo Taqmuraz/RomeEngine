@@ -2,6 +2,8 @@
 {
     public sealed class LineRenderer : Renderer
     {
+        public bool SmoothEnding { get; set; }
+
         Line[] lines;
         public void SetLines(params Line[] lines)
         {
@@ -12,7 +14,7 @@
             foreach (var line in lines)
             {
                 graphics.Brush = new SingleColorBrush(line.Color);
-                graphics.DrawLine(line.PointA, line.PointB, line.WidthA, line.WidthB);
+                graphics.DrawLine(line.PointA, line.PointB, line.WidthA, line.WidthB, SmoothEnding);
             }
         }
     }

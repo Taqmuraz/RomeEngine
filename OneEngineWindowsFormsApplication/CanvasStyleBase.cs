@@ -10,6 +10,11 @@ namespace OneEngineWindowsFormsApplication
         public Graphics Graphics { get; set; }
         public SolidBrush Brush { get; set; }
         public Pen Pen { get; set; }
+        public Matrix3x3 Transform { get; set; }
+
+        public virtual void Setup()
+        {
+        }
 
         static PointF[][] nonAllocPoints;
 

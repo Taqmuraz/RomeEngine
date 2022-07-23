@@ -15,20 +15,25 @@ namespace OneEngineWindowsFormsApplication
         {
             Graphics.DrawLine(Pen, a, b);
         }
-        public void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB)
+        public void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB, bool smoothEnding)
         {
             var nonAllocLinePoints = AllocPoints(4);
             Vector3 diff = (b - a);
             float length = diff.length;
             Vector3 dir = diff.normalized;
             Matrix3x3 lineMatrix = Matrix3x3.New(dir, new Vector3(-dir.y, dir.x, 0f), a);
-            widthA *= 0.5f;
-            widthB *= 0.5f;
-            nonAllocLinePoints[0] = lineMatrix.MultiplyPoint(new Vector2(0f, widthA));
-            nonAllocLinePoints[1] = lineMatrix.MultiplyPoint(new Vector2(length, widthB));
-            nonAllocLinePoints[2] = lineMatrix.MultiplyPoint(new Vector2(length, -widthB));
-            nonAllocLinePoints[3] = lineMatrix.MultiplyPoint(new Vector2(0f, -widthA));
+            float halfWidthA = widthA * 0.5f;
+            float halfWidthB = widthB * 0.5f;
+            nonAllocLinePoints[0] = lineMatrix.MultiplyPoint(new Vector2(0f, halfWidthA));
+            nonAllocLinePoints[1] = lineMatrix.MultiplyPoint(new Vector2(length, halfWidthB));
+            nonAllocLinePoints[2] = lineMatrix.MultiplyPoint(new Vector2(length, -halfWidthB));
+            nonAllocLinePoints[3] = lineMatrix.MultiplyPoint(new Vector2(0f, -halfWidthA));
             Graphics.FillPolygon(Brush, nonAllocLinePoints);
+            if (smoothEnding)
+            {
+                DrawEllipse(a, new Vector2(widthA, widthA));
+                DrawEllipse(b, new Vector2(widthB, widthB));
+            }
         }
 
         public void DrawEllipse(Vector2 center, Vector2 size)

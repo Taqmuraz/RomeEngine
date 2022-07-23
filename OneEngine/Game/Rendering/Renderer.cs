@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace OneEngine
 {
     public abstract class Renderer : Component
     {
         static List<Renderer> renderers = new List<Renderer>();
+
+        static List<RendererPass> passes = new List<RendererPass>() { new OutlineRendererPass(), new StandardRendererPass() };
 
         public int Queue { get; set; }
 
@@ -22,17 +23,15 @@ namespace OneEngine
 
         public static void UpdateGraphics(IGraphics graphics, Camera camera)
         {
-            graphics.Style = graphics.FillStyle;
             graphics.Clear(camera.ClearColor);
-            camera.Transform.LocalPosition += Input.GetWASD() * Time.deltaTime * 10f;
+            camera.Transform.LocalPosition += Input.GetWASD() * Time.deltaTime;
 
             if (Input.GetKeyDown(KeyCode.Q)) camera.OrthographicSize *= 2f;
             if (Input.GetKeyDown(KeyCode.E)) camera.OrthographicSize *= 0.5f;
 
-            foreach (var renderer in renderers.OrderBy(r => r.Queue))
+            foreach (var pass in passes)
             {
-                graphics.Transform = camera.WorldToScreenMatrix * renderer.Transform.LocalToWorld;
-                renderer.OnGraphicsUpdate(graphics, camera);
+                pass.Pass(graphics, camera, renderers, (r, g, c) => r.OnGraphicsUpdate(g, c));
             }
         }
 
