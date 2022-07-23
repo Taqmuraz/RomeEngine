@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace OneEngine
 {
     public sealed class StandardRendererPass : RendererPass
     {
-        public override void Pass(IGraphics graphics, Camera camera, ReadOnlyArrayList<Renderer> renderers, Action<Renderer, IGraphics, Camera> drawCall)
+        public override void Pass(IGraphics graphics, Camera camera, IEnumerable<Renderer> renderers, Action<Renderer, IGraphics, Camera> drawCall)
         {
             graphics.Style = graphics.FillStyle;
 

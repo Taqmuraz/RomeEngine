@@ -11,6 +11,7 @@ namespace OneEngine
         void Start()
         {
             cameras.Add(this);
+            OrthographicMultiplier = 1f;
         }
         [BehaviourEvent]
         void OnDestroy()
@@ -19,17 +20,26 @@ namespace OneEngine
         }
 
         public Color32 ClearColor { get; set; } = Color32.white;
-        public Vector2 OrthographicSize
+
+        public Vector2 OrthographicSize { get; private set; }
+
+        public float OrthographicMultiplier
         {
-            get => Transform.LocalScale;
-            set => Transform.LocalScale = value;
+            get => orthographicMultiplier;
+            set
+            {
+                orthographicMultiplier = value;
+                OrthographicSize = new Vector2(value, value) * Screen.AspectRatio * 2f;
+                Transform.LocalScale = new Vector2(value, value);
+            }
         }
+        float orthographicMultiplier;
 
         public Matrix3x3 Projection
         {
             get
             {
-                Vector2 screenSize = Engine.Instance.Runtime.SystemInfo.ScreenSize;
+                Vector2 screenSize = Screen.Size;
                 return Matrix3x3.Viewport(screenSize.x, screenSize.y);
             }
         }
@@ -47,5 +57,7 @@ namespace OneEngine
 
         public Matrix3x3 WorldToScreenMatrix => Projection * ViewMatrix.GetInversed();
         public Matrix3x3 ScreenToWorldMatrix => ViewMatrix * Projection.GetInversed();
+
+        public Rect Volume => Rect.FromCenterAndSize(Transform.LocalPosition, OrthographicSize);
     }
 }

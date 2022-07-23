@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace OneEngine
 {
@@ -23,17 +24,26 @@ namespace OneEngine
 
         public static void UpdateGraphics(IGraphics graphics, Camera camera)
         {
-            graphics.Clear(camera.ClearColor);
-            camera.Transform.LocalPosition += Input.GetWASD() * Time.deltaTime;
+            graphics.Clear(Color32.black);
+            graphics.Transform = camera.WorldToScreenMatrix;
 
-            if (Input.GetKeyDown(KeyCode.Q)) camera.OrthographicSize *= 2f;
-            if (Input.GetKeyDown(KeyCode.E)) camera.OrthographicSize *= 0.5f;
+            graphics.Brush = new SingleColorBrush(camera.ClearColor);
+            graphics.DrawRect(Rect.FromCenterAndSize(camera.Transform.Position, camera.OrthographicSize));
+
+            camera.Transform.LocalPosition += Input.GetWASD() * Time.deltaTime * 5f;
+
+            if (Input.GetKeyDown(KeyCode.Q)) camera.OrthographicMultiplier *= 2f;
+            if (Input.GetKeyDown(KeyCode.E)) camera.OrthographicMultiplier *= 0.5f;
+
+            var renderers = Renderer.renderers.Where(r => r.IsInsideScreen(graphics, camera));
 
             foreach (var pass in passes)
             {
                 pass.Pass(graphics, camera, renderers, (r, g, c) => r.OnGraphicsUpdate(g, c));
             }
         }
+
+        protected abstract bool IsInsideScreen(IGraphics graphics, Camera camera);
 
         protected abstract void OnGraphicsUpdate(IGraphics graphics, Camera camera);
     }

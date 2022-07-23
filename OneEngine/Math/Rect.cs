@@ -15,9 +15,11 @@ namespace OneEngine
 
 		public Rect(Vector2 min, Vector2 max)
 		{
-			this.min = min;
-			this.max = max;
+			this.min = Vector2.Min(min, max);
+			this.max = Vector2.Max(min, max);
 		}
+
+		public float Volume => Mathf.Abs(size.x * size.y);
 
 		public static Rect FromCenterAndSize(Vector2 center, Vector2 size)
 		{

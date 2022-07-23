@@ -6,6 +6,9 @@
 		public float LocalRotation { get; set; }
 		public Vector2 LocalScale { get; set; } = Vector2.one;
 
+		public Vector2 Position => (Vector2)LocalToWorld.Column_2;
+		public Vector2 Scale => LocalToWorld.MultiplyScale(Vector2.one);
+
         public override bool IsUnary => true;
 
         public Vector2 LocalRight => new Vector2(Mathf.Cos(LocalRotation), Mathf.Sin(LocalRotation));

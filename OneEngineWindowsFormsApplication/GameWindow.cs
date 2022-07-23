@@ -14,7 +14,7 @@ namespace OneEngineWindowsFormsApplication
             canvas = new GameCanvas();
             canvas.Parent = this;
 
-            SetBounds(0, 0, 1024, 800);
+            SetBounds(0, 0, 1280, 640);
         }
 
         protected override void OnResize(EventArgs e)

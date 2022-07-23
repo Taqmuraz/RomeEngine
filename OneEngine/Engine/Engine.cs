@@ -30,7 +30,7 @@
 
         public void UpdateGraphics(IGraphics graphics)
         {
-            Renderer.UpdateGraphics(graphics, Camera.Cameras[0]);
+            Game.UpdateGraphics(graphics, Camera.Cameras[0]);
             Debug.DrawDebug(graphics, Camera.Cameras[0]);
         }
     }

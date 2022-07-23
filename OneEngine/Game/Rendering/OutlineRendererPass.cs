@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OneEngine
 {
@@ -16,16 +17,10 @@ namespace OneEngine
             IGraphicsBrush brush;
         }
 
-        float outlineSize = 0.1f;
-
-        public override void Pass(IGraphics graphics, Camera camera, ReadOnlyArrayList<Renderer> renderers, Action<Renderer, IGraphics, Camera> drawCall)
+        public override void Pass(IGraphics graphics, Camera camera, IEnumerable<Renderer> renderers, Action<Renderer, IGraphics, Camera> drawCall)
         {
             graphics = new BlackBrushGraphics(graphics);
             graphics.Style = graphics.OutlineStyle;
-
-            if (Input.GetKey(KeyCode.Z)) outlineSize -= 1f * Time.deltaTime;
-            if (Input.GetKey(KeyCode.C)) outlineSize += 1f * Time.deltaTime;
-            outlineSize = outlineSize.Clamp(0f, 1f);
 
             foreach (var renderer in renderers)
             {

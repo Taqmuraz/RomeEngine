@@ -10,5 +10,10 @@ namespace OneEngineGame
             //graphics.Transform = Matrix3x3.identity;
             graphics.DrawText(new Vector2(50f, 50f), $"Delta time : {Time.deltaTime}", 25);
         }
+
+        protected override bool IsInsideScreen(IGraphics graphics, Camera camera)
+        {
+            return true;
+        }
     }
 }

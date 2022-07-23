@@ -52,5 +52,10 @@ namespace OneEngineWindowsFormsApplication
             for (int i = 0; i < points.Length; i++) pointsF[i] = points[i];
             Graphics.FillPolygon(Brush, pointsF);
         }
+
+        public void DrawText(Vector2 position, string text, int fontSize)
+        {
+            DrawInReversedScale(() => Graphics.DrawString(text, CanvasGraphics.CreateFont(fontSize), Brush, position));
+        }
     }
 }

@@ -9,5 +9,9 @@
         {
             graphics.DrawText(Vector2.zero, Text, FontSize);
         }
+        protected override bool IsInsideScreen(IGraphics graphics, Camera camera)
+        {
+            return new Rect(Transform.Position, Transform.Scale).IntersectsWith(camera.Volume);
+        }
     }
 }

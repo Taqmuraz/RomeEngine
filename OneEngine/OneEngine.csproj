@@ -83,6 +83,7 @@
     <Compile Include="Game\Rendering\RendererPass.cs" />
     <Compile Include="Game\Rendering\StandardRendererPass.cs" />
     <Compile Include="Game\Rendering\TextRenderer.cs" />
+    <Compile Include="Game\Screen.cs" />
     <Compile Include="Game\Time.cs" />
     <Compile Include="Game\Transform.cs" />
     <Compile Include="Graphics\IGraphics.cs" />

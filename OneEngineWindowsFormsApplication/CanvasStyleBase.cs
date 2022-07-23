@@ -29,10 +29,6 @@ namespace OneEngineWindowsFormsApplication
             for (int i = 0; i < nonAllocPoints.Length; i++) nonAllocPoints[i] = new PointF[i];
         }
 
-        public void DrawText(Vector2 position, string text, int fontSize)
-        {
-            DrawInReversedScale(() => Graphics.DrawString(text, CanvasGraphics.CreateFont(fontSize), Brush, position));
-        }
         protected void DrawInReversedScale(Action drawAction)
         {
             var transform = Graphics.Transform;

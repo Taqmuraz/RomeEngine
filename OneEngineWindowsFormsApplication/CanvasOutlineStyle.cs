@@ -108,5 +108,10 @@ namespace OneEngineWindowsFormsApplication
             for (int i = 0; i < points.Length; i++) pointsF[i] = Transform.MultiplyPoint(points[i]);
             Graphics.DrawPolygon(Pen, pointsF);
         }
+
+        public void DrawText(Vector2 position, string text, int fontSize)
+        {
+
+        }
     }
 }
