@@ -42,9 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FpsRenderer.cs" />
-    <Compile Include="HumanAnimation.cs" />
-    <Compile Include="HumanBone.cs" />
-    <Compile Include="HumanModel.cs" />
+    <Compile Include="Human\HumanAnimation.cs" />
+    <Compile Include="Human\HumanAnimations.cs" />
+    <Compile Include="Human\HumanBone.cs" />
+    <Compile Include="Human\HumanModel.cs" />
     <Compile Include="OneEngineGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -54,8 +55,6 @@
       <Name>OneEngine</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Human\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

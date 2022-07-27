@@ -91,6 +91,7 @@
     <Compile Include="Graphics\IGraphicsStyle.cs" />
     <Compile Include="Graphics\SingleColorBrush.cs" />
     <Compile Include="Input\Input.cs" />
+    <Compile Include="IO\GameObjectSerializer.cs" />
     <Compile Include="Math\Color32.cs" />
     <Compile Include="Math\Mathf.cs" />
     <Compile Include="Math\Matrix2x2.cs" />

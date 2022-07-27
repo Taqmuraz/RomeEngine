@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace OneEngineGame
 {
-
     public sealed class HumanModel : Component
     {
         ReadOnlyArray<HumanAnimation> animations;
@@ -78,6 +77,9 @@ namespace OneEngineGame
             CreateBone(HumanBone.RightLeg);
             CreateBone(HumanBone.LeftKnee);
             CreateBone(HumanBone.RightKnee);
+
+            var animator = GameObject.AddComponent<Animator>();
+            animator.PlayAnimation(HumanAnimations.CreateIdleAnimation(skeleton));
 
             Queue = 0;
         }
