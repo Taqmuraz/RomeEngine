@@ -4,11 +4,11 @@ namespace OneEngine.IO
 {
     public sealed class ComponentSerializer
     {
-        public void SerializeComponent(Component component, ISerializationStream stream)
+        public void SerializeComponent(Component component, ISerializationContext context)
         {
 
         }
-        public void DeserializeComponent(Component component, ISerializationStream stream)
+        public void DeserializeComponent(Component component, ISerializationContext context)
         {
 
         }

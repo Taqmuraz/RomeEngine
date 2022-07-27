@@ -1,9 +1,11 @@
-﻿using System;
+﻿using OneEngine.IO;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OneEngine
 {
-	public abstract class BehaviourEventsHandler
+	public abstract class BehaviourEventsHandler : ISerializable
 	{
 		SafeDictionary<string, List<Action>> actions;
 
@@ -14,11 +16,12 @@ namespace OneEngine
 
 			var type = GetType();
 
-			while (type != typeof(object))
+			do
 			{
 				methods.AddRange(type.GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic));
 				type = type.BaseType;
-			}
+			} while (type != typeof(object));
+
 
 			var zeroParam = new object[0];
 			for (int i = 0; i < methods.Count; i++)
@@ -58,6 +61,34 @@ namespace OneEngine
 		protected virtual void OnEventCall(string name)
 		{
 
+		}
+
+		public IEnumerable<SerializableField> EnumerateFields()
+		{
+			var type = GetType();
+			var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public;
+
+			var properties = type.GetProperties(flags);
+			foreach (var property in properties)
+			{
+				if (property.GetMethod != null && property.SetMethod != null && property.CustomAttributes.Any(a => a.AttributeType == typeof(SerializeFieldAttribute)))
+				{
+					yield return new SerializableField(property.Name, property.GetValue(this), value => property.SetValue(this, value), property.PropertyType);
+				}
+			}
+
+			do
+			{
+				var fields = type.GetFields(flags);
+				foreach (var field in fields)
+				{
+					if (field.CustomAttributes.Any(a => a.AttributeType == typeof(SerializeFieldAttribute)))
+					{
+						yield return new SerializableField(field.Name, field.GetValue(this), value => field.SetValue(this, value), field.FieldType);
+					}
+				}
+				type = type.BaseType;
+			} while (type != typeof(object));
 		}
 	}
 }

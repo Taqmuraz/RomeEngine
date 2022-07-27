@@ -1,5 +1,7 @@
 ﻿using OneEngine;
+using OneEngine.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,15 +26,18 @@ namespace OneEngineGame
             scene.AddGameObjectInstancer(text);
             scene.AddGameObjectInstancer(() => new GameObject("FPS").AddComponent<FpsRenderer>().GameObject);
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1; i++)
             {
                 int index = i;
 
                 scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
                 {
-                    var obj = new GameObject($"Human").AddComponent<HumanModel>().GameObject;
-                    obj.Transform.LocalPosition = new Vector2(-index, 0f);
-                    return obj;
+                    using (TextReader reader = new StreamReader("./SerializationTest.txt"))
+                    {
+                        var human = ((HumanModel)new Serializer().Deserialize(new TextSerializationStream(reader, null))).GameObject;
+                        human.CallEvent("Start");
+                        return human;
+                    }
                 }));
             }
             return scene;

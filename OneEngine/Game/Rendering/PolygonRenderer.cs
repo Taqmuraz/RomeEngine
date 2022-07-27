@@ -2,8 +2,8 @@
 {
     public sealed class PolygonRenderer : Renderer
     {
-        public Color32 Color { get; set; } = Color32.black;
-        Vector2[] vertices;
+        [SerializeField] public Color32 Color { get; set; } = Color32.black;
+        [SerializeField] Vector2[] vertices;
 
         public void SetVertices(Vector2[] vertices)
         {

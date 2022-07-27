@@ -21,32 +21,32 @@ namespace OneEngine.IO
             return collectionType.GetConstructors().First(c => c.GetParameters().Length == 0).Invoke(new object[0]);
         }
 
-        protected override void ReadElement(object collection, int index, ISerializationStream stream)
+        protected override void ReadElement(object collection, int index, ISerializationContext context)
         {
             var dictionary = (IDictionary)collection;
-            int serializerIndex = stream.ReadInt();
+            int serializerIndex = context.Stream.ReadInt();
             if (serializerIndex == -1) return;
             var serializer = Serializer.FieldSerializers[serializerIndex];
-            var key = serializer.DeserializeField(collection.GetType().GetElementType(), stream);
+            var key = serializer.DeserializeField(collection.GetType().GetElementType(), context);
 
             object value = null;
-            serializerIndex = stream.ReadInt();
+            serializerIndex = context.Stream.ReadInt();
             if (serializerIndex != -1)
             {
                 serializer = Serializer.FieldSerializers[serializerIndex];
-                value = serializer.DeserializeField(collection.GetType().GetElementType(), stream);
+                value = serializer.DeserializeField(collection.GetType().GetElementType(), context);
             }
             dictionary.Add(key, value);
         }
 
-        protected override void WriteElement(object collection, int index, ISerializationStream stream)
+        protected override void WriteElement(object collection, int index, ISerializationContext context)
         {
             var dictionary = ((IDictionary)collection);
             var key = dictionary.Keys.Cast<object>().ToArray()[index];
             var serializer = Serializer.FieldSerializers.FirstOrDefault(s => s.CanSerializeType(key.GetType()));
             if (serializer == null) return;
-            stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
-            serializer.SerializeField(key, stream);
+            context.Stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
+            serializer.SerializeField(key, context);
 
             var element = dictionary[key];
             if (element != null)
@@ -54,12 +54,12 @@ namespace OneEngine.IO
                 serializer = Serializer.FieldSerializers.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
                 if (serializer != null)
                 {
-                    stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
-                    serializer.SerializeField(element, stream);
+                    context.Stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
+                    serializer.SerializeField(element, context);
                     return;
                 }
             }
-            stream.WriteInt(-1);
+            context.Stream.WriteInt(-1);
         }
     }
 }

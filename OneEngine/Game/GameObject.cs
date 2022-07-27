@@ -5,22 +5,27 @@ namespace OneEngine
 {
 	public sealed class GameObject : Game.GameThreadHandler
 	{
+		[SerializeField]
 		public Transform Transform { get; private set; }
-
+		[SerializeField]
 		public string Name { get; set; }
 
-		public GameObject(string name)
+		public GameObject()
 		{
-			this.Name = name;
 			componentSearch = components.Concat(inOrderToAdd).Except(inOrderToRemove);
-
-			Transform = AddComponent<Transform>();
 			GameScene.activeScene.AddGameObject(this);
 		}
 
-		List<Component> components = new List<Component>();
-		List<Component> inOrderToAdd = new List<Component>();
-		List<Component> inOrderToRemove = new List<Component>();
+		public GameObject(string name) : this()
+		{
+			Name = name;
+
+			Transform = AddComponent<Transform>();
+		}
+
+		[SerializeField] List<Component> components = new List<Component>();
+		[SerializeField] List<Component> inOrderToAdd = new List<Component>();
+		[SerializeField] List<Component> inOrderToRemove = new List<Component>();
 
 		IEnumerable<Component> componentSearch;
 

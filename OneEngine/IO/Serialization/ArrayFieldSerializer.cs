@@ -15,16 +15,16 @@ namespace OneEngine.IO
             return Array.CreateInstance(collectionType.GetElementType(), length);
         }
 
-        protected override void ReadElement(object collection, int index, ISerializationStream stream)
+        protected override void ReadElement(object collection, int index, ISerializationContext context)
         {
             var array = (Array)collection;
-            int serializerIndex = stream.ReadInt();
+            int serializerIndex = context.Stream.ReadInt();
             if (serializerIndex == -1) return;
             var serializer = Serializer.FieldSerializers[serializerIndex];
-            array.SetValue(serializer.DeserializeField(collection.GetType().GetElementType(), stream), index);
+            array.SetValue(serializer.DeserializeField(collection.GetType().GetElementType(), context), index);
         }
 
-        protected override void WriteElement(object collection, int index, ISerializationStream stream)
+        protected override void WriteElement(object collection, int index, ISerializationContext context)
         {
             var array = (Array)collection;
             var element = array.GetValue(index);
@@ -33,12 +33,12 @@ namespace OneEngine.IO
                 var serializer = Serializer.FieldSerializers.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
                 if (serializer != null)
                 {
-                    stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
-                    serializer.SerializeField(element, stream);
+                    context.Stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
+                    serializer.SerializeField(element, context);
                     return;
                 }
             }
-            stream.WriteInt(-1);
+            context.Stream.WriteInt(-1);
         }
 
         protected override int GetCollectionLength(object collection)

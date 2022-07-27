@@ -9,7 +9,7 @@ namespace OneEngine
 
         static List<RendererPass> passes = new List<RendererPass>() { new OutlineRendererPass(), new StandardRendererPass() };
 
-        public int Queue { get; set; }
+        [SerializeField] public int Queue { get; set; }
 
         [BehaviourEvent]
         void Start()

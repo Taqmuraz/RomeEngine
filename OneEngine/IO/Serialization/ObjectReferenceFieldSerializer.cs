@@ -6,17 +6,20 @@ namespace OneEngine.IO
     {
         public bool CanSerializeType(Type type)
         {
-            throw new NotImplementedException();
+            return typeof(ISerializable).IsAssignableFrom(type);
         }
 
-        public void SerializeField(object value, ISerializationStream stream)
+        public void SerializeField(object value, ISerializationContext context)
         {
-            throw new NotImplementedException();
+            var obj = value as ISerializable;
+            if (obj == null) context.Stream.WriteInt(-1);
+            else context.Stream.WriteInt(context.Objects.IndexOf(obj));
         }
 
-        public object DeserializeField(Type type, ISerializationStream stream)
+        public object DeserializeField(Type type, ISerializationContext context)
         {
-            throw new NotImplementedException();
+            int index = context.Stream.ReadInt();
+            return index == -1 ? null : context.Objects[index];
         }
     }
 }

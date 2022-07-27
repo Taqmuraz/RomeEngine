@@ -1,10 +1,17 @@
-﻿namespace OneEngine
+﻿using System.Collections.Generic;
+
+namespace OneEngine
 {
 	public sealed class Transform : Component
 	{
-		public Vector2 LocalPosition { get; set; }
-		public float LocalRotation { get; set; }
-		public Vector2 LocalScale { get; set; } = Vector2.one;
+		[SerializeField] Transform parent;
+		[SerializeField] List<Transform> children = new List<Transform>();
+
+		public ReadOnlyArrayList<Transform> Children => children;
+
+		[SerializeField] public Vector2 LocalPosition { get; set; }
+		[SerializeField] public float LocalRotation { get; set; }
+		[SerializeField] public Vector2 LocalScale { get; set; } = Vector2.one;
 
 		public Vector2 Position => (Vector2)LocalToWorld.Column_2;
 		public Vector2 Scale => LocalToWorld.MultiplyScale(Vector2.one);
@@ -13,6 +20,12 @@
 
         public Vector2 LocalRight => new Vector2(Mathf.Cos(LocalRotation), Mathf.Sin(LocalRotation));
 		public Vector2 LocalUp => new Vector2(Mathf.Cos(LocalRotation + 90f), Mathf.Sin(LocalRotation + 90f));
+
+		[BehaviourEvent]
+		void OnDestroy()
+		{
+			parent = null;
+		}
 
         protected internal override Transform GetTransform()
         {
@@ -41,11 +54,19 @@
 			}
 			set
 			{
+				if (value == parent) return;
 				if (value == this) throw new System.ArgumentException("Parent can't be equal to current instance");
+				if (parent != null)
+				{
+					parent.children.Remove(this);
+				}
 				parent = value;
+				if (parent != null)
+				{
+					parent.children.Add(this);
+				}
 			}
 		}
-		Transform parent;
 
 		public Vector2 TransformPointLocal(Vector2 point)
 		{

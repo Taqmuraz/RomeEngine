@@ -21,16 +21,20 @@ namespace OneEngine.IO
             return collectionType.GetConstructors().First(c => c.GetParameters().Length == 0).Invoke(new object[0]);
         }
 
-        protected override void ReadElement(object collection, int index, ISerializationStream stream)
+        protected override void ReadElement(object collection, int index, ISerializationContext context)
         {
             var list = (IList)collection;
-            int serializerIndex = stream.ReadInt();
-            if (serializerIndex == -1) return;
+            int serializerIndex = context.Stream.ReadInt();
+            if (serializerIndex == -1)
+            {
+                list.Add(default);
+                return;
+            }
             var serializer = Serializer.FieldSerializers[serializerIndex];
-            list[index] = serializer.DeserializeField(collection.GetType().GetElementType(), stream);
+            list.Add(serializer.DeserializeField(collection.GetType().GetElementType(), context));
         }
 
-        protected override void WriteElement(object collection, int index, ISerializationStream stream)
+        protected override void WriteElement(object collection, int index, ISerializationContext context)
         {
             var list = (IList)collection;
             var element = list[index];
@@ -39,12 +43,12 @@ namespace OneEngine.IO
                 var serializer = Serializer.FieldSerializers.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
                 if (serializer != null)
                 {
-                    stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
-                    serializer.SerializeField(element, stream);
+                    context.Stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
+                    serializer.SerializeField(element, context);
                     return;
                 }
             }
-            stream.WriteInt(-1);
+            context.Stream.WriteInt(-1);
         }
     }
 }

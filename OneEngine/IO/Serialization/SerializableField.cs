@@ -16,6 +16,5 @@ namespace OneEngine.IO
         public object Value { get; }
         public Action<object> Setter { get; }
         public Type Type { get; }
-        public Type ActualType => Value == null ? Type : Value.GetType();
     }
 }

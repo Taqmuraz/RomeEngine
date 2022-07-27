@@ -13,8 +13,10 @@ namespace OneEngine.IO
         void WriteInt(int value);
         void WriteFloat(float value);
         void WriteType(Type type);
-
-        int Position { get; set; }
-        int Length { get; }
+    }
+    public interface ISerializationContext
+    {
+        ReadOnlyArrayList<ISerializable> Objects { get; }
+        ISerializationStream Stream { get; }
     }
 }

@@ -1,6 +1,11 @@
-﻿namespace OneEngine
+﻿using OneEngine.IO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace OneEngine
 {
-	public class Component : BehaviourEventsHandler, IInitializable<GameObject>
+    public class Component : BehaviourEventsHandler, IInitializable<GameObject>
 	{
 		bool destroyed;
 		static int id = 0;
@@ -14,19 +19,21 @@
 		{
 			return transform;
 		}
+		[SerializeField]
 		Transform transform;
-
-		public GameObject GameObject { get; private set; }
+		[SerializeField]
+		GameObject gameObject;
+		public GameObject GameObject => gameObject;
 
 		protected override void OnEventCall(string name)
 		{
 			base.OnEventCall(name);
-			if (GameObject == null) throw new System.Exception("Can't call event on destroyed component");
+			if (GameObject == null) throw new Exception("Can't call event on destroyed component");
 		}
 
 		void IInitializable<GameObject>.Initialize(GameObject arg)
 		{
-			GameObject = arg;
+			gameObject = arg;
 			transform = GameObject.Transform;
 			localID = id++;
 		}
@@ -44,5 +51,5 @@
 		{
 			return GameObject.Name + "_" + localID;
 		}
-	}
+    }
 }

@@ -9,36 +9,36 @@ namespace OneEngine.IO
 
         protected abstract int GetCollectionLength(object collection);
         protected abstract object CreateCollection(Type collectionType, int length);
-        protected abstract void ReadElement(object collection, int index, ISerializationStream stream);
-        protected abstract void WriteElement(object collection, int index, ISerializationStream stream);
+        protected abstract void ReadElement(object collection, int index, ISerializationContext context);
+        protected abstract void WriteElement(object collection, int index, ISerializationContext context);
 
-        public void SerializeField(object value, ISerializationStream stream)
+        public void SerializeField(object value, ISerializationContext context)
         {
             var collection = value as IEnumerable;
             
             if (collection == null)
             {
-                stream.WriteInt(-1);
+                context.Stream.WriteInt(-1);
             }
             else
             {
                 int length = GetCollectionLength(collection);
-                stream.WriteInt(length);
+                context.Stream.WriteInt(length);
                 for (int i = 0; i < length; i++)
                 {
-                    WriteElement(collection, i, stream);
+                    WriteElement(collection, i, context);
                 }
             }
         }
 
-        public object DeserializeField(Type type, ISerializationStream stream)
+        public object DeserializeField(Type type, ISerializationContext context)
         {
-            int length = stream.ReadInt();
+            int length = context.Stream.ReadInt();
             if (length == -1) return null;
             object collection = CreateCollection(type, length);
             for (int i = 0; i < length; i++)
             {
-                ReadElement(collection, i, stream);
+                ReadElement(collection, i, context);
             }
             return collection;
         }

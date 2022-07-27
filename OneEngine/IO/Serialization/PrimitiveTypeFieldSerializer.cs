@@ -9,17 +9,17 @@ namespace OneEngine.IO
             return type == typeof(int) || type == typeof(float);
         }
 
-        public void SerializeField(object value, ISerializationStream stream)
+        public void SerializeField(object value, ISerializationContext context)
         {
             var type = value.GetType();
-            if (type == typeof(int)) stream.WriteInt((int)value);
-            else stream.WriteFloat((float)value);
+            if (type == typeof(int)) context.Stream.WriteInt((int)value);
+            else context.Stream.WriteFloat((float)value);
         }
 
-        public object DeserializeField(Type type, ISerializationStream stream)
+        public object DeserializeField(Type type, ISerializationContext context)
         {
-            if (type == typeof(int)) return stream.ReadInt();
-            else return stream.ReadFloat();
+            if (type == typeof(int)) return context.Stream.ReadInt();
+            else return context.Stream.ReadFloat();
         }
     }
 }
