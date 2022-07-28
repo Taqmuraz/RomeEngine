@@ -20,7 +20,12 @@ namespace OneEngineGame
         static GameScene LoadScene()
         {
             var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
-            var text = new GameObjectInstancer(() => new GameObject("LoadScreenText").AddComponent<TextRenderer>().GameObject);
+            var text = new GameObjectInstancer(() =>
+            {
+                var textComponent = new GameObject("LoadScreenText").AddComponent<TextRenderer>();
+                textComponent.FontSize = 0.1f;
+                return textComponent.GameObject;
+            });
             var scene = new GameScene();
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(text);
@@ -32,11 +37,33 @@ namespace OneEngineGame
 
                 scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
                 {
-                    using (TextReader reader = new StreamReader("./SerializationTest.txt"))
+                    /*using (TextWriter humanWriter = new StreamWriter("./HumanTest.txt"))
                     {
-                        var human = ((HumanModel)new Serializer().Deserialize(new TextSerializationStream(reader, null))).GameObject;
-                        human.CallEvent("Start");
-                        return human;
+                        var human = new GameObject("Human").AddComponent<HumanModel>().GameObject;
+                        human.RemoveComponent(human.GetComponent<HumanModel>());
+
+                        using (TextWriter animationWriter = new StreamWriter("./AnimationTest.txt"))
+                        {
+                            new Serializer().Serialize(human.GetComponent<Animator>().Animation, new TextSerializationStream(null, animationWriter));
+                        }
+
+                        human.GetComponent<Animator>().PlayAnimation(null);
+
+                        new Serializer().Serialize(human, new TextSerializationStream(null, humanWriter));
+                    }*/
+
+                    using (TextReader animationReader = new StreamReader("./AnimationTest.txt"))
+                    {
+                        using (TextReader humanReader = new StreamReader("./HumanTest.txt"))
+                        {
+                            var human = (GameObject)new Serializer().Deserialize(new TextSerializationStream(humanReader, null));
+
+                            var animation = (Animation)new Serializer().Deserialize(new TextSerializationStream(animationReader, null));
+
+                            human.GetComponent<Animator>().PlayAnimation(animation);
+
+                            return human;
+                        }
                     }
                 }));
             }

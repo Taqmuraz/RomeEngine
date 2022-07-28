@@ -2,7 +2,7 @@
 {
     public sealed class EllipseRenderer : Renderer
     {
-        public Color32 Color { get; set; } = Color32.black;
+        [SerializeField] public Color32 Color { get; set; } = Color32.black;
 
         protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
         {

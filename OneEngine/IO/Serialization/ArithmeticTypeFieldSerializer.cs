@@ -2,7 +2,7 @@
 
 namespace OneEngine.IO
 {
-    public sealed class PrimitiveTypeFieldSerializer : IFieldSerializer
+    public sealed class ArithmeticTypeFieldSerializer : IFieldSerializer
     {
         public bool CanSerializeType(Type type)
         {

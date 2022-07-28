@@ -109,7 +109,7 @@ namespace OneEngineWindowsFormsApplication
             Graphics.DrawPolygon(Pen, pointsF);
         }
 
-        public void DrawText(Vector2 position, string text, int fontSize)
+        public void DrawText(Vector2 position, string text, float fontSize)
         {
 
         }

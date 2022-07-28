@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using OneEngine.IO;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OneEngine
 {
-	public sealed class GameObject : Game.GameThreadHandler
+	public sealed class GameObject : Game.GameThreadHandler, ISerializationHandler
 	{
 		[SerializeField]
 		public Transform Transform { get; private set; }
@@ -12,7 +13,6 @@ namespace OneEngine
 
 		public GameObject()
 		{
-			componentSearch = components.Concat(inOrderToAdd).Except(inOrderToRemove);
 			GameScene.activeScene.AddGameObject(this);
 		}
 
@@ -26,8 +26,6 @@ namespace OneEngine
 		[SerializeField] List<Component> components = new List<Component>();
 		[SerializeField] List<Component> inOrderToAdd = new List<Component>();
 		[SerializeField] List<Component> inOrderToRemove = new List<Component>();
-
-		IEnumerable<Component> componentSearch;
 
 		public override string ToString()
 		{
@@ -69,7 +67,7 @@ namespace OneEngine
 
 		public TComponent GetComponent<TComponent> ()
 		{
-			foreach (var component in componentSearch)
+			foreach (var component in components.Concat(inOrderToAdd).Except(inOrderToRemove))
 			{
 				if (component is TComponent t) return t;
 			}
@@ -89,6 +87,17 @@ namespace OneEngine
 					Debug.Log(ex.ToString());
 				}
 			}
+		}
+
+		void ISerializationHandler.OnSerialize()
+		{
+			Update();
+		}
+
+		void ISerializationHandler.OnDeserialize()
+		{
+			Update();
+			CallEvent("Start");
 		}
 	}
 }

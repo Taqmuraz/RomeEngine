@@ -54,7 +54,7 @@ namespace OneEngine.IO
 
         public float ReadFloat()
         {
-            return float.Parse(ReadValue(), CultureInfo.InvariantCulture);
+            return float.Parse(ReadValue());
         }
 
         public Type ReadType()

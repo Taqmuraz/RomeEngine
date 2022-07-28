@@ -90,5 +90,5 @@ namespace OneEngine
 				type = type.BaseType;
 			} while (type != typeof(object));
 		}
-	}
+    }
 }

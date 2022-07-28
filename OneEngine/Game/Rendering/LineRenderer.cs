@@ -2,16 +2,16 @@
 {
     public sealed class LineRenderer : Renderer
     {
-        public bool SmoothEnding { get; set; }
+        [SerializeField] public bool SmoothEnding { get; set; }
 
-        Line[] lines;
+        [SerializeField] Line[] lines;
         public void SetLines(params Line[] lines)
         {
-            if (lines == null) throw new System.ArgumentNullException(nameof(lines));
             this.lines = lines;
         }
         protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
         {
+            if (lines == null) return;
             foreach (var line in lines)
             {
                 graphics.Brush = new SingleColorBrush(line.Color);
@@ -21,7 +21,7 @@
 
         protected override bool IsInsideScreen(IGraphics graphics, Camera camera)
         {
-            if (lines.Length != 0)
+            if (lines != null && lines.Length != 0)
             {
                 var cameraVolume = camera.Volume;
                 var l2w = Transform.LocalToWorld;

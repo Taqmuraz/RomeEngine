@@ -69,7 +69,7 @@ namespace OneEngineWindowsFormsApplication
             SetupStyle().DrawLine(a, b, widthA, widthB, smoothEnding);
         }
 
-        public void DrawText(Vector2 position, string text, int fontSize)
+        public void DrawText(Vector2 position, string text, float fontSize)
         {
             SetupStyle().DrawText(position, text, fontSize);
         }
@@ -94,7 +94,7 @@ namespace OneEngineWindowsFormsApplication
             return Graphics.MeasureString(text, CreateFont(fontSize));
         }
 
-        public static Font CreateFont(int fontSize)
+        public static Font CreateFont(float fontSize)
         {
             return new Font(SystemFonts.DefaultFont.FontFamily, fontSize, FontStyle.Regular, GraphicsUnit.Pixel);
         }

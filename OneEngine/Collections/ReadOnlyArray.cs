@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
-public sealed class ReadOnlyArray<T> : IEnumerable<T>
+public sealed class ReadOnlyArray<T> : IEnumerable<T>, IList
 {
 	T[] array;
 
@@ -40,4 +41,60 @@ public sealed class ReadOnlyArray<T> : IEnumerable<T>
 	{
 		return new ReadOnlyArray<T>(array);
 	}
+	public static implicit operator ReadOnlyArray<T>(Array array)
+	{
+		return new ReadOnlyArray<T>((T[])array);
+	}
+
+	public void CopyTo(Array array, int index)
+    {
+        this.array.CopyTo(array, index);
+    }
+
+    public int Count => ((ICollection)array).Count;
+
+    public object SyncRoot => array.SyncRoot;
+
+    public bool IsSynchronized => array.IsSynchronized;
+
+    public int Add(object value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Contains(object value)
+    {
+        return ((IList)array).Contains(value);
+    }
+
+    public void Clear()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int IndexOf(object value)
+    {
+        return ((IList)array).IndexOf(value);
+    }
+
+    public void Insert(int index, object value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Remove(object value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveAt(int index)
+    {
+        throw new NotImplementedException();
+    }
+
+    object IList.this[int index] { get => array[index]; set => array[index] = (T)value; }
+
+    public bool IsReadOnly => array.IsReadOnly;
+
+    public bool IsFixedSize => array.IsFixedSize;
 }

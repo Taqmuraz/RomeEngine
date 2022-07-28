@@ -53,7 +53,7 @@ namespace OneEngineWindowsFormsApplication
             Graphics.FillPolygon(Brush, pointsF);
         }
 
-        public void DrawText(Vector2 position, string text, int fontSize)
+        public void DrawText(Vector2 position, string text, float fontSize)
         {
             DrawInReversedScale(() => Graphics.DrawString(text, CanvasGraphics.CreateFont(fontSize), Brush, position));
         }

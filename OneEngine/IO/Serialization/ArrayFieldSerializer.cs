@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OneEngine.IO
@@ -26,8 +28,8 @@ namespace OneEngine.IO
 
         protected override void WriteElement(object collection, int index, ISerializationContext context)
         {
-            var array = (Array)collection;
-            var element = array.GetValue(index);
+            var array = (IList)collection;
+            var element = array[index];
             if (element != null)
             {
                 var serializer = Serializer.FieldSerializers.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
@@ -43,7 +45,7 @@ namespace OneEngine.IO
 
         protected override int GetCollectionLength(object collection)
         {
-            return ((Array)collection).Length;
+            return ((ICollection)collection).Count;
         }
     }
 }

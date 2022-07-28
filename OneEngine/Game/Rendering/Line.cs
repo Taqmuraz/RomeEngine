@@ -5,6 +5,9 @@ namespace OneEngine
 {
     public class Line : ISerializable
     {
+        public Line()
+        {
+        }
         public Line(Vector2 pointA, Vector2 pointB, Color32 color, float widthA = 0.1f, float widthB = 0.1f)
         {
             PointA = pointA;

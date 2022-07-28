@@ -28,13 +28,14 @@ namespace OneEngine.IO
         static IEnumerable<IFieldSerializer> GetFieldSerializers()
         {
             yield return new ObjectReferenceFieldSerializer();
-            yield return new PrimitiveTypeFieldSerializer();
+            yield return new ArithmeticTypeFieldSerializer();
             yield return new StringFieldSerializer();
             yield return new ArrayFieldSerializer();
             yield return new ListFieldSerializer();
             yield return new DictionaryFieldSerializer();
             yield return new Vector2Serializer();
             yield return new Color32Serializer();
+            yield return new BoolTypeFieldSerializer();
         }
 
         public void Serialize(ISerializable serializable, ISerializationStream stream)
@@ -51,13 +52,18 @@ namespace OneEngine.IO
             }
             foreach (var obj in objects)
             {
-                foreach (var field in obj.EnumerateFields())
+                if (obj is ISerializationHandler handler) handler.OnSerialize();
+                var fieldsArray = obj.EnumerateFields().ToArray();
+                stream.WriteInt(fieldsArray.Length);
+                foreach (var field in fieldsArray)
                 {
                     var serializer = FieldSerializers.FirstOrDefault(f => f.CanSerializeType(field.Type));
                     if (serializer == null)
                     {
                         throw new InvalidOperationException($"Can't serialize field with type {field.Type.FullName}");
                     }
+                    stream.WriteString(field.Name);
+                    stream.WriteInt(FieldSerializers.IndexOf(serializer));
                     serializer.SerializeField(field.Value, context);
                 }
             }
@@ -89,16 +95,24 @@ namespace OneEngine.IO
             var context = new SerializationContext(objects, stream);
             for (int i = 0; i < length; i++)
             {
-                foreach (var field in objects[i].EnumerateFields())
+                var fieldsMap = objects[i].EnumerateFields().ToDictionary(f => f.Name);
+                int fieldsCount = stream.ReadInt();
+                for (int f = 0; f < fieldsCount; f++)
                 {
-                    var serializer = FieldSerializers.FirstOrDefault(f => f.CanSerializeType(field.Type));
-                    if (serializer == null)
+                    string fieldName = stream.ReadString();
+                    if (fieldsMap.TryGetValue(fieldName, out SerializableField field))
                     {
-                        throw new InvalidOperationException($"Can't deserialize field with type {field.Type.FullName}");
+                        int serializerIndex = stream.ReadInt();
+                        if (serializerIndex == -1)
+                        {
+                            throw new InvalidOperationException($"Can't deserialize field with type {field.Type.FullName}");
+                        }
+                        var serializer = FieldSerializers[serializerIndex];
+                        field.Setter(serializer.DeserializeField(field.Type, context));
                     }
-                    field.Setter(serializer.DeserializeField(field.Type, context));
                 }
             }
+            foreach (var obj in objects) if (obj is ISerializationHandler handler) handler.OnDeserialize();
             return objects[0];
         }
     }

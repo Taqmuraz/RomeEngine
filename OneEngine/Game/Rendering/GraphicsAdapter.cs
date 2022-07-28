@@ -37,7 +37,7 @@
             Provider.DrawLine(a, b, widthA, widthB, smoothEnding);
         }
 
-        public virtual void DrawText(Vector2 position, string text, int fontSize)
+        public virtual void DrawText(Vector2 position, string text, float fontSize)
         {
             Provider.DrawText(position, text, fontSize);
         }
