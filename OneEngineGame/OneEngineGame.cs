@@ -37,20 +37,20 @@ namespace OneEngineGame
 
                 scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
                 {
-                    /*using (TextWriter humanWriter = new StreamWriter("./HumanTest.txt"))
+                    using (var humanWriter = new MemoryStream())
                     {
                         var human = new GameObject("Human").AddComponent<HumanModel>().GameObject;
                         human.RemoveComponent(human.GetComponent<HumanModel>());
 
-                        using (TextWriter animationWriter = new StreamWriter("./AnimationTest.txt"))
+                        using (var animationWriter = new MemoryStream())
                         {
-                            new Serializer().Serialize(human.GetComponent<Animator>().Animation, new TextSerializationStream(null, animationWriter));
+                            new Serializer().Serialize(human.GetComponent<Animator>().Animation, new BinarySerializationStream(animationWriter));
                         }
 
                         human.GetComponent<Animator>().PlayAnimation(null);
 
-                        new Serializer().Serialize(human, new TextSerializationStream(null, humanWriter));
-                    }*/
+                        new Serializer().Serialize(human, new BinarySerializationStream(humanWriter));
+                    }
 
                     using (TextReader animationReader = new StreamReader("./AnimationTest.txt"))
                     {

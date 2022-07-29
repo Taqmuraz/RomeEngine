@@ -87,12 +87,14 @@
     <Compile Include="Game\SerializeFieldAttribute.cs" />
     <Compile Include="Game\Time.cs" />
     <Compile Include="Game\Transform.cs" />
+    <Compile Include="Game\UI\Canvas.cs" />
     <Compile Include="Graphics\IGraphics.cs" />
     <Compile Include="Graphics\IGraphicsBrush.cs" />
     <Compile Include="Graphics\IGraphicsStyle.cs" />
     <Compile Include="Graphics\SingleColorBrush.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="IO\Serialization\ArrayFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\BinarySerializationStream.cs" />
     <Compile Include="IO\Serialization\BoolTypeFieldSerializer.cs" />
     <Compile Include="IO\Serialization\CollectionFieldSerializer.cs" />
     <Compile Include="IO\Serialization\Color32Serializer.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="IO\Serialization\Serializer.cs" />
     <Compile Include="IO\Serialization\StringFieldSerializer.cs" />
     <Compile Include="IO\Serialization\TextSerializationStream.cs" />
+    <Compile Include="IO\Serialization\TypesMap.cs" />
     <Compile Include="IO\Serialization\Vector2Serializer.cs" />
     <Compile Include="Math\Color32.cs" />
     <Compile Include="Math\Mathf.cs" />

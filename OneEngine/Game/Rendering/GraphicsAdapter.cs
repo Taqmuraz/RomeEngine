@@ -37,9 +37,9 @@
             Provider.DrawLine(a, b, widthA, widthB, smoothEnding);
         }
 
-        public virtual void DrawText(Vector2 position, string text, float fontSize)
+        public virtual void DrawText(string text, Rect rect)
         {
-            Provider.DrawText(position, text, fontSize);
+            Provider.DrawText(text, rect);
         }
 
         public virtual void DrawEllipse(Vector2 center, Vector2 size)

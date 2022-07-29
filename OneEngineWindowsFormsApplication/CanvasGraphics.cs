@@ -69,9 +69,9 @@ namespace OneEngineWindowsFormsApplication
             SetupStyle().DrawLine(a, b, widthA, widthB, smoothEnding);
         }
 
-        public void DrawText(Vector2 position, string text, float fontSize)
+        public void DrawText(string text, Rect rect)
         {
-            SetupStyle().DrawText(position, text, fontSize);
+            SetupStyle().DrawText(text, rect);
         }
 
         public void DrawEllipse(Vector2 center, Vector2 size)

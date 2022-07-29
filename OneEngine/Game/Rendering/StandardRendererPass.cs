@@ -6,13 +6,13 @@ namespace OneEngine
 {
     public sealed class StandardRendererPass : RendererPass
     {
-        public override void Pass(IGraphics graphics, Camera camera, IEnumerable<Renderer> renderers, Action<Renderer, IGraphics, Camera> drawCall)
+        public override void Pass(IGraphics graphics, Camera camera, IEnumerable<Renderer> renderers, Func<Renderer, Matrix3x3> graphicsTransform, Action<Renderer, IGraphics, Camera> drawCall)
         {
             graphics.Style = graphics.FillStyle;
 
             foreach (var renderer in renderers.OrderBy(r => r.Queue))
             {
-                graphics.Transform = camera.WorldToScreenMatrix * renderer.Transform.LocalToWorld;
+                graphics.Transform = graphicsTransform(renderer);
                 drawCall(renderer, graphics, camera);
             }
         }

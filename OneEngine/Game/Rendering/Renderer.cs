@@ -6,8 +6,14 @@ namespace OneEngine
     public abstract class Renderer : Component
     {
         static List<Renderer> renderers = new List<Renderer>();
+        protected RendererPass OutlinePass { get; } = new OutlineRendererPass() { Queue = 0 };
+        protected RendererPass StandardPass { get; } = new StandardRendererPass() { Queue = 1 };
 
-        static List<RendererPass> passes = new List<RendererPass>() { new OutlineRendererPass(), new StandardRendererPass() };
+        protected virtual IEnumerable<RendererPass> EnumeratePasses()
+        {
+            yield return OutlinePass;
+            yield return StandardPass;
+        }
 
         [SerializeField] public int Queue { get; set; }
 
@@ -20,6 +26,11 @@ namespace OneEngine
         void OnDestroy()
         {
             renderers.Remove(this);
+        }
+
+        protected virtual Matrix3x3 GetGraphicsTransform(Camera camera)
+        {
+            return camera.WorldToScreenMatrix * Transform.LocalToWorld;
         }
 
         public static void UpdateGraphics(IGraphics graphics, Camera camera)
@@ -36,10 +47,12 @@ namespace OneEngine
             if (Input.GetKeyDown(KeyCode.E)) camera.OrthographicMultiplier *= 0.5f;
 
             var renderers = Renderer.renderers.Where(r => r.IsInsideScreen(graphics, camera));
+            var passes = renderers.SelectMany(r => r.EnumeratePasses()).Distinct().OrderBy(pass => pass.Queue);
 
             foreach (var pass in passes)
             {
-                pass.Pass(graphics, camera, renderers, (r, g, c) => r.OnGraphicsUpdate(g, c));
+                var renderersForPass = renderers.Where(r => r.EnumeratePasses().Contains(pass));
+                pass.Pass(graphics, camera, renderersForPass, r => r.GetGraphicsTransform(camera), (r, g, c) => r.OnGraphicsUpdate(g, c));
             }
         }
 

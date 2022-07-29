@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 
 namespace OneEngine.IO
 {
@@ -11,25 +8,6 @@ namespace OneEngine.IO
     {
         TextReader textReader;
         TextWriter textWriter;
-
-        static SafeDictionary<string, Type> typesMap = new SafeDictionary<string, Type>();
-
-        static TextSerializationStream()
-        {
-            var assemblies = new List<Assembly>();
-            TraceAssembly(Assembly.GetEntryAssembly(), assemblies);
-            var types = assemblies.SelectMany(a => a.GetTypes());
-            foreach (var type in types)
-            {
-                typesMap[type.FullName] = type;
-            }
-        }
-        static void TraceAssembly(Assembly root, List<Assembly> list)
-        {
-            if (list.Contains(root)) return;
-            list.Add(root);
-            foreach (var reference in root.GetReferencedAssemblies()) TraceAssembly(Assembly.Load(reference), list);
-        }
 
         public TextSerializationStream(TextReader textReader, TextWriter textWriter)
         {
@@ -59,7 +37,7 @@ namespace OneEngine.IO
 
         public Type ReadType()
         {
-            return typesMap[ReadValue()];
+            return TypesMap.GetType(ReadValue());
         }
 
         public void WriteString(string value)
