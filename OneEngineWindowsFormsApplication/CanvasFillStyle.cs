@@ -53,9 +53,9 @@ namespace OneEngineWindowsFormsApplication
             Graphics.FillPolygon(Brush, pointsF);
         }
 
-        public void DrawText(string text, Rect rect)
+        public void DrawText(string text, Rect rect, TextOptions options)
         {
-            DrawInReversedScale(() => Graphics.DrawString(text, SystemFonts.DefaultFont, Brush, rect));
+            Graphics.DrawString(text, CanvasGraphics.CreateFont(options.FontSize), Brush, rect);
         }
     }
 }

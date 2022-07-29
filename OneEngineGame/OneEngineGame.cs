@@ -13,7 +13,7 @@ namespace OneEngineGame
         public static IEngine StartGame(IEngineRuntine runtime)
         {
             var engine = new Engine();
-            GameScenes.InitializeGameScenes(LoadScene(), new GameScene[] { GameScene() });
+            GameScenes.InitializeGameScenes(AnimationEditorScene(), new GameScene[] { AnimationEditorScene() });
             engine.Initialize(runtime);
             return engine;
         }
@@ -23,13 +23,18 @@ namespace OneEngineGame
             var text = new GameObjectInstancer(() =>
             {
                 var textComponent = new GameObject("LoadScreenText").AddComponent<TextRenderer>();
-                textComponent.FontSize = 0.1f;
+                textComponent.Rect = new Rect(1f, 1f, 1f, 0.5f);
                 return textComponent.GameObject;
             });
             var scene = new GameScene();
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(text);
             scene.AddGameObjectInstancer(() => new GameObject("FPS").AddComponent<FpsRenderer>().GameObject);
+
+            var canvas = new GameObjectInstancer(() =>
+            {
+                return new GameObject("Canvas");
+            });
 
             for (int i = 0; i < 1; i++)
             {
@@ -69,13 +74,16 @@ namespace OneEngineGame
             }
             return scene;
         }
-        static GameScene GameScene()
+        static GameScene AnimationEditorScene()
         {
             var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
-            var text = new GameObjectInstancer(() => new GameObject("GameSceneText").AddComponent<TextRenderer>().GameObject);
             var scene = new GameScene();
             scene.AddGameObjectInstancer(camera);
-            scene.AddGameObjectInstancer(text);
+            scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
+            {
+                var animationEditor = new GameObject("AnimationEditor").AddComponent<AnimationEditor>();
+                return animationEditor.GameObject;
+            }));
             return scene;
         }
     }

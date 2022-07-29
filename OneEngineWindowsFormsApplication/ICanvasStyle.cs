@@ -9,7 +9,7 @@ namespace OneEngineWindowsFormsApplication
         void DrawPoint(Vector2 position, float radius);
         void DrawLine(Vector2 a, Vector2 b);
         void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB, bool smoothEnding);
-        void DrawText(string text, Rect rect);
+        void DrawText(string text, Rect rect, TextOptions options);
         void DrawEllipse(Vector2 center, Vector2 size);
         void DrawRect(Rect rect);
         void DrawPolygon(Vector2[] points);

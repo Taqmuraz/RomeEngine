@@ -3,11 +3,12 @@
     public sealed class TextRenderer : Renderer
     {
         public string Text { get; set; } = "NewText";
-        public float FontSize { get; set; } = 10;
+        public Rect Rect { get; set; }
+        public TextOptions TextOptions { get; set; } = TextOptions.Default;
 
         protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
         {
-            graphics.DrawText(Vector2.zero, Text, FontSize);
+            graphics.DrawText(Text, Rect, TextOptions);
         }
         protected override bool IsInsideScreen(IGraphics graphics, Camera camera)
         {

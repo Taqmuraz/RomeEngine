@@ -2,8 +2,8 @@
 {
 	public static class Time
 	{
-		public static float time => (float)(now - timeStart).TotalSeconds;
-		public static float deltaTime => (float)(currentUpdate - lastUpdate).TotalSeconds;
+		public static float CurrentTime => (float)(now - timeStart).TotalSeconds;
+		public static float DeltaTime => (float)(currentUpdate - lastUpdate).TotalSeconds;
 
 		static System.DateTime timeStart;
 		static System.DateTime now => System.DateTime.Now;

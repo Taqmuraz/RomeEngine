@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OneEngine.UI
 {
-    public class Canvas : Renderer
+    public sealed class Canvas : Renderer
     {
         List<ICanvasElement> elements = new List<ICanvasElement>();
 
@@ -22,45 +20,39 @@ namespace OneEngine.UI
         protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
         {
             foreach (var element in elements) element.Draw(graphics, camera);
+            elements.Clear();
         }
 
         protected override Matrix3x3 GetGraphicsTransform(Camera camera)
         {
             return Matrix3x3.identity;
         }
-    }
-    public interface ICanvasElement
-    {
-        void Draw(IGraphics graphics, Camera camera);
-    }
-    public sealed class CanvasRect : ICanvasElement
-    {
-        Rect rect;
-        Color32 color;
 
-        public void Draw(IGraphics graphics, Camera camera)
+        public void DrawRect(Rect rect, Color32 color)
         {
-            graphics.DrawRect(rect);
+            elements.Add(new CanvasRect(rect, color));
         }
-    }
-    public sealed class CanvasButton : ICanvasElement
-    {
-        Rect rect;
-        string text;
-        Color32 color;
-
-        public CanvasButton(string text, Rect rect, Color32 color)
+        public void DrawText(string text, Rect rect, Color32 color, TextOptions options)
         {
-            this.rect = rect;
-            this.text = text;
-            this.color = color;
+            elements.Add(new CanvasText(text, rect, color, options));
         }
-
-        public void Draw(IGraphics graphics, Camera camera)
+        public bool DrawButton(string text, Rect rect, Color32 textColor, Color32 buttonColor, Color32 buttonHoverColor, Color32 buttonDownColor, TextOptions options)
         {
-            graphics.Brush = new SingleColorBrush(color);
-            graphics.DrawRect(rect);
-            graphics.DrawText(text, rect);
+            bool hold = Input.GetKey(KeyCode.MouseL);
+            bool hover = rect.Contains(Input.MousePosition);
+            Color32 color = hover ? (hold ? buttonDownColor : buttonHoverColor) : buttonColor;
+
+            elements.Add(new CanvasButton(text, rect, textColor, color, options));
+            return Input.GetKeyDown(KeyCode.MouseL) && hover;
+        }
+        public bool DrawHandle(Vector2 position, float radius, Color32 color, Color32 hoverColor, Color32 holdColor, TextOptions options)
+        {
+            bool hold = Input.GetKey(KeyCode.MouseL);
+            bool hover = (Input.MousePosition - position).length <= radius;
+            color = hover ? (hold ? holdColor : hoverColor) : color;
+
+            elements.Add(new CanvasHandle(position, radius, color));
+            return hold && hover;
         }
     }
 }

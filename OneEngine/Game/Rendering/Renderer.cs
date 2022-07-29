@@ -41,7 +41,7 @@ namespace OneEngine
             graphics.Brush = new SingleColorBrush(camera.ClearColor);
             graphics.DrawRect(Rect.FromCenterAndSize(camera.Transform.Position, camera.OrthographicSize));
 
-            camera.Transform.LocalPosition += Input.GetWASD() * Time.deltaTime * 5f;
+            camera.Transform.LocalPosition += Input.GetWASD() * Time.DeltaTime * 5f;
 
             if (Input.GetKeyDown(KeyCode.Q)) camera.OrthographicMultiplier *= 2f;
             if (Input.GetKeyDown(KeyCode.E)) camera.OrthographicMultiplier *= 0.5f;

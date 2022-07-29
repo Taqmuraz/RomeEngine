@@ -1,21 +1,24 @@
 ﻿using OneEngine;
-using OneEngine.IO;
-using System.IO;
+using OneEngine.UI;
+
 
 namespace OneEngineGame
 {
-    public sealed class FpsRenderer : Renderer
+    public sealed class FpsRenderer : Component
     {
-        protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
-        {
-            graphics.Brush = new SingleColorBrush(Color32.white, 10);
-            //graphics.Transform = Matrix3x3.identity;
-            graphics.DrawText(new Vector2(50f, 50f), $"Delta time : {Time.deltaTime}", 25);
-        }
+        Canvas canvas;
 
-        protected override bool IsInsideScreen(IGraphics graphics, Camera camera)
+        [BehaviourEvent]
+        void Start ()
         {
-            return true;
+            canvas = GameObject.AddComponent<Canvas>();
+        }
+        [BehaviourEvent]
+        void Update()
+        {
+            canvas.DrawText($"Time : {Time.CurrentTime}", new Rect(50, 100, 150, 50), Color32.black, TextOptions.Default);
+            canvas.DrawText($"Delta time : {Time.DeltaTime}", new Rect(50, 50, 150, 50), Color32.black, TextOptions.Default);
+            canvas.DrawButton($"System time : {System.DateTime.Now}", new Rect(50, 150, 150, 50), Color32.white, Color32.gray, Color32.green, Color32.red, TextOptions.Default);
         }
     }
 }

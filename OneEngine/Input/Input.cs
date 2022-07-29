@@ -35,16 +35,16 @@ namespace OneEngine
 
 		static readonly KeyInfo emptyKey = new EmptyKeyInfo();
 
-		public static Vector2 mousePosition { get; private set; }
+		public static Vector2 MousePosition { get; private set; }
 
 		class EmptyKeyInfo : KeyInfo
 		{
-			public override KeyState keyState { get => KeyState.None; set { return; } }
+			public override KeyState KeyState { get => KeyState.None; set { return; } }
 		}
 
 		public class KeyInfo
 		{
-			public virtual KeyState keyState { get; set; }
+			public virtual KeyState KeyState { get; set; }
 		}
 
 		internal Input()
@@ -58,10 +58,10 @@ namespace OneEngine
 			{
 				foreach (var key in keys)
 				{
-					switch (key.Value.keyState)
+					switch (key.Value.KeyState)
 					{
-						case KeyState.Down: key.Value.keyState = KeyState.Hold; break;
-						case KeyState.Up: key.Value.keyState = KeyState.None; break;
+						case KeyState.Down: key.Value.KeyState = KeyState.Hold; break;
+						case KeyState.Up: key.Value.KeyState = KeyState.None; break;
 					}
 				}
 				lock (keysToUpdate)
@@ -70,7 +70,7 @@ namespace OneEngine
 					{
 						var info = keys[key.key];
 						if (info == emptyKey) keys[key.key] = info = new KeyInfo();
-						info.keyState = key.state;
+						info.KeyState = key.state;
 					}
 					keysToUpdate.Clear();
 				}
@@ -95,22 +95,22 @@ namespace OneEngine
 
 		public static bool GetKeyDown(KeyCode key)
 		{
-			return keys[key].keyState == KeyState.Down;
+			return keys[key].KeyState == KeyState.Down;
 		}
 		public static bool GetKey(KeyCode key)
 		{
-			return keys[key].keyState != KeyState.None;
+			return keys[key].KeyState != KeyState.None;
 		}
 		public static bool GetKeyUp(KeyCode key)
 		{
-			return keys[key].keyState == KeyState.Up;
+			return keys[key].KeyState == KeyState.Up;
 		}
 
 		public void OnKeyDown(KeyCode key)
 		{
 			lock (keys)
 			{
-				if (keys[key].keyState != KeyState.Hold) lock (keysToUpdate) keysToUpdate.Add((key, KeyState.Down));
+				if (keys[key].KeyState != KeyState.Hold) lock (keysToUpdate) keysToUpdate.Add((key, KeyState.Down));
 			}
 		}
 
@@ -123,19 +123,19 @@ namespace OneEngine
 		{
 			button++;
 			lock (keysToUpdate) keysToUpdate.Add(((KeyCode)button, KeyState.Down));
-			mousePosition = point;
+			MousePosition = point;
 		}
 
 		public void OnMouseMove(Vector2 point)
 		{
-			mousePosition = point;
+			MousePosition = point;
 		}
 
 		public void OnMouseUp(Vector2 point, int button)
 		{
 			button++;
 			lock (keysToUpdate) keysToUpdate.Add(((KeyCode)button, KeyState.Up));
-			mousePosition = point;
+			MousePosition = point;
 		}
 	}
 }

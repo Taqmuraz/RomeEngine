@@ -22,13 +22,13 @@
         [BehaviourEvent]
         void Update()
         {
-            if (animation != null) animation.Apply(bonesMap, Time.time - timeStart);
+            if (animation != null) animation.Apply(bonesMap, Time.CurrentTime - timeStart);
         }
 
         public void PlayAnimation(Animation animation)
         {
             this.animation = animation;
-            timeStart = Time.time;
+            timeStart = Time.CurrentTime;
         }
     }
 }

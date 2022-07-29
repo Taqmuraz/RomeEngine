@@ -69,9 +69,9 @@ namespace OneEngineWindowsFormsApplication
             SetupStyle().DrawLine(a, b, widthA, widthB, smoothEnding);
         }
 
-        public void DrawText(string text, Rect rect)
+        public void DrawText(string text, Rect rect, TextOptions options)
         {
-            SetupStyle().DrawText(text, rect);
+            SetupStyle().DrawText(text, rect, options);
         }
 
         public void DrawEllipse(Vector2 center, Vector2 size)
@@ -89,7 +89,7 @@ namespace OneEngineWindowsFormsApplication
             SetupStyle().DrawPolygon(points);
         }
 
-        public Vector2 MeasureText(string text, int fontSize)
+        public Vector2 MeasureText(string text, float fontSize)
         {
             return Graphics.MeasureString(text, CreateFont(fontSize));
         }

@@ -37,17 +37,18 @@
 		public static readonly Color32 green = new Color32(0, 255, 0, 255);
 		public static readonly Color32 blue = new Color32(0, 0, 255, 255);
 		public static readonly Color32 white = new Color32(255, 255, 255, 255);
-		public static readonly Color32 black = new Color32(0, 0, 0, 255);
+        public static readonly Color32 black = new Color32(0, 0, 0, 255);
+        public static readonly Color32 gray = new Color32(127, 127, 127, 255);
 
 		public int Argb => (a << 24) | (r << 16) | (g << 8) | b;
 
         public static Color32 operator * (Color32 a, float b)
 		{
-			return new Color32(a.r * b, a.g * b, a.b * b, a.a);
+			return new Color32((byte)(a.r * b), (byte)(a.g * b), (byte)(a.b * b), a.a);
 		}
 		public static Color32 operator *(Color32 a, Color32 b)
 		{
-			return new Color32(a.r * b.r, a.g * b.g, a.b * b.b, a.a * b.a);
+			return new Color32((float)a.r * b.r, (float)a.g * b.g, (float)a.b * b.b, (float)a.a * b.a);
 		}
 		public static Color32 operator +(Color32 a, Color32 b)
 		{

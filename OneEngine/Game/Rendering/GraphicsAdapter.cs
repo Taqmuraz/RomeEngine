@@ -37,9 +37,9 @@
             Provider.DrawLine(a, b, widthA, widthB, smoothEnding);
         }
 
-        public virtual void DrawText(string text, Rect rect)
+        public virtual void DrawText(string text, Rect rect, TextOptions options)
         {
-            Provider.DrawText(text, rect);
+            Provider.DrawText(text, rect, options);
         }
 
         public virtual void DrawEllipse(Vector2 center, Vector2 size)
@@ -57,7 +57,7 @@
             Provider.DrawPolygon(points);
         }
 
-        public virtual Vector2 MeasureText(string text, int fontSize)
+        public virtual Vector2 MeasureText(string text, float fontSize)
         {
             return Provider.MeasureText(text, fontSize);
         }
