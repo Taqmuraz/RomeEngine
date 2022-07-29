@@ -45,14 +45,18 @@ namespace OneEngine.UI
             elements.Add(new CanvasButton(text, rect, textColor, color, options));
             return Input.GetKeyDown(KeyCode.MouseL) && hover;
         }
-        public bool DrawHandle(Vector2 position, float radius, Color32 color, Color32 hoverColor, Color32 holdColor, TextOptions options)
+        public bool DrawHandle(Vector2 position, float radius, Color32 color, Color32 hoverColor, Color32 holdColor)
         {
             bool hold = Input.GetKey(KeyCode.MouseL);
             bool hover = (Input.MousePosition - position).length <= radius;
             color = hover ? (hold ? holdColor : hoverColor) : color;
 
-            elements.Add(new CanvasHandle(position, radius, color));
+            elements.Add(new CanvasCircle(position, radius, color));
             return hold && hover;
+        }
+        public void DrawLine(Vector2 a, Vector2 b, Color32 color, int width)
+        {
+            elements.Add(new CanvasLine(a, b, color, width));
         }
     }
 }

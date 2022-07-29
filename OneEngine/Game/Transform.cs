@@ -43,6 +43,7 @@ namespace OneEngine
 				return LocalMatrix;
 			}
 		}
+		public Matrix3x3 ParentToWorld => Parent == null ? Matrix3x3.identity : Parent.LocalToWorld;
 
 		public Matrix3x3 LocalMatrix => Matrix3x3.WorldTransform(LocalRight * LocalScale.x, LocalUp * LocalScale.y, LocalPosition);
 

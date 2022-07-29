@@ -7,7 +7,7 @@ namespace OneEngine.IO
     {
         Stream stream;
         byte[] fourBytesBuffer;
-        static System.Text.Encoding Encoding => System.Text.Encoding.Unicode;
+        static System.Text.Encoding Encoding => System.Text.Encoding.ASCII;
 
         public BinarySerializationStream(Stream stream)
         {

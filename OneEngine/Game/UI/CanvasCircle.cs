@@ -1,12 +1,12 @@
 ﻿namespace OneEngine.UI
 {
-    public sealed class CanvasHandle : ICanvasElement
+    public sealed class CanvasCircle : ICanvasElement
     {
         Vector2 position;
         float radius;
         Color32 color;
 
-        public CanvasHandle(Vector2 position, float radius, Color32 color)
+        public CanvasCircle(Vector2 position, float radius, Color32 color)
         {
             this.position = position;
             this.radius = radius;

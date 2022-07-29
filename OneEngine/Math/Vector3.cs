@@ -55,6 +55,15 @@ namespace OneEngine
 			return new Vector3(b.x == 0f ? 1 : (a.x / b.x), b.y == 0f ? 0f : (a.y / b.y), b.z == 0f ? 0f : (a.z / b.z));
 		}
 
+		public static bool operator ==(Vector3 a, Vector3 b)
+		{
+			return (a - b).length <= Mathf.Epsilon;
+		}
+		public static bool operator !=(Vector3 a, Vector3 b)
+		{
+			return (a - b).length >= Mathf.Epsilon;
+		}
+
 
 		public static explicit operator Point (Vector3 v)
 		{

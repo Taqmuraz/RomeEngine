@@ -18,8 +18,8 @@ namespace OneEngine
 			this.row_2 = row_2;
 		}
 
-        public static Matrix3x3 Viewport(float width, float height)
-        {
+		public static Matrix3x3 Viewport(float width, float height)
+		{
 			float w = width;
 			float h = height;
 			if (width > height) w *= height / width;
@@ -31,9 +31,9 @@ namespace OneEngine
 				Column_1 = new Vector3(0f, -h * 0.5f, 0f),
 				Column_2 = new Vector3(width * 0.5f, height * 0.5f, 1f)
 			};
-        }
+		}
 
-        public static Matrix3x3 WorldTransform(Vector2 right, Vector2 up, Vector2 translate)
+		public static Matrix3x3 WorldTransform(Vector2 right, Vector2 up, Vector2 translate)
 		{
 			return new Matrix3x3()
 			{
@@ -163,6 +163,15 @@ namespace OneEngine
 			res.row_2.z = lhs.row_2.x * rhs.row_0.z + lhs.row_2.y * rhs.row_1.z + lhs.row_2.z * rhs.row_2.z;
 
 			return res;
+		}
+
+		public static bool operator ==(Matrix3x3 a, Matrix3x3 b)
+		{
+			return a.row_0 == b.row_0 && a.row_1 == b.row_1 && a.row_2 == b.row_2;
+		}
+		public static bool operator !=(Matrix3x3 a, Matrix3x3 b)
+		{
+			return a.row_0 != b.row_0 || a.row_1 != b.row_1 || a.row_2 != b.row_2;
 		}
 
 		public static Matrix3x3 TransformMatrix(Vector2 position, Vector2 scale, float rotation)

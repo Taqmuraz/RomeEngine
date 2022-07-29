@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\CollectionsExtensions.cs" />
     <Compile Include="Collections\ReadOnlyArray.cs" />
     <Compile Include="Collections\ReadOnlyArrayList.cs" />
     <Compile Include="Collections\SafeDictionary.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Game\Time.cs" />
     <Compile Include="Game\Transform.cs" />
     <Compile Include="Game\UI\Canvas.cs" />
+    <Compile Include="Game\UI\CanvasLine.cs" />
     <Compile Include="Graphics\IGraphics.cs" />
     <Compile Include="Graphics\IGraphicsBrush.cs" />
     <Compile Include="Graphics\IGraphicsStyle.cs" />
@@ -129,7 +131,7 @@
     <Compile Include="Game\UI\CanvasText.cs" />
     <Compile Include="Game\UI\CanvasButton.cs" />
     <Compile Include="Graphics\TextOptions.cs" />
-    <Compile Include="Game\UI\CanvasHandle.cs" />
+    <Compile Include="Game\UI\CanvasCircle.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
