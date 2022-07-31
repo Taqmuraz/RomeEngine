@@ -30,7 +30,7 @@ namespace OneEngineGame
 
         public string File { get; private set; }
 
-        public override void Draw(Canvas canvas)
+        public override void Draw(EditorCanvas canvas)
         {
             try
             {

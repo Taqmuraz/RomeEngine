@@ -1,4 +1,5 @@
 ﻿using System;
+using OneEngine;
 using OneEngine.UI;
 
 namespace OneEngineGame
@@ -6,7 +7,9 @@ namespace OneEngineGame
     public abstract class EditorMenu
     {
         public Action OnClose { get; set; }
-        public abstract void Draw(Canvas canvas);
+        public abstract void Draw(EditorCanvas canvas);
+
+        public Rect Rect { get; set; } = new Rect(Vector2.zero, Screen.Size);
 
         protected void Close()
         {

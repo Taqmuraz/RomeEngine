@@ -81,8 +81,8 @@ namespace OneEngineGame
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
             {
-                var animationEditor = new GameObject("AnimationEditor").AddComponent<AnimationEditor>();
-                return animationEditor.GameObject;
+                var modelEditor = new GameObject("ModelEditor").AddComponent<ModelEditor>();
+                return modelEditor.GameObject;
             }));
             return scene;
         }

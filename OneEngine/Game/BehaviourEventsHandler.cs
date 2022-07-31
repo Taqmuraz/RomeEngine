@@ -71,9 +71,11 @@ namespace OneEngine
 			var properties = type.GetProperties(flags);
 			foreach (var property in properties)
 			{
-				if (property.GetMethod != null && property.SetMethod != null && property.CustomAttributes.Any(a => a.AttributeType == typeof(SerializeFieldAttribute)))
+                var attribute = Attribute.GetCustomAttribute(property, typeof(SerializeFieldAttribute)) as SerializeFieldAttribute;
+
+                if (property.GetMethod != null && property.SetMethod != null && attribute != null)
 				{
-					yield return new SerializableField(property.Name, property.GetValue(this), value => property.SetValue(this, value), property.PropertyType);
+					yield return new SerializableField(property.Name, property.GetValue(this), value => property.SetValue(this, value), property.PropertyType, attribute.HideInInspector);
 				}
 			}
 
@@ -82,9 +84,11 @@ namespace OneEngine
 				var fields = type.GetFields(flags);
 				foreach (var field in fields)
 				{
-					if (field.CustomAttributes.Any(a => a.AttributeType == typeof(SerializeFieldAttribute)))
+                    var attribute = Attribute.GetCustomAttribute(field, typeof(SerializeFieldAttribute)) as SerializeFieldAttribute;
+
+                    if (attribute != null)
 					{
-						yield return new SerializableField(field.Name, field.GetValue(this), value => field.SetValue(this, value), field.FieldType);
+						yield return new SerializableField(field.Name, field.GetValue(this), value => field.SetValue(this, value), field.FieldType, attribute.HideInInspector);
 					}
 				}
 				type = type.BaseType;

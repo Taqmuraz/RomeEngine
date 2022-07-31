@@ -54,6 +54,13 @@
     <Compile Include="FileSearchMenu.cs" />
     <Compile Include="EditorMenu.cs" />
     <Compile Include="StringInputMenu.cs" />
+    <Compile Include="EditorCanvas.cs" />
+    <Compile Include="InspectorMenu.cs" />
+    <Compile Include="TransformRotationHandle.cs" />
+    <Compile Include="TransformHandle.cs" />
+    <Compile Include="ITransformHandle.cs" />
+    <Compile Include="TransformPositionHandle.cs" />
+    <Compile Include="TransformScaleHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OneEngine\OneEngine.csproj">

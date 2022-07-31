@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Linq;
 using OneEngineGame;
+using System.IO;
 
 namespace OneEngineWindowsFormsApplication
 {
@@ -13,9 +14,19 @@ namespace OneEngineWindowsFormsApplication
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameWindow());
+            using (StreamWriter log = new StreamWriter("./log.txt"))
+            {
+                try
+                {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Application.Run(new GameWindow(log));
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLine(ex);
+                };
+            }
         }
     }
 }

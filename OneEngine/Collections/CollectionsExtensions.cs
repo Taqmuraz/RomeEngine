@@ -15,4 +15,14 @@ public static class CollectionsExtensions
 		trace.Add(element);
 		foreach (var child in childNodes(element)) TraceElement(child, childNodes, trace);
 	}
+    public static TResult Iterate<TElement, TResult>(this TElement element, TResult seed, Func<TElement, TResult, TResult> iteration, Func<TElement, (TElement element, bool hasNext)> nextElement)
+    {
+        seed = iteration(element, seed);
+        var next = nextElement(element);
+        if (next.hasNext)
+        {
+            return Iterate(next.element, seed, iteration, nextElement);
+        }
+        else return seed;
+    }
 }

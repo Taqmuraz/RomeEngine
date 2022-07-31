@@ -4,10 +4,16 @@ using System.Linq;
 
 namespace OneEngine.UI
 {
-    public sealed class Canvas : Renderer
+    public class Canvas : Renderer
     {
         List<ICanvasElement> elements = new List<ICanvasElement>();
         HashSet<int> handles = new HashSet<int>();
+
+        [BehaviourEvent]
+        void Start()
+        {
+            Queue = -1000;
+        }
 
         protected override bool IsInsideScreen(IGraphics graphics, Camera camera)
         {
@@ -15,13 +21,18 @@ namespace OneEngine.UI
         }
         protected override IEnumerable<RendererPass> EnumeratePasses()
         {
-            yield return OutlinePass;
             yield return StandardPass;
         }
 
         protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
         {
-            foreach (var element in elements) element.Draw(graphics, camera);
+            foreach (var element in elements)
+            {
+                graphics.Style = graphics.OutlineStyle;
+                element.Draw(new OutlineRendererPass.BlackBrushGraphics(graphics), camera);
+                graphics.Style = graphics.FillStyle;
+                element.Draw(graphics, camera);
+            }
         }
 
         [BehaviourEvent]

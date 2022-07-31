@@ -134,6 +134,7 @@
     <Compile Include="Game\UI\CanvasButton.cs" />
     <Compile Include="Graphics\TextOptions.cs" />
     <Compile Include="Game\UI\CanvasCircle.cs" />
+    <Compile Include="Graphics\TextAlignment.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

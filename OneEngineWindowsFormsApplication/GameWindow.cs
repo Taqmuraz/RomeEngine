@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 using OneEngine;
@@ -9,9 +10,9 @@ namespace OneEngineWindowsFormsApplication
     {
         GameCanvas canvas;
 
-        public GameWindow()
+        public GameWindow(TextWriter log)
         {
-            canvas = new GameCanvas();
+            canvas = new GameCanvas(log);
             canvas.Parent = this;
 
             SetBounds(0, 0, 1280, 640);

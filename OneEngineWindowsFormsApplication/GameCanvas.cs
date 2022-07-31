@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 using OneEngine;
@@ -7,6 +8,7 @@ namespace OneEngineWindowsFormsApplication
 {
     class GameCanvas : Panel, IEngineRuntine, ISystemInfo
     {
+        TextWriter log;
         IEngine engine;
         CanvasGraphics graphics = new CanvasGraphics();
 
@@ -21,13 +23,14 @@ namespace OneEngineWindowsFormsApplication
 
         public void Log(string message)
         {
-
+            log.WriteLine(message);
         }
 
-        public GameCanvas()
+        public GameCanvas(TextWriter log)
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
 
+            this.log = log;
             engine = OneEngineGame.OneEngineGame.StartGame(this);
 
             Timer timer = new Timer();

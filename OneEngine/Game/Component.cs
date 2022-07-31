@@ -8,8 +8,6 @@ namespace OneEngine
     public class Component : BehaviourEventsHandler, IInitializable<GameObject>
 	{
 		bool destroyed;
-		static int id = 0;
-		int localID;
 
 		public string Name => GameObject.Name;
 		public virtual bool IsUnary { get; }
@@ -35,7 +33,6 @@ namespace OneEngine
 		{
 			gameObject = arg;
 			transform = GameObject.Transform;
-			localID = id++;
 		}
 
 		public void Destroy()
@@ -49,7 +46,7 @@ namespace OneEngine
 
 		public override string ToString()
 		{
-			return GameObject.Name + "_" + localID;
+			return $"(Component){GameObject.Name}";
 		}
     }
 }

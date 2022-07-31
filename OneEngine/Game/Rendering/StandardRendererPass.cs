@@ -10,7 +10,7 @@ namespace OneEngine
         {
             graphics.Style = graphics.FillStyle;
 
-            foreach (var renderer in renderers.OrderBy(r => r.Queue))
+            foreach (var renderer in renderers)
             {
                 graphics.Transform = graphicsTransform(renderer);
                 drawCall(renderer, graphics, camera);

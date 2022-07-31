@@ -41,17 +41,12 @@ namespace OneEngine
             graphics.Brush = new SingleColorBrush(camera.ClearColor);
             graphics.DrawRect(Rect.FromCenterAndSize(camera.Transform.Position, camera.OrthographicSize));
 
-            camera.Transform.LocalPosition += Input.GetWASD() * Time.DeltaTime * 5f;
-
-            if (Input.GetKeyDown(KeyCode.Q)) camera.OrthographicMultiplier *= 2f;
-            if (Input.GetKeyDown(KeyCode.E)) camera.OrthographicMultiplier *= 0.5f;
-
             var renderers = Renderer.renderers.Where(r => r.IsInsideScreen(graphics, camera));
             var passes = renderers.SelectMany(r => r.EnumeratePasses()).Distinct().OrderBy(pass => pass.Queue);
 
             foreach (var pass in passes)
             {
-                var renderersForPass = renderers.Where(r => r.EnumeratePasses().Contains(pass));
+                var renderersForPass = renderers.Where(r => r.EnumeratePasses().Contains(pass)).OrderBy(r => r.Queue);
                 pass.Pass(graphics, camera, renderersForPass, r => r.GetGraphicsTransform(camera), (r, g, c) => r.OnGraphicsUpdate(g, c));
             }
         }

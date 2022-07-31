@@ -39,10 +39,10 @@ namespace OneEngine
 		void Subdivide()
 		{
 			nodes = new QuadTree<T>[4];
-			nodes[0] = downLeft = new QuadTree<T>(new Rect(bounds.min, bounds.center), capacity, depthLimit, depth + 1);
-			nodes[1] = downRight = new QuadTree<T>(new Rect(bounds.bottom, bounds.right), capacity, depthLimit, depth + 1);
-			nodes[2] = upperLeft = new QuadTree<T>(new Rect(bounds.left, bounds.top), capacity, depthLimit, depth + 1);
-			nodes[3] = upperRight = new QuadTree<T>(new Rect(bounds.center, bounds.max), capacity, depthLimit, depth + 1);
+			nodes[0] = downLeft = new QuadTree<T>(new Rect(bounds.min, bounds.Center), capacity, depthLimit, depth + 1);
+			nodes[1] = downRight = new QuadTree<T>(new Rect(bounds.Bottom, bounds.Right), capacity, depthLimit, depth + 1);
+			nodes[2] = upperLeft = new QuadTree<T>(new Rect(bounds.Left, bounds.Top), capacity, depthLimit, depth + 1);
+			nodes[3] = upperRight = new QuadTree<T>(new Rect(bounds.Center, bounds.max), capacity, depthLimit, depth + 1);
 
 			for (int i = 0; i < locatables.Count; i++)
 			{

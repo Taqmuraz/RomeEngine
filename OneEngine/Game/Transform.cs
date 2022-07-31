@@ -24,7 +24,7 @@ namespace OneEngine
 		[BehaviourEvent]
 		void OnDestroy()
 		{
-			parent = null;
+			Parent = null;
 		}
 
         protected internal override Transform GetTransform()

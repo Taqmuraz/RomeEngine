@@ -19,7 +19,7 @@ namespace OneEngine
 			this.max = Vector2.Max(min, max);
 		}
 
-		public float Volume => Mathf.Abs(size.x * size.y);
+		public float Volume => Mathf.Abs(Size.x * Size.y);
 
 		public static Rect FromCenterAndSize(Vector2 center, Vector2 size)
 		{
@@ -31,21 +31,27 @@ namespace OneEngine
 			return $"({min.x}, {min.y}, {max.x - min.x}, {max.y - min.y})";
 		}
 
-		public Vector2 size => max - min;
-		public Vector2 center => (min + max) * 0.5f;
-		public Vector2 upperLeft => new Vector2(min.x, max.y);
-		public Vector2 downRight => new Vector2(max.x, min.y);
-		public Vector2 bottom => new Vector2((min.x + max.x) * 0.5f, min.y);
-		public Vector2 top => new Vector2((min.x + max.x) * 0.5f, max.y);
-		public Vector2 right => new Vector2(max.x, (min.y + max.y) * 0.5f);
-		public Vector2 left => new Vector2(min.x, (min.y + max.y) * 0.5f);
+		public Vector2 Size => max - min;
+		public Vector2 Center => (min + max) * 0.5f;
+		public Vector2 UpperLeft => new Vector2(min.x, max.y);
+		public Vector2 DownRight => new Vector2(max.x, min.y);
+		public Vector2 Bottom => new Vector2((min.x + max.x) * 0.5f, min.y);
+		public Vector2 Top => new Vector2((min.x + max.x) * 0.5f, max.y);
+		public Vector2 Right => new Vector2(max.x, (min.y + max.y) * 0.5f);
+		public Vector2 Left => new Vector2(min.x, (min.y + max.y) * 0.5f);
 
-		public bool IntersectsWith(Rect rect)
+        public float Width => max.x - min.x;
+        public float Height => max.y - min.y;
+
+        public float X => min.x;
+        public float Y => min.y;
+
+        public bool IntersectsWith(Rect rect)
 		{
 			Rect r = this;
 			Vector2.Clamp(ref r.min, rect.min, rect.max);
 			Vector2.Clamp(ref r.max, rect.min, rect.max);
-			Vector2 area = r.size;
+			Vector2 area = r.Size;
 			return area.x * area.y != 0f;
 		}
 
@@ -66,11 +72,11 @@ namespace OneEngine
 
 		public static implicit operator System.Drawing.RectangleF(Rect rect)
 		{
-			return new System.Drawing.RectangleF(rect.min.x, rect.min.y, rect.size.x, rect.size.y);
+			return new System.Drawing.RectangleF(rect.min.x, rect.min.y, rect.Size.x, rect.Size.y);
 		}
 		public static explicit operator System.Drawing.Rectangle(Rect rect)
 		{
-			return new System.Drawing.Rectangle((int)rect.min.x, (int)rect.min.y, (int)rect.size.x, (int)rect.size.y);
+			return new System.Drawing.Rectangle((int)rect.min.x, (int)rect.min.y, (int)rect.Size.x, (int)rect.Size.y);
 		}
 		public static implicit operator Rect(System.Drawing.RectangleF rectangle)
 		{
@@ -80,7 +86,7 @@ namespace OneEngine
 		static Vector2[] nonAllocVertices = new Vector2[4];
 		public bool IntersectsRay(Ray ray, out float distance)
 		{
-			distance = (center - ray.origin).length;
+			distance = (Center - ray.origin).length;
 
 			Matrix3x3 rayMatrix = Matrix3x3.New(ray.direction, new Vector2(-ray.direction.y, ray.direction.x), ray.origin).GetInversed();
 			bool negative = false, positive = false;
@@ -88,8 +94,8 @@ namespace OneEngine
 			{
 				nonAllocVertices[0] = min;
 				nonAllocVertices[1] = max;
-				nonAllocVertices[2] = upperLeft;
-				nonAllocVertices[3] = downRight;
+				nonAllocVertices[2] = UpperLeft;
+				nonAllocVertices[3] = DownRight;
 
 				for (int i = 0; i < 4; i++)
 				{

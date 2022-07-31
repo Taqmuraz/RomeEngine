@@ -17,6 +17,7 @@ namespace OneEngine.IO
             foreach (var type in types)
             {
                 typesMap[type.FullName] = type;
+                typesMap[type.Name] = type;
             }
         }
 

@@ -90,8 +90,8 @@ namespace OneEngineWindowsFormsApplication
 
         public void DrawRect(Rect rect)
         {
-            Vector2 center = rect.center;
-            Vector2 size = rect.size;
+            Vector2 center = rect.Center;
+            Vector2 size = rect.Size;
             center = Transform.MultiplyVector(center);
             size = Transform.MultiplyScale(size);
             Vector2 right = (Vector2)Transform.Column_0.normalized;

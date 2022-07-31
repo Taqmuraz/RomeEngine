@@ -13,7 +13,7 @@ namespace OneEngineGame
         protected override IEnumerator Routine()
         {
             var camera = Camera.Cameras[0];
-            Canvas canvas = GameObject.AddComponent<Canvas>();
+            EditorCanvas canvas = GameObject.AddComponent<EditorCanvas>();
             FileSearchMenu fileSearch = new FileSearchMenu("./", "Select gameObject file");
             while (string.IsNullOrEmpty(fileSearch.File))
             {

@@ -5,7 +5,7 @@ namespace OneEngine
 {
     public sealed class OutlineRendererPass : RendererPass
     {
-        class BlackBrushGraphics : GraphicsAdapter
+        public class BlackBrushGraphics : GraphicsAdapter
         {
             public BlackBrushGraphics(IGraphics provider) : base(provider)
             {
