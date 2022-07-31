@@ -8,11 +8,9 @@ using OneEngine.UI;
 
 namespace OneEngineGame
 {
-    public sealed class AnimationEditor : Component
+    public sealed class AnimationEditor : Editor
     {
-        IEnumerator routine;
-
-        IEnumerator Routine()
+        protected override IEnumerator Routine()
         {
             var camera = Camera.Cameras[0];
             Canvas canvas = GameObject.AddComponent<Canvas>();
@@ -34,46 +32,38 @@ namespace OneEngineGame
 
                 var worldToScreen = camera.WorldToScreenMatrix;
                 var screenToWorld = camera.ScreenToWorldMatrix;
+                int hash = 0;
 
                 foreach (var bone in skeleton)
                 {
                     var l2w = bone.LocalToWorld;
                     var p2w = bone.ParentToWorld;
                     var w2p = p2w.GetInversed();
+                    var mouseWorld = screenToWorld.MultiplyPoint((Input.MousePosition));
 
-                    var handlePos = worldToScreen.MultiplyPoint(l2w.MultiplyPoint(Vector2.right * 0.25f));
+                    var handleWorld = l2w.MultiplyPoint(Vector2.right * 0.25f);
+                    var handleScreen = worldToScreen.MultiplyPoint(handleWorld);
 
-                    canvas.DrawLine(worldToScreen.MultiplyPoint((Vector2)l2w.Column_2), handlePos, Color32.red, 5);
-                    if (canvas.DrawHandle(handlePos, 15f, Color32.red, Color32.green, Color32.gray))
+                    float radius = (handleWorld - mouseWorld).length < 0.1f ? 15f : 5f;
+
+                    canvas.DrawLine(worldToScreen.MultiplyPoint((Vector2)l2w.Column_2), handleScreen, Color32.red, 5);
+                    if (canvas.DrawHandle(hash++, handleScreen, radius, Color32.red, Color32.green, Color32.gray))
                     {
-                        var mouseWorld = screenToWorld.MultiplyPoint(Input.MousePosition);
                         var worldDelta = mouseWorld - bone.Position;
                         var localDelta = w2p.MultiplyVector(worldDelta);
                         bone.LocalRotation = localDelta.ToAngle();
                     }
 
-                    handlePos = worldToScreen.MultiplyPoint((Vector2)l2w.Column_2);
+                    /*handlePos = worldToScreen.MultiplyPoint((Vector2)l2w.Column_2);
 
-                    if (canvas.DrawHandle(handlePos, 15f, Color32.blue, Color32.green, Color32.gray))
+                    if (canvas.DrawHandle(hash++, handlePos, 15f, Color32.blue, Color32.green, Color32.gray))
                     {
-                        var mouseWorld = screenToWorld.MultiplyPoint((Input.MousePosition));
                         var mouseLocal = w2p.MultiplyPoint(mouseWorld);
                         
                         bone.LocalPosition = mouseLocal;
-                    }
+                    }*/
                 }
             }
-        }
-
-        [BehaviourEvent]
-        void Start()
-        {
-            routine = Routine();
-        }
-        [BehaviourEvent]
-        void Update()
-        {
-            if (routine != null && !routine.MoveNext()) routine = null;
         }
     }
 }

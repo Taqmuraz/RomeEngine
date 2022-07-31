@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editor.cs" />
     <Compile Include="FpsRenderer.cs" />
     <Compile Include="Human\HumanAnimation.cs" />
     <Compile Include="Human\HumanAnimations.cs" />

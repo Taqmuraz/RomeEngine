@@ -40,12 +40,12 @@ namespace OneEngineGame
                 float startX = 50f;
                 float startY = 50f;
                 float elementWidth = 600f;
-                float elementHeight = 50f;
+                float elementHeight = 30f;
                 float outline = 10f;
                 TextOptions textOptions = new TextOptions() { FontSize = 15f };
 
-                canvas.DrawRect(new Rect(startX - outline * 0.5f, startY - outline * 0.5f, elementWidth + outline, elementHeight * (elementsOnPage + 1) + outline), Color32.black);
-                canvas.DrawRect(new Rect(startX, startY + elementHeight, elementWidth, elementHeight), Color32.gray);
+                canvas.DrawRect(new Rect(startX - outline * 0.5f, startY - outline * 0.5f, elementWidth + outline, elementHeight * (elementsOnPage + 2) + outline), Color32.black);
+                
                 canvas.DrawText(header + $"\n{Root}", new Rect(startX, startY, elementWidth, elementHeight), Color32.white, textOptions);
 
                 for (int i = positionOffset; i < Math.Min(totalLength, elementsOnPage) - positionOffset; i++)
@@ -70,7 +70,7 @@ namespace OneEngineGame
                     else continue;
 
                     if (canvas.DrawButton(text,
-                            new Rect(startX, startY + elementHeight * (index + 1), elementWidth, elementHeight),
+                            new Rect(startX, startY + elementHeight * (index + 2), elementWidth, elementHeight),
                             Color32.white, Color32.gray, Color32.blue, Color32.green, textOptions))
                     {
                         action();
