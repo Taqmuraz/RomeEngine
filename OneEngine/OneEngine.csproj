@@ -95,6 +95,8 @@
     <Compile Include="Graphics\IGraphicsStyle.cs" />
     <Compile Include="Graphics\SingleColorBrush.cs" />
     <Compile Include="Input\Input.cs" />
+    <Compile Include="Input\KeyCode.cs" />
+    <Compile Include="Input\KeyState.cs" />
     <Compile Include="IO\Serialization\ArrayFieldSerializer.cs" />
     <Compile Include="IO\Serialization\BinarySerializationStream.cs" />
     <Compile Include="IO\Serialization\BoolTypeFieldSerializer.cs" />

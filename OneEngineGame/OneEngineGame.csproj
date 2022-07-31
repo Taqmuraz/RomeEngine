@@ -47,11 +47,13 @@
     <Compile Include="Human\HumanAnimations.cs" />
     <Compile Include="Human\HumanBone.cs" />
     <Compile Include="Human\HumanModel.cs" />
+    <Compile Include="ModelEditor.cs" />
     <Compile Include="OneEngineGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnimationEditor.cs" />
     <Compile Include="FileSearchMenu.cs" />
     <Compile Include="EditorMenu.cs" />
+    <Compile Include="StringInputMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OneEngine\OneEngine.csproj">
