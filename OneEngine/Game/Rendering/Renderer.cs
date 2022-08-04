@@ -6,8 +6,8 @@ namespace OneEngine
     public abstract class Renderer : Component
     {
         static List<Renderer> renderers = new List<Renderer>();
-        protected RendererPass OutlinePass { get; } = new OutlineRendererPass() { Queue = 0 };
-        protected RendererPass StandardPass { get; } = new StandardRendererPass() { Queue = 1 };
+        protected static RendererPass OutlinePass { get; } = new OutlineRendererPass() { Queue = 0 };
+        protected static RendererPass StandardPass { get; } = new StandardRendererPass() { Queue = 1 };
 
         protected virtual IEnumerable<RendererPass> EnumeratePasses()
         {
@@ -46,7 +46,7 @@ namespace OneEngine
 
             foreach (var pass in passes)
             {
-                var renderersForPass = renderers.Where(r => r.EnumeratePasses().Contains(pass)).OrderBy(r => r.Queue);
+                var renderersForPass = renderers.Where(r => r.EnumeratePasses().Contains(pass)).OrderByDescending(r => r.Queue);
                 pass.Pass(graphics, camera, renderersForPass, r => r.GetGraphicsTransform(camera), (r, g, c) => r.OnGraphicsUpdate(g, c));
             }
         }

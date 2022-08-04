@@ -13,7 +13,7 @@ namespace OneEngineGame
 
         protected bool IsAccurateMode { get; private set; }
 
-        bool ITransformHandle.Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode)
+        bool ITransformHandle.Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode, bool drawOnly)
         {
             IsAccurateMode = accurateMode;
             var screenToWorld = camera.ScreenToWorldMatrix;
@@ -27,9 +27,10 @@ namespace OneEngineGame
 
             float radius = Radius;
 
-            canvas.DrawText(transform.Name, Rect.FromCenterAndSize(worldToScreen.MultiplyPoint(l2w.MultiplyPoint(new Vector2(0.5f, 0f))), new Vector2(100f, 25f)), IsAccurateMode ? Color32.blue : Color32.red, new TextOptions() { FontSize = 12f });
+            canvas.DrawLine(worldToScreen.MultiplyPoint((Vector2)l2w.Column_2), worldToScreen.MultiplyPoint(l2w.MultiplyPoint(Vector2.right)), Color32.blue, 1);
+            canvas.DrawText(transform.Name, Rect.FromCenterAndSize(worldToScreen.MultiplyPoint(l2w.MultiplyPoint(TextLocalPosition)) + TextScreenOffset, new Vector2(100f, 25f)), IsAccurateMode ? Color32.blue : Color32.red, new TextOptions() { FontSize = 12f });
 
-            if (canvas.DrawHandle(transform.GetHashCode(), handleScreen, radius, Color, Color32.white, Color32.gray))
+            if (!drawOnly && canvas.DrawHandle(transform.GetHashCode() + GetHashCode(), handleScreen, radius, Color, Color32.white, Color32.gray))
             {
                 OnDragHandle(transform, mouseWorld);
                 return true;

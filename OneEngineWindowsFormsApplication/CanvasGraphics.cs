@@ -13,7 +13,14 @@ namespace OneEngineWindowsFormsApplication
             set
             {
                 transform = value;
-                Graphics.Transform = new System.Drawing.Drawing2D.Matrix(value.Column_0.x, value.Column_0.y, value.Column_1.x, value.Column_1.y, value.Column_2.x, value.Column_2.y);
+                try
+                {
+                    Graphics.Transform = new System.Drawing.Drawing2D.Matrix(value.Column_0.x, value.Column_0.y, value.Column_1.x, value.Column_1.y, value.Column_2.x, value.Column_2.y);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError(ex);
+                }
             }
         }
         Matrix3x3 transform = Matrix3x3.identity;

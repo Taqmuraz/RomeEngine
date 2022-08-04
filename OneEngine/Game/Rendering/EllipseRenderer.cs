@@ -7,7 +7,7 @@
         protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
         {
             graphics.Brush = new SingleColorBrush(Color);
-            graphics.DrawEllipse(Vector2.zero, Vector2.one);
+            graphics.DrawEllipse(Vector2.zero, Vector2.one * 2f);
         }
 
         protected override bool IsInsideScreen(IGraphics graphics, Camera camera)

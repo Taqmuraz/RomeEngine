@@ -3,10 +3,22 @@ using OneEngine.UI;
 
 namespace OneEngineGame
 {
-    public sealed class StringInputMenu : EditorMenu
+    public sealed class StringInputMenu : EditorMenu, IInputHandler
     {
         public string InputString { get; set; } = string.Empty;
         public bool Done { get; private set; } = false;
+
+        bool shift;
+
+        public StringInputMenu()
+        {
+            Engine.Instance.Runtime.SetInputHandler(this);
+        }
+
+        protected override void OnMenuClosed()
+        {
+            Engine.Instance.Runtime.SetInputHandler(new Input());
+        }
 
         public override void Draw(EditorCanvas canvas)
         {
@@ -15,24 +27,48 @@ namespace OneEngineGame
             var inputRect = new Rect((screenSize - menuSize) * 0.5f, (screenSize + menuSize) * 0.5f);
             canvas.DrawRect(inputRect, Color32.white);
             canvas.DrawText(InputString == null ? string.Empty : InputString + "_", inputRect, Color32.black, new TextOptions() { FontSize = 25f });
+        }
 
-            for (int i = 0; i < ('z' - 'a'); i++)
+        public void OnKeyDown(KeyCode key)
+        {
+            if (key >= KeyCode.A && key <= KeyCode.Z)
             {
-                if (Input.GetKeyDown(KeyCode.A + i))
-                {
-                    char c = ((char)('a' + i));
-                    InputString += Input.GetKey(KeyCode.ShiftKey) ? char.ToUpper(c) : c;
-                }
+                char c = ((char)('a' + (key - KeyCode.A)));
+                InputString += shift ? char.ToUpper(c) : c;
             }
-            if (!string.IsNullOrEmpty(InputString))
+            else if (key == KeyCode.ShiftKey)
             {
-                if (Input.GetKeyDown(KeyCode.Backspace)) InputString = InputString.Substring(0, InputString.Length - 1);
-                if (Input.GetKeyDown(KeyCode.Enter))
+                shift = true;
+            }
+            else if (!string.IsNullOrEmpty(InputString))
+            {
+                if (key == KeyCode.Backspace) InputString = InputString.Substring(0, InputString.Length - 1);
+                else if (key == KeyCode.Enter)
                 {
                     Done = true;
                     Close();
                 }
             }
+        }
+
+        public void OnKeyUp(KeyCode key)
+        {
+            if (key == KeyCode.ShiftKey)
+            {
+                shift = false;
+            }
+        }
+
+        public void OnMouseDown(Vector2 mousePosition, int button)
+        {
+        }
+
+        public void OnMouseMove(Vector2 mousePosition)
+        {
+        }
+
+        public void OnMouseUp(Vector2 mousePosition, int button)
+        {
         }
     }
 }

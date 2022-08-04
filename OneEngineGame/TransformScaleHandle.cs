@@ -4,22 +4,27 @@ namespace OneEngineGame
 {
     public sealed class TransformScaleHandle : TransformHandle
     {
+        public int Axis { get; set; } = 0;
+
         protected override Color32 Color => Color32.green;
 
         protected override float Radius => 10f;
 
-        protected override Vector2 HandleLocalPosition => Vector2.right;
+        protected override Vector2 HandleLocalPosition => new Vector2() { [Axis] = 1f };
 
         protected override Vector2 TextLocalPosition => new Vector2(0.5f, 0f);
 
         protected override void OnDragHandle(Transform transform, Vector2 worldMousePosition)
         {
-            float scale = transform.ParentToWorld.GetInversed().MultiplyPoint(worldMousePosition).length;
+            float scale = Vector2.Dot((transform.ParentToWorld.GetInversed().MultiplyPoint(worldMousePosition) - transform.LocalPosition), transform.LocalMatrix.MultiplyVector(new Vector2() { [Axis] = 1f }).normalized);
             if (IsAccurateMode)
             {
-                scale = (int)(scale * 10f) * 0.1f;
+                scale = ((int)(scale * 10f) * 0.1f);
             }
-            transform.LocalScale = Vector2.one * scale;
+            scale = scale.Clamp(0.1f, scale);
+            Vector2 currentScale = transform.LocalScale;
+            currentScale[Axis] = scale;
+            transform.LocalScale = currentScale;
         }
     }
 }

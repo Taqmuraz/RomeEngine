@@ -84,6 +84,10 @@
     <Compile Include="Game\Rendering\RendererPass.cs" />
     <Compile Include="Game\Rendering\StandardRendererPass.cs" />
     <Compile Include="Game\Rendering\TextRenderer.cs" />
+    <Compile Include="Game\Routine\ActionRoutine.cs" />
+    <Compile Include="Game\Routine\EnumeratorRoutine.cs" />
+    <Compile Include="Game\Routine\IRoutine.cs" />
+    <Compile Include="Game\Routine\Routine.cs" />
     <Compile Include="Game\Screen.cs" />
     <Compile Include="Game\SerializeFieldAttribute.cs" />
     <Compile Include="Game\Time.cs" />

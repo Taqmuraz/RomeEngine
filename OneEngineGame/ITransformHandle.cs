@@ -5,6 +5,6 @@ namespace OneEngineGame
 {
     public interface ITransformHandle
     {
-        bool Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode);
+        bool Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode, bool drawOnly);
     }
 }

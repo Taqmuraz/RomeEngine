@@ -31,7 +31,7 @@ namespace OneEngine
 			public virtual KeyState KeyState { get; set; }
 		}
 
-		internal Input()
+		public Input()
 		{
 
 		}

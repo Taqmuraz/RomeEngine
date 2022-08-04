@@ -83,13 +83,7 @@ namespace OneEngineGame
                 {
                     if (canvas.DrawButton("Add component", new Rect(inspectorRect.X, inspectorRect.Y + offsetY, elementWidth, elementHeight), new TextOptions() { FontSize = 25f, Alignment = TextAlignment.MiddleCenter }))
                     {
-                        var stringInput = new StringInputMenu();
-                        while (!stringInput.Done)
-                        {
-                            yield return null;
-                            stringInput.Draw(canvas);
-                        }
-                        gameObject.AddComponent(TypesMap.GetType(stringInput.InputString));
+                        ShowMenu<StringInputMenu>(canvas, menu => gameObject.AddComponent(TypesMap.GetType(menu.InputString)));
                     }
                 }
             }
