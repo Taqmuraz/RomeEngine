@@ -6,7 +6,7 @@ namespace OneEngineGame
     public sealed class StringInputMenu : EditorMenu, IInputHandler
     {
         public string InputString { get; set; } = string.Empty;
-        public bool Done { get; private set; } = false;
+        public string Header { get; set; }
 
         bool shift;
 
@@ -26,7 +26,13 @@ namespace OneEngineGame
             Vector2 menuSize = new Vector2(400f, 50f);
             var inputRect = new Rect((screenSize - menuSize) * 0.5f, (screenSize + menuSize) * 0.5f);
             canvas.DrawRect(inputRect, Color32.white);
-            canvas.DrawText(InputString == null ? string.Empty : InputString + "_", inputRect, Color32.black, new TextOptions() { FontSize = 25f });
+            var textOptions = new TextOptions() { FontSize = 25f };
+
+            if (string.IsNullOrEmpty(InputString) && !string.IsNullOrEmpty(Header))
+            {
+                canvas.DrawText(Header, inputRect, Color32.gray, textOptions);
+            }
+            canvas.DrawText(InputString == null ? string.Empty : InputString + "_", inputRect, Color32.black, textOptions);
         }
 
         public void OnKeyDown(KeyCode key)
@@ -35,6 +41,11 @@ namespace OneEngineGame
             {
                 char c = ((char)('a' + (key - KeyCode.A)));
                 InputString += shift ? char.ToUpper(c) : c;
+            }
+            else if (key >= KeyCode.N0 && key <= KeyCode.N9)
+            {
+                char c = ((char)('0' + (key - KeyCode.N0)));
+                InputString += c;
             }
             else if (key == KeyCode.ShiftKey)
             {
@@ -45,7 +56,6 @@ namespace OneEngineGame
                 if (key == KeyCode.Backspace) InputString = InputString.Substring(0, InputString.Length - 1);
                 else if (key == KeyCode.Enter)
                 {
-                    Done = true;
                     Close();
                 }
             }

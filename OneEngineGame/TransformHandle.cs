@@ -10,10 +10,11 @@ namespace OneEngineGame
         protected abstract Vector2 HandleLocalPosition { get; }
         protected abstract Vector2 TextLocalPosition { get; }
         protected virtual Vector2 TextScreenOffset => new Vector2(0f, 25f);
+        protected abstract string Text { get; }
 
         protected bool IsAccurateMode { get; private set; }
 
-        bool ITransformHandle.Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode, bool drawOnly)
+        bool ITransformHandle.Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode)
         {
             IsAccurateMode = accurateMode;
             var screenToWorld = camera.ScreenToWorldMatrix;
@@ -27,10 +28,9 @@ namespace OneEngineGame
 
             float radius = Radius;
 
-            canvas.DrawLine(worldToScreen.MultiplyPoint((Vector2)l2w.Column_2), worldToScreen.MultiplyPoint(l2w.MultiplyPoint(Vector2.right)), Color32.blue, 1);
-            canvas.DrawText(transform.Name, Rect.FromCenterAndSize(worldToScreen.MultiplyPoint(l2w.MultiplyPoint(TextLocalPosition)) + TextScreenOffset, new Vector2(100f, 25f)), IsAccurateMode ? Color32.blue : Color32.red, new TextOptions() { FontSize = 12f });
+            canvas.DrawText(Text, Rect.FromCenterAndSize(worldToScreen.MultiplyPoint(l2w.MultiplyPoint(TextLocalPosition)) + TextScreenOffset, new Vector2(100f, 25f)), IsAccurateMode ? Color32.blue : Color32.red, new TextOptions() { FontSize = 12f });
 
-            if (!drawOnly && canvas.DrawHandle(transform.GetHashCode() + GetHashCode(), handleScreen, radius, Color, Color32.white, Color32.gray))
+            if (canvas.DrawHandle(transform.GetHashCode() + GetHashCode(), handleScreen, radius, Color, Color32.white, Color32.gray))
             {
                 OnDragHandle(transform, mouseWorld);
                 return true;

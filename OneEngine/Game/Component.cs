@@ -46,7 +46,7 @@ namespace OneEngine
 
 		public override string ToString()
 		{
-			return $"(Component){GameObject.Name}";
+			return $"({GetType().Name}){GameObject.Name}";
 		}
     }
 }

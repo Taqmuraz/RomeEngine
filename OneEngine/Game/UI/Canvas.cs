@@ -79,5 +79,23 @@ namespace OneEngine.UI
         {
             elements.Add(new CanvasLine(a, b, color, width));
         }
+        public float DrawScrollbar(int id, float minValue, float maxValue, float value, Rect rect, int axis, Color32 handleColor)
+        {
+            DrawRect(rect, Color32.white);
+            Vector2 axisDir = new Vector2() { [axis] = 1f };
+            int otherAxis = (axis + 1) % 2;
+            float width = rect.Size[otherAxis];
+            float length = rect.Size[axis];
+
+            float valuableLength = length - width;
+            Vector2 start = rect.min + new Vector2(width, width) * 0.5f;
+
+            if (DrawHandle(id, start + (axisDir * (value - minValue) / (maxValue - minValue)) * valuableLength, width * 0.5f, handleColor, Color32.gray, Color32.white))
+            {
+                value = ((Vector2.Dot(Input.MousePosition - start, axisDir) / valuableLength) * (maxValue - minValue) + minValue).Clamp(minValue, maxValue);
+            }
+
+            return value;
+        }
     }
 }

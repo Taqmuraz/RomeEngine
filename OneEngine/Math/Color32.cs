@@ -42,6 +42,8 @@
 
 		public int Argb => (a << 24) | (r << 16) | (g << 8) | b;
 
+		public Color32 Negative => new Color32(~Argb, a);
+
         public static Color32 operator * (Color32 a, float b)
 		{
 			return new Color32((byte)(a.r * b), (byte)(a.g * b), (byte)(a.b * b), a.a);

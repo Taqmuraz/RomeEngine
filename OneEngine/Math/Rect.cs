@@ -25,6 +25,10 @@ namespace OneEngine
 		{
 			return new Rect(center - size * 0.5f, center + size * 0.5f);
 		}
+		public static Rect FromLocationAndSize(Vector2 location, Vector2 size)
+		{
+			return new Rect(location, location + size);
+		}
 
 		public override string ToString()
 		{

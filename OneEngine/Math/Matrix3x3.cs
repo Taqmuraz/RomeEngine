@@ -276,6 +276,15 @@ namespace OneEngine
 		{
 			return new Vector2(Column_0.length * scale.x, Column_1.length * scale.y);
 		}
+		public Vector2 MultiplyDirection(Vector2 direction)
+		{
+			return new Matrix3x3()
+			{
+				Column_0 = this.Column_0.normalized,
+				Column_1 = this.Column_1.normalized,
+				Column_2 = this.Column_2.normalized,
+			}.MultiplyVector(direction);
+		}
 
 		public override string ToString()
 		{

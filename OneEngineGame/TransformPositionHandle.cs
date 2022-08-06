@@ -8,6 +8,8 @@ namespace OneEngineGame
 
         protected override float Radius => 10f;
 
+        protected override string Text => "Position";
+
         protected override Vector2 HandleLocalPosition => Vector2.zero;
 
         protected override Vector2 TextLocalPosition => Vector2.zero;

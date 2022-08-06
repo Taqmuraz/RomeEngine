@@ -21,9 +21,16 @@ namespace OneEngineGame
             var canvasRect = new Rect(Vector2.zero, Screen.Size);
             Transform root = null;
             InspectorMenu inspectorMenu = new InspectorMenu() { Rect = new Rect(canvasRect.Width * 0.75f, 0f, canvasRect.Width * 0.25f, canvasRect.Height) };
-            int handleIndex = 0;
+            Transform inspectedTransform = null;
             bool accurateMode = false;
-            ITransformHandle[] transformHandles = { new TransformRotationHandle(), new TransformPositionHandle(), new TransformScaleHandle(), new TransformScaleHandle() { Axis = 1 } };
+            ITransformHandle[] transformHandles =
+            {
+                new TransformRotationHandle(),
+                new TransformPositionHandle(),
+                new TransformScaleHandle() { Axis = 1 },
+                new TransformScaleHandle() { Axis = 2 },
+                new TransformScaleHandle() { Axis = 3 },
+            };
 
             while (true)
             {
@@ -43,28 +50,32 @@ namespace OneEngineGame
                 {
                     if (canvas.DrawButton("Create root", new Rect(0f, 0f, elementWidth, elementHeight), TextOptions.Default))
                     {
-                        EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => root = new GameObject(menu.InputString).Transform);
+                        var inputMenu = EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => root = new GameObject(menu.InputString).Transform);
+                        inputMenu.Header = "New transform name";
                     }
                 }
                 else
                 {
                     int posX = 0;
                     int posY = 0;
-                    if (Input.GetKey(KeyCode.R)) handleIndex = 0;
-                    else if (Input.GetKey(KeyCode.T)) handleIndex = 1;
-                    else if (Input.GetKey(KeyCode.F)) handleIndex = 2;
-                    else if (Input.GetKey(KeyCode.V)) handleIndex = 3;
                     if (Input.GetKeyDown(KeyCode.ShiftKey)) accurateMode = !accurateMode;
                     
                     IEnumerator DrawTransform(Transform transform)
                     {
-                        foreach (var handle in transformHandles) handle.Draw(transform, sceneCanvas, camera, accurateMode, !(inspectorMenu.InspectedObject == transform.GameObject || inspectorMenu.InspectedObject is Component inspectedComponent && inspectedComponent.GameObject == transform.GameObject));
+                        var worldToScreen = camera.WorldToScreenMatrix;
+                        var l2w = transform.LocalToWorld;
+                        Vector2 textLocalPosition = new Vector2(0.5f, 0f);
+                        Vector2 textScreenOffset = new Vector2(0f, 25f);
+
+                        sceneCanvas.DrawLine(worldToScreen.MultiplyPoint((Vector2)l2w.Column_2), worldToScreen.MultiplyPoint(l2w.MultiplyPoint(Vector2.right)), transform == inspectedTransform ? Color32.white : Color32.blue, 1);
+                        
+                        if (transform == inspectedTransform) foreach (var handle in transformHandles) handle.Draw(transform, sceneCanvas, camera, accurateMode);
 
                         string name = transform.Name;
                         if (transform.Parent != null) name = $"{transform.Parent.Children.IndexOf(transform) + 1}){name}";
                         if (canvas.DrawButton(transform.Name, new Rect(posX * indent, posY * elementHeight, elementWidth - posX * indent - elementHeight * 2f, elementHeight), TextOptions.Default))
                         {
-                            inspectorMenu.InspectedObject = transform;
+                            inspectorMenu.Inspect(inspectedTransform = transform);
                         }
 
                         if (canvas.DrawButton("-", new Rect(elementWidth - elementHeight * 2f, elementHeight * posY, elementHeight, elementHeight), TextOptions.Default))
@@ -73,12 +84,13 @@ namespace OneEngineGame
                         }
                         if (canvas.DrawButton("+", new Rect(elementWidth - elementHeight, elementHeight * posY, elementHeight, elementHeight), TextOptions.Default))
                         {
-                            EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
+                            var inputMenu = EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
                             {
                                 var newChild = new GameObject(menu.InputString).Transform;
                                 newChild.Parent = transform;
                                 newChild.LocalPosition = Vector2.right;
                             });
+                            inputMenu.Header = "New child name";
                         }
                         posX++;
 
