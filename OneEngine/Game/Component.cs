@@ -7,7 +7,7 @@ namespace OneEngine
 {
     public class Component : BehaviourEventsHandler, IInitializable<GameObject>
 	{
-		bool destroyed;
+		[SerializeField(HideInInspector = true)] bool destroyed;
 
 		public string Name => GameObject.Name;
 		public virtual bool IsUnary { get; }
@@ -17,9 +17,9 @@ namespace OneEngine
 		{
 			return transform;
 		}
-		[SerializeField]
+		[SerializeField(HideInInspector = true)]
 		Transform transform;
-		[SerializeField]
+		[SerializeField(HideInInspector = true)]
 		GameObject gameObject;
 		public GameObject GameObject => gameObject;
 

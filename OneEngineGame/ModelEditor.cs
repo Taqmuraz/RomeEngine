@@ -21,7 +21,7 @@ namespace OneEngineGame
             var canvasRect = new Rect(Vector2.zero, Screen.Size);
             Transform root = null;
             InspectorMenu inspectorMenu = new InspectorMenu() { Rect = new Rect(canvasRect.Width * 0.75f, 0f, canvasRect.Width * 0.25f, canvasRect.Height) };
-            Transform inspectedTransform = null;
+            GameObject inspectedGameObject = null;
             bool accurateMode = false;
             ITransformHandle[] transformHandles =
             {
@@ -50,8 +50,7 @@ namespace OneEngineGame
                 {
                     if (canvas.DrawButton("Create root", new Rect(0f, 0f, elementWidth, elementHeight), TextOptions.Default))
                     {
-                        var inputMenu = EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => root = new GameObject(menu.InputString).Transform);
-                        inputMenu.Header = "New transform name";
+                        EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => root = new GameObject(menu.InputString).Transform).WithHeader("New transform name");
                     }
                 }
                 else
@@ -67,15 +66,15 @@ namespace OneEngineGame
                         Vector2 textLocalPosition = new Vector2(0.5f, 0f);
                         Vector2 textScreenOffset = new Vector2(0f, 25f);
 
-                        sceneCanvas.DrawLine(worldToScreen.MultiplyPoint((Vector2)l2w.Column_2), worldToScreen.MultiplyPoint(l2w.MultiplyPoint(Vector2.right)), transform == inspectedTransform ? Color32.white : Color32.blue, 1);
+                        sceneCanvas.DrawLine(worldToScreen.MultiplyPoint((Vector2)l2w.Column_2), worldToScreen.MultiplyPoint(l2w.MultiplyPoint(Vector2.right)), transform.GameObject == inspectedGameObject ? Color32.white : Color32.blue, 1);
                         
-                        if (transform == inspectedTransform) foreach (var handle in transformHandles) handle.Draw(transform, sceneCanvas, camera, accurateMode);
+                        if (transform.GameObject == inspectedGameObject) foreach (var handle in transformHandles) handle.Draw(transform, sceneCanvas, camera, accurateMode);
 
                         string name = transform.Name;
                         if (transform.Parent != null) name = $"{transform.Parent.Children.IndexOf(transform) + 1}){name}";
                         if (canvas.DrawButton(transform.Name, new Rect(posX * indent, posY * elementHeight, elementWidth - posX * indent - elementHeight * 2f, elementHeight), TextOptions.Default))
                         {
-                            inspectorMenu.Inspect(inspectedTransform = transform);
+                            inspectorMenu.Inspect(inspectedGameObject = transform.GameObject);
                         }
 
                         if (canvas.DrawButton("-", new Rect(elementWidth - elementHeight * 2f, elementHeight * posY, elementHeight, elementHeight), TextOptions.Default))
@@ -84,13 +83,12 @@ namespace OneEngineGame
                         }
                         if (canvas.DrawButton("+", new Rect(elementWidth - elementHeight, elementHeight * posY, elementHeight, elementHeight), TextOptions.Default))
                         {
-                            var inputMenu = EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
+                            EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
                             {
                                 var newChild = new GameObject(menu.InputString).Transform;
                                 newChild.Parent = transform;
                                 newChild.LocalPosition = Vector2.right;
-                            });
-                            inputMenu.Header = "New child name";
+                            }).WithHeader("New child name");
                         }
                         posX++;
 

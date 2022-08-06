@@ -1,30 +1,53 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace OneEngineGame
 {
-    public sealed class ArrayFieldInspector : CollectionFieldInspector<IList, object>
+    public sealed class ArrayFieldInspector : CollectionFieldInspector<Array, object>
     {
-        protected override IEnumerable<object> EnumerateCollection(IList collection)
+        protected override IEnumerable<object> EnumerateCollection(Array collection)
         {
             foreach (var element in collection) yield return element;
         }
 
-        protected override IList SetElement(IList collection, int index, object element)
+        protected override Array SetElement(Array collection, int index, object element)
         {
-            collection[index] = element;
+            collection.SetValue(element, index);
             return collection;
         }
 
-        protected override IList CreateCollection(int length, Type collectionType)
+        protected override Array RemoveElement(Array collection, int index)
         {
-            return Array.CreateInstance(collectionType.GetElementType(), length);
+            Array clone = Array.CreateInstance(collection.GetType().GetElementType(), collection.Length - 1);
+            for (int i = 0, j = 0; i < collection.Length; i++)
+            {
+                if (i == index) continue;
+                clone.SetValue(collection.GetValue(i), j);
+                j++;
+            }
+            return clone;
+        }
+        protected override Array AddElement(Array collection, object element)
+        {
+            Array clone = Array.CreateInstance(collection.GetType().GetElementType(), collection.Length + 1);
+            collection.CopyTo(clone, 0);
+            clone.SetValue(element, collection.Length);
+            return clone;
         }
 
-        protected override int GetCollectionLength(IList collection)
+        protected override Array CreateCollection(Type collectionType)
         {
-            return collection.Count;
+            return Array.CreateInstance(collectionType.GetElementType(), 0);
+        }
+
+        protected override int GetCollectionLength(Array collection)
+        {
+            return collection.Length;
+        }
+
+        protected override Type GetElementType(Array collection)
+        {
+            return collection.GetType().GetElementType();
         }
     }
 }

@@ -7,9 +7,9 @@ namespace OneEngine
     {
         public class BlackBrushGraphics : GraphicsAdapter
         {
-            public BlackBrushGraphics(IGraphics provider) : base(provider)
+            public BlackBrushGraphics(IGraphics provider, int width = 6) : base(provider)
             {
-                provider.Brush = new SingleColorBrush(Color32.black, 6);
+                provider.Brush = new SingleColorBrush(Color32.black, width);
             }
 
             public override IGraphicsBrush Brush { get => brush; set => brush = value; }

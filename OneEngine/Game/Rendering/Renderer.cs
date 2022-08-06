@@ -47,7 +47,18 @@ namespace OneEngine
             foreach (var pass in passes)
             {
                 var renderersForPass = renderers.Where(r => r.EnumeratePasses().Contains(pass)).OrderByDescending(r => r.Queue);
-                pass.Pass(graphics, camera, renderersForPass, r => r.GetGraphicsTransform(camera), (r, g, c) => r.OnGraphicsUpdate(g, c));
+                pass.Pass(graphics, camera, renderersForPass, r => r.GetGraphicsTransform(camera), (r, g, c) => r.GraphicsUpdate(g, c));
+            }
+        }
+        void GraphicsUpdate(IGraphics graphics, Camera camera)
+        {
+            try
+            {
+                OnGraphicsUpdate(graphics, camera);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex);
             }
         }
 

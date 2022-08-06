@@ -19,11 +19,13 @@ namespace OneEngineGame
         {
             fieldInspectors = new IFieldInspector[]
             {
+                new Vector2FieldInspector(),
                 new StringFieldInspector(),
                 new FloatFieldInspector(),
                 new IntFieldInspector(),
                 new BoolFieldInspector(),
                 new ColorFieldInspector(),
+                new ListFieldInspector(),
                 new ArrayFieldInspector(),
                 new SerializableFieldInspector(),
                 new DefaultFieldInspector(),
@@ -63,13 +65,23 @@ namespace OneEngineGame
         int fieldIndex;
         public Rect GetNextRect()
         {
-            return new Rect(Rect.X, Rect.Y + elementHeight * fieldIndex++, Rect.Width, elementHeight);
+            var result = GetCurrentRect();
+            fieldIndex++;
+            return result;
+        }
+        public Rect GetCurrentRect()
+        {
+            return new Rect(Rect.X, Rect.Y + elementHeight * fieldIndex, Rect.Width, elementHeight);
+        }
+        public void GetCurrentField(out Rect name, out Rect value)
+        {
+            var rect = GetCurrentRect();
+            rect.SplitHorizontal(out name, out value);
         }
         public void AllocateField(out Rect name, out Rect value)
         {
             var rect = GetNextRect();
-            name = new Rect(rect.X, rect.Y, rect.Width * 0.5f, rect.Height);
-            value = new Rect(rect.X + rect.Width * 0.5f, rect.Y, rect.Width * 0.5f, rect.Height);
+            rect.SplitHorizontal(out name, out value);
         }
 
         IEnumerator DrawRoutine()

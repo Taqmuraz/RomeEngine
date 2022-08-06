@@ -22,8 +22,7 @@ namespace OneEngineGame
         }
         protected virtual void OnButtonPress(string name, object value, Action<object> setter, Type type, EditorCanvas canvas)
         {
-            var textInputMenu = EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => setter(ParseString(menu.InputString)));
-            textInputMenu.Header = name;
+            EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => setter(ParseString(menu.InputString))).WithHeader(name);
         }
         protected abstract object ParseString(string value);
     }

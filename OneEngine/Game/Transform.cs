@@ -4,8 +4,8 @@ namespace OneEngine
 {
 	public sealed class Transform : Component
 	{
-		[SerializeField] Transform parent;
-		[SerializeField] List<Transform> children = new List<Transform>();
+		[SerializeField(HideInInspector = true)] Transform parent;
+		[SerializeField(HideInInspector = true)] List<Transform> children = new List<Transform>();
 
 		public ReadOnlyArrayList<Transform> Children => children;
 
@@ -25,6 +25,7 @@ namespace OneEngine
 		void OnDestroy()
 		{
 			Parent = null;
+			foreach (var child in children.ToArray()) child.GameObject.Destroy();
 		}
 
         protected internal override Transform GetTransform()

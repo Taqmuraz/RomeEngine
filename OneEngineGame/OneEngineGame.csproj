@@ -59,9 +59,11 @@
     <Compile Include="Inspector\IFieldInspector.cs" />
     <Compile Include="Inspector\IntFieldInspector.cs" />
     <Compile Include="Inspector\IObjectInspector.cs" />
+    <Compile Include="Inspector\ListFieldInspector.cs" />
     <Compile Include="Inspector\ObjectInspector.cs" />
     <Compile Include="Inspector\PrimitiveTypeFieldInspector.cs" />
     <Compile Include="Inspector\StringFieldInspector.cs" />
+    <Compile Include="Inspector\Vector2FieldInspector.cs" />
     <Compile Include="ModelEditor.cs" />
     <Compile Include="OneEngineGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

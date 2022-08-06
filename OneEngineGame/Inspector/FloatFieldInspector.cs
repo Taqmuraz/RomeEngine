@@ -10,7 +10,7 @@ namespace OneEngineGame
         }
         protected override object ParseString(string value)
         {
-            if (float.TryParse(value, out float result)) return result;
+            if (float.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float result)) return result;
             else return 0f;
         }
     }

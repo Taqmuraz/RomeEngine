@@ -7,7 +7,7 @@ namespace OneEngine
 {
 	public sealed class GameObject : Game.GameThreadHandler, ISerializationHandler
 	{
-		[SerializeField]
+		[SerializeField(HideInInspector = true)]
 		public Transform Transform { get; private set; }
 		[SerializeField]
 		public string Name { get; set; }
@@ -24,7 +24,7 @@ namespace OneEngine
 			Transform = AddComponent<Transform>();
 		}
 
-		[SerializeField] List<Component> components = new List<Component>();
+		[SerializeField(HideInInspector = true)] List<Component> components = new List<Component>();
 		[SerializeField(HideInInspector = true)] List<Component> inOrderToAdd = new List<Component>();
 		[SerializeField(HideInInspector = true)] List<Component> inOrderToRemove = new List<Component>();
 
@@ -89,6 +89,11 @@ namespace OneEngine
             }
             return default;
         }
+
+		public IEnumerable<Component> GetComponents()
+		{
+			return components.ToArray();
+		}
 
         protected sealed override void OnEventCall(string name)
 		{

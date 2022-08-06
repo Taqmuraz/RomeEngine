@@ -48,11 +48,10 @@ namespace OneEngineWindowsFormsApplication
 
             Matrix3x3 lineMatrix = Matrix3x3.New(dir, lineUp, a);
 
+            widthA *= 0.5f;
+            widthB *= 0.5f;
             if (smoothEnding)
             {
-                widthA *= 0.5f;
-                widthB *= 0.5f;
-
                 Graphics.DrawLine(Pen, lineMatrix.MultiplyPoint(new Vector2(0f, widthA)), lineMatrix.MultiplyPoint(new Vector2(length, widthB)));
                 Graphics.DrawLine(Pen, lineMatrix.MultiplyPoint(new Vector2(length, -widthB)), lineMatrix.MultiplyPoint(new Vector2(0f, -widthA)));
 

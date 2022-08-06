@@ -29,10 +29,40 @@ namespace OneEngineWindowsFormsApplication
             nonAllocLinePoints[2] = lineMatrix.MultiplyPoint(new Vector2(length, -halfWidthB));
             nonAllocLinePoints[3] = lineMatrix.MultiplyPoint(new Vector2(0f, -halfWidthA));
             Graphics.FillPolygon(Brush, nonAllocLinePoints);
+            
             if (smoothEnding)
             {
-                DrawEllipse(a, new Vector2(widthA, widthA));
-                DrawEllipse(b, new Vector2(widthB, widthB));
+                var lastTransform = Graphics.Transform;
+                
+                Vector2 right = (Vector2)Transform.Column_0.normalized;
+                Vector2 up = (Vector2)Transform.Column_1.normalized;
+                Vector2 translate = (Vector2)Transform.Column_2;
+
+                Graphics.Transform = new System.Drawing.Drawing2D.Matrix(right.x, right.y, up.x, up.y, translate.x, translate.y);
+
+                a = Transform.MultiplyScale(a);
+                b = Transform.MultiplyScale(b);
+
+                diff = (b - a);
+                length = diff.length;
+                dir = diff.normalized;
+
+                Vector2 lineUp = new Vector2(-dir.y, dir.x);
+                float globalWidthUnit = Transform.MultiplyVector(lineUp).length * 0.5f;
+                widthA *= globalWidthUnit;
+                widthB *= globalWidthUnit;
+
+                lineMatrix = Matrix3x3.New(dir, lineUp, a);
+
+                void DrawEndEllipse(Vector2 position, Vector2 size)
+                {
+                    var ellipsePos = lineMatrix.MultiplyPoint(position);
+                    DrawEllipse(ellipsePos, size * 2f);
+                }
+
+                DrawEndEllipse(Vector2.zero, new Vector2(widthA, widthA));
+                DrawEndEllipse(new Vector2(length, 0f), new Vector2(widthB, widthB));
+                Graphics.Transform = lastTransform;
             }
         }
 

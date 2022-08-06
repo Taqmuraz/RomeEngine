@@ -30,6 +30,17 @@ namespace OneEngine
 			return new Rect(location, location + size);
 		}
 
+		public void SplitHorizontal(out Rect left, out Rect right)
+		{
+			left = FromLocationAndSize(min, new Vector2(Width * 0.5f, Height));
+			right = FromLocationAndSize(min + new Vector2(Width * 0.5f, 0f), new Vector2(Width * 0.5f, Height));
+		}
+		public void SplitVertical(out Rect up, out Rect down)
+		{
+			up = FromLocationAndSize(min, new Vector2(Width, Height * 0.5f));
+			down = FromLocationAndSize(min + new Vector2(0f, Height * 0.5f), new Vector2(Width, Height * 0.5f));
+		}
+
 		public override string ToString()
 		{
 			return $"({min.x}, {min.y}, {max.x - min.x}, {max.y - min.y})";

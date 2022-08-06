@@ -18,10 +18,11 @@ namespace OneEngineGame
             byte r = (byte)canvas.DrawScrollbar(hash, 0f, 255f, Color.r, Rect.FromLocationAndSize(menuStart, new Vector2(menuSize.x, elementHeight)), 0, Color32.red);
             byte g = (byte)canvas.DrawScrollbar(hash + 1, 0f, 255f, Color.g, Rect.FromLocationAndSize(menuStart + new Vector2(0f, elementHeight), new Vector2(menuSize.x, elementHeight)), 0, Color32.green);
             byte b = (byte)canvas.DrawScrollbar(hash + 2, 0f, 255f, Color.b, Rect.FromLocationAndSize(menuStart + new Vector2(0f, elementHeight * 2f), new Vector2(menuSize.x, elementHeight)), 0, Color32.blue);
+            byte a = (byte)canvas.DrawScrollbar(hash + 3, 0f, 255f, Color.a, Rect.FromLocationAndSize(menuStart + new Vector2(0f, elementHeight * 3f), new Vector2(menuSize.x, elementHeight)), 0, Color32.black);
 
-            Color = new Color32(r, g, b, Color.a);
+            Color = new Color32(r, g, b, a);
 
-            if (canvas.DrawButton("OK", Rect.FromLocationAndSize(menuStart + new Vector2(0f, elementHeight * 3f), new Vector2(menuSize.x, elementHeight)), TextOptions.Default))
+            if (canvas.DrawButton("OK", Rect.FromLocationAndSize(menuStart + new Vector2(0f, elementHeight * 4f), new Vector2(menuSize.x, elementHeight)), TextOptions.Default))
             {
                 Close();
             }

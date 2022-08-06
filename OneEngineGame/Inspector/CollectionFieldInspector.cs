@@ -13,7 +13,10 @@ namespace OneEngineGame
 
         protected abstract IEnumerable<TElement> EnumerateCollection(TCollection collection);
         protected abstract TCollection SetElement(TCollection collection, int index, TElement element);
-        protected abstract TCollection CreateCollection(int length, Type collectionType);
+        protected abstract TCollection AddElement(TCollection collection, TElement element);
+        protected abstract TCollection RemoveElement(TCollection collection, int index);
+        protected abstract TCollection CreateCollection(Type collectionType);
+        protected abstract Type GetElementType(TCollection collection);
         protected abstract int GetCollectionLength(TCollection collection);
 
         public void Inspect(string name, object value, Action<object> setter, Type type, EditorCanvas canvas, InspectorMenu inspectorMenu)
@@ -22,14 +25,36 @@ namespace OneEngineGame
 
             inspectorMenu.AllocateField(out Rect nameRect, out Rect valueRect);
             canvas.DrawText(name, nameRect, inspectorMenu.NameTextOptions);
-            canvas.DrawText(collection == null ? "null" : $"length:{GetCollectionLength(collection)}", valueRect, inspectorMenu.ValueTextOptions);
 
-            int index = 0;
-            foreach (TElement element in EnumerateCollection(collection))
+            if (value != null)
             {
-                int i = index;
-                var elementType = element == null ? typeof(object) : element.GetType();
-                inspectorMenu.GetFieldInspector(elementType).Inspect(string.Empty, element, e => SetElement(collection, i, (TElement)e), elementType, canvas, inspectorMenu);
+                canvas.DrawText($"length:{GetCollectionLength(collection)}", valueRect, inspectorMenu.ValueTextOptions);
+                int index = 0;
+                foreach (TElement element in EnumerateCollection(collection))
+                {
+                    int i = index;
+                    var elementType = element == null ? typeof(object) : element.GetType();
+                    inspectorMenu.GetCurrentField(out nameRect, out valueRect);
+                    if (canvas.DrawButton("Remove", nameRect, inspectorMenu.NameTextOptions))
+                    {
+                        setter(collection = RemoveElement(collection, index));
+                    }
+                    inspectorMenu.GetFieldInspector(elementType).Inspect(string.Empty, element, e => SetElement(collection, i, (TElement)e), elementType, canvas, inspectorMenu);
+                }
+                inspectorMenu.AllocateField(out nameRect, out valueRect);
+                if (canvas.DrawButton("Add element", valueRect, inspectorMenu.ValueTextOptions))
+                {
+                    var elementType = GetElementType(collection);
+                    object instance = Activator.CreateInstance(elementType);
+                    setter(collection = AddElement(collection, (TElement)instance));
+                }
+            }
+            else
+            {
+                if (canvas.DrawButton("Create new", valueRect, inspectorMenu.ValueTextOptions))
+                {
+                    setter(CreateCollection(type));
+                }
             }
         }
     }

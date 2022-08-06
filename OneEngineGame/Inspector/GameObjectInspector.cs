@@ -11,16 +11,25 @@ namespace OneEngineGame
         }
         protected override void AfterInspect(ISerializable inspectedObject, InspectorMenu inspectorMenu, EditorCanvas canvas)
         {
+            var gameObject = (GameObject)inspectedObject;
+            var components = gameObject.GetComponents();
+
+            foreach (var component in components)
+            {
+                var labelRect = inspectorMenu.GetNextRect();
+                canvas.DrawRectWithText(component.GetType().Name, labelRect, new TextOptions() { FontSize = 20f, Alignment = TextAlignment.MiddleCenter });
+                inspectorMenu.GetObjectInspector(component).Inspect(component, inspectorMenu, canvas);
+            }
+
             inspectorMenu.GetNextRect();
             var buttonRect = inspectorMenu.GetNextRect();
             if (canvas.DrawButton("Add component", buttonRect, new TextOptions() { FontSize = 25f, Alignment = TextAlignment.MiddleCenter }))
             {
-                var inputMenu = EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
+                EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
                 {
                     var type = TypesMap.GetType(menu.InputString);
                     if (type != null && typeof(Component).IsAssignableFrom(type)) ((GameObject)inspectedObject).AddComponent(type);
-                });
-                inputMenu.Header = "Component type name";
+                }).WithHeader("Component type name");
             }
         }
     }

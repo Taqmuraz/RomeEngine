@@ -29,7 +29,7 @@ namespace OneEngine.UI
             foreach (var element in elements)
             {
                 graphics.Style = graphics.OutlineStyle;
-                element.Draw(new OutlineRendererPass.BlackBrushGraphics(graphics), camera);
+                element.Draw(new OutlineRendererPass.BlackBrushGraphics(graphics, 2), camera);
                 graphics.Style = graphics.FillStyle;
                 element.Draw(graphics, camera);
             }

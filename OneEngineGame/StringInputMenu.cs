@@ -6,13 +6,19 @@ namespace OneEngineGame
     public sealed class StringInputMenu : EditorMenu, IInputHandler
     {
         public string InputString { get; set; } = string.Empty;
-        public string Header { get; set; }
+        string header;
 
         bool shift;
 
         public StringInputMenu()
         {
             Engine.Instance.Runtime.SetInputHandler(this);
+        }
+
+        public StringInputMenu WithHeader(string header)
+        {
+            this.header = header;
+            return this;
         }
 
         protected override void OnMenuClosed()
@@ -28,9 +34,9 @@ namespace OneEngineGame
             canvas.DrawRect(inputRect, Color32.white);
             var textOptions = new TextOptions() { FontSize = 25f };
 
-            if (string.IsNullOrEmpty(InputString) && !string.IsNullOrEmpty(Header))
+            if (string.IsNullOrEmpty(InputString) && !string.IsNullOrEmpty(header))
             {
-                canvas.DrawText(Header, inputRect, Color32.gray, textOptions);
+                canvas.DrawText(header, inputRect, Color32.gray, textOptions);
             }
             canvas.DrawText(InputString == null ? string.Empty : InputString + "_", inputRect, Color32.black, textOptions);
         }
@@ -46,6 +52,10 @@ namespace OneEngineGame
             {
                 char c = ((char)('0' + (key - KeyCode.N0)));
                 InputString += c;
+            }
+            else if (key == KeyCode.Point)
+            {
+                InputString += '.';
             }
             else if (key == KeyCode.ShiftKey)
             {
