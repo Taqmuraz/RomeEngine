@@ -35,12 +35,17 @@ namespace OneEngine
 			transform = GameObject.Transform;
 		}
 
+		[BehaviourEvent]
+		void OnDestroy()
+		{
+			destroyed = true;
+		}
+
 		public void Destroy()
 		{
 			if (!destroyed)
 			{
 				GameObject.RemoveComponent(this);
-				destroyed = true;
 			}
 		}
 

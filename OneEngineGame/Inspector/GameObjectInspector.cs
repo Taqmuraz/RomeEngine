@@ -16,8 +16,21 @@ namespace OneEngineGame
 
             foreach (var component in components)
             {
-                var labelRect = inspectorMenu.GetNextRect();
+                Rect labelRect;
+                if (component is Transform)
+                {
+                    labelRect = inspectorMenu.GetNextRect();
+                }
+                else
+                {
+                    inspectorMenu.AllocateField(out labelRect, out Rect valueRect);
+                    if (canvas.DrawButton("Destroy", valueRect, new TextOptions() { FontSize = 20f, Alignment = TextAlignment.MiddleCenter }))
+                    {
+                        component.Destroy();
+                    }
+                }
                 canvas.DrawRectWithText(component.GetType().Name, labelRect, new TextOptions() { FontSize = 20f, Alignment = TextAlignment.MiddleCenter });
+
                 inspectorMenu.GetObjectInspector(component).Inspect(component, inspectorMenu, canvas);
             }
 
