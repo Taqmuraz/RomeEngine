@@ -18,42 +18,36 @@ namespace OneEngineWindowsFormsApplication
         public void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB, bool smoothEnding)
         {
             var nonAllocLinePoints = AllocPoints(4);
-            Vector3 diff = (b - a);
-            float length = diff.length;
-            Vector3 dir = diff.normalized;
-            Matrix3x3 lineMatrix = Matrix3x3.New(dir, new Vector3(-dir.y, dir.x, 0f), a);
-            float halfWidthA = widthA * 0.5f;
-            float halfWidthB = widthB * 0.5f;
-            nonAllocLinePoints[0] = lineMatrix.MultiplyPoint(new Vector2(0f, halfWidthA));
-            nonAllocLinePoints[1] = lineMatrix.MultiplyPoint(new Vector2(length, halfWidthB));
-            nonAllocLinePoints[2] = lineMatrix.MultiplyPoint(new Vector2(length, -halfWidthB));
-            nonAllocLinePoints[3] = lineMatrix.MultiplyPoint(new Vector2(0f, -halfWidthA));
+            var lastTransform = Graphics.Transform;
+
+            Vector2 right = (Vector2)Transform.Column_0.normalized;
+            Vector2 up = (Vector2)Transform.Column_1.normalized;
+            Vector2 translate = (Vector2)Transform.Column_2;
+
+            Graphics.Transform = new System.Drawing.Drawing2D.Matrix(right.x, right.y, up.x, up.y, translate.x, translate.y);
+
+            a = Transform.MultiplyScale(a);
+            b = Transform.MultiplyScale(b);
+
+            var diff = (b - a);
+            var length = diff.length;
+            var dir = diff.normalized;
+
+            Vector2 lineUp = new Vector2(-dir.y, dir.x);
+            float globalWidthUnit = Transform.MultiplyVector(lineUp).length * 0.5f;
+            widthA *= globalWidthUnit;
+            widthB *= globalWidthUnit;
+
+            var lineMatrix = Matrix3x3.New(dir, lineUp, a);
+
+            nonAllocLinePoints[0] = lineMatrix.MultiplyPoint(new Vector2(0f, widthA));
+            nonAllocLinePoints[1] = lineMatrix.MultiplyPoint(new Vector2(length, widthB));
+            nonAllocLinePoints[2] = lineMatrix.MultiplyPoint(new Vector2(length, -widthB));
+            nonAllocLinePoints[3] = lineMatrix.MultiplyPoint(new Vector2(0f, -widthA));
             Graphics.FillPolygon(Brush, nonAllocLinePoints);
             
             if (smoothEnding)
             {
-                var lastTransform = Graphics.Transform;
-                
-                Vector2 right = (Vector2)Transform.Column_0.normalized;
-                Vector2 up = (Vector2)Transform.Column_1.normalized;
-                Vector2 translate = (Vector2)Transform.Column_2;
-
-                Graphics.Transform = new System.Drawing.Drawing2D.Matrix(right.x, right.y, up.x, up.y, translate.x, translate.y);
-
-                a = Transform.MultiplyScale(a);
-                b = Transform.MultiplyScale(b);
-
-                diff = (b - a);
-                length = diff.length;
-                dir = diff.normalized;
-
-                Vector2 lineUp = new Vector2(-dir.y, dir.x);
-                float globalWidthUnit = Transform.MultiplyVector(lineUp).length * 0.5f;
-                widthA *= globalWidthUnit;
-                widthB *= globalWidthUnit;
-
-                lineMatrix = Matrix3x3.New(dir, lineUp, a);
-
                 void DrawEndEllipse(Vector2 position, Vector2 size)
                 {
                     var ellipsePos = lineMatrix.MultiplyPoint(position);
@@ -62,8 +56,8 @@ namespace OneEngineWindowsFormsApplication
 
                 DrawEndEllipse(Vector2.zero, new Vector2(widthA, widthA));
                 DrawEndEllipse(new Vector2(length, 0f), new Vector2(widthB, widthB));
-                Graphics.Transform = lastTransform;
             }
+            Graphics.Transform = lastTransform;
         }
 
         public void DrawEllipse(Vector2 center, Vector2 size)

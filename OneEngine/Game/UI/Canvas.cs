@@ -89,8 +89,14 @@ namespace OneEngine.UI
 
             float valuableLength = length - width;
             Vector2 start = rect.min + new Vector2(width, width) * 0.5f;
+            Vector2 handlePos = start + (axisDir * (value - minValue) / (maxValue - minValue)) * valuableLength;
+            Rect handleRect = Rect.FromCenterAndSize(handlePos, new Vector2(width, width));
+            DrawRect(handleRect, handleColor);
 
-            if (DrawHandle(id, start + (axisDir * (value - minValue) / (maxValue - minValue)) * valuableLength, width * 0.5f, handleColor, Color32.gray, Color32.white))
+            if (Input.GetKeyDown(KeyCode.MouseL) && rect.Contains(Input.MousePosition)) handles.Add(id);
+            if (Input.GetKeyUp(KeyCode.MouseL)) handles.Remove(id);
+
+            if (handles.Contains(id))
             {
                 value = ((Vector2.Dot(Input.MousePosition - start, axisDir) / valuableLength) * (maxValue - minValue) + minValue).Clamp(minValue, maxValue);
             }

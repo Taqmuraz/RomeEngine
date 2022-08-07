@@ -29,6 +29,10 @@ namespace OneEngine
 		{
 			return new Rect(location, location + size);
 		}
+		public static Rect FromLocationAndSize(float x, float y, float width, float height)
+		{
+			return new Rect(new Vector2(x, y), new Vector2(x + width, y + height));
+		}
 
 		public void SplitHorizontal(out Rect left, out Rect right)
 		{

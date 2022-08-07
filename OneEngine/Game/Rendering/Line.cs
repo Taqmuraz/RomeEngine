@@ -18,10 +18,10 @@ namespace OneEngine
         }
 
         public Vector2 PointA { get; set; }
-        public Vector2 PointB { get; set; }
-        public float WidthA { get; set; }
-        public float WidthB { get; set; }
-        public Color32 Color { get; set; }
+        public Vector2 PointB { get; set; } = Vector2.right;
+        public float WidthA { get; set; } = 0.1f;
+        public float WidthB { get; set; } = 0.1f;
+        public Color32 Color { get; set; } = Color32.white;
 
         public IEnumerable<SerializableField> EnumerateFields()
         {

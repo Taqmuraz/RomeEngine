@@ -34,8 +34,8 @@ namespace OneEngineGame
                 {
                     int i = index;
                     var elementType = element == null ? typeof(object) : element.GetType();
-                    inspectorMenu.GetCurrentField(out nameRect, out valueRect);
-                    if (canvas.DrawButton("Remove", nameRect, inspectorMenu.NameTextOptions))
+                    inspectorMenu.AllocateField(out nameRect, out valueRect);
+                    if (canvas.DrawButton("Remove", valueRect, inspectorMenu.ValueTextOptions))
                     {
                         setter(collection = RemoveElement(collection, index));
                     }

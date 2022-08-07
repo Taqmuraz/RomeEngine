@@ -12,8 +12,6 @@ namespace OneEngineGame
         ISerializable InspectedObject { get; set; }
         IEnumerable<IFieldInspector> fieldInspectors;
         IEnumerable<IObjectInspector> objectInspectors;
-        EditorCanvas canvas;
-        IEnumerator routine;
 
         public InspectorMenu()
         {
@@ -35,7 +33,6 @@ namespace OneEngineGame
                 new GameObjectInspector(),
                 new DefaultObjectInspector(),
             };
-            routine = DrawRoutine();
         }
 
         public void Inspect(ISerializable objectToInspect)
@@ -45,8 +42,29 @@ namespace OneEngineGame
 
         public override void Draw(EditorCanvas canvas)
         {
-            this.canvas = canvas;
-            if (routine != null) if (!routine.MoveNext()) routine = null;
+            if (InspectedObject == null) return;
+
+            fieldIndex = 0;
+
+            canvas.DrawRect(Rect);
+            
+            try
+            {
+                GetObjectInspector(InspectedObject).Inspect(InspectedObject, this, canvas);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex);
+            }
+            float diff = fieldIndex * elementHeight - Rect.Height;
+            if (diff > 0f)
+            {
+                menuScrollbar = canvas.DrawScrollbar(GetHashCode(), 0f, diff, menuScrollbar, Rect.FromLocationAndSize(Rect.X - scrollbarWidth, Rect.Y, scrollbarWidth, Rect.Height), 1, Color32.gray);
+            }
+            else
+            {
+                menuScrollbar = 0f;
+            }
         }
 
         public IFieldInspector GetFieldInspector(Type type)
@@ -62,6 +80,8 @@ namespace OneEngineGame
         public TextOptions NameTextOptions { get; } = new TextOptions() { FontSize = 14f, Alignment = TextAlignment.MiddleLeft };
 
         readonly float elementHeight = 30f;
+        readonly float scrollbarWidth = 20f;
+        float menuScrollbar = 0f;
         int fieldIndex;
         public Rect GetNextRect()
         {
@@ -71,7 +91,7 @@ namespace OneEngineGame
         }
         public Rect GetCurrentRect()
         {
-            return new Rect(Rect.X, Rect.Y + elementHeight * fieldIndex, Rect.Width, elementHeight);
+            return new Rect(Rect.X, Rect.Y + elementHeight * fieldIndex - menuScrollbar, Rect.Width - scrollbarWidth, elementHeight);
         }
         public void GetCurrentField(out Rect name, out Rect value)
         {
@@ -82,33 +102,6 @@ namespace OneEngineGame
         {
             var rect = GetNextRect();
             rect.SplitHorizontal(out name, out value);
-        }
-
-        IEnumerator DrawRoutine()
-        {
-            while (true)
-            {
-            START:
-                if (InspectedObject == null)
-                {
-                    yield return null;
-                    goto START;
-                }
-                yield return null;
-
-                fieldIndex = 0;
-
-                canvas.DrawRect(Rect);
-
-                try
-                {
-                    GetObjectInspector(InspectedObject).Inspect(InspectedObject, this, canvas);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError(ex);
-                }
-            }
         }
     }
 }
