@@ -22,10 +22,11 @@ namespace OneEngineGame
         string root;
         string header;
 
-        public FileSearchMenu(string rootFolder, string header)
+        public FileSearchMenu Initialize(string rootFolder, string header)
         {
             Root = rootFolder;
             this.header = header;
+            return this;
         }
 
         public string File { get; private set; }

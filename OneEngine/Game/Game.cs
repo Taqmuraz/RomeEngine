@@ -51,7 +51,7 @@ namespace OneEngine
 
 			lock (gameHandlers)
 			{
-				foreach (var handler in gameHandlers)
+				foreach (var handler in gameHandlers.ToArray())
 				{
 					try
 					{

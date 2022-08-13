@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace OneEngine.IO
@@ -7,6 +8,11 @@ namespace OneEngine.IO
     public sealed class Serializer
     {
         public static ReadOnlyArrayList<IFieldSerializer> FieldSerializers { get; }
+        public static string BinaryFormatExtension => BIN;
+        public static string TextFormatExtension => TXT;
+
+        const string BIN = ".bin";
+        const string TXT = ".txt";
 
         class SerializationContext : ISerializationContext
         {
@@ -114,6 +120,47 @@ namespace OneEngine.IO
             }
             foreach (var obj in objects) if (obj is ISerializationHandler handler) handler.OnDeserialize();
             return objects[0];
+        }
+
+        public ISerializable DeserializeFile(string file)
+        {
+            string extension = Path.GetExtension(file).ToLower();
+            switch (extension)
+            {
+                case BIN:
+                    using (FileStream fs = File.OpenRead(file))
+                    {
+                        return Deserialize(new BinarySerializationStream(fs));
+                    }
+                case TXT:
+                    using (StreamReader sr = new StreamReader(file))
+                    {
+                        return Deserialize(new TextSerializationStream(sr, null));
+                    }
+                default:
+                    throw new InvalidOperationException($"Extension {extension} is not supported to deserialize");
+            }
+        }
+        public void SerializeFile(ISerializable serializable, string path)
+        {
+            string extension = Path.GetExtension(path).ToLower();
+            switch (extension)
+            {
+                case BIN:
+                    using (FileStream fs = File.OpenWrite(path))
+                    {
+                        Serialize(serializable, new BinarySerializationStream(fs));
+                    }
+                    break;
+                case TXT:
+                    using (StreamWriter sw = new StreamWriter(path))
+                    {
+                        Serialize(serializable, new TextSerializationStream(null, sw));
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException($"Extension {extension} is not supported to serialize");
+            }
         }
     }
 }

@@ -14,6 +14,11 @@ namespace OneEngineGame
 
         protected bool IsAccurateMode { get; private set; }
 
+        protected virtual Vector2 GetHandleWorldPosition(Transform transform)
+        {
+            return transform.LocalToWorld.MultiplyPoint(HandleLocalPosition);
+        }
+
         bool ITransformHandle.Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode)
         {
             IsAccurateMode = accurateMode;
@@ -23,7 +28,7 @@ namespace OneEngineGame
             var l2w = transform.LocalToWorld;
             var mouseWorld = screenToWorld.MultiplyPoint((Input.MousePosition));
 
-            var handleWorld = l2w.MultiplyPoint(HandleLocalPosition);
+            var handleWorld = GetHandleWorldPosition(transform);
             var handleScreen = worldToScreen.MultiplyPoint(handleWorld);
 
             float radius = Radius;

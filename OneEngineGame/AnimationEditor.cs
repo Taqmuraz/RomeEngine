@@ -12,9 +12,9 @@ namespace OneEngineGame
     {
         protected override IEnumerator Routine()
         {
-            var camera = Camera.Cameras[0];
+            yield return null;
+            /*var camera = Camera.Cameras[0];
             EditorCanvas canvas = GameObject.AddComponent<EditorCanvas>();
-            FileSearchMenu fileSearch = new FileSearchMenu("./", "Select gameObject file");
             while (string.IsNullOrEmpty(fileSearch.File))
             {
                 fileSearch.Draw(canvas);
@@ -61,9 +61,9 @@ namespace OneEngineGame
                         var mouseLocal = w2p.MultiplyPoint(mouseWorld);
                         
                         bone.LocalPosition = mouseLocal;
-                    }*/
+                    }
                 }
-            }
+            }*/
         }
     }
 }

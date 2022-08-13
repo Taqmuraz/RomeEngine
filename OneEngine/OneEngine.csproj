@@ -65,6 +65,7 @@
     <Compile Include="Game\GameScenes.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\IInitializable.cs" />
+    <Compile Include="Game\Layer.cs" />
     <Compile Include="Game\Physics\BoxCollider.cs" />
     <Compile Include="Game\Physics\CircleCollider.cs" />
     <Compile Include="Game\Physics\Collider.cs" />

@@ -15,7 +15,10 @@ namespace OneEngineGame
         [BehaviourEvent]
         void Update()
         {
-            if (routine != null && !routine.MoveNext()) routine = null;
+            if (routine != null && !routine.MoveNext())
+            {
+                routine = null;
+            }
         }
 
         protected abstract IEnumerator Routine();

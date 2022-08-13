@@ -43,7 +43,12 @@ namespace OneEngine
 			return new PointF (v.x, v.y);
 		}
 
-		public static explicit operator Size(Vector2 v)
+        public static Vector2 Cross(Vector2 v)
+        {
+			return new Vector2(-v.y, v.x);
+        }
+
+        public static explicit operator Size(Vector2 v)
 		{
 			return new Size((int)v.x, (int)v.y);
 		}

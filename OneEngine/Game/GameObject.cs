@@ -5,12 +5,14 @@ using System.Linq;
 
 namespace OneEngine
 {
-	public sealed class GameObject : Game.GameThreadHandler, ISerializationHandler
+    public sealed class GameObject : Game.GameThreadHandler, ISerializationHandler
 	{
 		[SerializeField(HideInInspector = true)]
 		public Transform Transform { get; private set; }
 		[SerializeField]
 		public string Name { get; set; }
+		[SerializeField]
+		public int Layer { get; set; }
 
 		public GameObject()
 		{
@@ -97,7 +99,7 @@ namespace OneEngine
 
         protected sealed override void OnEventCall(string name)
 		{
-			foreach (var component in components)
+			foreach (var component in GetComponents())
 			{
 				try
 				{

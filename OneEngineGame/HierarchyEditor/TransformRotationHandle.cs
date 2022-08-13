@@ -2,7 +2,7 @@
 
 namespace OneEngineGame
 {
-    public sealed class TransformRotationHandle : TransformHandle
+    public class TransformRotationHandle : TransformHandle
     {
         protected override Color32 Color => Color32.red;
 

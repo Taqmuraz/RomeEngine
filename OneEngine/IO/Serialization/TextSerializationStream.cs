@@ -17,7 +17,17 @@ namespace OneEngine.IO
 
         private string ReadValue()
         {
-            return textReader.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
+            string line = textReader.ReadLine();
+            if (string.IsNullOrEmpty(line)) return null;
+            try
+            {
+                var row = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                return row.Length < 2 ? string.Empty : row[1];
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error while reading line : {line}", ex);
+            }
         }
 
         public string ReadString()
@@ -27,12 +37,12 @@ namespace OneEngine.IO
 
         public int ReadInt()
         {
-            return int.Parse(ReadValue());
+            return int.TryParse(ReadValue(), out int result) ? result : 0;
         }
 
         public float ReadFloat()
         {
-            return float.Parse(ReadValue());
+            return float.TryParse(ReadValue(), out float result) ? result : 0;
         }
 
         public Type ReadType()
