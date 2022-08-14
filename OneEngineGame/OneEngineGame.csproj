@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="HierarchyEditor\FullModelEditorMode.cs" />
     <Compile Include="HierarchyEditor\IHierarchyEditorMode.cs" />
+    <Compile Include="Inspector\AnimatorInspector.cs" />
     <Compile Include="Inspector\ArrayFieldInspector.cs" />
     <Compile Include="Inspector\BoolFieldInspector.cs" />
     <Compile Include="Inspector\CollectionFieldInspector.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="HierarchyEditor\HierarchyEditor.cs" />
     <Compile Include="OneEngineGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AnimationEditor.cs" />
+    <Compile Include="AnimationMenu.cs" />
     <Compile Include="FileSearchMenu.cs" />
     <Compile Include="Editor\EditorMenu.cs" />
     <Compile Include="Inspector\SerializableFieldInspector.cs" />

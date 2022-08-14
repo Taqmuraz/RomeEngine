@@ -30,6 +30,7 @@ namespace OneEngineGame
             };
             objectInspectors = new IObjectInspector[]
             {
+                new AnimatorInspector(),
                 new GameObjectInspector(),
                 new DefaultObjectInspector(),
             };

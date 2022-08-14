@@ -19,6 +19,7 @@ namespace OneEngineGame
             InspectorMenu inspectorMenu = new InspectorMenu() { Rect = new Rect(canvasRect.Width * 0.75f, 0f, canvasRect.Width * 0.25f, canvasRect.Height) };
             GameObject inspectedGameObject = null;
             bool accurateMode = false;
+            int scroll = 0;
             
             IHierarchyEditorMode[] editorModes = 
             {
@@ -66,8 +67,19 @@ namespace OneEngineGame
                             editorMode = editorModes[i];
                         }
                     }
-                    int posX = 0;
-                    int posY = 1;
+
+                    int transformsCount = root.TraceElement(r => r.Children).Count();
+                    int scrollMax = transformsCount - (int)((canvasRect.Height - elementHeight) / elementHeight);
+
+                    if (scrollMax > 0)
+                    {
+                        var scrollRect = new Rect(elementWidth, elementHeight, 30f, canvasRect.Height - elementHeight);
+                        scroll = (int)canvas.DrawScrollbar(GetHashCode(), 0, scrollMax, scroll, scrollRect, 1, Color32.gray);
+                    }
+
+                    int positionX = 0;
+                    int positionY = 1 - scroll;
+
                     if (Input.GetKeyDown(KeyCode.ShiftKey)) accurateMode = !accurateMode;
                     editorMode.IsAccurate = accurateMode;
 
@@ -75,35 +87,38 @@ namespace OneEngineGame
                     {
                         editorMode.DrawHandles(transform, inspectedGameObject?.Transform, camera, sceneCanvas);
 
-                        string name = transform.Name;
-                        if (transform.Parent != null) name = $"{transform.Parent.Children.IndexOf(transform) + 1}){name}";
-                        if (canvas.DrawButton(transform.Name, new Rect(posX * indent, posY * elementHeight, elementWidth - posX * indent - elementHeight * 2f, elementHeight), TextOptions.Default))
+                        if (positionY > 0)
                         {
-                            inspectorMenu.Inspect(inspectedGameObject = transform.GameObject);
-                        }
-
-                        if (canvas.DrawButton("-", new Rect(elementWidth - elementHeight * 2f, elementHeight * posY, elementHeight, elementHeight), TextOptions.Default))
-                        {
-                            transform.GameObject.Destroy();
-                        }
-                        if (canvas.DrawButton("+", new Rect(elementWidth - elementHeight, elementHeight * posY, elementHeight, elementHeight), TextOptions.Default))
-                        {
-                            EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
+                            string name = transform.Name;
+                            if (transform.Parent != null) name = $"{transform.Parent.Children.IndexOf(transform) + 1}){name}";
+                            if (canvas.DrawButton(transform.Name, new Rect(positionX * indent, positionY * elementHeight, elementWidth - positionX * indent - elementHeight * 2f, elementHeight), TextOptions.Default))
                             {
-                                var newChild = new GameObject(menu.InputString).Transform;
-                                newChild.Parent = transform;
-                                newChild.LocalPosition = Vector2.right;
-                            }).WithHeader("New child name");
+                                inspectorMenu.Inspect(inspectedGameObject = transform.GameObject);
+                            }
+
+                            if (canvas.DrawButton("-", new Rect(elementWidth - elementHeight * 2f, elementHeight * positionY, elementHeight, elementHeight), TextOptions.Default))
+                            {
+                                transform.GameObject.Destroy();
+                            }
+                            if (canvas.DrawButton("+", new Rect(elementWidth - elementHeight, elementHeight * positionY, elementHeight, elementHeight), TextOptions.Default))
+                            {
+                                EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
+                                {
+                                    var newChild = new GameObject(menu.InputString).Transform;
+                                    newChild.Parent = transform;
+                                    newChild.LocalPosition = Vector2.right;
+                                }).WithHeader("New child name");
+                            }
                         }
-                        posX++;
+                        positionX++;
 
                         foreach (var child in transform.Children.ToArray())
                         {
-                            posY++;
+                            positionY++;
                             var drawIterator = DrawTransform(child);
                             while (drawIterator.MoveNext()) { yield return null; }
                         }
-                        posX--;
+                        positionX--;
                     }
                     var iterator = DrawTransform(root);
                     while (iterator.MoveNext()) { yield return null; }

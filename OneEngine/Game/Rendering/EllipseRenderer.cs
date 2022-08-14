@@ -3,14 +3,14 @@
     public sealed class EllipseRenderer : Renderer
     {
         [SerializeField] public Color32 Color { get; set; } = Color32.black;
-        /*public Vector2 Offset { get; set; }
-        public Vector2 Scale { get; set; }
-        public float Rotation { get; set; }
+        [SerializeField] public Vector2 Offset { get; set; }
+        [SerializeField] public Vector2 Scale { get; set; } = Vector2.one;
+        [SerializeField] public float Rotation { get; set; }
 
         protected override Matrix3x3 GetGraphicsTransform(Camera camera)
         {
-            return camera.WorldToScreenMatrix * Matrix3x3.TransformMatrix(Offset, Scale, Rotation) * Transform.LocalToWorld;
-        }*/
+            return camera.WorldToScreenMatrix * Transform.LocalToWorld * Matrix3x3.TransformMatrix(Offset, Scale, Rotation);
+        }
 
         protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
         {

@@ -5,6 +5,7 @@ namespace OneEngineGame
     public sealed class ColorSelectMenu : EditorMenu
     {
         public Color32 Color { get; set; } = Color32.white;
+        static Color32 bufferColor = Color32.white;
 
         public override void Draw(EditorCanvas canvas)
         {
@@ -24,6 +25,16 @@ namespace OneEngineGame
 
             if (canvas.DrawButton("OK", Rect.FromLocationAndSize(menuStart + new Vector2(0f, elementHeight * 4f), new Vector2(menuSize.x, elementHeight)), TextOptions.Default))
             {
+                Close();
+            }
+            if (canvas.DrawButton("Copy color", Rect.FromLocationAndSize(menuStart + new Vector2(0f, elementHeight * 5f), new Vector2(menuSize.x, elementHeight)), TextOptions.Default))
+            {
+                bufferColor = Color;
+                Close();
+            }
+            if (canvas.DrawButton("Paste color", Rect.FromLocationAndSize(menuStart + new Vector2(0f, elementHeight * 6f), new Vector2(menuSize.x, elementHeight)), TextOptions.Default))
+            {
+                Color = bufferColor;
                 Close();
             }
         }

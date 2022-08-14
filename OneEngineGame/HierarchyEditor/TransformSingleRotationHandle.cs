@@ -41,20 +41,20 @@ namespace OneEngineGame
                 checkMouse = false;
             }
 
-            float lineWidth = 0.1f;
+            float lineWidth = 0.2f;
 
             foreach (var line in lineTransforms)
             {
                 Vector2 aWorld, bWorld;
                 Vector2 a = w2s.MultiplyPoint(aWorld = (Vector2)line.Column_2);
                 Vector2 b = w2s.MultiplyPoint(bWorld = line.MultiplyPoint(Vector2.right));
-                if (checkMouse && !mouseOnLine)
+                if (!mouseOnLine)
                 {
                     Vector2 mouseInLineSpace = line.GetInversed().MultiplyPoint(mouseWorld);
-                    if (new Rect(-0.5f, -lineWidth * 0.5f, 1f, lineWidth).Contains(mouseInLineSpace))
+                    if (new Rect(0f, -lineWidth * 0.5f, 1f, lineWidth).Contains(mouseInLineSpace))
                     {
                         mouseOnLine = true;
-                        transforms[transform] = transform.ParentToWorld.GetInversed().MultiplyDirection((bWorld - aWorld).normalized).ToAngle();
+                        if (checkMouse && transforms.Count == 0) transforms[transform] = transform.LocalRotation - transform.ParentToWorld.GetInversed().MultiplyDirection((mouseWorld - aWorld).normalized).ToAngle();
                     }
                 }
                 canvas.DrawLine(a, b, mouseOnLine ? Color32.red : Color32.gray, 3);
@@ -62,7 +62,7 @@ namespace OneEngineGame
 
             if (transforms.TryGetValue(transform, out float value))
             {
-                transform.LocalRotation = (transform.ParentToWorld.GetInversed().MultiplyPoint(mouseWorld) - transform.LocalPosition).ToAngle() - value;
+                transform.LocalRotation = (transform.ParentToWorld.GetInversed().MultiplyPoint(mouseWorld) - transform.LocalPosition).ToAngle() + value;
             }
 
             return true;

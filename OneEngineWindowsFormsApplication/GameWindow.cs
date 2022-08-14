@@ -20,7 +20,7 @@ namespace OneEngineWindowsFormsApplication
 
         protected override void OnResize(EventArgs e)
         {
-            canvas.Size = Size;
+            canvas.Size = new System.Drawing.Size(Width - 50, Height - 50);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
