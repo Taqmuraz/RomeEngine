@@ -13,6 +13,10 @@ namespace OneEngineGame
         public StringInputMenu()
         {
             Engine.Instance.Runtime.SetInputHandler(this);
+
+            var screenSize = Screen.Size;
+            Vector2 menuSize = new Vector2(400f, 50f);
+            Rect = new Rect((screenSize - menuSize) * 0.5f, (screenSize + menuSize) * 0.5f);
         }
 
         public StringInputMenu WithHeader(string header)
@@ -28,9 +32,7 @@ namespace OneEngineGame
 
         public override void Draw(EditorCanvas canvas)
         {
-            var screenSize = Screen.Size;
-            Vector2 menuSize = new Vector2(400f, 50f);
-            var inputRect = new Rect((screenSize - menuSize) * 0.5f, (screenSize + menuSize) * 0.5f);
+            var inputRect = Rect;
             canvas.DrawRect(inputRect, Color32.white);
             var textOptions = new TextOptions() { FontSize = 25f };
 

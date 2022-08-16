@@ -19,6 +19,13 @@ namespace OneEngineGame
 
         protected virtual void OnMenuClosed() { }
 
+        public static TMenu ShowMenu<TMenu>(EditorCanvas canvas, Action<TMenu> callback, Rect rect) where TMenu : EditorMenu, new()
+        {
+            var menu = ShowMenu(canvas, callback);
+            menu.Rect = rect;
+            return menu;
+        }
+
         public static TMenu ShowMenu<TMenu>(EditorCanvas canvas, Action<TMenu> callback) where TMenu : EditorMenu, new()
         {
             var menu = new TMenu();

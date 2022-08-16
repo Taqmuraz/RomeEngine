@@ -4,7 +4,7 @@ namespace OneEngineGame
 {
     public static class HumanAnimations
     {
-        public static Animation CreateIdleAnimation(ReadOnlyArray<Transform> skeleton)
+        public static LineBasedAnimation CreateIdleAnimation(ReadOnlyArray<Transform> skeleton)
         {
             var rightForearm = skeleton[HumanBone.RightForearm];
             var rightArm = skeleton[HumanBone.RightArm];
@@ -23,7 +23,7 @@ namespace OneEngineGame
                 new AnimationKey(rightArm.LocalPosition, rightArm.LocalRotation + 45f, rightArm.LocalScale, 2f),
                 new AnimationKey(rightArm.LocalPosition, rightArm.LocalRotation + 45f, rightArm.LocalScale, 0.5f)
                 );
-            return new Animation(rightForearmLine, rightArmLine);
+            return new LineBasedAnimation(rightForearmLine, rightArmLine);
         }
     }
 }

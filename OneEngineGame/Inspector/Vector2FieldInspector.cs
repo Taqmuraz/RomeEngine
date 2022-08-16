@@ -21,7 +21,7 @@ namespace OneEngineGame
             {
                 EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
                 {
-                    vector.x = float.Parse(menu.InputString, System.Globalization.CultureInfo.InvariantCulture);
+                    vector.x = menu.InputString.ToFloat();
                     setter(vector);
                 }).WithHeader("x");
             }
@@ -29,7 +29,7 @@ namespace OneEngineGame
             {
                 EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
                 {
-                    vector.y = float.Parse(menu.InputString, System.Globalization.CultureInfo.InvariantCulture);
+                    vector.y = menu.InputString.ToFloat();
                     setter(vector);
                 }).WithHeader("y");
             }

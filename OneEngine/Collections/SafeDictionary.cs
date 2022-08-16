@@ -1,11 +1,22 @@
-﻿using System;
+﻿using OneEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public sealed class SafeDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
 {
-    private Dictionary<TKey, TValue> provider;
+	private Dictionary<TKey, TValue> provider;
 	private Func<TValue> defaultValueFunc;
+
+	public IEnumerable<TKey> Keys => provider.Keys;
+	public IEnumerable<TValue> Values => provider.Values;
+
+	public static implicit operator SafeDictionary<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
+	{
+		var instance = new SafeDictionary<TKey, TValue>();
+		foreach (var values in dictionary) instance[values.Key] = values.Value;
+		return instance;
+	}
 
 	public SafeDictionary(Func<TValue> defaultValueFunc = null)
 	{

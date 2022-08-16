@@ -42,6 +42,7 @@ namespace OneEngine.IO
             yield return new Vector2Serializer();
             yield return new Color32Serializer();
             yield return new BoolTypeFieldSerializer();
+            yield return new ReadOnlyArrayFieldSerializer();
         }
 
         public void Serialize(ISerializable serializable, ISerializationStream stream)

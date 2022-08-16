@@ -1,4 +1,6 @@
-﻿namespace OneEngine
+﻿using System.Collections.Generic;
+
+namespace OneEngine
 {
     public sealed class Animator : Component
     {
@@ -7,6 +9,8 @@
         SafeDictionary<string, Transform> bonesMap;
         float timeStart;
         bool isStopped;
+
+        public IEnumerable<Transform> Bones => bonesMap.Values;
 
         [BehaviourEvent]
         void Start()

@@ -8,10 +8,14 @@ public sealed class ReadOnlyArray<T> : IEnumerable<T>, IList
 
 	public int Length => array == null ? 0 : array.Length;
 
-	private ReadOnlyArray(T[] array)
+	public ReadOnlyArray(T[] array)
 	{
 		this.array = array;
 	}
+    public ReadOnlyArray(Array array)
+    {
+        this.array = (T[])array;
+    }
 
 	public T this[int index]
 	{

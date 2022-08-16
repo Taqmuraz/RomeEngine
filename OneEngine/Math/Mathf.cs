@@ -9,6 +9,12 @@ namespace OneEngine
 		public const float Rad2Deg = 180f / PI;
 		public const float Epsilon = 1.401298E-45f;
 
+		public static float ToFloat(this string value)
+		{
+			if (float.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float result)) return result;
+			else return 0f;
+		}
+
 		public static float Sin (this float a)
 		{
 			return (float)Math.Sin (a * Deg2Rad);
