@@ -19,7 +19,7 @@ namespace OneEngine
             cameras.Remove(this);
         }
 
-        public Color32 ClearColor { get; set; } = Color32.white;
+        public Color32 ClearColor { get; set; } = Color32.white * 0.25f;
 
         public Vector2 OrthographicSize { get; private set; }
 

@@ -5,7 +5,7 @@ namespace OneEngineGame
 {
     public sealed class EditorCanvas : Canvas
     {
-        public Color32 RectColor { get; set; } = Color32.white;
+        public Color32 RectColor { get; set; } = Color32.white * 0.6f;
         public Color32 ButtonColor { get; set; } = Color32.gray;
         public Color32 TextColor { get; set; } = Color32.black;
         public Color32 ButtonTextColor { get; set; } = Color32.white;

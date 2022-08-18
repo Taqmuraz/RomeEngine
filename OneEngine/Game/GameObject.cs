@@ -92,9 +92,14 @@ namespace OneEngine
             return default;
         }
 
-		public IEnumerable<Component> GetComponents()
+		public Component[] GetComponents()
 		{
 			return components.ToArray();
+		}
+
+		public TComponent[] GetComponentsOfType<TComponent>()
+		{
+			return GetComponents().Where(c => c is TComponent).Select(c => (TComponent)(object)c).ToArray();
 		}
 
         protected sealed override void OnEventCall(string name)

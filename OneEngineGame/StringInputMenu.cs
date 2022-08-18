@@ -59,6 +59,10 @@ namespace OneEngineGame
             {
                 InputString += '.';
             }
+            else if (key == KeyCode.Minus)
+            {
+                InputString += '-';
+            }
             else if (key == KeyCode.ShiftKey)
             {
                 shift = true;

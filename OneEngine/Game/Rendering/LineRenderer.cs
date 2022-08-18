@@ -1,6 +1,9 @@
-﻿namespace OneEngine
+﻿using OneEngine.UI;
+using System.Linq;
+
+namespace OneEngine
 {
-    public sealed class LineRenderer : Renderer
+    public sealed class LineRenderer : Renderer, IHandlable
     {
         [SerializeField] public bool SmoothEnding { get; set; }
 
@@ -37,6 +40,12 @@
                 if (cameraVolume.IntersectsWith(lineBounds)) return true;
             }
             return false;
+        }
+
+        public (Vector2, Vector2)[] GetHandleLines()
+        {
+            var l2w = Transform.LocalToWorld;
+            return lines.Select(l => (l2w.MultiplyPoint(l.PointA), l2w.MultiplyPoint(l.PointB))).ToArray();
         }
     }
 }

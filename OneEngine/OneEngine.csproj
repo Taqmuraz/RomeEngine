@@ -99,6 +99,7 @@
     <Compile Include="Game\Transform.cs" />
     <Compile Include="Game\UI\Canvas.cs" />
     <Compile Include="Game\UI\CanvasLine.cs" />
+    <Compile Include="Game\UI\IHandlable.cs" />
     <Compile Include="Graphics\IGraphics.cs" />
     <Compile Include="Graphics\IGraphicsBrush.cs" />
     <Compile Include="Graphics\IGraphicsStyle.cs" />

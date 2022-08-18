@@ -13,14 +13,18 @@
 
         protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
         {
-            graphics.DrawPolygon(vertices);
+            if (vertices != null && vertices.Length != 0)
+            {
+                graphics.Brush = new SingleColorBrush(Color);
+                graphics.DrawPolygon(vertices);
+            }
         }
 
         protected override bool IsInsideScreen(IGraphics graphics, Camera camera)
         {
-            var cameraVolume = camera.Volume;
-            if (vertices.Length != 0)
+            if (vertices != null && vertices.Length != 0)
             {
+                var cameraVolume = camera.Volume;
                 for (int i = 0; i < vertices.Length; i++)
                 {
                     if (cameraVolume.Contains(vertices[i])) return true;

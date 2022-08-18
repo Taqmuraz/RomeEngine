@@ -81,7 +81,7 @@ namespace OneEngine.UI
         }
         public float DrawScrollbar(int id, float minValue, float maxValue, float value, Rect rect, int axis, Color32 handleColor)
         {
-            DrawRect(rect, Color32.white);
+            DrawRect(rect, Color32.white * 0.75f);
             Vector2 axisDir = new Vector2() { [axis] = 1f };
             int otherAxis = (axis + 1) % 2;
             float width = rect.Size[otherAxis];

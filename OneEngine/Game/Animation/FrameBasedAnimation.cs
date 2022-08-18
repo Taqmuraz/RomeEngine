@@ -20,26 +20,28 @@ namespace OneEngine
 
         public float Length => Frames[Frames.Length - 1].TimeCode;
 
-        IEnumerable<(AnimationFrame frameFirst, AnimationFrame frameSecond, float timeCode)> EnumerateLoop()
-        {
-            float totalTimeCode = 0f;
-
-            while (true)
-            {
-                for (int i = 0; i < Frames.Length; i++)
-                {
-                    var nextFrame = Frames[(i + 1) % Frames.Length];
-                    yield return (Frames[i], nextFrame, totalTimeCode + nextFrame.TimeCode);
-                }
-                totalTimeCode += Length;
-            }
-        }
-
         public override void Apply(SafeDictionary<string, Transform> bonesMap, float time)
         {
             float normalizedTime = time - (int)(time / Length) * Length;
-            var framesToBlend = EnumerateLoop().First(f => f.timeCode >= normalizedTime);
-            AnimationFrame.ApplyBlended(framesToBlend.frameFirst, framesToBlend.frameSecond, bonesMap, (normalizedTime - framesToBlend.frameFirst.TimeCode) / (framesToBlend.frameSecond.TimeCode - framesToBlend.frameFirst.TimeCode));
+
+            AnimationFrame frameCurrent = null;
+            AnimationFrame frameNext = null;
+
+            for (int i = 1; i < Frames.Length; i++)
+            {
+                if (Frames[i].TimeCode >= normalizedTime)
+                {
+                    frameCurrent = Frames[i - 1];
+                    frameNext = Frames[i];
+                    break;
+                }
+            }
+
+            float blend = (normalizedTime - frameCurrent.TimeCode) / (frameNext.TimeCode - frameCurrent.TimeCode);
+
+            if (blend < 0) throw new Exception();
+
+            if (frameCurrent != null && frameNext != null) AnimationFrame.ApplyBlended(frameCurrent, frameNext, bonesMap, blend);
         }
 
         public override IEnumerable<SerializableField> EnumerateFields()

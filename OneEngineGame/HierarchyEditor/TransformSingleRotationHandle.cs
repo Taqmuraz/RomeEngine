@@ -10,22 +10,19 @@ namespace OneEngineGame
 
         public bool Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode)
         {
-            Matrix3x3[] lineTransforms;
+            var handlables = transform.GameObject.GetComponentsOfType<IHandlable>();
 
-            if (transform.Children.Count == 0)
+            if (handlables.Length == 0) return false;
+
+            var lineTransforms = new List<Matrix3x3>();
+
+            foreach (var handlable in handlables)
             {
-                lineTransforms = new Matrix3x3[] { transform.LocalToWorld };
-            }
-            else
-            {
-                lineTransforms = new Matrix3x3[transform.Children.Count];
-                Matrix3x3 l2w = transform.LocalToWorld;
-                Vector2 pos = (Vector2)l2w.Column_2;
-                for (int i = 0; i < lineTransforms.Length; i++)
+                var lines = handlable.GetHandleLines();
+                foreach (var line in lines)
                 {
-                    var child = transform.Children[i];
-                    Vector2 right = l2w.MultiplyVector(child.LocalPosition);
-                    lineTransforms[i] = Matrix3x3.WorldTransform(right, Vector2.Cross(right), pos);
+                    Vector2 right = line.b - line.a;
+                    lineTransforms.Add(Matrix3x3.WorldTransform(right, Vector2.Cross(right), line.a));
                 }
             }
 

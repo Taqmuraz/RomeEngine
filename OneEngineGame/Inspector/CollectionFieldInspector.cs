@@ -40,6 +40,7 @@ namespace OneEngineGame
                         setter(collection = RemoveElement(collection, index));
                     }
                     inspectorMenu.GetFieldInspector(elementType).Inspect(string.Empty, element, e => SetElement(collection, i, (TElement)e), elementType, canvas, inspectorMenu);
+                    index++;
                 }
                 inspectorMenu.AllocateField(out nameRect, out valueRect);
                 if (canvas.DrawButton("Add element", valueRect, inspectorMenu.ValueTextOptions))

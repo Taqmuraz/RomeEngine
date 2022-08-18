@@ -1,6 +1,8 @@
-﻿namespace OneEngine
+﻿using OneEngine.UI;
+
+namespace OneEngine
 {
-    public sealed class EllipseRenderer : Renderer
+    public sealed class EllipseRenderer : Renderer, IHandlable
     {
         [SerializeField] public Color32 Color { get; set; } = Color32.black;
         [SerializeField] public Vector2 Offset { get; set; }
@@ -22,6 +24,12 @@
         {
             var scale = Transform.Scale;
             return camera.Volume.IntersectsWith(Rect.FromCenterAndSize(Transform.Position, Vector2.one * Mathf.Max(scale.x, scale.y)));
+        }
+
+        public (Vector2, Vector2)[] GetHandleLines()
+        {
+            var l2w = Transform.LocalToWorld;
+            return new[] { ((Vector2)l2w.Column_2, l2w.MultiplyPoint(Offset)) };
         }
     }
 }

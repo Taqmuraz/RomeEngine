@@ -15,6 +15,8 @@ namespace OneEngineGame
         public Animation Animation { get; set; }
         Animation initialAnimation;
 
+        int scroll;
+
         public void Initialize(Animator animator, Animation animation, Rect rect)
         {
             Animator = animator;
@@ -26,8 +28,11 @@ namespace OneEngineGame
         {
             Rect rect = Rect;
 
+            float scrollWidth = 30f;
+            float panelWidth = rect.Width - scrollWidth;
+
             float elementHeight = rect.Height * 0.125f;
-            float elementWidth = rect.Width * 0.25f;
+            float elementWidth = panelWidth * 0.25f;
 
             AnimationFrame CreateFrame(float timeCode)
             {
@@ -75,22 +80,38 @@ namespace OneEngineGame
                 int index = 0;
                 foreach (var frame in frameBased.Frames)
                 {
-                    Rect timecodeRect;
-                    if (canvas.DrawButton($"({index}) time code : " + frame.TimeCode.ToString(), timecodeRect = new Rect(rect.X + elementWidth, rect.Y + elementHeight * index, elementWidth, elementHeight), TextOptions.Default))
+                    if (index - scroll >= 0)
                     {
-                        ShowMenu<StringInputMenu>(canvas, menu => ChangeFrame(frame, new AnimationFrame(frame.FrameElements.ToArray(), menu.InputString.ToFloat())), timecodeRect);
-                    }
-                    if (canvas.DrawButton("Apply frame", new Rect(rect.X + elementWidth * 2f, rect.Y + elementHeight * index, elementWidth, elementHeight), TextOptions.Default))
-                    {
-                        AnimationFrame.ApplyBlended(frame, frame, Animator.Bones.ToDictionary(b => b.Name), 0f);
-                        //Animator.PlayAnimationFrame(Animation, frame.TimeCode);
-                    }
-                    if (canvas.DrawButton("Write frame", new Rect(rect.X + elementWidth * 3f, rect.Y + elementHeight * index, elementWidth, elementHeight), TextOptions.Default))
-                    {
-                        AnimationFrame newFrame = CreateFrame(frame.TimeCode);
-                        ChangeFrame(frame, newFrame);
+                        float posY = rect.Y + (index - scroll) * elementHeight;
+
+                        Rect timecodeRect;
+                        if (canvas.DrawButton($"({index}) time code : " + frame.TimeCode.ToString(), timecodeRect = new Rect(rect.X + elementWidth, posY, elementWidth, elementHeight), TextOptions.Default))
+                        {
+                            ShowMenu<StringInputMenu>(canvas, menu => ChangeFrame(frame, new AnimationFrame(frame.FrameElements.ToArray(), menu.InputString.ToFloat())), timecodeRect);
+                        }
+                        if (canvas.DrawButton("Apply frame", new Rect(rect.X + elementWidth * 2f, posY, elementWidth, elementHeight), TextOptions.Default))
+                        {
+                            AnimationFrame.ApplyBlended(frame, frame, Animator.Bones.ToDictionary(b => b.Name), 0f);
+                            //Animator.PlayAnimationFrame(Animation, frame.TimeCode);
+                        }
+                        if (canvas.DrawButton("Write frame", new Rect(rect.X + elementWidth * 3f, posY, elementWidth, elementHeight), TextOptions.Default))
+                        {
+                            AnimationFrame newFrame = CreateFrame(frame.TimeCode);
+                            ChangeFrame(frame, newFrame);
+                        }
                     }
                     index++;
+                }
+
+                index = frameBased.Frames.Length;
+                int elementsMax = (int)(rect.Height / elementHeight);
+                if (index > elementsMax)
+                {
+                    scroll = (int)canvas.DrawScrollbar(GetHashCode(), 0f, index - elementsMax, scroll, new Rect(rect.X + elementWidth * 4f, rect.Y, scrollWidth, rect.Height), 1, Color32.gray);
+                }
+                else
+                {
+                    scroll = 0;
                 }
             }
         }
