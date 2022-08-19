@@ -43,6 +43,16 @@ namespace OneEngine
 		{
 			return a + (b - a) * t.Clamp(0f, 1f);
 		}
+		const float OneOf360 = 1f / 360f;
+		public static float LerpAngle(this float a, float b, float t)
+		{
+			a = a - (int)(a * OneOf360) * 360f;
+			b = b - (int)(b * OneOf360) * 360f;
+
+			float delta = b - a;
+			if (delta.Abs() > 180f) delta = 360f * (delta * -1f).Sign() + delta;
+			return a + delta * t.Clamp(0f, 1f);
+		}
 
 		public static float Pow(this float a, float n)
 		{

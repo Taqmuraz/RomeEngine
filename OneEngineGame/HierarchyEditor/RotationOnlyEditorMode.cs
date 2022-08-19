@@ -6,6 +6,7 @@ namespace OneEngineGame
     public sealed class RotationOnlyEditorMode : IHierarchyEditorMode
     {
         ITransformHandle rotationHandle = new TransformSingleRotationHandle();
+        ITransformHandle positionHandle = new TransformPositionHandle();
 
         public void DrawHandles(Transform transform, Transform inspectedTransform, Camera camera, Canvas sceneCanvas)
         {

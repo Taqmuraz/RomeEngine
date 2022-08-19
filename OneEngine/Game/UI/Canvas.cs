@@ -8,6 +8,7 @@ namespace OneEngine.UI
     {
         List<ICanvasElement> elements = new List<ICanvasElement>();
         HashSet<int> handles = new HashSet<int>();
+        List<Rect> usedSpace = new List<Rect>();
 
         [BehaviourEvent]
         void Start()
@@ -39,6 +40,7 @@ namespace OneEngine.UI
         void OnPostRender()
         {
             elements.Clear();
+            usedSpace.Clear();
         }
 
         protected override Matrix3x3 GetGraphicsTransform(Camera camera)
@@ -61,7 +63,10 @@ namespace OneEngine.UI
             Color32 color = hover ? (hold ? buttonDownColor : buttonHoverColor) : buttonColor;
 
             elements.Add(new CanvasButton(text, rect, textColor, color, options));
-            return Input.GetKeyDown(KeyCode.MouseL) && hover;
+
+            bool result = Input.GetKeyDown(KeyCode.MouseL) && hover && !usedSpace.Any(r => r.Contains(Input.MousePosition));
+            usedSpace.Add(rect);
+            return result;
         }
         public bool DrawHandle(int id, Vector2 position, float radius, Color32 color, Color32 hoverColor, Color32 holdColor)
         {

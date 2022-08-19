@@ -13,7 +13,16 @@ namespace OneEngineGame
         {
             Animator animator = (Animator)inspectedObject;
             var animationEditRect = inspectorMenu.GetNextRect();
-            var textOptions = new TextOptions() { FontSize = 20f, Alignment = TextAlignment.MiddleCenter };
+            var textOptions = new TextOptions() { FontSize = 18f, Alignment = TextAlignment.MiddleCenter };
+            if (animator.Animation != null)
+            {
+                animationEditRect.SplitHorizontal(out Rect editRect, out Rect setNullRect);
+                animationEditRect = editRect;
+                if (canvas.DrawButton("Set null", setNullRect, textOptions))
+                {
+                    animator.PlayAnimation(null);
+                }
+            }
             if (canvas.DrawButton("Edit", animationEditRect, textOptions))
             {
                 var screenSize = Screen.Size;

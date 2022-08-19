@@ -14,7 +14,14 @@ namespace OneEngineGame
         protected void Close()
         {
             OnMenuClosed();
-            if (OnClose != null) OnClose();
+            try
+            {
+                if (OnClose != null) OnClose();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex);
+            }
         }
 
         protected virtual void OnMenuClosed() { }

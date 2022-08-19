@@ -32,5 +32,14 @@ namespace OneEngine.IO
         {
             return typesMap[name];
         }
+
+        public static Type FindType(Func<Type, bool> condition)
+        {
+            return typesMap.Values.Distinct().FirstOrDefault(condition);
+        }
+        public static Type[] FindTypes(Func<Type, bool> condition)
+        {
+            return typesMap.Values.Distinct().Where(condition).ToArray();
+        }
     }
 }

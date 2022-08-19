@@ -36,7 +36,7 @@ namespace OneEngineGame
 
             AnimationFrame CreateFrame(float timeCode)
             {
-                return new AnimationFrame(Animator.Bones.Select(b => new AnimationFrameElement(b.Name, b.LocalRotation)).ToArray(), timeCode);
+                return new AnimationFrame(Animator.Bones.Select(b => new AnimationFrameElement(b.Name, b.LocalRotation, b.LocalPosition)).ToArray(), timeCode);
             }
 
             (string title, Func<bool> condition, Action action)[] buttons = new (string, Func<bool>, Action)[]

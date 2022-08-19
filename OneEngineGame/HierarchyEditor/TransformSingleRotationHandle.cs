@@ -57,12 +57,13 @@ namespace OneEngineGame
                 canvas.DrawLine(a, b, mouseOnLine ? Color32.red : Color32.gray, 3);
             }
 
-            if (transforms.TryGetValue(transform, out float value))
+            bool rotating = transforms.TryGetValue(transform, out float value);
+            if (rotating)
             {
                 transform.LocalRotation = (transform.ParentToWorld.GetInversed().MultiplyPoint(mouseWorld) - transform.LocalPosition).ToAngle() + value;
             }
 
-            return true;
+            return rotating;
         }
     }
 }

@@ -43,6 +43,20 @@ namespace OneEngineGame
                 float indent = 30f;
                 canvas.DrawRect(new Rect(0f, 0f, elementWidth, Screen.Size.y));
 
+                var worldToScreen = camera.WorldToScreenMatrix;
+
+                sceneCanvas.DrawLine(worldToScreen.MultiplyPoint(new Vector2(-10f, 0f)), worldToScreen.MultiplyPoint(new Vector2(10f, 0f)), Color32.red, 1);
+                sceneCanvas.DrawLine(worldToScreen.MultiplyPoint(new Vector2(0f, -10f)), worldToScreen.MultiplyPoint(new Vector2(0f, 10f)), Color32.green, 1);
+
+                Color32 gridColor = (Color32.white * 0.8f).WithAlpha(128);
+
+                for (int i = -10; i <= 10; i++)
+                {
+                    if (i == 0) continue;
+                    sceneCanvas.DrawLine(worldToScreen.MultiplyPoint(new Vector2(i, -10f)), worldToScreen.MultiplyPoint(new Vector2(i, 10f)), gridColor, 1);
+                    sceneCanvas.DrawLine(worldToScreen.MultiplyPoint(new Vector2(-10f, i)), worldToScreen.MultiplyPoint(new Vector2(10f, i)), gridColor, 1);
+                }
+
                 if (root == null || !root.GameObject.IsActive)
                 {
                     if (canvas.DrawButton("Create root", new Rect(0f, 0f, elementWidth, elementHeight), TextOptions.Default))

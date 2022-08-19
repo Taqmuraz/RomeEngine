@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editor\DropdownMenu.cs" />
     <Compile Include="HierarchyEditor\FullModelEditorMode.cs" />
     <Compile Include="HierarchyEditor\IHierarchyEditorMode.cs" />
     <Compile Include="Inspector\AnimatorInspector.cs" />

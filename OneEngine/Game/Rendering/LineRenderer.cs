@@ -45,7 +45,7 @@ namespace OneEngine
         public (Vector2, Vector2)[] GetHandleLines()
         {
             var l2w = Transform.LocalToWorld;
-            return lines.Select(l => (l2w.MultiplyPoint(l.PointA), l2w.MultiplyPoint(l.PointB))).ToArray();
+            return lines == null ? new (Vector2, Vector2)[0] : lines.Select(l => (l2w.MultiplyPoint(l.PointA), l2w.MultiplyPoint(l.PointB))).ToArray();
         }
     }
 }

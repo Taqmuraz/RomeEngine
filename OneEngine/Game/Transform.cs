@@ -70,6 +70,8 @@ namespace OneEngine
 			}
 		}
 
+		public Transform Root => Parent == null ? this : Parent.Root;
+
 		public Vector2 TransformPointLocal(Vector2 point)
 		{
 			return LocalPosition + LocalRight * LocalScale.x * point.x + LocalUp * LocalScale.y * point.y;

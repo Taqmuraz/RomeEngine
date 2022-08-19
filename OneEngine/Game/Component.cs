@@ -26,7 +26,10 @@ namespace OneEngine
 		protected override void OnEventCall(string name)
 		{
 			base.OnEventCall(name);
-			if (GameObject == null) throw new Exception("Can't call event on destroyed component");
+			if (GameObject == null)
+			{
+				Debug.LogError("Can't call event on destroyed component");
+			}
 		}
 
 		void IInitializable<GameObject>.Initialize(GameObject arg)

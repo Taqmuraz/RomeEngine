@@ -1,4 +1,6 @@
-﻿namespace OneEngine
+﻿using System;
+
+namespace OneEngine
 {
 	public struct Color32
 	{
@@ -65,5 +67,10 @@
 		{
 			return new Color32(color.R, color.G, color.B, color.A);
 		}
-	}
+
+        public Color32 WithAlpha(byte alpha)
+        {
+			return new Color32(r, g, b, alpha);
+        }
+    }
 }

@@ -33,7 +33,7 @@ namespace OneEngine
         public void PlayAnimation(Animation animation)
         {
             this.animation = animation;
-            isStopped = false;
+            isStopped = animation == null;
             timeStart = Time.CurrentTime;
         }
         public void Stop()

@@ -1,5 +1,6 @@
 ﻿using OneEngine;
 using OneEngine.IO;
+using System.Linq;
 
 namespace OneEngineGame
 {
@@ -38,11 +39,13 @@ namespace OneEngineGame
             var buttonRect = inspectorMenu.GetNextRect();
             if (canvas.DrawButton("Add component", buttonRect, new TextOptions() { FontSize = 25f, Alignment = TextAlignment.MiddleCenter }))
             {
-                EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
+                var types = TypesMap.FindTypes(t => typeof(Component).IsAssignableFrom(t) && !t.IsAbstract);
+
+                EditorMenu.ShowMenu<DropdownMenu>(canvas, menu =>
                 {
-                    var type = TypesMap.GetType(menu.InputString);
-                    if (type != null && typeof(Component).IsAssignableFrom(type)) ((GameObject)inspectedObject).AddComponent(type);
-                }).WithHeader("Component type name");
+                    var type = types[menu.SelectedOption];
+                    ((GameObject)inspectedObject).AddComponent(type);
+                }).DropdownOptions = types.Select(t => t.Name).ToArray();
             }
         }
     }
