@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BFB7B952-3ABF-4258-9427-07D40FF4C0E1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OneEngine</RootNamespace>
+    <AssemblyName>OneEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\CollectionsExtensions.cs" />
+    <Compile Include="Collections\ReadOnlyArray.cs" />
+    <Compile Include="Collections\ReadOnlyArrayList.cs" />
+    <Compile Include="Collections\SafeDictionary.cs" />
+    <Compile Include="Engine\Engine.cs" />
+    <Compile Include="Engine\IEngine.cs" />
+    <Compile Include="Engine\IEngineRuntine.cs" />
+    <Compile Include="Engine\ISystemInfo.cs" />
+    <Compile Include="Game\Animation\Animation.cs" />
+    <Compile Include="Game\Animation\AnimationFrame.cs" />
+    <Compile Include="Game\Animation\AnimationFrameElement.cs" />
+    <Compile Include="Game\Animation\FrameBasedAnimation.cs" />
+    <Compile Include="Game\Animation\LineBasedAnimation.cs" />
+    <Compile Include="Game\Animation\AnimationKey.cs" />
+    <Compile Include="Game\Animation\AnimationLine.cs" />
+    <Compile Include="Game\Animation\Animator.cs" />
+    <Compile Include="Game\BehaviourEventAttribute.cs" />
+    <Compile Include="Game\BehaviourEventsHandler.cs" />
+    <Compile Include="Game\Camera.cs" />
+    <Compile Include="Game\Component.cs" />
+    <Compile Include="Game\Debug.cs" />
+    <Compile Include="Game\GameObject.cs" />
+    <Compile Include="Game\GameObjectInstancer.cs" />
+    <Compile Include="Game\GameScene.cs" />
+    <Compile Include="Game\GameScenes.cs" />
+    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\IInitializable.cs" />
+    <Compile Include="Game\Layer.cs" />
+    <Compile Include="Game\Physics\BoxCollider.cs" />
+    <Compile Include="Game\Physics\CircleCollider.cs" />
+    <Compile Include="Game\Physics\Collider.cs" />
+    <Compile Include="Game\Physics\Collision.cs" />
+    <Compile Include="Game\Physics\ContactData.cs" />
+    <Compile Include="Game\Physics\ILocatable.cs" />
+    <Compile Include="Game\Physics\QuadTree.cs" />
+    <Compile Include="Game\Physics\RaycastHit.cs" />
+    <Compile Include="Game\Physics\RoomCollider.cs" />
+    <Compile Include="Game\Rendering\EllipseRenderer.cs" />
+    <Compile Include="Game\Rendering\GraphicsAdapter.cs" />
+    <Compile Include="Game\Rendering\Line.cs" />
+    <Compile Include="Game\Rendering\LineRenderer.cs" />
+    <Compile Include="Game\Rendering\OutlineRendererPass.cs" />
+    <Compile Include="Game\Rendering\PolygonRenderer.cs" />
+    <Compile Include="Game\Rendering\Renderer.cs" />
+    <Compile Include="Game\Rendering\RendererPass.cs" />
+    <Compile Include="Game\Rendering\StandardRendererPass.cs" />
+    <Compile Include="Game\Rendering\TextRenderer.cs" />
+    <Compile Include="Game\Routine\ActionRoutine.cs" />
+    <Compile Include="Game\Routine\EnumeratorRoutine.cs" />
+    <Compile Include="Game\Routine\IRoutine.cs" />
+    <Compile Include="Game\Routine\Routine.cs" />
+    <Compile Include="Game\Screen.cs" />
+    <Compile Include="Game\SerializeFieldAttribute.cs" />
+    <Compile Include="Game\Time.cs" />
+    <Compile Include="Game\Transform.cs" />
+    <Compile Include="Game\UI\Canvas.cs" />
+    <Compile Include="Game\UI\CanvasLine.cs" />
+    <Compile Include="Game\UI\IHandlable.cs" />
+    <Compile Include="Graphics\IGraphics.cs" />
+    <Compile Include="Graphics\IGraphicsBrush.cs" />
+    <Compile Include="Graphics\IGraphicsStyle.cs" />
+    <Compile Include="Graphics\SingleColorBrush.cs" />
+    <Compile Include="Input\Input.cs" />
+    <Compile Include="Input\KeyCode.cs" />
+    <Compile Include="Input\KeyState.cs" />
+    <Compile Include="IO\Serialization\ArrayFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\BinarySerializationStream.cs" />
+    <Compile Include="IO\Serialization\BoolTypeFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\CollectionFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\Color32Serializer.cs" />
+    <Compile Include="IO\Serialization\DictionaryFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\GameObjectSerializer.cs" />
+    <Compile Include="IO\Serialization\IFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\ISerializable.cs" />
+    <Compile Include="IO\Serialization\ISerializationHandler.cs" />
+    <Compile Include="IO\Serialization\ISerializationStream.cs" />
+    <Compile Include="IO\Serialization\ListFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\ObjectReferenceFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\ArithmeticTypeFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\ReadOnlyArrayFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\SerializableField.cs" />
+    <Compile Include="IO\Serialization\Serializer.cs" />
+    <Compile Include="IO\Serialization\StringFieldSerializer.cs" />
+    <Compile Include="IO\Serialization\TextSerializationStream.cs" />
+    <Compile Include="IO\Serialization\TypesMap.cs" />
+    <Compile Include="IO\Serialization\Vector2Serializer.cs" />
+    <Compile Include="Math\Color32.cs" />
+    <Compile Include="Math\Mathf.cs" />
+    <Compile Include="Math\Matrix2x2.cs" />
+    <Compile Include="Math\Matrix3x3.cs" />
+    <Compile Include="Math\Ray.cs" />
+    <Compile Include="Math\Rect.cs" />
+    <Compile Include="Math\Vector2.cs" />
+    <Compile Include="Math\Vector3.cs" />
+    <Compile Include="Math\Vector4.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Game\UI\ICanvasElement.cs" />
+    <Compile Include="Game\UI\CanvasRect.cs" />
+    <Compile Include="Game\UI\CanvasText.cs" />
+    <Compile Include="Game\UI\CanvasButton.cs" />
+    <Compile Include="Graphics\TextOptions.cs" />
+    <Compile Include="Game\UI\CanvasCircle.cs" />
+    <Compile Include="Graphics\TextAlignment.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
