@@ -12,14 +12,20 @@ namespace RomeEngine
 		[SerializeField] public Vector2 LocalPosition { get; set; }
 		[SerializeField] public float LocalRotation { get; set; }
 		[SerializeField] public Vector2 LocalScale { get; set; } = Vector2.one;
+		[SerializeField] public bool FlipX { get; set; }
+		[SerializeField] public bool FlipY { get; set; }
 
-		public Vector2 Position => (Vector2)LocalToWorld.Column_2;
+		public Vector2 Position
+		{
+			get => (Vector2)LocalToWorld.Column_2;
+			set => LocalPosition = ParentToWorld.GetInversed().MultiplyPoint(value);
+		}
 		public Vector2 Scale => LocalToWorld.MultiplyScale(Vector2.one);
 
         public override bool IsUnary => true;
 
-        public Vector2 LocalRight => new Vector2(Mathf.Cos(LocalRotation), Mathf.Sin(LocalRotation));
-		public Vector2 LocalUp => new Vector2(Mathf.Cos(LocalRotation + 90f), Mathf.Sin(LocalRotation + 90f));
+        public Vector2 LocalRight => new Vector2(Mathf.Cos(LocalRotation), Mathf.Sin(LocalRotation)) * (FlipY ? -1f : 1f);
+		public Vector2 LocalUp => new Vector2(Mathf.Cos(LocalRotation + 90f), Mathf.Sin(LocalRotation + 90f)) * (FlipX ? -1f : 1f);
 
 		[BehaviourEvent]
 		void OnDestroy()

@@ -5,11 +5,11 @@ namespace RomeEngine
 {
 	public static class Game
 	{
-		static List<BehaviourEventsHandler> gameHandlers = new List<BehaviourEventsHandler>();
-		static List<BehaviourEventsHandler> handlersToAdd = new List<BehaviourEventsHandler>();
-		static List<BehaviourEventsHandler> handlersToRemove = new List<BehaviourEventsHandler>();
+		static List<SerializableEventsHandler> gameHandlers = new List<SerializableEventsHandler>();
+		static List<SerializableEventsHandler> handlersToAdd = new List<SerializableEventsHandler>();
+		static List<SerializableEventsHandler> handlersToRemove = new List<SerializableEventsHandler>();
 
-		public abstract class GameThreadHandler : BehaviourEventsHandler
+		public abstract class GameThreadHandler : SerializableEventsHandler
 		{
 			bool m_active;
 			public bool IsActive

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public class Component : BehaviourEventsHandler, IInitializable<GameObject>
+    public class Component : SerializableEventsHandler, IInitializable<GameObject>
 	{
 		[SerializeField(HideInInspector = true)] bool destroyed;
 

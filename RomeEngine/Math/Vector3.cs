@@ -14,6 +14,11 @@ namespace RomeEngine
 			this.y = y;
 			this.z = z;
 		}
+
+		public Vector3 WithX(float x) => new Vector3(x, y, z);
+		public Vector3 WithY(float y) => new Vector3(x, y, z);
+		public Vector3 WithZ(float z) => new Vector3(x, y, z);
+
 		public static float Dot (Vector3 a, Vector3 b)
 		{
 			return a.x * b.x + a.y * b.y + a.z * b.z;

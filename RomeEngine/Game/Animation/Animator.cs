@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RomeEngine
 {
-    public sealed class Animator : Component
+    public class Animator : Component
     {
         [SerializeField(HideInInspector = true)] Animation animation;
         public Animation Animation => animation;
@@ -10,13 +11,20 @@ namespace RomeEngine
         float timeStart;
         bool isStopped;
 
+        [SerializeField] public float PlaybackSpeed { get; set; } = 1f;
+
         public IEnumerable<Transform> Bones => bonesMap.Values;
+
+        protected virtual Transform GetRoot()
+        {
+            return Transform;
+        }
 
         [BehaviourEvent]
         void Start()
         {
             bonesMap = new SafeDictionary<string, Transform>();
-            TraceBones(Transform, bonesMap);
+            TraceBones(GetRoot(), bonesMap);
         }
         void TraceBones(Transform root, SafeDictionary<string, Transform> map)
         {
@@ -27,7 +35,7 @@ namespace RomeEngine
         [BehaviourEvent]
         void Update()
         {
-            if (animation != null && !isStopped) animation.Apply(bonesMap, Time.CurrentTime - timeStart);
+            if (animation != null && !isStopped) animation.Apply(bonesMap, (Time.CurrentTime - timeStart) * PlaybackSpeed);
         }
 
         public void PlayAnimation(Animation animation)

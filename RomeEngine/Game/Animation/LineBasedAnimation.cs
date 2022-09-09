@@ -28,5 +28,10 @@ namespace RomeEngine
         {
             yield return new SerializableField(nameof(lines), lines, value => lines = (AnimationLine[])value, typeof(AnimationLine[]));
         }
+
+        public override Animation CreateTransition(Animation nextAnimation, float transitionLength)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

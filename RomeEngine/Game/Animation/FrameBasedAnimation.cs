@@ -22,18 +22,27 @@ namespace RomeEngine
 
         public override void Apply(SafeDictionary<string, Transform> bonesMap, float time)
         {
+            if (Frames == null || Frames.Length == 0) return;
+
             float normalizedTime = time - (int)(time / Length) * Length;
 
             AnimationFrame frameCurrent = null;
             AnimationFrame frameNext = null;
 
-            for (int i = 1; i < Frames.Length; i++)
+            if (Frames.Length == 1)
             {
-                if (Frames[i].TimeCode >= normalizedTime)
+                frameCurrent = frameNext = Frames[0];
+            }
+            else
+            {
+                for (int i = 1; i < Frames.Length; i++)
                 {
-                    frameCurrent = Frames[i - 1];
-                    frameNext = Frames[i];
-                    break;
+                    if (Frames[i].TimeCode >= normalizedTime)
+                    {
+                        frameCurrent = Frames[i - 1];
+                        frameNext = Frames[i];
+                        break;
+                    }
                 }
             }
 
@@ -47,6 +56,17 @@ namespace RomeEngine
         public override IEnumerable<SerializableField> EnumerateFields()
         {
             yield return new SerializableField(nameof(Frames), Frames, value => Frames = new ReadOnlyArray<AnimationFrame>((Array)value), typeof(ReadOnlyArray<AnimationFrame>));
+        }
+
+        public override Animation CreateTransition(Animation nextAnimation, float length)
+        {
+            if (nextAnimation == null) return null;
+
+            if (nextAnimation is FrameBasedAnimation frameBasedNext)
+            {
+                return new FramesTransitionAnimation(new AnimationFrame(Frames[Frames.Length - 1].FrameElements, 0f), new AnimationFrame(frameBasedNext.Frames[0].FrameElements, length));
+            }
+            else throw new NotImplementedException();
         }
     }
 }

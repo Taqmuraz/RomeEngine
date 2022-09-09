@@ -59,10 +59,18 @@ namespace OneEngineGame
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
             {
-                var player = (GameObject)new Serializer().DeserializeFile("./Models/HumanWithSwordIdle.bin");
+                var player = Resources.Load<GameObject>("Models/HumanWithSwordIdle.bin");
                 player.AddComponent<PlayerController>();
                 return player;
             }));
+            scene.AddGameObjectInstancer(() =>
+            {
+                var box = new GameObject("Box").AddComponent<BoxRenderer>();
+                box.Scale = new Vector2(10f, 1f);
+                box.Transform.Position = new Vector2(0f, -0.5f);
+                box.Color = Color32.gray;
+                return box.GameObject;
+            });
             return scene;
         }
     }

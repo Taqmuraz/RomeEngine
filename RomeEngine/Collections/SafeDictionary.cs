@@ -13,9 +13,13 @@ public sealed class SafeDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey
 
 	public static implicit operator SafeDictionary<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
 	{
-		var instance = new SafeDictionary<TKey, TValue>();
-		foreach (var values in dictionary) instance[values.Key] = values.Value;
-		return instance;
+		return new SafeDictionary<TKey, TValue>(dictionary);
+	}
+
+	public SafeDictionary(Dictionary<TKey, TValue> dictionary, Func<TValue> defaultValueFunc = null) : this(defaultValueFunc)
+	{
+		provider = new Dictionary<TKey, TValue>();
+		foreach (var pair in dictionary) provider.Add(pair.Key, pair.Value);
 	}
 
 	public SafeDictionary(Func<TValue> defaultValueFunc = null)

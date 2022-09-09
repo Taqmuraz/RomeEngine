@@ -54,12 +54,16 @@
     <Compile Include="Game\Animation\AnimationFrame.cs" />
     <Compile Include="Game\Animation\AnimationFrameElement.cs" />
     <Compile Include="Game\Animation\FrameBasedAnimation.cs" />
+    <Compile Include="Game\Animation\FramesTransitionAnimation.cs" />
     <Compile Include="Game\Animation\LineBasedAnimation.cs" />
     <Compile Include="Game\Animation\AnimationKey.cs" />
     <Compile Include="Game\Animation\AnimationLine.cs" />
     <Compile Include="Game\Animation\Animator.cs" />
     <Compile Include="Game\BehaviourEventAttribute.cs" />
-    <Compile Include="Game\BehaviourEventsHandler.cs" />
+    <Compile Include="Game\EventsHandler.cs" />
+    <Compile Include="Game\Rendering\BoxRenderer.cs" />
+    <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
+    <Compile Include="Game\SerializableEventsHandler.cs" />
     <Compile Include="Game\Camera.cs" />
     <Compile Include="Game\Component.cs" />
     <Compile Include="Game\Debug.cs" />
@@ -68,6 +72,7 @@
     <Compile Include="Game\GameScene.cs" />
     <Compile Include="Game\GameScenes.cs" />
     <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\IEventsHandler.cs" />
     <Compile Include="Game\IInitializable.cs" />
     <Compile Include="Game\Layer.cs" />
     <Compile Include="Game\Physics\BoxCollider.cs" />
@@ -122,6 +127,7 @@
     <Compile Include="IO\Serialization\ObjectReferenceFieldSerializer.cs" />
     <Compile Include="IO\Serialization\ArithmeticTypeFieldSerializer.cs" />
     <Compile Include="IO\Serialization\ReadOnlyArrayFieldSerializer.cs" />
+    <Compile Include="IO\Resources.cs" />
     <Compile Include="IO\Serialization\SerializableField.cs" />
     <Compile Include="IO\Serialization\Serializer.cs" />
     <Compile Include="IO\Serialization\StringFieldSerializer.cs" />

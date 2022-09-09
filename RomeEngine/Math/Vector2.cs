@@ -34,6 +34,9 @@ namespace RomeEngine
 			return $"( {x.ToString("F3")}, {y.ToString("F3")} )";
 		}
 
+		public Vector2 WithX(float x) => new Vector2(x, y);
+		public Vector2 WithY(float y) => new Vector2(x, y);
+
 		public static explicit operator Point (Vector2 v)
 		{
 			return new Point ((int)v.x, (int)v.y);
