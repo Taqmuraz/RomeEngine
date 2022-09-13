@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B4D8FFAC-10F0-4CBE-8ECA-91A743C16A66}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>OneEngineWindowsFormsApplication</RootNamespace>
-    <AssemblyName>OneEngineWindowsFormsApplication</AssemblyName>
+    <RootNamespace>RomeEngineWindowsFormsApplication</RootNamespace>
+    <AssemblyName>RomeEngineWindowsFormsApplication</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -68,6 +68,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

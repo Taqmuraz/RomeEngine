@@ -10,6 +10,8 @@ namespace OneEngineGame
         protected abstract Vector2 GetVelocity();
         float startTime;
 
+        protected float NormalizedTime => (Time.CurrentTime - startTime) / TimeLength;
+
         [BehaviourEvent]
         void OnEnter()
         {

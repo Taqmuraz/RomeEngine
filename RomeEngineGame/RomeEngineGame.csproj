@@ -7,8 +7,8 @@
     <ProjectGuid>{3A6C8B9F-4F72-4D65-B53B-E50D2B2F0230}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OneEngineGame</RootNamespace>
-    <AssemblyName>OneEngineGame</AssemblyName>
+    <RootNamespace>RomeEngineGame</RootNamespace>
+    <AssemblyName>RomeEngineGame</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -69,6 +69,13 @@
     <Compile Include="Editor\Inspector\StringFieldInspector.cs" />
     <Compile Include="Editor\Inspector\Vector2FieldInspector.cs" />
     <Compile Include="Editor\HierarchyEditor\HierarchyEditor.cs" />
+    <Compile Include="Game\HumanState\HumanAirAttackState.cs" />
+    <Compile Include="Game\HumanState\HumanBlockState.cs" />
+    <Compile Include="Game\HumanState\HumanControlActorState.cs" />
+    <Compile Include="Game\HumanState\HumanHighBlockState.cs" />
+    <Compile Include="Game\HumanState\HumanLowBlockState.cs" />
+    <Compile Include="Game\HumanState\HumanShieldStrikeState.cs" />
+    <Compile Include="Game\HumanState\HumanStandardBlockState.cs" />
     <Compile Include="Game\Human\HumanAnimator.cs" />
     <Compile Include="Game\Human\HumanController.cs" />
     <Compile Include="Game\HumanState\HumanState.cs" />
@@ -97,8 +104,8 @@
     <Compile Include="Editor\HierarchyEditor\TransformSingleRotationHandle.cs" />
     <Compile Include="Game\HumanState\HumanAnimatedConstantMoveState.cs" />
     <Compile Include="Game\HumanState\HumanRetreatAttackState.cs" />
-    <Compile Include="Game\Human\IControlAgentActor.cs" />
-    <Compile Include="Game\Human\IControlAgentAction.cs" />
+    <Compile Include="Game\Human\IControlActor.cs" />
+    <Compile Include="Game\Human\IControlAction.cs" />
     <Compile Include="Game\Human\CustomControlAgentAction.cs" />
     <Compile Include="Game\Human\EmptyControlAgentAction.cs" />
   </ItemGroup>

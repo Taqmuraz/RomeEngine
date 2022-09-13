@@ -2,16 +2,16 @@
 
 namespace OneEngineGame
 {
-    public sealed class CustomControlAgentAction : IControlAgentAction
+    public sealed class CustomControlAgentAction : IControlAction
     {
-        Action<IControlAgentActor> action;
+        Action<IControlActor> action;
 
-        public CustomControlAgentAction(Action<IControlAgentActor> action)
+        public CustomControlAgentAction(Action<IControlActor> action)
         {
             this.action = action;
         }
 
-        void IControlAgentAction.AcceptActor(IControlAgentActor actor)
+        void IControlAction.AcceptActor(IControlActor actor)
         {
             action(actor);
         }

@@ -7,8 +7,8 @@
     <ProjectGuid>{BFB7B952-3ABF-4258-9427-07D40FF4C0E1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OneEngine</RootNamespace>
-    <AssemblyName>OneEngine</AssemblyName>
+    <RootNamespace>RomeEngine</RootNamespace>
+    <AssemblyName>RomeEngine</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

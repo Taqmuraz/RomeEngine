@@ -1,6 +1,6 @@
 ﻿namespace OneEngineGame
 {
-    public interface IControlAgentActor
+    public interface IControlActor
     {
         void MoveToState(string stateName);
     }

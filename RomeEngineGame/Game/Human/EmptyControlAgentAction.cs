@@ -1,8 +1,8 @@
 ﻿namespace OneEngineGame
 {
-    public sealed class EmptyControlAgentAction : IControlAgentAction
+    public sealed class EmptyControlAgentAction : IControlAction
     {
-        void IControlAgentAction.AcceptActor(IControlAgentActor actor)
+        void IControlAction.AcceptActor(IControlActor actor)
         {
 
         }
