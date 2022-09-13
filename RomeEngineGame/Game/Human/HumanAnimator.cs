@@ -31,7 +31,7 @@ namespace OneEngineGame
                 if (lastAnimation == null) PlayAnimation(animationsMap[lastAnimation = name]);
                 else
                 {
-                    var transition = animationsMap[lastAnimation].CreateTransition(animationsMap[name], transitionLength);
+                    var transition = animationsMap[lastAnimation].CreateTransition(animationsMap[name], LocalTime, transitionLength);
                     lastAnimation = name;
                     PlayAnimation(transition);
                     Routine.StartRoutine(new DelayedActionRoutine(() =>

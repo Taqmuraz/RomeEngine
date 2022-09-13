@@ -1,5 +1,6 @@
 ﻿using RomeEngine;
 using RomeEngine.IO;
+using RomeEngine.UI;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -63,6 +64,13 @@ namespace OneEngineGame
                 player.AddComponent<PlayerController>();
                 return player;
             }));
+            scene.AddGameObjectInstancer(() =>
+            {
+                var canvas = new GameObject("Loop test").AddComponent<EditorCanvas>();
+                canvas.TextColor = Color32.white;
+                Routine.StartRoutine(new ActionRoutine(() => canvas.DrawText(((int)Mathf.Loop(Time.CurrentTime, 10, 20)).ToString(), new Rect(25, 25, 200, 50), TextOptions.Default)));
+                return canvas.GameObject;
+            });
             scene.AddGameObjectInstancer(() =>
             {
                 var box = new GameObject("Box").AddComponent<BoxRenderer>();

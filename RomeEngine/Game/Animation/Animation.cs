@@ -7,6 +7,6 @@ namespace RomeEngine
     {
         public abstract void Apply(SafeDictionary<string, Transform> bonesMap, float time);
         public abstract IEnumerable<SerializableField> EnumerateFields();
-        public abstract Animation CreateTransition(Animation nextAnimation, float length);
+        public abstract Animation CreateTransition(Animation nextAnimation, float time, float length);
     }
 }

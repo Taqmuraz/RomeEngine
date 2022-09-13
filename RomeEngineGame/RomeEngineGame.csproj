@@ -95,6 +95,12 @@
     <Compile Include="Editor\HierarchyEditor\TransformPositionHandle.cs" />
     <Compile Include="Editor\HierarchyEditor\TransformScaleHandle.cs" />
     <Compile Include="Editor\HierarchyEditor\TransformSingleRotationHandle.cs" />
+    <Compile Include="Game\HumanState\HumanAnimatedConstantMoveState.cs" />
+    <Compile Include="Game\HumanState\HumanRetreatAttackState.cs" />
+    <Compile Include="Game\Human\IControlAgentActor.cs" />
+    <Compile Include="Game\Human\IControlAgentAction.cs" />
+    <Compile Include="Game\Human\CustomControlAgentAction.cs" />
+    <Compile Include="Game\Human\EmptyControlAgentAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RomeEngine\RomeEngine.csproj">

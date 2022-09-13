@@ -58,13 +58,14 @@ namespace RomeEngine
             yield return new SerializableField(nameof(Frames), Frames, value => Frames = new ReadOnlyArray<AnimationFrame>((Array)value), typeof(ReadOnlyArray<AnimationFrame>));
         }
 
-        public override Animation CreateTransition(Animation nextAnimation, float length)
+        public override Animation CreateTransition(Animation nextAnimation, float time, float length)
         {
             if (nextAnimation == null) return null;
 
             if (nextAnimation is FrameBasedAnimation frameBasedNext)
             {
-                return new FramesTransitionAnimation(new AnimationFrame(Frames[Frames.Length - 1].FrameElements, 0f), new AnimationFrame(frameBasedNext.Frames[0].FrameElements, length));
+                float loopTime = Mathf.Loop(time, 0f, Frames[Frames.Length - 1].TimeCode);
+                return new FramesTransitionAnimation(new AnimationFrame((Frames.FirstOrDefault(f => f.TimeCode >= loopTime) ?? Frames.Last()).FrameElements, 0f), new AnimationFrame(frameBasedNext.Frames[0].FrameElements, length));
             }
             else throw new NotImplementedException();
         }

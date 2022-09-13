@@ -10,6 +10,7 @@ namespace OneEngineGame
         protected override IEnumerable<HumanState> CreateStates()
         {
             yield return new HumanSwordDefaultState().Initialize(HumanController);
+            yield return new HumanRetreatAttackState().Initialize(HumanController);
         }
 
         public void Initialize(HumanController human)

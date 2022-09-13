@@ -29,7 +29,7 @@ namespace RomeEngine
             throw new NotImplementedException();
         }
 
-        public override Animation CreateTransition(Animation nextAnimation, float length)
+        public override Animation CreateTransition(Animation nextAnimation, float time, float length)
         {
             throw new NotImplementedException();
         }

@@ -6,6 +6,8 @@ namespace OneEngineGame
     {
         float orthographicSize = 5f;
         Camera camera;
+        EmptyControlAgentAction emptyAction = new EmptyControlAgentAction();
+        CustomControlAgentAction attackAction_0 = new CustomControlAgentAction(agent => agent.MoveToState("RetreatAttack"));
 
         [BehaviourEvent]
         void Start()
@@ -17,5 +19,11 @@ namespace OneEngineGame
         public override IControlAgent GetControlAgent() => this;
 
         public Vector2 InputMovement => Input.GetWASD();
+
+        public IControlAgentAction GetAction()
+        {
+            if (Input.GetKeyDown(KeyCode.Q)) return attackAction_0;
+            return emptyAction;
+        }
     }
 }

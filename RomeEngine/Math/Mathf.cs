@@ -99,7 +99,17 @@ namespace RomeEngine
 			if (b <= c && b <= a) return b;
 			return c;
 		}
-		public static float Max(float a, float b)
+
+        public static float Loop(float value, float min, float max)
+        {
+            float r = max - min;
+            float d = value - min;
+            int loops = (int)(d / r);
+            float inloop = d - loops * r;
+            return inloop < 0 ? max + inloop : min + inloop;
+        }
+
+        public static float Max(float a, float b)
 		{
 			if (a < b) return b;
 			return a;

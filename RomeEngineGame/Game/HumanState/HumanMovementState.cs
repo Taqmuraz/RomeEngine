@@ -4,18 +4,9 @@ namespace OneEngineGame
 {
     public abstract class HumanMovementState : HumanState
     {
-        string name;
-
-        protected abstract float MovementSpeed { get; }
-
-        public HumanMovementState()
-        {
-            name = GetType().Name.Replace("Human", string.Empty).Replace("State", string.Empty);
-        }
-
-        protected override string GetName() => name;
         protected abstract string GetMovementAnimationName();
         protected abstract string GetIdleAnimationName();
+        protected abstract float MovementSpeed { get; }
 
         [BehaviourEvent]
         void Update()

@@ -11,6 +11,8 @@ namespace RomeEngine
         float timeStart;
         bool isStopped;
 
+        public float LocalTime => (Time.CurrentTime - timeStart) * PlaybackSpeed;
+
         [SerializeField] public float PlaybackSpeed { get; set; } = 1f;
 
         public IEnumerable<Transform> Bones => bonesMap.Values;
@@ -35,7 +37,7 @@ namespace RomeEngine
         [BehaviourEvent]
         void Update()
         {
-            if (animation != null && !isStopped) animation.Apply(bonesMap, (Time.CurrentTime - timeStart) * PlaybackSpeed);
+            if (animation != null && !isStopped) animation.Apply(bonesMap, LocalTime);
         }
 
         public void PlayAnimation(Animation animation)
