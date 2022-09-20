@@ -5,7 +5,7 @@ using System.Linq;
 using RomeEngine;
 using RomeEngine.IO;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class InspectorMenu : EditorMenu
     {

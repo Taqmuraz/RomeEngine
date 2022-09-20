@@ -2,7 +2,7 @@
 using RomeEngine.IO;
 using System.Linq;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class GameObjectInspector : ObjectInspector
     {

@@ -1,6 +1,6 @@
 ﻿using RomeEngine;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public static class HumanAnimations
     {

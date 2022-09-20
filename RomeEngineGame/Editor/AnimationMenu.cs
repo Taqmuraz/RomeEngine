@@ -7,7 +7,7 @@ using RomeEngine;
 using RomeEngine.IO;
 using RomeEngine.UI;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class AnimationMenu : EditorMenu
     {

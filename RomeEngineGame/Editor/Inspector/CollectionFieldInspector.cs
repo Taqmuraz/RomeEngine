@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using RomeEngine;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public abstract class CollectionFieldInspector<TCollection, TElement> : IFieldInspector
     {

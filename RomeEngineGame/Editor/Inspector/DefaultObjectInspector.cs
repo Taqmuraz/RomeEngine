@@ -1,6 +1,6 @@
 ﻿using RomeEngine.IO;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class DefaultObjectInspector : ObjectInspector
     {

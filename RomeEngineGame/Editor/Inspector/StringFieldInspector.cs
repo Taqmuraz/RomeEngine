@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class StringFieldInspector : PrimitiveTypeFieldInspector
     {

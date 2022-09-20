@@ -1,7 +1,7 @@
 ﻿using RomeEngine;
 using System.Collections.Generic;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public class HumanStateMachine : StateMachine<string, HumanState>, IInitializable<HumanController>
     {

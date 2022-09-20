@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class ArrayFieldInspector : CollectionFieldInspector<Array, object>
     {

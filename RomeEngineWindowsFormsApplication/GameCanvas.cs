@@ -32,7 +32,7 @@ namespace OneEngineWindowsFormsApplication
             SetBounds(0, 0, width, height);
 
             this.log = log;
-            engine = OneEngineGame.RomeEngineGame.StartGame(this);
+            engine = RomeEngineGame.RomeEngineGame.StartGame(this);
 
             Timer timer = new Timer();
             timer.Tick += (s, e) => UpdateEngine();

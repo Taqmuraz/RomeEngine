@@ -1,7 +1,7 @@
 ﻿using RomeEngine;
 using RomeEngine.UI;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class EditorCanvas : Canvas
     {

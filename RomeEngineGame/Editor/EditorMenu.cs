@@ -2,7 +2,7 @@
 using RomeEngine;
 using RomeEngine.UI;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public abstract class EditorMenu
     {

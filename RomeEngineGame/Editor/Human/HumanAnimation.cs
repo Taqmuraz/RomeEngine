@@ -1,6 +1,6 @@
 ﻿using RomeEngine;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class HumanAnimation : LineBasedAnimation
     {

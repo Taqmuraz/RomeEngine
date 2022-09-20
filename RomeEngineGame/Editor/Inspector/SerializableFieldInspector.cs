@@ -2,7 +2,7 @@
 using RomeEngine;
 using RomeEngine.IO;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class SerializableFieldInspector : IFieldInspector
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using RomeEngine;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class BoolFieldInspector : IFieldInspector
     {

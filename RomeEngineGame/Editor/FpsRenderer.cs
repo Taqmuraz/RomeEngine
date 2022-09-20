@@ -2,7 +2,7 @@
 using RomeEngine.UI;
 
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class FpsRenderer : Component
     {

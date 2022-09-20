@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using RomeEngine;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public abstract class Editor : Component
     {

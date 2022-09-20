@@ -4,7 +4,7 @@ using RomeEngine;
 using RomeEngine.UI;
 using System.Linq;
 
-namespace OneEngineGame
+namespace RomeEngineGame
 {
     public sealed class FileSearchMenu : EditorMenu
     {
