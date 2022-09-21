@@ -1,6 +1,6 @@
 ﻿namespace RomeEngine
 {
-    public interface IGraphics3D
+    public interface IGraphics
     {
         void SetProjectionMatrix(Matrix4x4 projection);
         void SetViewMatrix(Matrix4x4 view);

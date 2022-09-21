@@ -17,7 +17,7 @@ namespace RomeEngine
             IGraphicsBrush brush;
         }
 
-        public override void Pass(IGraphics2D graphics, Camera2D camera, IEnumerable<Renderer2D> renderers, Func<Renderer2D, Matrix3x3> graphicsTransform, Action<Renderer2D, IGraphics2D, Camera2D> drawCall)
+        public override void Pass(IGraphics2D graphics, IEnumerable<Renderer2D> renderers, Func<Renderer2D, Matrix3x3> graphicsTransform, Action<Renderer2D, IGraphics2D> drawCall)
         {
             graphics = new BlackBrushGraphics(graphics);
             graphics.Style = graphics.OutlineStyle;
@@ -25,7 +25,7 @@ namespace RomeEngine
             foreach (var renderer in renderers)
             {
                 graphics.Transform = graphicsTransform(renderer);
-                drawCall(renderer, graphics, camera);
+                drawCall(renderer, graphics);
             }
         }
     }

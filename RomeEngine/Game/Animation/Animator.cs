@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public class Animator2D : Component
+    public class Animator : Component
     {
-        [SerializeField(HideInInspector = true)] Animation2D animation;
-        public Animation2D Animation => animation;
-        SafeDictionary<string, Transform2D> bonesMap;
+        [SerializeField(HideInInspector = true)] Animation animation;
+        public Animation Animation => animation;
+        SafeDictionary<string, Transform> bonesMap;
         float timeStart;
         bool isStopped;
 
@@ -15,9 +15,9 @@ namespace RomeEngine
 
         [SerializeField] public float PlaybackSpeed { get; set; } = 1f;
 
-        public IEnumerable<Transform2D> Bones => bonesMap.Values;
+        public IEnumerable<Transform> Bones => bonesMap.Values;
 
-        protected virtual Transform2D GetRoot()
+        protected virtual Transform GetRoot()
         {
             return Transform;
         }
@@ -25,10 +25,10 @@ namespace RomeEngine
         [BehaviourEvent]
         void Start()
         {
-            bonesMap = new SafeDictionary<string, Transform2D>();
+            bonesMap = new SafeDictionary<string, Transform>();
             TraceBones(GetRoot(), bonesMap);
         }
-        void TraceBones(Transform2D root, SafeDictionary<string, Transform2D> map)
+        void TraceBones(Transform root, SafeDictionary<string, Transform> map)
         {
             map[root.Name] = root;
             foreach (var child in root.Children) TraceBones(child, map);
@@ -40,7 +40,7 @@ namespace RomeEngine
             if (animation != null && !isStopped) animation.Apply(bonesMap, LocalTime);
         }
 
-        public void PlayAnimation(Animation2D animation)
+        public void PlayAnimation(Animation animation)
         {
             this.animation = animation;
             isStopped = animation == null;
@@ -51,7 +51,7 @@ namespace RomeEngine
             isStopped = true;
         }
 
-        public void PlayAnimationFrame(Animation2D animation, float time)
+        public void PlayAnimationFrame(Animation animation, float time)
         {
             if (animation != null)
             {

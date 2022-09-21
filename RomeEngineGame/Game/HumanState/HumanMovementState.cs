@@ -14,7 +14,7 @@ namespace RomeEngineGame
             var inputMovement = HumanController.GetControlAgent().InputMovement.WithY(0f).normalized;
             if (inputMovement.x != 0)
             {
-                HumanController.Transform.FlipY = inputMovement.x < 0f;
+                //HumanController.Transform.FlipY = inputMovement.x < 0f;
                 HumanController.HumanAnimator.PlayAnimationWithTransition(GetMovementAnimationName());
             }
             else

@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-
-namespace RomeEngine
+﻿namespace RomeEngine
 {
-    public abstract class Camera<TCamera> : Component where TCamera : Camera<TCamera>
+    public sealed class Camera : Component
     {
-        static List<TCamera> cameras = new List<TCamera>();
-        public static TCamera ActiveCamera { get; private set; }
+        public static Camera ActiveCamera { get; private set; }
 
         [BehaviourEvent]
         void Start()
         {
-            if (ActiveCamera == null) ActiveCamera = (TCamera)this;
+            if (ActiveCamera == null) ActiveCamera = this;
             else throw new System.InvalidOperationException("Active camera already exists, can't create more");
         }
         [BehaviourEvent]

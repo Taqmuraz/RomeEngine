@@ -28,33 +28,29 @@ namespace RomeEngine
             renderers.Remove(this);
         }
 
-        protected virtual Matrix3x3 GetGraphicsTransform(Camera2D camera)
+        protected virtual Matrix3x3 GetGraphicsTransform()
         {
-            return camera.WorldToScreenMatrix * Transform.LocalToWorld;
+            return Matrix3x3.identity;
         }
 
-        public static void UpdateGraphics(IGraphics2D graphics, Camera2D camera)
+        public static void Update2DGraphics(IGraphics2D graphics)
         {
             graphics.Clear(Color32.black);
-            graphics.Transform = camera.WorldToScreenMatrix;
+            graphics.Transform = Matrix3x3.identity;
 
-            graphics.Brush = new SingleColorBrush(camera.ClearColor);
-            graphics.DrawRect(Rect.FromCenterAndSize(camera.Transform.Position, camera.OrthographicSize));
-
-            var renderers = Renderer2D.renderers.Where(r => r.IsInsideScreen(graphics, camera));
             var passes = renderers.SelectMany(r => r.EnumeratePasses()).Distinct().OrderBy(pass => pass.Queue);
 
             foreach (var pass in passes)
             {
                 var renderersForPass = renderers.Where(r => r.EnumeratePasses().Contains(pass)).OrderByDescending(r => r.Queue);
-                pass.Pass(graphics, camera, renderersForPass, r => r.GetGraphicsTransform(camera), (r, g, c) => r.GraphicsUpdate(g, c));
+                pass.Pass(graphics, renderersForPass, r => r.GetGraphicsTransform(), (r, g) => r.GraphicsUpdate(g));
             }
         }
-        void GraphicsUpdate(IGraphics2D graphics, Camera2D camera)
+        void GraphicsUpdate(IGraphics2D graphics)
         {
             try
             {
-                OnGraphicsUpdate(graphics, camera);
+                OnGraphicsUpdate(graphics);
             }
             catch (System.Exception ex)
             {
@@ -62,8 +58,6 @@ namespace RomeEngine
             }
         }
 
-        protected abstract bool IsInsideScreen(IGraphics2D graphics, Camera2D camera);
-
-        protected abstract void OnGraphicsUpdate(IGraphics2D graphics, Camera2D camera);
+        protected abstract void OnGraphicsUpdate(IGraphics2D graphics);
     }
 }

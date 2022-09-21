@@ -102,5 +102,7 @@ namespace OneEngineWindowsFormsApplication
             thread.SetApartmentState(System.Threading.ApartmentState.STA);
             thread.Start();
         }
+
+        public IFileSystem FileSystem { get; } = new FileSystem();
     }
 }

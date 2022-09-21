@@ -30,8 +30,8 @@
 
         public void UpdateGraphics(IGraphics2D graphics)
         {
-            Game.UpdateGraphics(graphics, Camera2D.Cameras[0]);
-            Debug.DrawDebug(graphics, Camera2D.Cameras[0]);
+            Game.UpdateGraphics2D(graphics);
+            Debug.DrawDebug(graphics);
         }
     }
 }

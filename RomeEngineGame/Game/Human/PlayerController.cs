@@ -4,9 +4,6 @@ namespace RomeEngineGame
 {
     public sealed class PlayerController : HumanController, IControlAgent
     {
-        float orthographicSize = 5f;
-        Camera2D camera;
-
         IControlAction emptyAction = new EmptyControlAgentAction();
         IControlAction resetAction = new CustomControlAgentAction(agent => agent.MoveToState("SwordDefault"));
 
@@ -18,13 +15,6 @@ namespace RomeEngineGame
         IControlAction highBlockEnterAction = new CustomControlAgentAction(agent => agent.MoveToState("HighBlock"));
 
         IControlAction shieldStrikeAction = new CustomControlAgentAction(agent => agent.MoveToState("ShieldStrike"));
-
-        [BehaviourEvent]
-        void Start()
-        {
-            camera = Camera2D.Cameras[0];
-            camera.OrthographicMultiplier = orthographicSize;
-        }
 
         public override IControlAgent GetControlAgent() => this;
 

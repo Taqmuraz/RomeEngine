@@ -16,34 +16,30 @@ namespace RomeEngine.UI
             Queue = -1000;
         }
 
-        protected override bool IsInsideScreen(IGraphics2D graphics, Camera2D camera)
-        {
-            return true;
-        }
         protected override IEnumerable<Renderer2DPass> EnumeratePasses()
         {
             yield return StandardPass;
         }
 
-        protected override void OnGraphicsUpdate(IGraphics2D graphics, Camera2D camera)
+        protected override void OnGraphicsUpdate(IGraphics2D graphics)
         {
             foreach (var element in elements)
             {
                 graphics.Style = graphics.OutlineStyle;
-                element.Draw(new OutlineRendererPass.BlackBrushGraphics(graphics, 2), camera);
+                element.Draw(new OutlineRendererPass.BlackBrushGraphics(graphics, 2));
                 graphics.Style = graphics.FillStyle;
-                element.Draw(graphics, camera);
+                element.Draw(graphics);
             }
         }
 
         [BehaviourEvent]
-        void OnPostRender()
+        void OnPostRender2D()
         {
             elements.Clear();
             usedSpace.Clear();
         }
 
-        protected override Matrix3x3 GetGraphicsTransform(Camera2D camera)
+        protected override Matrix3x3 GetGraphicsTransform()
         {
             return Matrix3x3.identity;
         }

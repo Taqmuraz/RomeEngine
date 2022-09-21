@@ -13,7 +13,7 @@
             this.color = color;
         }
 
-        public void Draw(IGraphics2D graphics, Camera2D camera)
+        public void Draw(IGraphics2D graphics)
         {
             graphics.Style = graphics.OutlineStyle;
             graphics.Brush = new SingleColorBrush(color);

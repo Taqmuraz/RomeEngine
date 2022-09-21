@@ -26,13 +26,13 @@ namespace RomeEngine
 			Engine.Instance.Runtime.Log(message.ToString());
 		}
 
-		public static void DrawDebug(IGraphics2D graphics, Camera2D camera)
+		public static void DrawDebug(IGraphics2D graphics)
         {
 			for (int i = 0; i < lines.Count; i++)
 			{
 				var line = lines[i];
 				graphics.Brush = new SingleColorBrush(line.color);
-				graphics.DrawLine(camera.WorldToScreen(line.a), camera.WorldToScreen(line.b));
+				graphics.DrawLine(line.a, line.b);
 			}
 			lines.Clear();
 		}

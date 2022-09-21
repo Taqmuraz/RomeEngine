@@ -51,6 +51,7 @@
     <Compile Include="CanvasFillStyle.cs" />
     <Compile Include="CanvasGraphics.cs" />
     <Compile Include="CanvasStyleBase.cs" />
+    <Compile Include="FileSystem.cs" />
     <Compile Include="GameCanvas.cs">
       <SubType>Component</SubType>
     </Compile>

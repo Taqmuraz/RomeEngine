@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace RomeEngine.IO
 {
     public sealed class Serializer
     {
-        public static ReadOnlyArrayList<IFieldSerializer> FieldSerializers { get; }
+        public static Dictionary<string, IFieldSerializer> FieldSerializers { get; }
         public static string BinaryFormatExtension => BIN;
         public static string TextFormatExtension => TXT;
 
@@ -26,9 +25,16 @@ namespace RomeEngine.IO
             public ISerializationStream Stream { get; }
         }
 
+        public static string EmptySerializerKey { get; } = "Empty";
+
+        public static string GetSerializerKey(IFieldSerializer serializer)
+        {
+            return serializer.GetType().Name;
+        }
+
         static Serializer()
         {
-            FieldSerializers = GetFieldSerializers().ToList();
+            FieldSerializers = GetFieldSerializers().ToDictionary(GetSerializerKey);
         }
 
         static IEnumerable<IFieldSerializer> GetFieldSerializers()
@@ -39,6 +45,7 @@ namespace RomeEngine.IO
             yield return new ArrayFieldSerializer();
             yield return new ListFieldSerializer();
             yield return new DictionaryFieldSerializer();
+            yield return new Vector2Serializer();
             yield return new Vector2Serializer();
             yield return new Color32Serializer();
             yield return new BoolTypeFieldSerializer();
@@ -64,13 +71,13 @@ namespace RomeEngine.IO
                 stream.WriteInt(fieldsArray.Length);
                 foreach (var field in fieldsArray)
                 {
-                    var serializer = FieldSerializers.FirstOrDefault(f => f.CanSerializeType(field.Type));
+                    var serializer = FieldSerializers.Values.FirstOrDefault(f => f.CanSerializeType(field.Type));
                     if (serializer == null)
                     {
                         throw new InvalidOperationException($"Can't serialize field with type {field.Type.FullName}");
                     }
                     stream.WriteString(field.Name);
-                    stream.WriteInt(FieldSerializers.IndexOf(serializer));
+                    stream.WriteString(GetSerializerKey(serializer));
                     serializer.SerializeField(field.Value, context);
                 }
             }
@@ -109,8 +116,8 @@ namespace RomeEngine.IO
                     string fieldName = stream.ReadString();
                     if (fieldsMap.TryGetValue(fieldName, out SerializableField field))
                     {
-                        int serializerIndex = stream.ReadInt();
-                        if (serializerIndex == -1)
+                        string serializerIndex = stream.ReadString();
+                        if (serializerIndex == Serializer.EmptySerializerKey)
                         {
                             throw new InvalidOperationException($"Can't deserialize field with type {field.Type.FullName}");
                         }
@@ -125,18 +132,18 @@ namespace RomeEngine.IO
 
         public ISerializable DeserializeFile(string file)
         {
-            string extension = Path.GetExtension(file).ToLower();
+            string extension = Engine.Instance.Runtime.FileSystem.GetFileExtension(file).ToLower();
             switch (extension)
             {
                 case BIN:
-                    using (FileStream fs = File.OpenRead(file))
+                    using (System.IO.Stream fs = Engine.Instance.Runtime.FileSystem.OpenFileRead(file))
                     {
                         return Deserialize(new BinarySerializationStream(fs));
                     }
                 case TXT:
-                    using (StreamReader sr = new StreamReader(file))
+                    using (System.IO.TextReader tr = Engine.Instance.Runtime.FileSystem.ReadText(file))
                     {
-                        return Deserialize(new TextSerializationStream(sr, null));
+                        return Deserialize(new TextSerializationStream(tr, null));
                     }
                 default:
                     throw new InvalidOperationException($"Extension {extension} is not supported to deserialize");
@@ -144,17 +151,17 @@ namespace RomeEngine.IO
         }
         public void SerializeFile(ISerializable serializable, string path)
         {
-            string extension = Path.GetExtension(path).ToLower();
+            string extension = Engine.Instance.Runtime.FileSystem.GetFileExtension(path).ToLower();
             switch (extension)
             {
                 case BIN:
-                    using (FileStream fs = File.OpenWrite(path))
+                    using (System.IO.Stream fs = Engine.Instance.Runtime.FileSystem.OpenFileWrite(path))
                     {
                         Serialize(serializable, new BinarySerializationStream(fs));
                     }
                     break;
                 case TXT:
-                    using (StreamWriter sw = new StreamWriter(path))
+                    using (System.IO.TextWriter sw = Engine.Instance.Runtime.FileSystem.WriteText(path))
                     {
                         Serialize(serializable, new TextSerializationStream(null, sw));
                     }

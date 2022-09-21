@@ -59,7 +59,7 @@ namespace RomeEngine
 			return new Vector3(b.x == 0f ? 1 : (a.x / b.x), b.y == 0f ? 0f : (a.y / b.y), b.z == 0f ? 0f : (a.z / b.z));
 		}
 
-		public static bool operator ==(Vector3 a, Vector3 b)
+        public static bool operator ==(Vector3 a, Vector3 b)
 		{
 			return (a - b).length <= Mathf.Epsilon;
 		}
@@ -141,6 +141,16 @@ namespace RomeEngine
 		public static Vector3 Lerp (Vector3 a, Vector3 b, float t)
 		{
 			return a + (b - a) * t.Clamp(0f, 1f);
+		}
+
+		public static Vector3 LerpRotation(Vector3 a, Vector3 b, float blend)
+		{
+			return new Vector3
+				(
+				Mathf.LerpAngle(a.x, b.x, blend),
+				Mathf.LerpAngle(a.y, b.y, blend),
+				Mathf.LerpAngle(a.z, b.z, blend)
+				);
 		}
 
 		public static readonly Vector3 right = new Vector3 (1, 0, 0);

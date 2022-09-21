@@ -10,13 +10,13 @@ namespace RomeEngineGame
 {
     public sealed class AnimationMenu : EditorMenu
     {
-        public Animator2D Animator { get; set; }
-        public Animation2D Animation { get; set; }
-        Animation2D initialAnimation;
+        public Animator Animator { get; set; }
+        public Animation Animation { get; set; }
+        Animation initialAnimation;
 
         int scroll;
 
-        public void Initialize(Animator2D animator, Animation2D animation, Rect rect)
+        public void Initialize(Animator animator, Animation animation, Rect rect)
         {
             Animator = animator;
             Animation = initialAnimation = animation;
@@ -33,37 +33,37 @@ namespace RomeEngineGame
             float elementHeight = rect.Height * 0.125f;
             float elementWidth = panelWidth * 0.25f;
 
-            Animation2DFrame CreateFrame(float timeCode)
+            AnimationFrame CreateFrame(float timeCode)
             {
-                return new Animation2DFrame(Animator.Bones.Select(b => new Animation2DFrameElement(b.Name, b.LocalRotation, b.LocalPosition)).ToArray(), timeCode);
+                return new AnimationFrame(Animator.Bones.Select(b => new AnimationFrameElement(b.Name, b.LocalPosition, b.LocalRotation, b.LocalScale)).ToArray(), timeCode);
             }
 
             (string title, Func<bool> condition, Action action)[] buttons = new (string, Func<bool>, Action)[]
             {
-                ("Import animation", () => true, () => Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select animation", file => Animation = (Animation2D)new Serializer().DeserializeFile(file))),
+                ("Import animation", () => true, () => Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select animation", file => Animation = (Animation)new Serializer().DeserializeFile(file))),
                 ("Export animation", () => Animation != null, () => Engine.Instance.Runtime.ShowFileWriteDialog("./", $"Animation{Serializer.BinaryFormatExtension}", "Select animation", file => new Serializer().SerializeFile(Animation, file))),
-                ("Create new animation", () => true, () => Animation = new FrameBasedAnimation2D(new [] { CreateFrame(0f) })),
-                ("Add frame", () => Animation is FrameBasedAnimation2D, () =>
+                ("Create new animation", () => true, () => Animation = new FrameBasedAnimation(new [] { CreateFrame(0f) })),
+                ("Add frame", () => Animation is FrameBasedAnimation, () =>
                 {
-                    var fb = (FrameBasedAnimation2D)Animation;
-                    Animation = new FrameBasedAnimation2D(fb.Frames.Append(CreateFrame(fb.Length + 0.25f)).ToArray());
+                    var fb = (FrameBasedAnimation)Animation;
+                    Animation = new FrameBasedAnimation(fb.Frames.Append(CreateFrame(fb.Length + 0.25f)).ToArray());
                 }),
                 ("Play", () => Animator != null && Animation != null, () => Animator.PlayAnimation(Animation)),
                 ("Stop", () => Animator != null, () => Animator.Stop()),
                 ("Apply", () => true, () => Close()),
-                ("Change inverval", () => Animation is FrameBasedAnimation2D, () =>
+                ("Change inverval", () => Animation is FrameBasedAnimation, () =>
                 {
                     ShowMenu<StringInputMenu>(canvas, menu => 
                     {
                         float interval = menu.InputString.ToFloat();
-                        if (Animation is FrameBasedAnimation2D frameBasedAnimation)
+                        if (Animation is FrameBasedAnimation frameBasedAnimation)
                         {
                             var frames = frameBasedAnimation.Frames.ToArray();
                             for (int i = 0; i < frames.Length; i++)
                             {
-                                frames[i] = new Animation2DFrame(frames[i].FrameElements, i * interval);
+                                frames[i] = new AnimationFrame(frames[i].FrameElements, i * interval);
                             }
-                            Animation = new FrameBasedAnimation2D(frames);
+                            Animation = new FrameBasedAnimation(frames);
                         }
                     });
                 }),
@@ -82,12 +82,12 @@ namespace RomeEngineGame
                 }
             }
 
-            if (Animation is FrameBasedAnimation2D frameBased)
+            if (Animation is FrameBasedAnimation frameBased)
             {
-                void ChangeFrame(Animation2DFrame src, Animation2DFrame dst)
+                void ChangeFrame(AnimationFrame src, AnimationFrame dst)
                 {
                     var frames = frameBased.Frames;
-                    Animation = new FrameBasedAnimation2D(frames.Select(f => f == src ? dst : f).ToArray());
+                    Animation = new FrameBasedAnimation(frames.Select(f => f == src ? dst : f).ToArray());
                 }
 
                 canvas.DrawRect(new Rect(rect.X + elementWidth, rect.Y, rect.Width - elementWidth, rect.Height), Color32.white * 0.8f);
@@ -102,16 +102,16 @@ namespace RomeEngineGame
                         Rect timecodeRect;
                         if (canvas.DrawButton($"({index}) time code : " + frame.TimeCode.ToString(), timecodeRect = new Rect(rect.X + elementWidth, posY, elementWidth, elementHeight), TextOptions.Default))
                         {
-                            ShowMenu<StringInputMenu>(canvas, menu => ChangeFrame(frame, new Animation2DFrame(frame.FrameElements.ToArray(), menu.InputString.ToFloat())), timecodeRect);
+                            ShowMenu<StringInputMenu>(canvas, menu => ChangeFrame(frame, new AnimationFrame(frame.FrameElements.ToArray(), menu.InputString.ToFloat())), timecodeRect);
                         }
                         if (canvas.DrawButton("Apply frame", new Rect(rect.X + elementWidth * 2f, posY, elementWidth, elementHeight), TextOptions.Default))
                         {
-                            Animation2DFrame.ApplyBlended(frame, frame, Animator.Bones.ToDictionary(b => b.Name), 0f);
+                            AnimationFrame.ApplyBlended(frame, frame, Animator.Bones.ToDictionary(b => b.Name), 0f);
                             //Animator.PlayAnimationFrame(Animation, frame.TimeCode);
                         }
                         if (canvas.DrawButton("Write frame", new Rect(rect.X + elementWidth * 3f, posY, elementWidth, elementHeight), TextOptions.Default))
                         {
-                            Animation2DFrame newFrame = CreateFrame(frame.TimeCode);
+                            AnimationFrame newFrame = CreateFrame(frame.TimeCode);
                             ChangeFrame(frame, newFrame);
                         }
                     }

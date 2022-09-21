@@ -6,10 +6,12 @@ namespace RomeEngine
     {
         TextReader ReadText(string file);
         TextWriter WriteText(string file);
-        Stream OpenFile(string file);
+        Stream OpenFileRead(string file);
+        Stream OpenFileWrite(string file);
         string[] GetFiles(string directory);
         string[] GetDirectories(string directory);
         string GetFileName(string file);
+        string GetFileExtension(string file);
         string GetFileNameWithoutExtension(string file);
         string GetParentDirectory(string directory);
         string GetFullPath(string relativePath);

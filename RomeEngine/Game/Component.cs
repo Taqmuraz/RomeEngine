@@ -11,13 +11,13 @@ namespace RomeEngine
 		public string Name => GameObject.Name;
 		public virtual bool IsUnary { get; }
 
-		public virtual Transform2D Transform => GetTransform();
-		internal protected virtual Transform2D GetTransform()
+		public virtual Transform Transform => GetTransform();
+		internal protected virtual Transform GetTransform()
 		{
 			return transform;
 		}
 		[SerializeField(HideInInspector = true)]
-		Transform2D transform;
+		Transform transform;
 		[SerializeField(HideInInspector = true)]
 		GameObject gameObject;
 		public GameObject GameObject => gameObject;

@@ -35,7 +35,7 @@ namespace RomeEngineGame
         }
         static GameScene LevelSelectScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera2D>().GameObject);
+            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
             var scene = new GameScene("Level select scene");
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(new GameObjectInstancer(() => new GameObject("Level select menu").AddComponent<LevelSelectMenu>().GameObject));
@@ -43,7 +43,7 @@ namespace RomeEngineGame
         }
         static GameScene AnimationEditorScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera2D>().GameObject);
+            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
             var scene = new GameScene("Editor scene");
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
@@ -55,7 +55,7 @@ namespace RomeEngineGame
         }
         static GameScene GamePlayScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera2D>().GameObject);
+            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
             var scene = new GameScene("Game scene");
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
@@ -70,14 +70,6 @@ namespace RomeEngineGame
                 canvas.TextColor = Color32.white;
                 Routine.StartRoutine(new ActionRoutine(() => canvas.DrawText(((int)Mathf.Loop(Time.CurrentTime, 10, 20)).ToString(), new Rect(25, 25, 200, 50), TextOptions.Default)));
                 return canvas.GameObject;
-            });
-            scene.AddGameObjectInstancer(() =>
-            {
-                var box = new GameObject("Box").AddComponent<BoxRenderer>();
-                box.Scale = new Vector2(10f, 1f);
-                box.Transform.Position = new Vector2(0f, -0.5f);
-                box.Color = Color32.gray;
-                return box.GameObject;
             });
             return scene;
         }

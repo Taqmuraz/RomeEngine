@@ -21,8 +21,8 @@ namespace RomeEngine.IO
         protected override void ReadElement(object collection, int index, ISerializationContext context)
         {
             var array = (Array)collection;
-            int serializerIndex = context.Stream.ReadInt();
-            if (serializerIndex == -1)
+            string serializerIndex = context.Stream.ReadString();
+            if (serializerIndex == Serializer.EmptySerializerKey)
             {
                 return;
             }
@@ -35,10 +35,10 @@ namespace RomeEngine.IO
             var element = array[index];
             if (element != null)
             {
-                var serializer = Serializer.FieldSerializers.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
+                var serializer = Serializer.FieldSerializers.Values.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
                 if (serializer != null)
                 {
-                    context.Stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
+                    context.Stream.WriteString(Serializer.GetSerializerKey(serializer));
                     serializer.SerializeField(element, context);
                     return;
                 }

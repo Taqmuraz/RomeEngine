@@ -1,4 +1,6 @@
-﻿namespace RomeEngine
+﻿using System;
+
+namespace RomeEngine
 {
     public struct Matrix4x4
 	{
@@ -32,7 +34,26 @@
 		{
 		}
 
-		public static Matrix4x4 CreateViewport(int width, int height)
+        public Vector3 GetEulerRotation()
+        {
+			float sy = Mathf.Sqrt(column_0.x * column_0.x + column_0.y * column_0.y);
+			float x, y, z;
+			if (sy < 1e-6f)
+			{
+				x = (float)Math.Atan2(-column_2.y, column_1.y);
+				y = (float)Math.Atan2(-column_0.z, sy);
+				z = 0f;
+			}
+			else
+			{
+				x = (float)Math.Atan2(column_1.z, column_2.z);
+				y = (float)Math.Atan2(-column_0.z, sy);
+				z = (float)Math.Atan2(-column_0.y, column_0.x);
+			}
+			return new Vector3(x, y, z);
+        }
+
+        public static Matrix4x4 CreateViewport(int width, int height)
 		{
 			Matrix4x4 m = new Matrix4x4();
 			m.column_0 = new Vector4(width / 2, 0f, 0f, 0);

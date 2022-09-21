@@ -3,20 +3,20 @@ using RomeEngine.IO;
 
 namespace RomeEngineGame
 {
-    public sealed class HumanAnimator : Animator2D
+    public sealed class HumanAnimator : Animator
     {
-        static SafeDictionary<string, Animation2D> animationsMap;
+        static SafeDictionary<string, Animation> animationsMap;
         string lastAnimation;
 
-        protected override Transform2D GetRoot()
+        protected override Transform GetRoot()
         {
             return Transform.Children[0];
         }
 
         static HumanAnimator()
         {
-            var animations = Resources.LoadAll<Animation2D>("Animations");
-            animationsMap = new SafeDictionary<string, Animation2D>();
+            var animations = Resources.LoadAll<Animation>("Animations");
+            animationsMap = new SafeDictionary<string, Animation>();
             foreach (var animation in animations) animationsMap.Add(animation.fileName, animation.result);
         }
 

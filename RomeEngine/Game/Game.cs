@@ -76,7 +76,7 @@ namespace RomeEngine
 
 			SendHandlersMessage("EarlyUpdate");
 
-			Collider2D.UpdatePhysics();
+			// update physics here
 
 			SendHandlersMessage("Update");
 
@@ -84,11 +84,11 @@ namespace RomeEngine
 
 			Input.UpdateInput();
 		}
-		public static void UpdateGraphics(IGraphics2D graphics, Camera2D camera)
+		public static void UpdateGraphics2D(IGraphics2D graphics)
 		{
-			SendHandlersMessage("OnPreRender");
-			Renderer2D.UpdateGraphics(graphics, camera);
-			SendHandlersMessage("OnPostRender");
+			SendHandlersMessage("OnPreRender2D");
+			Renderer2D.Update2DGraphics(graphics);
+			SendHandlersMessage("OnPostRender2D");
 		}
 	}
 }

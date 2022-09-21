@@ -17,7 +17,7 @@
             this.options = options;
         }
 
-        public void Draw(IGraphics2D graphics, Camera2D camera)
+        public void Draw(IGraphics2D graphics)
         {
             graphics.Brush = new SingleColorBrush(buttonColor);
             graphics.DrawRect(rect);

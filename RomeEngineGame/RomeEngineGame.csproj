@@ -42,8 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Editor\DropdownMenu.cs" />
-    <Compile Include="Editor\HierarchyEditor\FullModelEditorMode.cs" />
-    <Compile Include="Editor\HierarchyEditor\IHierarchyEditorMode.cs" />
     <Compile Include="Editor\Inspector\AnimatorInspector.cs" />
     <Compile Include="Editor\Inspector\ArrayFieldInspector.cs" />
     <Compile Include="Editor\Inspector\BoolFieldInspector.cs" />
@@ -53,10 +51,6 @@
     <Compile Include="Editor\Inspector\DefaultFieldInspector.cs" />
     <Compile Include="Editor\Editor.cs" />
     <Compile Include="Editor\FpsRenderer.cs" />
-    <Compile Include="Editor\Human\HumanAnimation.cs" />
-    <Compile Include="Editor\Human\HumanAnimations.cs" />
-    <Compile Include="Editor\Human\HumanBone.cs" />
-    <Compile Include="Editor\Human\HumanModel.cs" />
     <Compile Include="Editor\Inspector\DefaultObjectInspector.cs" />
     <Compile Include="Editor\Inspector\FloatFieldInspector.cs" />
     <Compile Include="Editor\Inspector\GameObjectInspector.cs" />
@@ -92,16 +86,9 @@
     <Compile Include="Editor\FileSearchMenu.cs" />
     <Compile Include="Editor\EditorMenu.cs" />
     <Compile Include="Editor\Inspector\SerializableFieldInspector.cs" />
-    <Compile Include="Editor\HierarchyEditor\RotationOnlyEditorMode.cs" />
     <Compile Include="Editor\StringInputMenu.cs" />
     <Compile Include="Editor\EditorCanvas.cs" />
     <Compile Include="Editor\Inspector\InspectorMenu.cs" />
-    <Compile Include="Editor\HierarchyEditor\TransformRotationHandle.cs" />
-    <Compile Include="Editor\HierarchyEditor\TransformHandle.cs" />
-    <Compile Include="Editor\HierarchyEditor\ITransformHandle.cs" />
-    <Compile Include="Editor\HierarchyEditor\TransformPositionHandle.cs" />
-    <Compile Include="Editor\HierarchyEditor\TransformScaleHandle.cs" />
-    <Compile Include="Editor\HierarchyEditor\TransformSingleRotationHandle.cs" />
     <Compile Include="Game\HumanState\HumanAnimatedConstantMoveState.cs" />
     <Compile Include="Game\HumanState\HumanRetreatAttackState.cs" />
     <Compile Include="Game\Human\IControlActor.cs" />

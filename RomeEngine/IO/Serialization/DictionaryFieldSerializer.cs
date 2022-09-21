@@ -24,14 +24,14 @@ namespace RomeEngine.IO
         protected override void ReadElement(object collection, int index, ISerializationContext context)
         {
             var dictionary = (IDictionary)collection;
-            int serializerIndex = context.Stream.ReadInt();
-            if (serializerIndex == -1) return;
+            string serializerIndex = context.Stream.ReadString();
+            if (serializerIndex == Serializer.EmptySerializerKey) return;
             var serializer = Serializer.FieldSerializers[serializerIndex];
             var key = serializer.DeserializeField(collection.GetType().GetElementType(), context);
 
             object value = null;
-            serializerIndex = context.Stream.ReadInt();
-            if (serializerIndex != -1)
+            serializerIndex = context.Stream.ReadString();
+            if (serializerIndex != Serializer.EmptySerializerKey)
             {
                 serializer = Serializer.FieldSerializers[serializerIndex];
                 value = serializer.DeserializeField(collection.GetType().GetElementType(), context);
@@ -43,18 +43,18 @@ namespace RomeEngine.IO
         {
             var dictionary = ((IDictionary)collection);
             var key = dictionary.Keys.Cast<object>().ToArray()[index];
-            var serializer = Serializer.FieldSerializers.FirstOrDefault(s => s.CanSerializeType(key.GetType()));
+            var serializer = Serializer.FieldSerializers.Values.FirstOrDefault(s => s.CanSerializeType(key.GetType()));
             if (serializer == null) return;
-            context.Stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
+            context.Stream.WriteString(Serializer.GetSerializerKey(serializer));
             serializer.SerializeField(key, context);
 
             var element = dictionary[key];
             if (element != null)
             {
-                serializer = Serializer.FieldSerializers.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
+                serializer = Serializer.FieldSerializers.Values.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
                 if (serializer != null)
                 {
-                    context.Stream.WriteInt(Serializer.FieldSerializers.IndexOf(serializer));
+                    context.Stream.WriteString(Serializer.GetSerializerKey(serializer));
                     serializer.SerializeField(element, context);
                     return;
                 }

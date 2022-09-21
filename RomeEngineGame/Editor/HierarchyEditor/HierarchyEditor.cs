@@ -10,31 +10,21 @@ namespace RomeEngineGame
     {
         protected override IEnumerator Routine()
         {
-            var camera = Camera2D.ActiveCamera;
+            var camera = Camera.ActiveCamera;
             Canvas sceneCanvas = GameObject.AddComponent<Canvas>();
             EditorCanvas canvas = GameObject.AddComponent<EditorCanvas>();
             var canvasRect = new Rect(Vector2.zero, Screen.Size);
-            Transform2D root = null;
+            Transform root = null;
             InspectorMenu inspectorMenu = new InspectorMenu() { Rect = new Rect(canvasRect.Width * 0.75f, 0f, canvasRect.Width * 0.25f, canvasRect.Height) };
-            GameObject2D inspectedGameObject = null;
+            GameObject inspectedGameObject = null;
             bool accurateMode = false;
             int scroll = 0;
             
-            IHierarchyEditorMode[] editorModes = 
-            {
-                new FullModelEditorMode(),
-                new RotationOnlyEditorMode(),
-            };
-            IHierarchyEditorMode editorMode = editorModes[0];
-
             while (true)
             {
                 yield return null;
 
                 camera.Transform.LocalPosition += Input.GetWASD() * Time.DeltaTime * 5f;
-
-                if (Input.GetKeyDown(KeyCode.Q)) camera.OrthographicMultiplier *= 2f;
-                if (Input.GetKeyDown(KeyCode.E)) camera.OrthographicMultiplier *= 0.5f;
 
                 inspectorMenu.Draw(canvas);
                 float elementWidth = canvasRect.Size.x * 0.25f;
@@ -42,29 +32,15 @@ namespace RomeEngineGame
                 float indent = 30f;
                 canvas.DrawRect(new Rect(0f, 0f, elementWidth, Screen.Size.y));
 
-                var worldToScreen = camera.WorldToScreenMatrix;
-
-                sceneCanvas.DrawLine(worldToScreen.MultiplyPoint(new Vector2(-10f, 0f)), worldToScreen.MultiplyPoint(new Vector2(10f, 0f)), Color32.red, 1);
-                sceneCanvas.DrawLine(worldToScreen.MultiplyPoint(new Vector2(0f, -10f)), worldToScreen.MultiplyPoint(new Vector2(0f, 10f)), Color32.green, 1);
-
-                Color32 gridColor = (Color32.white * 0.8f).WithAlpha(128);
-
-                for (int i = -10; i <= 10; i++)
-                {
-                    if (i == 0) continue;
-                    sceneCanvas.DrawLine(worldToScreen.MultiplyPoint(new Vector2(i, -10f)), worldToScreen.MultiplyPoint(new Vector2(i, 10f)), gridColor, 1);
-                    sceneCanvas.DrawLine(worldToScreen.MultiplyPoint(new Vector2(-10f, i)), worldToScreen.MultiplyPoint(new Vector2(10f, i)), gridColor, 1);
-                }
-
                 if (root == null || !root.GameObject.IsActive)
                 {
                     if (canvas.DrawButton("Create root", new Rect(0f, 0f, elementWidth, elementHeight), TextOptions.Default))
                     {
-                        EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => root = new GameObject2D(menu.InputString).Transform).WithHeader("New transform name");
+                        EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => root = new GameObject(menu.InputString).Transform).WithHeader("New transform name");
                     }
                     if (canvas.DrawButton("Import hierarchy", new Rect(0f, elementHeight, elementWidth, elementHeight), TextOptions.Default))
                     {
-                        Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select GameObject file", file => root = ((GameObject2D)new Serializer().DeserializeFile(file)).Transform);
+                        Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select GameObject file", file => root = ((GameObject)new Serializer().DeserializeFile(file)).Transform);
                     }
                 }
                 else
@@ -72,13 +48,6 @@ namespace RomeEngineGame
                     if (canvas.DrawButton("Export hierarchy", new Rect(0f, 0f, elementWidth, elementHeight), TextOptions.Default))
                     {
                         Engine.Instance.Runtime.ShowFileWriteDialog("./", root.Name + Serializer.BinaryFormatExtension, "Select export path", file => new Serializer().SerializeFile(root.GameObject, file));
-                    }
-                    for (int i = 0; i < editorModes.Length; i++)
-                    {
-                        if (canvas.DrawButton(editorModes[i].Name, new Rect(i * elementWidth * 0.5f + elementWidth, 0f, elementWidth * 0.5f, elementHeight), TextOptions.Default))
-                        {
-                            editorMode = editorModes[i];
-                        }
                     }
 
                     int transformsCount = root.TraceElement(r => r.Children).Count();
@@ -94,12 +63,9 @@ namespace RomeEngineGame
                     int positionY = 1 - scroll;
 
                     if (Input.GetKeyDown(KeyCode.ShiftKey)) accurateMode = !accurateMode;
-                    editorMode.IsAccurate = accurateMode;
 
-                    IEnumerator DrawTransform(Transform2D transform)
+                    IEnumerator DrawTransform(Transform transform)
                     {
-                        editorMode.DrawHandles(transform, inspectedGameObject?.Transform, camera, sceneCanvas);
-
                         if (positionY > 0)
                         {
                             string name = transform.Name;
@@ -117,7 +83,7 @@ namespace RomeEngineGame
                             {
                                 EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
                                 {
-                                    var newChild = new GameObject2D(menu.InputString).Transform;
+                                    var newChild = new GameObject(menu.InputString).Transform;
                                     newChild.Parent = transform;
                                     newChild.LocalPosition = Vector2.right;
                                 }).WithHeader("New child name");
