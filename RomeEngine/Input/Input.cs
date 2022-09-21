@@ -19,9 +19,9 @@ namespace RomeEngine
 
 		static readonly KeyInfo emptyKey = new EmptyKeyInfo();
 
-		Vector2 lastMousePosition;
+		static Vector2 lastMousePosition;
 		public static Vector2 MousePosition { get; private set; }
-		public static Vector2 MouseDelta { get; private set; }
+		public static Vector2 MouseDelta => MousePosition - lastMousePosition;
 
 		class EmptyKeyInfo : KeyInfo
 		{
@@ -40,6 +40,7 @@ namespace RomeEngine
 
 		public static void UpdateInput()
 		{
+			lastMousePosition = MousePosition;
 			lock (keys)
 			{
 				foreach (var key in keys)
@@ -125,8 +126,7 @@ namespace RomeEngine
 
 		public void OnMouseMove(Vector2 point)
 		{
-			MouseDelta = point - lastMousePosition;
-			lastMousePosition = point;
+			lastMousePosition = MousePosition;
 			MousePosition = point;
 		}
 

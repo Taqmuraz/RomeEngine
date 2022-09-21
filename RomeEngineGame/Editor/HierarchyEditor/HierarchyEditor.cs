@@ -28,9 +28,9 @@ namespace RomeEngineGame
                 if (Input.GetKey(KeyCode.MouseR))
                 {
                     Vector2 mouseDelta = Input.MouseDelta;
-                    camera.Transform.LocalRotation += new Vector3(mouseDelta.y, mouseDelta.x, 0f) * 5f * Time.DeltaTime;
+                    camera.Transform.LocalRotation += new Vector3(mouseDelta.y, mouseDelta.x, 0f) * 15f * Time.DeltaTime;
                 }
-                if (Input.GetKeyDown(KeyCode.Space)) camera.Transform.LocalPosition = Vector3.zero;
+                if (Input.GetKeyDown(KeyCode.Space)) camera.Transform.LocalPosition = camera.Transform.LocalRotation = Vector3.zero;
 
                 inspectorMenu.Draw(canvas);
                 float elementWidth = canvasRect.Size.x * 0.25f;
