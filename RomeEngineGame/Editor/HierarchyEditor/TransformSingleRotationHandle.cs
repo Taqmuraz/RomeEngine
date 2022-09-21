@@ -6,9 +6,9 @@ namespace RomeEngineGame
 {
     public sealed class TransformSingleRotationHandle : ITransformHandle
     {
-        Dictionary<Transform, float> transforms = new Dictionary<Transform, float>();
+        Dictionary<Transform2D, float> transforms = new Dictionary<Transform2D, float>();
 
-        public bool Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode)
+        public bool Draw(Transform2D transform, Canvas canvas, Camera2D camera, bool accurateMode)
         {
             var handlables = transform.GameObject.GetComponentsOfType<IHandlable>();
 

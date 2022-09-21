@@ -14,7 +14,7 @@ namespace RomeEngineGame
 
         protected override Vector2 TextLocalPosition => new Vector2(0.5f, 0f);
 
-        protected override void OnDragHandle(Transform transform, Vector2 worldMousePosition)
+        protected override void OnDragHandle(Transform2D transform, Vector2 worldMousePosition)
         {
             var worldDelta = worldMousePosition - transform.Position;
             var localDelta = transform.ParentToWorld.GetInversed().MultiplyVector(worldDelta);

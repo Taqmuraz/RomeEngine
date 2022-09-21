@@ -4,6 +4,6 @@
     {
         void Initialize(IEngineRuntine runtine);
         void UpdateGameState();
-        void UpdateGraphics(IGraphics graphics);
+        void UpdateGraphics(IGraphics2D graphics);
     }
 }

@@ -26,7 +26,7 @@ namespace RomeEngine
 			Engine.Instance.Runtime.Log(message.ToString());
 		}
 
-		public static void DrawDebug(IGraphics graphics, Camera camera)
+		public static void DrawDebug(IGraphics2D graphics, Camera2D camera)
         {
 			for (int i = 0; i < lines.Count; i++)
 			{

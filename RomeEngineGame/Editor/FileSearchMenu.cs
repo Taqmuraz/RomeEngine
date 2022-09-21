@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using RomeEngine;
 using RomeEngine.UI;
 using System.Linq;
@@ -35,8 +34,8 @@ namespace RomeEngineGame
         {
             try
             {
-                string[] files = Directory.GetFiles(Root).OrderBy(f => f).ToArray();
-                string[] folders = Directory.GetDirectories(Root).OrderBy(f => f).ToArray();
+                string[] files = Engine.Instance.Runtime.FileSystem.GetFiles(Root).OrderBy(f => f).ToArray();
+                string[] folders = Engine.Instance.Runtime.FileSystem.GetDirectories(Root).OrderBy(f => f).ToArray();
                 int totalLength = files.Length + folders.Length;
                 float startX = 50f;
                 float startY = 50f;
@@ -56,12 +55,12 @@ namespace RomeEngineGame
                     Action action;
                     if (i < folders.Length)
                     {
-                        text = Path.GetFileName(folders[i]);
+                        text = Engine.Instance.Runtime.FileSystem.GetFileName(folders[i]);
                         action = () => Root = folders[i];
                     }
                     else if (i < folders.Length + files.Length)
                     {
-                        text = Path.GetFileName(files[i - folders.Length]);
+                        text = Engine.Instance.Runtime.FileSystem.GetFileName(files[i - folders.Length]);
                         action = () =>
                         {
                             File = files[i - folders.Length];
@@ -80,7 +79,7 @@ namespace RomeEngineGame
 
                 (string text, Action action)[] buttons =
                 {
-                    ("To parent folder", () => Root = Directory.GetParent(Root).FullName),
+                    ("To parent folder", () => Root = Engine.Instance.Runtime.FileSystem.GetParentDirectory(Root)),
                     ("Scroll up", () => positionOffset = Math.Max(positionOffset - 1, 0)),
                     ("Scroll down", () => positionOffset = Math.Min(positionOffset + 1, totalLength - elementsOnPage)),
                 };
@@ -95,7 +94,7 @@ namespace RomeEngineGame
             }
             catch (Exception ex)
             {
-                System.IO.File.WriteAllText("./error.txt", ex.ToString());
+                Engine.Instance.Runtime.FileSystem.WriteAllText("./error.txt", ex.ToString());
                 throw ex;
             }
         }

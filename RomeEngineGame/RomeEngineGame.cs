@@ -35,7 +35,7 @@ namespace RomeEngineGame
         }
         static GameScene LevelSelectScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
+            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera2D>().GameObject);
             var scene = new GameScene("Level select scene");
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(new GameObjectInstancer(() => new GameObject("Level select menu").AddComponent<LevelSelectMenu>().GameObject));
@@ -43,7 +43,7 @@ namespace RomeEngineGame
         }
         static GameScene AnimationEditorScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
+            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera2D>().GameObject);
             var scene = new GameScene("Editor scene");
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
@@ -55,7 +55,7 @@ namespace RomeEngineGame
         }
         static GameScene GamePlayScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
+            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera2D>().GameObject);
             var scene = new GameScene("Game scene");
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>

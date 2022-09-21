@@ -5,7 +5,7 @@ namespace RomeEngineGame
     public sealed class PlayerController : HumanController, IControlAgent
     {
         float orthographicSize = 5f;
-        Camera camera;
+        Camera2D camera;
 
         IControlAction emptyAction = new EmptyControlAgentAction();
         IControlAction resetAction = new CustomControlAgentAction(agent => agent.MoveToState("SwordDefault"));
@@ -22,7 +22,7 @@ namespace RomeEngineGame
         [BehaviourEvent]
         void Start()
         {
-            camera = Camera.Cameras[0];
+            camera = Camera2D.Cameras[0];
             camera.OrthographicMultiplier = orthographicSize;
         }
 

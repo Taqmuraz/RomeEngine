@@ -2,9 +2,9 @@
 
 namespace RomeEngineGame
 {
-    public sealed class HumanAnimation : LineBasedAnimation
+    public sealed class HumanAnimation : LineBasedAnimation2D
     {
-        public HumanAnimation(string name, params AnimationLine[] lines) : base(lines)
+        public HumanAnimation(string name, params Animation2DLine[] lines) : base(lines)
         {
             Name = name;
         }

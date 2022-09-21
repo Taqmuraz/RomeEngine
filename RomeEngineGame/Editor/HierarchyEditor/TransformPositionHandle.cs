@@ -16,7 +16,7 @@ namespace RomeEngineGame
 
         protected override Vector2 TextScreenOffset => new Vector2(0f, 25f);
 
-        protected override void OnDragHandle(Transform transform, Vector2 worldMousePosition)
+        protected override void OnDragHandle(Transform2D transform, Vector2 worldMousePosition)
         {
             var position = transform.ParentToWorld.GetInversed().MultiplyPoint(worldMousePosition);
             if (IsAccurateMode)

@@ -39,7 +39,7 @@ namespace RomeEngineGame
             }
         }
 
-        protected override void OnDragHandle(Transform transform, Vector2 worldMousePosition)
+        protected override void OnDragHandle(Transform2D transform, Vector2 worldMousePosition)
         {
             if (Axis == 0) return;
 

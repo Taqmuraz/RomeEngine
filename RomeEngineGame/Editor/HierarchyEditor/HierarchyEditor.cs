@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.IO;
 using System.Linq;
 using RomeEngine;
 using RomeEngine.IO;
@@ -11,13 +10,13 @@ namespace RomeEngineGame
     {
         protected override IEnumerator Routine()
         {
-            var camera = Camera.Cameras[0];
+            var camera = Camera2D.ActiveCamera;
             Canvas sceneCanvas = GameObject.AddComponent<Canvas>();
             EditorCanvas canvas = GameObject.AddComponent<EditorCanvas>();
             var canvasRect = new Rect(Vector2.zero, Screen.Size);
-            Transform root = null;
+            Transform2D root = null;
             InspectorMenu inspectorMenu = new InspectorMenu() { Rect = new Rect(canvasRect.Width * 0.75f, 0f, canvasRect.Width * 0.25f, canvasRect.Height) };
-            GameObject inspectedGameObject = null;
+            GameObject2D inspectedGameObject = null;
             bool accurateMode = false;
             int scroll = 0;
             
@@ -61,11 +60,11 @@ namespace RomeEngineGame
                 {
                     if (canvas.DrawButton("Create root", new Rect(0f, 0f, elementWidth, elementHeight), TextOptions.Default))
                     {
-                        EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => root = new GameObject(menu.InputString).Transform).WithHeader("New transform name");
+                        EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => root = new GameObject2D(menu.InputString).Transform).WithHeader("New transform name");
                     }
                     if (canvas.DrawButton("Import hierarchy", new Rect(0f, elementHeight, elementWidth, elementHeight), TextOptions.Default))
                     {
-                        Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select GameObject file", file => root = ((GameObject)new Serializer().DeserializeFile(file)).Transform);
+                        Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select GameObject file", file => root = ((GameObject2D)new Serializer().DeserializeFile(file)).Transform);
                     }
                 }
                 else
@@ -97,7 +96,7 @@ namespace RomeEngineGame
                     if (Input.GetKeyDown(KeyCode.ShiftKey)) accurateMode = !accurateMode;
                     editorMode.IsAccurate = accurateMode;
 
-                    IEnumerator DrawTransform(Transform transform)
+                    IEnumerator DrawTransform(Transform2D transform)
                     {
                         editorMode.DrawHandles(transform, inspectedGameObject?.Transform, camera, sceneCanvas);
 
@@ -118,7 +117,7 @@ namespace RomeEngineGame
                             {
                                 EditorMenu.ShowMenu<StringInputMenu>(canvas, menu =>
                                 {
-                                    var newChild = new GameObject(menu.InputString).Transform;
+                                    var newChild = new GameObject2D(menu.InputString).Transform;
                                     newChild.Parent = transform;
                                     newChild.LocalPosition = Vector2.right;
                                 }).WithHeader("New child name");

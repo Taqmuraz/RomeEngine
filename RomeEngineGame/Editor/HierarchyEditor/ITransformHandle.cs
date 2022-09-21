@@ -5,6 +5,6 @@ namespace RomeEngineGame
 {
     public interface ITransformHandle
     {
-        bool Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode);
+        bool Draw(Transform2D transform, Canvas canvas, Camera2D camera, bool accurateMode);
     }
 }

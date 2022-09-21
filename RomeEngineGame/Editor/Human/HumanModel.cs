@@ -9,8 +9,8 @@ namespace RomeEngineGame
     public sealed class HumanModel : Component
     {
         ReadOnlyArray<HumanAnimation> animations;
-        Transform[] skeleton;
-        Action<Transform>[] boneBuilders;
+        Transform2D[] skeleton;
+        Action<Transform2D>[] boneBuilders;
         Color32[] colors;
         int[] queues;
         event Action<int> QueueChanged;
@@ -29,8 +29,8 @@ namespace RomeEngineGame
         [BehaviourEvent]
         void Start()
         {
-            skeleton = new Transform[HumanBone.Count];
-            boneBuilders = new Action<Transform>[HumanBone.Count];
+            skeleton = new Transform2D[HumanBone.Count];
+            boneBuilders = new Action<Transform2D>[HumanBone.Count];
 
             Color32 skin = new Color32(0xf5cfb0, 255);
             Color32 shirt = new Color32(0xc22828, 255);
@@ -80,7 +80,7 @@ namespace RomeEngineGame
             CreateBone(HumanBone.LeftKnee);
             CreateBone(HumanBone.RightKnee);
 
-            var animator = GameObject.AddComponent<Animator>();
+            var animator = GameObject.AddComponent<Animator2D>();
             animator.PlayAnimation(HumanAnimations.CreateIdleAnimation(skeleton));
 
             Queue = 0;
@@ -106,7 +106,7 @@ namespace RomeEngineGame
         const float KNEE_LENGTH = 0.35f;
         const float KNEE_WIDTH = 0.075f;
 
-        void BuildBodyBone(Transform body)
+        void BuildBodyBone(Transform2D body)
         {
             body.Transform.Parent = Transform;
             body.Transform.LocalPosition = new Vector2(0f, 1f);
@@ -121,7 +121,7 @@ namespace RomeEngineGame
 
             QueueChanged += q => renderer.Queue = q + queues[HumanBone.Body];
         }
-        void BuildHeadBone(Transform head)
+        void BuildHeadBone(Transform2D head)
         {
             head.Transform.Parent = skeleton[HumanBone.Body];
             head.LocalPosition = new Vector2(0f, BODY_LENGTH);
@@ -139,7 +139,7 @@ namespace RomeEngineGame
 
             QueueChanged += q => ellipse.Queue = neck.Queue = q + queues[HumanBone.Head];
         }
-        void BuildArm(Transform arm, bool left)
+        void BuildArm(Transform2D arm, bool left)
         {
             var armEllipse = new GameObject("Arm_Ellipse").AddComponent<EllipseRenderer>();
             armEllipse.Transform.Parent = arm;
@@ -159,7 +159,7 @@ namespace RomeEngineGame
 
             QueueChanged += q => armEllipse.Queue = armShoulder.Queue = q + queues[left ? HumanBone.LeftArm : HumanBone.RightArm];
         }
-        void BuildForearm(Transform forearm, bool left)
+        void BuildForearm(Transform2D forearm, bool left)
         {
             var forearmEllipse = new GameObject("Forearm_Ellipse").AddComponent<EllipseRenderer>();
             forearmEllipse.Transform.Parent = forearm;
@@ -179,7 +179,7 @@ namespace RomeEngineGame
 
             QueueChanged += q => forearmEllipse.Queue = forearmElbow.Queue = q + queues[left ? HumanBone.LeftForearm : HumanBone.RightForearm];
         }
-        void BuildLeg(Transform leg, bool left)
+        void BuildLeg(Transform2D leg, bool left)
         {
             var legLine = new GameObject("Leg_Line").AddComponent<LineRenderer>();
             legLine.Transform.Parent = leg;
@@ -192,7 +192,7 @@ namespace RomeEngineGame
 
             QueueChanged += q => legLine.Queue = q + queues[left ? HumanBone.LeftLeg : HumanBone.RightLeg];
         }
-        void BuildKnee(Transform knee, bool left)
+        void BuildKnee(Transform2D knee, bool left)
         {
             var kneeLine = new GameObject("Knee_Line").AddComponent<LineRenderer>();
             kneeLine.Transform.Parent = knee;
@@ -206,7 +206,7 @@ namespace RomeEngineGame
             QueueChanged += q => kneeLine.Queue = q + queues[left ? HumanBone.LeftKnee : HumanBone.RightKnee];
         }
 
-        Transform CreateBone(int humanBone)
+        Transform2D CreateBone(int humanBone)
         {
             var bone = new GameObject(HumanBone.Names[humanBone]).Transform;
             boneBuilders[humanBone](bone);

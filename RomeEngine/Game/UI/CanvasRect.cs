@@ -11,7 +11,7 @@
             this.color = color;
         }
 
-        public void Draw(IGraphics graphics, Camera camera)
+        public void Draw(IGraphics2D graphics, Camera2D camera)
         {
             graphics.Brush = new SingleColorBrush(color);
             graphics.DrawRect(rect);

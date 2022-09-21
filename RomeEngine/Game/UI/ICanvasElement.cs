@@ -2,6 +2,6 @@
 {
     public interface ICanvasElement
     {
-        void Draw(IGraphics graphics, Camera camera);
+        void Draw(IGraphics2D graphics, Camera2D camera);
     }
 }

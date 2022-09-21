@@ -15,7 +15,7 @@
             this.width = width;
         }
 
-        public void Draw(IGraphics graphics, Camera camera)
+        public void Draw(IGraphics2D graphics, Camera2D camera)
         {
             graphics.Brush = new SingleColorBrush(color, (int)width);
             graphics.DrawLine(a, b);

@@ -14,12 +14,12 @@ namespace RomeEngineGame
 
         protected bool IsAccurateMode { get; private set; }
 
-        protected virtual Vector2 GetHandleWorldPosition(Transform transform)
+        protected virtual Vector2 GetHandleWorldPosition(Transform2D transform)
         {
             return transform.LocalToWorld.MultiplyPoint(HandleLocalPosition);
         }
 
-        bool ITransformHandle.Draw(Transform transform, Canvas canvas, Camera camera, bool accurateMode)
+        bool ITransformHandle.Draw(Transform2D transform, Canvas canvas, Camera2D camera, bool accurateMode)
         {
             IsAccurateMode = accurateMode;
             var screenToWorld = camera.ScreenToWorldMatrix;
@@ -42,6 +42,6 @@ namespace RomeEngineGame
             }
             return false;
         }
-        protected abstract void OnDragHandle(Transform transform, Vector2 worldMousePosition);
+        protected abstract void OnDragHandle(Transform2D transform, Vector2 worldMousePosition);
     }
 }

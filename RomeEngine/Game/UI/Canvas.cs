@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace RomeEngine.UI
 {
-    public class Canvas : Renderer
+    public class Canvas : Renderer2D
     {
         List<ICanvasElement> elements = new List<ICanvasElement>();
         HashSet<int> handles = new HashSet<int>();
@@ -16,16 +16,16 @@ namespace RomeEngine.UI
             Queue = -1000;
         }
 
-        protected override bool IsInsideScreen(IGraphics graphics, Camera camera)
+        protected override bool IsInsideScreen(IGraphics2D graphics, Camera2D camera)
         {
             return true;
         }
-        protected override IEnumerable<RendererPass> EnumeratePasses()
+        protected override IEnumerable<Renderer2DPass> EnumeratePasses()
         {
             yield return StandardPass;
         }
 
-        protected override void OnGraphicsUpdate(IGraphics graphics, Camera camera)
+        protected override void OnGraphicsUpdate(IGraphics2D graphics, Camera2D camera)
         {
             foreach (var element in elements)
             {
@@ -43,7 +43,7 @@ namespace RomeEngine.UI
             usedSpace.Clear();
         }
 
-        protected override Matrix3x3 GetGraphicsTransform(Camera camera)
+        protected override Matrix3x3 GetGraphicsTransform(Camera2D camera)
         {
             return Matrix3x3.identity;
         }

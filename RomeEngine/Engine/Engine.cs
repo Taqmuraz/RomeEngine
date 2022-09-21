@@ -28,10 +28,10 @@
             }
         }
 
-        public void UpdateGraphics(IGraphics graphics)
+        public void UpdateGraphics(IGraphics2D graphics)
         {
-            Game.UpdateGraphics(graphics, Camera.Cameras[0]);
-            Debug.DrawDebug(graphics, Camera.Cameras[0]);
+            Game.UpdateGraphics(graphics, Camera2D.Cameras[0]);
+            Debug.DrawDebug(graphics, Camera2D.Cameras[0]);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public sealed class GameObject : Game.GameThreadHandler, ISerializationHandler
+    public abstract class GameObject : Game.GameThreadHandler, ISerializationHandler
 	{
 		[SerializeField(HideInInspector = true)]
 		public Transform Transform { get; private set; }
@@ -23,8 +23,10 @@ namespace RomeEngine
 		{
 			Name = name;
 
-			Transform = AddComponent<Transform>();
+			Transform = AddComponent<Transform2D>();
 		}
+
+		protected abstract Transform CreateTransform();
 
 		[SerializeField(HideInInspector = true)] List<Component> components = new List<Component>();
 		[SerializeField(HideInInspector = true)] List<Component> inOrderToAdd = new List<Component>();

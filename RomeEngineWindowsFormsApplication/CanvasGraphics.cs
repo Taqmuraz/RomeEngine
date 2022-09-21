@@ -5,7 +5,7 @@ using RomeEngine;
 
 namespace OneEngineWindowsFormsApplication
 {
-    class CanvasGraphics : IGraphics
+    class CanvasGraphics : IGraphics2D
     {
         public Matrix3x3 Transform
         {

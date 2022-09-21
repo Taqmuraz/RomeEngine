@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace RomeEngine.IO
 {
     public static class Resources
     {
-        public static string ResourcesGlobalPath => Path.GetFullPath("./Resources/");
+        public static string ResourcesGlobalPath => Engine.Instance.Runtime.FileSystem.GetFullPath("./Resources/");
 
         static Dictionary<string, ISerializable> cache = new Dictionary<string, ISerializable>();
 
         public static T Load<T>(string file) where T : ISerializable
         {
-            file = Path.Combine(ResourcesGlobalPath, file);
+            file = Engine.Instance.Runtime.FileSystem.CombinePath(ResourcesGlobalPath, file);
 
             if (cache.TryGetValue(file, out ISerializable value))
             {
@@ -27,10 +26,10 @@ namespace RomeEngine.IO
         }
         public static (T result, string fileName)[] LoadAll<T>(string directory) where T : ISerializable
         {
-            directory = Path.Combine(ResourcesGlobalPath, directory);
+            directory = Engine.Instance.Runtime.FileSystem.CombinePath(ResourcesGlobalPath, directory);
 
-            var files = Directory.GetFiles(directory);
-            return files.Select(f => (new Serializer().DeserializeFile(f), Path.GetFileNameWithoutExtension(f))).Where(s => s.Item1 is T).Select(s => ((T)s.Item1, s.Item2)).ToArray();
+            var files = Engine.Instance.Runtime.FileSystem.GetFiles(directory);
+            return files.Select(f => (new Serializer().DeserializeFile(f), Engine.Instance.Runtime.FileSystem.GetFileNameWithoutExtension(f))).Where(s => s.Item1 is T).Select(s => ((T)s.Item1, s.Item2)).ToArray();
         }
     }
 }

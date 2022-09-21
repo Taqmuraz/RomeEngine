@@ -8,7 +8,7 @@ namespace RomeEngineGame
         ITransformHandle rotationHandle = new TransformSingleRotationHandle();
         ITransformHandle positionHandle = new TransformPositionHandle();
 
-        public void DrawHandles(Transform transform, Transform inspectedTransform, Camera camera, Canvas sceneCanvas)
+        public void DrawHandles(Transform2D transform, Transform2D inspectedTransform, Camera2D camera, Canvas sceneCanvas)
         {
             rotationHandle.Draw(transform, sceneCanvas, camera, IsAccurate);
         }

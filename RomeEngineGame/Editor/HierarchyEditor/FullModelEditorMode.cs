@@ -16,7 +16,7 @@ namespace RomeEngineGame
                 new TransformScaleHandle() { Axis = 3 },
             };
 
-        public void DrawHandles(Transform transform, Transform inspectedTransform, Camera camera, Canvas sceneCanvas)
+        public void DrawHandles(Transform2D transform, Transform2D inspectedTransform, Camera2D camera, Canvas sceneCanvas)
         {
             var worldToScreen = camera.WorldToScreenMatrix;
             var l2w = transform.LocalToWorld;

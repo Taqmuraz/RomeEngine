@@ -7,11 +7,11 @@ namespace RomeEngineGame
     {
         public override bool CanInspect(ISerializable inspectedObject)
         {
-            return inspectedObject is Animator;
+            return inspectedObject is Animator2D;
         }
         protected override void AfterInspect(ISerializable inspectedObject, InspectorMenu inspectorMenu, EditorCanvas canvas)
         {
-            Animator animator = (Animator)inspectedObject;
+            Animator2D animator = (Animator2D)inspectedObject;
             var animationEditRect = inspectorMenu.GetNextRect();
             var textOptions = new TextOptions() { FontSize = 18f, Alignment = TextAlignment.MiddleCenter };
             if (animator.Animation != null)

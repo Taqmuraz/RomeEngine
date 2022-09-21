@@ -6,7 +6,7 @@ namespace RomeEngineGame
     public interface IHierarchyEditorMode
     {
         string Name { get; }
-        void DrawHandles(Transform transform, Transform inspectedTransform, Camera camera, Canvas sceneCanvas);
+        void DrawHandles(Transform2D transform, Transform2D inspectedTransform, Camera2D camera, Canvas sceneCanvas);
         bool IsAccurate { get; set; }
     }
 }

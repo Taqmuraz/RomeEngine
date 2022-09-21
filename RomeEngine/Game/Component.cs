@@ -1,5 +1,4 @@
 ﻿using RomeEngine.IO;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,13 +11,13 @@ namespace RomeEngine
 		public string Name => GameObject.Name;
 		public virtual bool IsUnary { get; }
 
-		public virtual Transform Transform => GetTransform();
-		internal protected virtual Transform GetTransform()
+		public virtual Transform2D Transform => GetTransform();
+		internal protected virtual Transform2D GetTransform()
 		{
 			return transform;
 		}
 		[SerializeField(HideInInspector = true)]
-		Transform transform;
+		Transform2D transform;
 		[SerializeField(HideInInspector = true)]
 		GameObject gameObject;
 		public GameObject GameObject => gameObject;

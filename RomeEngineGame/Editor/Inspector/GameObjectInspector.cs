@@ -18,7 +18,7 @@ namespace RomeEngineGame
             foreach (var component in components)
             {
                 Rect labelRect;
-                if (component is Transform)
+                if (component is Transform2D)
                 {
                     labelRect = inspectorMenu.GetNextRect();
                 }
