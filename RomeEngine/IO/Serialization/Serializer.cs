@@ -46,7 +46,7 @@ namespace RomeEngine.IO
             yield return new ListFieldSerializer();
             yield return new DictionaryFieldSerializer();
             yield return new Vector2Serializer();
-            yield return new Vector2Serializer();
+            yield return new Vector3Serializer();
             yield return new Color32Serializer();
             yield return new BoolTypeFieldSerializer();
             yield return new ReadOnlyArrayFieldSerializer();

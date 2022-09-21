@@ -84,10 +84,13 @@ namespace RomeEngine
 
 			Input.UpdateInput();
 		}
-		public static void UpdateGraphics2D(IGraphics2D graphics)
+		public static void UpdateGraphics(IGraphics2D graphics2D, IGraphics graphics, IGraphicsContext context)
 		{
+			SendHandlersMessage("OnPreRender");
+			Renderer.UpdateGraphics(graphics, context);
+			SendHandlersMessage("OnPostRender");
 			SendHandlersMessage("OnPreRender2D");
-			Renderer2D.Update2DGraphics(graphics);
+			Renderer2D.Update2DGraphics(graphics2D);
 			SendHandlersMessage("OnPostRender2D");
 		}
 	}

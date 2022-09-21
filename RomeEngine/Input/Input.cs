@@ -70,6 +70,17 @@ namespace RomeEngine
 			if (GetKey(KeyCode.D)) wasd.x += 1f;
 			return wasd;
 		}
+		public static Vector3 GetWASDQE()
+		{
+			Vector3 wasd = Vector3.zero;
+			if (GetKey(KeyCode.W)) wasd.y += 1f;
+			if (GetKey(KeyCode.A)) wasd.x -= 1f;
+			if (GetKey(KeyCode.S)) wasd.y -= 1f;
+			if (GetKey(KeyCode.D)) wasd.x += 1f;
+			if (GetKey(KeyCode.Q)) wasd.z -= 1f;
+			if (GetKey(KeyCode.E)) wasd.z += 1f;
+			return wasd;
+		}
 
 		public static KeyInfo GetKeyInfo(KeyCode key)
 		{

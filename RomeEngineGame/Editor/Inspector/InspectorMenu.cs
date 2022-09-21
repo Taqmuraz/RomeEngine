@@ -18,6 +18,7 @@ namespace RomeEngineGame
             fieldInspectors = new IFieldInspector[]
             {
                 new Vector2FieldInspector(),
+                new Vector3FieldInspector(),
                 new StringFieldInspector(),
                 new FloatFieldInspector(),
                 new IntFieldInspector(),
@@ -25,6 +26,7 @@ namespace RomeEngineGame
                 new ColorFieldInspector(),
                 new ListFieldInspector(),
                 new ArrayFieldInspector(),
+                new MeshFieldInspector(),
                 new SerializableFieldInspector(),
                 new DefaultFieldInspector(),
             };

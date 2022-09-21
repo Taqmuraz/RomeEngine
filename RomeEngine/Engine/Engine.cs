@@ -28,10 +28,10 @@
             }
         }
 
-        public void UpdateGraphics(IGraphics2D graphics)
+        public void UpdateGraphics(IGraphics2D graphics2D, IGraphics graphics, IGraphicsContext context)
         {
-            Game.UpdateGraphics2D(graphics);
-            Debug.DrawDebug(graphics);
+            Game.UpdateGraphics(graphics2D, graphics, context);
+            Debug.DrawDebug(graphics2D);
         }
     }
 }

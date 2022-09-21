@@ -24,7 +24,8 @@ namespace RomeEngineGame
             {
                 yield return null;
 
-                camera.Transform.LocalPosition += Input.GetWASD() * Time.DeltaTime * 5f;
+                camera.Transform.LocalPosition += Input.GetWASDQE() * Time.DeltaTime * 5f;
+                if (Input.GetKeyDown(KeyCode.Space)) camera.Transform.LocalPosition = Vector3.zero;
 
                 inspectorMenu.Draw(canvas);
                 float elementWidth = canvasRect.Size.x * 0.25f;

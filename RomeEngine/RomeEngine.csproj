@@ -95,7 +95,10 @@
     <Compile Include="Graphics\2D\SingleColorBrush.cs" />
     <Compile Include="Graphics\IGraphicsContext.cs" />
     <Compile Include="Graphics\IMesh.cs" />
-    <Compile Include="Graphics\StaticMesh.cs" />
+    <Compile Include="Graphics\IMeshIdentifier.cs" />
+    <Compile Include="Game\Rendering\Renderer.cs" />
+    <Compile Include="Game\Rendering\StaticMesh.cs" />
+    <Compile Include="Game\Rendering\StaticMeshRenderer.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\Vertex.cs" />
     <Compile Include="Input\Input.cs" />

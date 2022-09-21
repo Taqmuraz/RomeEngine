@@ -10,7 +10,9 @@ namespace OneEngineWindowsFormsApplication
     {
         TextWriter log;
         IEngine engine;
-        CanvasGraphics graphics = new CanvasGraphics();
+        CanvasGraphics2D graphics2D = new CanvasGraphics2D();
+        Graphics3D graphics3D = new Graphics3D();
+        GraphicsContext context = new GraphicsContext();
 
         public ISystemInfo SystemInfo => this;
         public Vector2 ScreenSize => new Vector2(Width, Height);
@@ -68,9 +70,10 @@ namespace OneEngineWindowsFormsApplication
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            graphics.Graphics = e.Graphics;
-            graphics.ScreenSize = Size;
-            engine.UpdateGraphics(graphics);
+            graphics2D.Graphics = e.Graphics;
+            graphics3D.SetGraphics(e.Graphics, context);
+            graphics2D.ScreenSize = Size;
+            engine.UpdateGraphics(graphics2D, graphics3D, context);
         }
 
         public void ShowFileOpenDialog(string root, string title, Action<string> callback)

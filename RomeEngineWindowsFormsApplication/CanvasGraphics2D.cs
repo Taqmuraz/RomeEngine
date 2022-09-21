@@ -1,11 +1,111 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
-
+using System.Linq;
 using RomeEngine;
 
 namespace OneEngineWindowsFormsApplication
 {
-    class CanvasGraphics : IGraphics2D
+    class MeshIdentifier : IMeshIdentifier
+    {
+    }
+    class BitmapTexture : Texture
+    {
+        public BitmapTexture(Bitmap image)
+        {
+            Image = image;
+        }
+
+        public Bitmap Image { get; }
+    }
+    class Graphics3D : IGraphics
+    {
+        Graphics graphics;
+        GraphicsContext context;
+
+        SafeDictionary<TextureType, Texture> textures = new SafeDictionary<TextureType, Texture>();
+
+        public void SetGraphics(Graphics graphics, GraphicsContext context)
+        {
+            this.context = context;
+            this.graphics = graphics;
+        }
+
+        Matrix4x4 projection;
+        Matrix4x4 view;
+        Matrix4x4 model;
+
+        public void Clear(Color32 color)
+        {
+            graphics.Clear(color);
+        }
+
+        public void SetProjectionMatrix(Matrix4x4 projection)
+        {
+            this.projection = projection;
+        }
+
+        public void SetViewMatrix(Matrix4x4 view)
+        {
+            this.view = view;
+        }
+
+        public void SetModelMatrix(Matrix4x4 model)
+        {
+            this.model = model;
+        }
+
+        public void SetTexture(Texture texture, TextureType type)
+        {
+            textures[type] = texture;
+        }
+
+        public void DrawMesh(IMeshIdentifier meshIdentifier)
+        {
+            var mesh = context.GetMesh(meshIdentifier);
+            DrawDynamicMesh(mesh);
+        }
+
+        public void DrawDynamicMesh(IMesh mesh)
+        {
+            var vertices = mesh.EnumerateVertices().ToArray();
+            var indices = mesh.EnumerateIndices().ToArray();
+
+            Matrix4x4 mvp = projection * view.GetInversed() * model;
+
+            for (int i = 1; i < indices.Length; i++)
+            {
+                Vector3 vertexA = mvp.MultiplyPoint_With_WDevision(vertices[indices[i]].Position);
+                Vector3 vertexB = mvp.MultiplyPoint_With_WDevision(vertices[indices[i - 1]].Position);
+                graphics.DrawLine(new Pen(Color.White), vertexA, vertexB);
+            }
+        }
+    }
+    class GraphicsContext : IGraphicsContext
+    {
+        Dictionary<IMeshIdentifier, IMesh> meshes = new Dictionary<IMeshIdentifier, IMesh>();
+        Dictionary<IMesh, IMeshIdentifier> identifiers = new Dictionary<IMesh, IMeshIdentifier>();
+
+        public IMesh GetMesh(IMeshIdentifier identifier) => meshes[identifier];
+
+        public Texture LoadTexture(string fileName)
+        {
+            return new BitmapTexture(new Bitmap(fileName));
+        }
+
+        public IMeshIdentifier LoadMesh(IMesh mesh)
+        {
+            if (identifiers.TryGetValue(mesh, out IMeshIdentifier result)) return result;
+            else
+            {
+                var identifier = new MeshIdentifier();
+                meshes.Add(identifier, mesh);
+                identifiers.Add(mesh, identifier);
+                return identifier;
+            }
+        }
+    }
+    class CanvasGraphics2D : IGraphics2D
     {
         public Matrix3x3 Transform
         {
@@ -44,7 +144,7 @@ namespace OneEngineWindowsFormsApplication
         public Graphics Graphics { get; set; }
         public Vector2 ScreenSize { get; set; }
 
-        public CanvasGraphics()
+        public CanvasGraphics2D()
         {
             drawStyle = new CanvasOutlineStyle();
             fillStyle = new CanvasFillStyle();
@@ -108,7 +208,6 @@ namespace OneEngineWindowsFormsApplication
 
         public void Clear(Color32 color)
         {
-            Graphics.Clear(color);
         }
     }
 }

@@ -62,7 +62,7 @@ namespace RomeEngine
 		public static float Tan(this float v)
 		{
 			var cos = Cos(v);
-			return cos == 0 ? 0 : Sin(v) / Cos(v);
+			return cos == 0 ? 0 : Sin(v) / cos;
 		}
 
 		public static float Atan(this float v)

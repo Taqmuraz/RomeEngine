@@ -49,7 +49,7 @@ namespace RomeEngine.IO
                     return;
                 }
             }
-            context.Stream.WriteInt(-1);
+            context.Stream.WriteString(Serializer.EmptySerializerKey);
         }
     }
 }

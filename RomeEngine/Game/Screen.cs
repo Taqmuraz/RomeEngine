@@ -3,7 +3,7 @@
     public static class Screen
     {
         public static Vector2 Size => Engine.Instance.Runtime.SystemInfo.ScreenSize;
-        public static Vector2 AspectRatio
+        public static Vector2 AspectVector
         {
             get
             {
@@ -12,6 +12,14 @@
                 if (size.x > size.y) ratio.x = size.x / size.y;
                 else ratio.y = size.y / size.x;
                 return ratio;
+            }
+        }
+        public static float AspectRatio
+        {
+            get
+            {
+                Vector2 size = Size;
+                return size.x / size.y;
             }
         }
     }

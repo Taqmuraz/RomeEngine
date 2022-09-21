@@ -82,7 +82,7 @@ namespace OneEngineWindowsFormsApplication
             var format = StringFormat.GenericDefault;
             format.LineAlignment = (StringAlignment)(((int)options.Alignment >> 2) & 3);
             format.Alignment = (StringAlignment)((int)options.Alignment & 3);
-            Graphics.DrawString(text, CanvasGraphics.CreateFont(options.FontSize), Brush, rect, format);
+            Graphics.DrawString(text, CanvasGraphics2D.CreateFont(options.FontSize), Brush, rect, format);
         }
     }
 }

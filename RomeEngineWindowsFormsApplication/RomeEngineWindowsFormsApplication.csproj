@@ -49,7 +49,7 @@
     <Compile Include="CanvasBrush.cs" />
     <Compile Include="CanvasOutlineStyle.cs" />
     <Compile Include="CanvasFillStyle.cs" />
-    <Compile Include="CanvasGraphics.cs" />
+    <Compile Include="CanvasGraphics2D.cs" />
     <Compile Include="CanvasStyleBase.cs" />
     <Compile Include="FileSystem.cs" />
     <Compile Include="GameCanvas.cs">

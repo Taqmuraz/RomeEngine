@@ -53,13 +53,13 @@ namespace RomeEngine
 			return new Vector3(x, y, z);
         }
 
-        public static Matrix4x4 CreateViewport(int width, int height)
+        public static Matrix4x4 CreateViewport(float width, float height)
 		{
 			Matrix4x4 m = new Matrix4x4();
-			m.column_0 = new Vector4(width / 2, 0f, 0f, 0);
-			m.column_1 = new Vector4(0f, height / 2, 0f, 0);
+			m.column_0 = new Vector4(-width * 0.5f, 0f, 0f, 0);
+			m.column_1 = new Vector4(0f, height * 0.5f, 0f, 0);
 			m.column_2 = new Vector4(0f, 0f, 1f, 0f);
-			m.column_3 = new Vector4(0f, 0f, 0f, 1f);
+			m.column_3 = new Vector4(width * 0.5f, height * 0.5f, 0f, 1f);
 
 			return m;
 		}
@@ -82,10 +82,10 @@ namespace RomeEngine
 		}
 		public static Matrix4x4 operator *(Matrix4x4 a, Matrix4x4 b)
 		{
-			Vector4 c0 = b * a.column_0;
-			Vector4 c1 = b * a.column_1;
-			Vector4 c2 = b * a.column_2;
-			Vector4 c3 = b * a.column_3;
+			Vector4 c0 = a * b.column_0;
+			Vector4 c1 = a * b.column_1;
+			Vector4 c2 = a * b.column_2;
+			Vector4 c3 = a * b.column_3;
 
 			return new Matrix4x4(c0, c1, c2, c3);
 		}
@@ -293,15 +293,6 @@ namespace RomeEngine
 			Vector4 row2 = new Vector4(0f, 1f / tan, 0f, 0f);
 			Vector4 row3 = new Vector4(0f, 0f, 0f, 1f);
 			Vector4 row4 = new Vector4(0f, 0f, -1f, 0f);
-
-			return new Matrix4x4(row1, row2, row3, row4);
-		}
-		public static Matrix4x4 CreateOrthoMatrix(Vector2 screenSize)
-		{
-			Vector4 row1 = new Vector4(0f, 0f, 0f, 0f);
-			Vector4 row2 = new Vector4(0f, 0f, 0f, 0f);
-			Vector4 row3 = new Vector4(0f, 0f, 0f, 0f);
-			Vector4 row4 = new Vector4(0f, 0f, 0f, 0f);
 
 			return new Matrix4x4(row1, row2, row3, row4).GetTransponed();
 		}
