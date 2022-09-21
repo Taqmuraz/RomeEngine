@@ -24,7 +24,12 @@ namespace RomeEngineGame
             {
                 yield return null;
 
-                camera.Transform.LocalPosition += Input.GetWASDQE() * Time.DeltaTime * 5f;
+                camera.Transform.LocalPosition += camera.Transform.LocalToWorld.MultiplyDirection(Input.GetWASDQE()) * Time.DeltaTime * 5f;
+                if (Input.GetKey(KeyCode.MouseR))
+                {
+                    Vector2 mouseDelta = Input.MouseDelta;
+                    camera.Transform.LocalRotation += new Vector3(mouseDelta.y, mouseDelta.x, 0f) * 5f * Time.DeltaTime;
+                }
                 if (Input.GetKeyDown(KeyCode.Space)) camera.Transform.LocalPosition = Vector3.zero;
 
                 inspectorMenu.Draw(canvas);

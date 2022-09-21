@@ -73,11 +73,15 @@ namespace OneEngineWindowsFormsApplication
 
             Matrix4x4 mvp = projection * view.GetInversed() * model;
 
-            for (int i = 1; i < indices.Length; i++)
+            for (int i = 2; i < indices.Length; i+=3)
             {
-                Vector3 vertexA = mvp.MultiplyPoint_With_WDevision(vertices[indices[i]].Position);
+                Vector3 vertexA = mvp.MultiplyPoint_With_WDevision(vertices[indices[i - 2]].Position);
                 Vector3 vertexB = mvp.MultiplyPoint_With_WDevision(vertices[indices[i - 1]].Position);
-                graphics.DrawLine(new Pen(Color.White), vertexA, vertexB);
+                Vector3 vertexC = mvp.MultiplyPoint_With_WDevision(vertices[indices[i]].Position);
+                var pen = new Pen(Color.White);
+                graphics.DrawLine(pen, vertexA, vertexB);
+                graphics.DrawLine(pen, vertexA, vertexC);
+                graphics.DrawLine(pen, vertexB, vertexC);
             }
         }
     }
