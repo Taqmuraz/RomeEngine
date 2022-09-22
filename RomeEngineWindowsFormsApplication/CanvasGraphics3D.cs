@@ -10,6 +10,7 @@ namespace OneEngineWindowsFormsApplication
         Graphics graphics;
         GraphicsContext context;
         PointF[] triangle = new PointF[3];
+        CullingMode cullingMode;
 
         List<(Vector3 t0, Vector3 t1, Vector3 t2, Vector3 center, Vector3 worldNormal, Vector3 worldCenter)> triangles = new List<(Vector3, Vector3, Vector3, Vector3, Vector3, Vector3)>();
 
@@ -21,8 +22,10 @@ namespace OneEngineWindowsFormsApplication
             this.graphics = graphics;
         }
 
-        Matrix4x4 MVP => projection * view.GetInversed() * model;
-        Matrix4x4 VP => projection * view.GetInversed();
+        Matrix4x4 Viewport => Matrix4x4.CreateViewport(Screen.Size.x, Screen.Size.y);
+
+        Matrix4x4 MVP => Viewport * projection * view.GetInversed() * model;
+        Matrix4x4 VP => Viewport * projection * view.GetInversed();
 
         public void End()
         {
@@ -72,6 +75,17 @@ namespace OneEngineWindowsFormsApplication
             DrawDynamicMesh(mesh);
         }
 
+        bool Cull(float dot)
+        {
+            switch (cullingMode)
+            {
+                default:
+                case CullingMode.None:return false;
+                case CullingMode.Back:return dot < 0f;
+                case CullingMode.Front:return dot > 0f;
+            }
+        }
+
         public void DrawDynamicMesh(IMesh mesh)
         {
             var vertices = mesh.EnumerateVertices().ToArray();
@@ -101,6 +115,11 @@ namespace OneEngineWindowsFormsApplication
                 graphics.DrawLine(pen, vertexA, vertexC);
                 graphics.DrawLine(pen, vertexB, vertexC);
             }
+        }
+
+        public void SetCulling(CullingMode cullingMode)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

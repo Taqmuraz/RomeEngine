@@ -22,6 +22,8 @@ namespace RomeEngineGame
         public override void Draw(EditorCanvas canvas)
         {
             Rect startRect = Rect;
+            elementWidth = startRect.Width;
+            elementHeight = startRect.Height;
 
             int diff = DropdownOptions.Length - maxElements;
             if (diff > 0)

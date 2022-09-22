@@ -11,5 +11,8 @@ namespace OneEngineWindowsFormsApplication
         }
 
         public Bitmap Image { get; }
+
+        public override int Width => Image.Width;
+        public override int Height => Image.Height;
     }
 }

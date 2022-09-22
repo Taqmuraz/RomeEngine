@@ -2,9 +2,9 @@
 
 using RomeEngine;
 
-namespace OneEngineWindowsFormsApplication
+namespace RomeEngineGame
 {
-    class FileSystem : IFileSystem
+    public class StandardFileSystem : IFileSystem
     {
         public TextReader ReadText(string file)
         {

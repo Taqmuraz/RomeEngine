@@ -20,16 +20,13 @@ namespace RomeEngine
 
 		public static Matrix3x3 Viewport(float width, float height)
 		{
-			float w = width;
-			float h = height;
-			if (width > height) w *= height / width;
-			else h *= width / height;
-
+			width *= 0.5f;
+			height *= 0.5f;
 			return new Matrix3x3()
 			{
-				Column_0 = new Vector3(w * 0.5f, 0f, 0f),
-				Column_1 = new Vector3(0f, -h * 0.5f, 0f),
-				Column_2 = new Vector3(width * 0.5f, height * 0.5f, 1f)
+				Column_0 = new Vector3(width, 0f, 0f),
+				Column_1 = new Vector3(0f, -height, 0f),
+				Column_2 = new Vector3(width, height, 1f)
 			};
 		}
 

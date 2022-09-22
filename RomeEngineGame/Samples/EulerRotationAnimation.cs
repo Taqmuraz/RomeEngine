@@ -6,6 +6,10 @@ namespace RomeEngineGame
     {
         [SerializeField] Vector3 euler;
 
+        public EulerRotationAnimation()
+        {
+        }
+
         [BehaviourEvent]
         void Update()
         {

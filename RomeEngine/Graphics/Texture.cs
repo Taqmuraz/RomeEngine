@@ -2,7 +2,7 @@
 {
     public abstract class Texture
     {
-        public int Width { get; }
-        public int Height { get; }
+        public abstract int Width { get; }
+        public abstract int Height { get; }
     }
 }

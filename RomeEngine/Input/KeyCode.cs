@@ -9,5 +9,6 @@
         ShiftKey = 16, ControlKey = 17, Space = 32, Backspace = 8, Enter = 13,
         Minus = 189,
         Point = 190,
+        Escape = 27
     }
 }

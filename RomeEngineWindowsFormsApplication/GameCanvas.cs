@@ -108,6 +108,6 @@ namespace OneEngineWindowsFormsApplication
             thread.Start();
         }
 
-        public IFileSystem FileSystem { get; } = new FileSystem();
+        public IFileSystem FileSystem { get; } = new RomeEngineGame.StandardFileSystem();
     }
 }

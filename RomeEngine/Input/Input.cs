@@ -4,15 +4,7 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public interface IInputHandler
-    {
-        void OnKeyDown(KeyCode key);
-        void OnKeyUp(KeyCode key);
-        void OnMouseDown(Vector2 mousePosition, int button);
-        void OnMouseMove(Vector2 mousePosition);
-        void OnMouseUp(Vector2 mousePosition, int button);
-    }
-	public sealed class Input : IInputHandler
+    public sealed class Input : IInputHandler
 	{
 		static SafeDictionary<KeyCode, KeyInfo> keys = new SafeDictionary<KeyCode, KeyInfo>(() => emptyKey);
 		static List<(KeyCode key, KeyState state)> keysToUpdate = new List<(KeyCode, KeyState)>();

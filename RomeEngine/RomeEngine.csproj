@@ -102,6 +102,7 @@
     <Compile Include="Game\Rendering\StaticMeshRenderer.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\Vertex.cs" />
+    <Compile Include="Input\IInputHandler.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\KeyState.cs" />

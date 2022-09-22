@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomeEngine", "RomeEngine\Ro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomeEngineGame", "RomeEngineGame\RomeEngineGame.csproj", "{3A6C8B9F-4F72-4D65-B53B-E50D2B2F0230}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomeEngineOpenGL", "RomeEngineOpenGL\RomeEngineOpenGL.csproj", "{60538F40-049B-4F17-8D07-C5781296964C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3A6C8B9F-4F72-4D65-B53B-E50D2B2F0230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A6C8B9F-4F72-4D65-B53B-E50D2B2F0230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A6C8B9F-4F72-4D65-B53B-E50D2B2F0230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60538F40-049B-4F17-8D07-C5781296964C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60538F40-049B-4F17-8D07-C5781296964C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60538F40-049B-4F17-8D07-C5781296964C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60538F40-049B-4F17-8D07-C5781296964C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
