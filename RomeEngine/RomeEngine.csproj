@@ -60,6 +60,7 @@
     <Compile Include="Game\BehaviourEventAttribute.cs" />
     <Compile Include="Game\Camera.cs" />
     <Compile Include="Game\EventsHandler.cs" />
+    <Compile Include="Game\GlobalLight.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
     <Compile Include="Game\SerializableEventsHandler.cs" />
     <Compile Include="Game\Component.cs" />

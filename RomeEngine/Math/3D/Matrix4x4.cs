@@ -331,7 +331,7 @@ namespace RomeEngine
 			return m;
 		}
 
-		public Vector3 MultiplyPoint_With_WDevision(Vector3 point)
+		public Vector3 MultiplyPoint_With_WDivision(Vector3 point)
 		{
 			return (this * new Vector4(point.x, point.y, point.z, 1f)).ToVector3WithWDevision();
 		}

@@ -21,6 +21,7 @@ namespace RomeEngineGame
                 ("Cancel", () => (IMesh)value),
                 ("Null", () => null),
                 ("Box", () => StaticMesh.CreateBoxMesh()),
+                ("Pyramide", () => StaticMesh.CreatePyramideMesh()),
             };
 
             if (canvas.DrawButton("Change", valueRect, inspectorMenu.ValueTextOptions))

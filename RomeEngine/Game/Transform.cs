@@ -45,6 +45,10 @@ namespace RomeEngine
 		public Vector3 LocalUp => (Vector3)localRotationMatrix.column_1;
 		public Vector3 LocalForward => (Vector3)localRotationMatrix.column_2;
 
+		public Vector3 Right => ParentToWorld.MultiplyDirection(LocalRight);
+		public Vector3 Up => ParentToWorld.MultiplyDirection(LocalUp);
+		public Vector3 Forward => ParentToWorld.MultiplyDirection(LocalForward);
+
 		[BehaviourEvent]
 		void OnDestroy()
 		{

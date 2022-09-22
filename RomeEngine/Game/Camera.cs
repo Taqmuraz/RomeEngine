@@ -12,6 +12,8 @@
         public Matrix4x4 Projection => Matrix4x4.CreateViewport(Screen.Size.x, Screen.Size.y) * Matrix4x4.CreateFrustumMatrix(FieldOfView, Screen.AspectRatio, NearPlane, FarPlane);
         public Matrix4x4 View => Transform.LocalToWorld;
 
+        public Matrix4x4 WorldToScreenMatrix => Projection * View.GetInversed();
+
         [BehaviourEvent]
         void Start()
         {

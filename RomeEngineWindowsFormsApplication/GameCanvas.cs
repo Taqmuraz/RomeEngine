@@ -11,7 +11,7 @@ namespace OneEngineWindowsFormsApplication
         TextWriter log;
         IEngine engine;
         CanvasGraphics2D graphics2D = new CanvasGraphics2D();
-        Graphics3D graphics3D = new Graphics3D();
+        CanvasGraphics3D graphics3D = new CanvasGraphics3D();
         GraphicsContext context = new GraphicsContext();
 
         public ISystemInfo SystemInfo => this;
@@ -73,7 +73,9 @@ namespace OneEngineWindowsFormsApplication
             graphics2D.Graphics = e.Graphics;
             graphics3D.SetGraphics(e.Graphics, context);
             graphics2D.ScreenSize = Size;
-            engine.UpdateGraphics(graphics2D, graphics3D, context);
+            engine.UpdateGraphics3D(graphics3D, context);
+            graphics3D.End();
+            engine.UpdateGraphics2D(graphics2D);
         }
 
         public void ShowFileOpenDialog(string root, string title, Action<string> callback)
