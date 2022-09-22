@@ -11,24 +11,34 @@ namespace RomeEngineOpenGL
     class OpenGLContext : IGraphicsContext
     {
         Dictionary<IMesh, IMeshIdentifier> meshIdentifiers = new Dictionary<IMesh, IMeshIdentifier>();
-        Dictionary<string, OpenGLTexture> textures = new Dictionary<string, OpenGLTexture>(); 
+        Dictionary<string, OpenGLTexture> textures = new Dictionary<string, OpenGLTexture>();
 
         public Texture LoadTexture(string fileName)
         {
-            Bitmap bmp = new Bitmap(1, 1);
-            if (File.Exists(fileName))
+            if (textures.TryGetValue(fileName, out OpenGLTexture texture))
             {
-                bmp = (Bitmap)Image.FromFile(fileName);
+                return texture;
             }
-
-            int width = bmp.Width;
-            int height = bmp.Height;
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            else
+            {
+                Bitmap bmp = new Bitmap(1, 1);
+                if (File.Exists(fileName))
+                {
+                    bmp = (Bitmap)Image.FromFile(fileName);
+                }
+                return LoadTexture(bmp, fileName);
+            }
+        }
+        public Texture LoadTexture(Bitmap bitmap, string key)
+        {
+            int width = bitmap.Width;
+            int height = bitmap.Height;
+            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             int id = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, id);
 
             var texture = new OpenGLTexture(width, height, id);
-            textures.Add(fileName, texture);
+            textures.Add(key, texture);
 
             int linear = (int)TextureMinFilter.Linear;
             int repeat = (int)TextureWrapMode.Repeat;
@@ -38,7 +48,7 @@ namespace RomeEngineOpenGL
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, repeat);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
             GL.BindTexture(TextureTarget.Texture2D, 0);
-            bmp.UnlockBits(data);
+            bitmap.UnlockBits(data);
 
             return texture;
         }
