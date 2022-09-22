@@ -72,5 +72,11 @@ namespace RomeEngine
         {
 			return new Color32(r, g, b, alpha);
         }
+
+        public Vector4 ToVector4()
+        {
+			float d = 1f / 255f;
+			return new Vector4(r * d, g * d, b * d, a * d);
+        }
     }
 }

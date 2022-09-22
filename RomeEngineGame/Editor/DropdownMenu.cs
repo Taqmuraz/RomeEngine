@@ -16,7 +16,7 @@ namespace RomeEngineGame
         public DropdownMenu()
         {
             Vector2 screenSize = Screen.Size;
-            Rect = new Rect(screenSize.x * 0.5f - elementWidth * 0.5f, screenSize.y * 0.5f - elementHeight * maxElements * 0.5f, elementWidth, elementHeight * maxElements);
+            Rect = new Rect(screenSize.x * 0.5f - elementWidth * 0.5f, screenSize.y * 0.5f - elementHeight * maxElements * 0.5f, elementWidth, elementHeight);
         }
 
         public override void Draw(EditorCanvas canvas)

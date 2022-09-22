@@ -129,7 +129,7 @@ namespace RomeEngineOpenGL
                 while (!reader.EndOfStream)
                 {
                     line = reader.ReadLine();
-                    shaderSource.Append(line).Append("//\n");
+                    shaderSource.Append(line).Append("\n");
                 }
             }
 

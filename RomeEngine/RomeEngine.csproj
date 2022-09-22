@@ -58,9 +58,9 @@
     <Compile Include="Game\Animation\FramesTransitionAnimation.cs" />
     <Compile Include="Game\Animation\Animator.cs" />
     <Compile Include="Game\BehaviourEventAttribute.cs" />
-    <Compile Include="Game\Camera.cs" />
+    <Compile Include="Game\Rendering\Camera.cs" />
     <Compile Include="Game\EventsHandler.cs" />
-    <Compile Include="Game\GlobalLight.cs" />
+    <Compile Include="Game\Rendering\GlobalLight.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
     <Compile Include="Game\SerializableEventsHandler.cs" />
     <Compile Include="Game\Component.cs" />

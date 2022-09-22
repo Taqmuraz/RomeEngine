@@ -62,7 +62,9 @@ namespace RomeEngine
                 1, 6, 5
             };
 
-            return new StaticMesh(vertices.Select(v => v - Vector3.one * 0.5f).Select(v => new Vertex(v, v, Vector2.zero)).ToArray(), indices);
+            var result = new StaticMesh(vertices.Select(v => v - Vector3.one * 0.5f).Select(v => new Vertex(v, Vector3.zero, Vector2.zero)).ToArray(), indices);
+            result.RecalculateNormals();
+            return result;
         }
         public static StaticMesh CreatePyramideMesh()
         {
@@ -83,7 +85,25 @@ namespace RomeEngine
                 1, 2, 3,
                 3, 4, 1
             };
-            return new StaticMesh(vertices.Select(v => new Vertex(v, v, Vector2.zero)).ToArray(), indices);
+            var result = new StaticMesh(vertices.Select(v => new Vertex(v, Vector3.zero, Vector2.zero)).ToArray(), indices);
+            result.RecalculateNormals();
+            return result;
+        }
+
+        public void RecalculateNormals()
+        {
+            for (int i = 2; i < Indices.Length; i+=3)
+            {
+                Vector3 t0 = Vertices[Indices[i - 2]].Position;
+                Vector3 t1 = Vertices[Indices[i - 1]].Position;
+                Vector3 t2 = Vertices[Indices[i]].Position;
+
+                Vector3 normal = Vector3.Cross(t0 - t1, t2 - t1).normalized;
+
+                Vertices[Indices[i - 2]].Normal = normal;
+                Vertices[Indices[i - 1]].Normal = normal;
+                Vertices[Indices[i]].Normal = normal;
+            }
         }
 
         public IEnumerable<SerializableField> EnumerateFields()

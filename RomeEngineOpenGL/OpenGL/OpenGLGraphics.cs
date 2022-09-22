@@ -82,6 +82,9 @@ namespace RomeEngineOpenGL
 
         void SetupShader()
         {
+            ActiveShader.SetFloat("ambienceIntencivity", GlobalLight.AmbienceIntencivity);
+            ActiveShader.SetVector3("lightDirection", GlobalLight.LightDirection);
+            ActiveShader.SetVector4("lightColor", GlobalLight.LightColor.ToVector4());
             ActiveShader.SetMatrix("viewMatrix", view.GetInversed());
             ActiveShader.SetMatrix("projectionMatrix", projection);
             ActiveShader.SetMatrix("transformationMatrix", model);
@@ -91,13 +94,13 @@ namespace RomeEngineOpenGL
         {
             if (meshIdentifier is OpenGLMeshIdentifier identifier)
             {
-                //SetupShader();
-                //ActiveShader.Start();
-                GL.MatrixMode(MatrixMode.Modelview);
+                ActiveShader.Start();
+                SetupShader();
+                /*GL.MatrixMode(MatrixMode.Modelview);
                 GL.LoadMatrix((view.GetInversed() * model).ToDoubleArray());
                 GL.MatrixMode(MatrixMode.Projection);
                 GL.LoadMatrix(projection.ToDoubleArray());
-                
+                */
                 GL.BindVertexArray(identifier.VertexArrrayObjectIndex);
                 GL.EnableVertexAttribArray(0);
                 GL.EnableVertexAttribArray(1);
@@ -129,7 +132,7 @@ namespace RomeEngineOpenGL
                 var vertex = vertices[index];
                 Vector3 pos = mvp.MultiplyPoint_With_WDivision(vertex.Position);
 
-                GL.Color4(Color32.white);
+                GL.Color4(Color32.white.WithAlpha(64));
                 GL.Vertex3(pos.x, pos.y, 0f);
                 GL.TexCoord2(vertex.UV.x, vertex.UV.y);
                 GL.Normal3(vertex.Normal.x, vertex.Normal.y, vertex.Normal.z);
