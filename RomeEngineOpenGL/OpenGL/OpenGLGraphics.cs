@@ -9,6 +9,10 @@ namespace RomeEngineOpenGL
         int width;
         int height;
 
+        OpenGLShader standardShader = new OpenGLShader("./Resources/Shaders/vertexShader.glsl", "./Resources/Shaders/fragmentShader.glsl");
+
+        OpenGLShader ActiveShader => standardShader;
+
         public void Clear(Color32 color)
         {
             GL.ClearColor(color);
@@ -76,27 +80,32 @@ namespace RomeEngineOpenGL
             GL.BindTexture(TextureTarget.Texture2D, ((OpenGLTexture)texture).TextureIndex);
         }
 
-        void SetupMatrix()
+        void SetupShader()
         {
-            Matrix4x4 mvp = Matrix4x4.CreateViewport(width, height) * projection * view.GetInversed() * model;
-
-            for (int i = 0; i < matrix.Length; i++) matrix[i] = mvp[i % 4, i / 4];
-            GL.LoadIdentity();
-            GL.LoadMatrix(matrix);
-            GL.PushMatrix();
+            ActiveShader.SetMatrix("viewMatrix", view.GetInversed());
+            ActiveShader.SetMatrix("projectionMatrix", projection);
+            ActiveShader.SetMatrix("transformationMatrix", model);
         }
 
         public void DrawMesh(IMeshIdentifier meshIdentifier)
         {
             if (meshIdentifier is OpenGLMeshIdentifier identifier)
             {
-                SetupMatrix();
+                //SetupShader();
+                //ActiveShader.Start();
+                GL.MatrixMode(MatrixMode.Modelview);
+                GL.LoadMatrix((view.GetInversed() * model).ToDoubleArray());
+                GL.MatrixMode(MatrixMode.Projection);
+                GL.LoadMatrix(projection.ToDoubleArray());
+                
                 GL.BindVertexArray(identifier.VertexArrrayObjectIndex);
                 GL.EnableVertexAttribArray(0);
                 GL.EnableVertexAttribArray(1);
                 GL.EnableVertexAttribArray(2);
 
-                GL.DrawElements(BeginMode.Triangles, identifier.VerticesNumber, DrawElementsType.UnsignedInt, 0);
+                GL.DrawElements(PrimitiveType.Triangles, identifier.VerticesNumber * 3, DrawElementsType.UnsignedInt, 0);
+
+                ActiveShader.Stop();
             }
             else
             {
@@ -106,13 +115,22 @@ namespace RomeEngineOpenGL
 
         public void DrawDynamicMesh(IMesh mesh)
         {
-            SetupMatrix();
-            GL.Begin(PrimitiveType.Triangles);
+            var mvp = projection * view.GetInversed() * model;
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+            GL.Viewport(0, 0, width, height);
+            GL.Begin(PrimitiveType.LineLoop);
             var vertices = mesh.EnumerateVertices().ToArray();
             foreach (var index in mesh.EnumerateIndices())
             {
                 var vertex = vertices[index];
-                GL.Vertex3(vertex.Position.x, vertex.Position.y, vertex.Position.z);
+                Vector3 pos = mvp.MultiplyPoint_With_WDivision(vertex.Position);
+
+                GL.Color4(Color32.white);
+                GL.Vertex3(pos.x, pos.y, 0f);
                 GL.TexCoord2(vertex.UV.x, vertex.UV.y);
                 GL.Normal3(vertex.Normal.x, vertex.Normal.y, vertex.Normal.z);
             }

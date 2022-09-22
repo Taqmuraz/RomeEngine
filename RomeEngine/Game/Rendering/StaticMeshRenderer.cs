@@ -11,6 +11,7 @@
         }
         protected override void Draw(IGraphics graphics)
         {
+            graphics.DrawDynamicMesh(StaticMesh);
             if (meshIdentifier != null) graphics.DrawMesh(meshIdentifier);
         }
     }

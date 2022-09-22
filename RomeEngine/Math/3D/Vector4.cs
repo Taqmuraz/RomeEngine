@@ -25,6 +25,10 @@
 		public Vector4 WithZ(float z) => new Vector4(x, y, z, w);
 		public Vector4 WithW(float w) => new Vector4(x, y, z, w);
 
+		public static Vector4 operator -(Vector4 v)
+		{
+			return new Vector4(-v.x, -v.y, -v.z, -v.w);
+		}
 		public static Vector4 operator +(Vector4 a, Vector4 b)
 		{
 			return new Vector4(a.x + b.x, a.y + b.y, a.z + b.z, b.w + a.w);

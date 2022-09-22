@@ -56,8 +56,8 @@ namespace RomeEngine
         public static Matrix4x4 CreateViewport(float width, float height)
 		{
 			Matrix4x4 m = new Matrix4x4();
-			m.column_0 = new Vector4(-width * 0.5f, 0f, 0f, 0);
-			m.column_1 = new Vector4(0f, height * 0.5f, 0f, 0);
+			m.column_0 = new Vector4(width * 0.5f, 0f, 0f, 0);
+			m.column_1 = new Vector4(0f, -height * 0.5f, 0f, 0);
 			m.column_2 = new Vector4(0f, 0f, 1f, 0f);
 			m.column_3 = new Vector4(width * 0.5f, height * 0.5f, 0f, 1f);
 
@@ -124,7 +124,20 @@ namespace RomeEngine
 			}
 		}
 
-		public float GetDeterminant()
+        public float[] ToFloatArray()
+        {
+			float[] array = new float[16];
+			for (int i = 0; i < 16; i++) array[i] = this[i % 4, i / 4];
+			return array;
+        }
+		public double[] ToDoubleArray()
+		{
+			double[] array = new double[16];
+			for (int i = 0; i < 16; i++) array[i] = this[i % 4, i / 4];
+			return array;
+		}
+
+        public float GetDeterminant()
 		{
 			float SubFactor00 = this[2, 2] * this[3, 3] - this[3, 2] * this[2, 3];
 			float SubFactor01 = this[2, 1] * this[3, 3] - this[3, 1] * this[2, 3];
@@ -291,10 +304,12 @@ namespace RomeEngine
 			float tan = Mathf.Tan(fov * 0.5f);
 			Vector4 row1 = new Vector4(1f / (aspect * tan), 0f, 0f, 0f);
 			Vector4 row2 = new Vector4(0f, 1f / tan, 0f, 0f);
-			Vector4 row3 = new Vector4(0f, 0f, 0f, 1f);
+			Vector4 row3 = new Vector4(0f, 0f, -(far + near) / (far - near), -2 * far * near / (far - near));
 			Vector4 row4 = new Vector4(0f, 0f, -1f, 0f);
 
-			return new Matrix4x4(row1, row2, row3, row4).GetTransponed();
+			var result = new Matrix4x4(row1, row2, row3, row4).GetTransponed();
+			result.column_2 = -result.column_2;
+			return result;
 		}
 
 		public Vector3 MultiplyPoint(Vector3 point)
