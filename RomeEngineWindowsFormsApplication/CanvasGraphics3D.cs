@@ -88,12 +88,11 @@ namespace OneEngineWindowsFormsApplication
 
         public void DrawDynamicMesh(IMesh mesh)
         {
-            var vertices = mesh.EnumerateVertices().ToArray();
             var indices = mesh.EnumerateIndices().ToArray();
 
             Matrix4x4 mvp = MVP;
 
-            float[] positionsArray = vertices.SelectMany(v => v.Attributes.First().ToFloatsArray()).ToArray();
+            float[] positionsArray = mesh.CreateVerticesAttributeBuffer(0).ToArray();
 
             Vector3 ReadVertex(int index)
             {

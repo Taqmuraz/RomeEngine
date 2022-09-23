@@ -5,7 +5,6 @@ namespace RomeEngine
 {
     public interface IVertex : ISerializable
     {
-        IEnumerable<IVertexAttribute> Attributes { get; }
-        int AttributesCount { get; }
+
     }
 }

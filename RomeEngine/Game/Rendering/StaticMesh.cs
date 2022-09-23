@@ -8,9 +8,15 @@ namespace RomeEngine
     {
         public StaticMesh()
         {
+            attributes = new IMeshAttribute<Vertex>[] 
+            {
+                new VertexAttributePosition(),
+                new VertexAttributeUV(),
+                new VertexAttributeNormal()
+            };
         }
 
-        public StaticMesh(Vertex[] vertices, int[] indices)
+        public StaticMesh(Vertex[] vertices, int[] indices) : this()
         {
             Vertices = vertices;
             Indices = indices;
@@ -18,11 +24,6 @@ namespace RomeEngine
 
         public Vertex[] Vertices { get; set; }
         public int[] Indices { get; set; }
-
-        public IEnumerable<IVertex> EnumerateVertices()
-        {
-            return Vertices == null ? Enumerable.Empty<IVertex>() : Vertices;
-        }
 
         public IEnumerable<int> EnumerateIndices()
         {
@@ -154,6 +155,24 @@ namespace RomeEngine
         {
             yield return new SerializableField(nameof(Vertices), Vertices, v => Vertices = (Vertex[])v, typeof(Vertex[]), true);
             yield return new SerializableField(nameof(Indices), Indices, v => Indices = (int[])v, typeof(int[]), true);
+        }
+
+        IMeshAttribute<Vertex>[] attributes;
+        public ReadOnlyArray<IMeshAttributeInfo> Attributes => attributes;
+
+        public void WriteVerticesToAttributeBuffer(IVertexBuffer buffer, int attributeIndex)
+        {
+            foreach (var vertex in Vertices) attributes[attributeIndex].WriteVertex(buffer, vertex);
+        }
+
+        public IVertexBuffer CreateVerticesAttributeBuffer(int attributeIndex)
+        {
+            int size = 0;
+            for (int i = 0; i < attributes.Length; i++) size += attributes[i].Size;
+            size *= Vertices.Length;
+            var buffer = new VertexBuffer(size);
+            WriteVerticesToAttributeBuffer(buffer, attributeIndex);
+            return buffer;
         }
     }
 }

@@ -4,7 +4,10 @@ namespace RomeEngine
 {
     public interface IMesh
     {
-        IEnumerable<IVertex> EnumerateVertices();
         IEnumerable<int> EnumerateIndices();
+        ReadOnlyArray<IMeshAttributeInfo> Attributes { get; }
+
+        void WriteVerticesToAttributeBuffer(IVertexBuffer buffer, int attributeIndex);
+        IVertexBuffer CreateVerticesAttributeBuffer(int attributeIndex);
     }
 }

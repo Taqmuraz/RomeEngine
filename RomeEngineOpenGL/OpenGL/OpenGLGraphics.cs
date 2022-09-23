@@ -82,20 +82,24 @@ namespace RomeEngineOpenGL
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Viewport(0, 0, width, height);
-            GL.Begin(PrimitiveType.LineLoop);
-            var vertices = mesh.EnumerateVertices().ToArray();
+            GL.Begin(PrimitiveType.Triangles);
+
+            float[] positions = mesh.CreateVerticesAttributeBuffer(0).ToArray();
+            float[] uvs = mesh.CreateVerticesAttributeBuffer(1).ToArray();
+            float[] normals = mesh.CreateVerticesAttributeBuffer(2).ToArray();
+
             foreach (var index in mesh.EnumerateIndices())
             {
-                var vertex = vertices[index];
-                var attributes = vertex.Attributes.ToArray();
-                Vector3 pos = mvp.MultiplyPoint_With_WDivision(attributes[0].ReadVector3());
+                int bufferIndex3 = index * 3;
+                int bufferIndex2 = index * 2;
+                Vector3 pos = new Vector3(positions[bufferIndex3], positions[bufferIndex3 + 1], positions[bufferIndex3 + 2]);
+                pos = mvp.MultiplyPoint_With_WDivision(pos);
+                Vector2 uv = new Vector2(uvs[bufferIndex2], uvs[bufferIndex2 + 1]);
+                Vector3 normal = new Vector3(normals[bufferIndex3], normals[bufferIndex3 + 1], normals[bufferIndex3 + 2]);
 
-                GL.Color4(Color32.white.WithAlpha(64));
-                GL.Vertex3(pos.x, pos.y, 0f);
-                Vector2 uv = attributes[1].ReadVector2();
                 GL.TexCoord2(uv.x, uv.y);
-                var normal = attributes[2].ReadVector3();
                 GL.Normal3(normal.x, normal.y, normal.z);
+                GL.Vertex3(pos.x, pos.y, 0f);
             }
             GL.End();
         }
