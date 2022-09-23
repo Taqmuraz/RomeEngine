@@ -1,8 +1,8 @@
 ﻿namespace RomeEngine
 {
-    public class VertexAttributeNormal : IMeshAttribute<Vertex>
+    public class VertexAttributeNormal : IMeshFloatAttribute<Vertex>
     {
-        public void WriteVertex(IVertexBuffer buffer, Vertex vertex)
+        public void WriteVertex(IVertexBuffer<float> buffer, Vertex vertex)
         {
             Vector3 normal = vertex.Normal;
             buffer.Write(normal.x);
@@ -11,5 +11,6 @@
         }
 
         public int Size => 3;
+        public MeshAttributeType Type => MeshAttributeType.Float;
     }
 }

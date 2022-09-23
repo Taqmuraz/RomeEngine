@@ -37,9 +37,11 @@ namespace RomeEngineOpenGL
                 shader.Start();
                 SetupShader(shader);
                 GL.BindVertexArray(identifier.VertexArrrayObjectIndex);
-                GL.EnableVertexAttribArray(0);
-                GL.EnableVertexAttribArray(1);
-                GL.EnableVertexAttribArray(2);
+                var attributes = identifier.SourceMesh.Attributes;
+                for (int i = 0; i < attributes.Length; i++)
+                {
+                    GL.EnableVertexAttribArray(i);
+                }
 
                 GL.DrawElements(PrimitiveType.Triangles, identifier.IndicesNumber * 3, DrawElementsType.UnsignedInt, 0);
 

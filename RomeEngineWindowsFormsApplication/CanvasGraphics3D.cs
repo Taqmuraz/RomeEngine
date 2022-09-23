@@ -92,7 +92,7 @@ namespace OneEngineWindowsFormsApplication
 
             Matrix4x4 mvp = MVP;
 
-            float[] positionsArray = mesh.CreateVerticesAttributeBuffer(0).ToArray();
+            float[] positionsArray = mesh.CreateVerticesFloatAttributeBuffer(mesh.PositionAttributeIndex).ToArray();
 
             Vector3 ReadVertex(int index)
             {

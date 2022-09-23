@@ -70,12 +70,22 @@ namespace RomeEngineOpenGL
 
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    StoreDataInAttributeList(i, attributes[i].Size, mesh.CreateVerticesAttributeBuffer(i).ToArray());
+                    switch (attributes[i].Type)
+                    {
+                        case MeshAttributeType.Float:
+                            StoreDataInAttributeListFloat(i, attributes[i].Size, mesh.CreateVerticesFloatAttributeBuffer(i).ToArray());
+                            break;
+                        case MeshAttributeType.Int:
+                            StoreDataInAttributeListInt(i, attributes[i].Size, mesh.CreateVerticesIntAttributeBuffer(i).ToArray());
+                            break;
+                        default:
+                            throw new System.InvalidOperationException($"Mesh attribute type {attributes[i].Type} is not supported");
+                    }
                 }
 
                 UnbindVAO();
 
-                var identifier = new OpenGLMeshIdentifier(indices.Length, vaoID);
+                var identifier = new OpenGLMeshIdentifier(indices.Length, vaoID, mesh);
                 meshIdentifiers.Add(mesh, identifier);
                 return identifier;
             }
@@ -91,12 +101,20 @@ namespace RomeEngineOpenGL
             int vboID = GL.GenBuffer();
             return vboID;
         }
-        private static void StoreDataInAttributeList(int attributeNumber, int coordinateSize, float[] data)
+        private static void StoreDataInAttributeListFloat(int attributeNumber, int coordinateSize, float[] data)
         {
             int vboID = CreateVBO();
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
             GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(attributeNumber, coordinateSize, VertexAttribPointerType.Float, false, 0, 0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+        }
+        private static void StoreDataInAttributeListInt(int attributeNumber, int coordinateSize, int[] data)
+        {
+            int vboID = CreateVBO();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
+            GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(int), data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(attributeNumber, coordinateSize, VertexAttribPointerType.Int, false, 0, 0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
         private static void UnbindVAO()

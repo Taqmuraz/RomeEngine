@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using RomeEngine;
+using System;
 using System.Linq;
 
 namespace RomeEngineOpenGL
@@ -84,22 +85,37 @@ namespace RomeEngineOpenGL
             GL.Viewport(0, 0, width, height);
             GL.Begin(PrimitiveType.Triangles);
 
-            float[] positions = mesh.CreateVerticesAttributeBuffer(0).ToArray();
-            float[] uvs = mesh.CreateVerticesAttributeBuffer(1).ToArray();
-            float[] normals = mesh.CreateVerticesAttributeBuffer(2).ToArray();
+            var attributes = mesh.Attributes;
+            float[] positions = mesh.CreateVerticesFloatAttributeBuffer(mesh.PositionAttributeIndex).ToArray();
+            float[] uvs = mesh.CreateVerticesFloatAttributeBuffer(mesh.TexcoordAttributeIndex).ToArray();
+            float[] normals = mesh.CreateVerticesFloatAttributeBuffer(mesh.NormalAttributeIndex).ToArray();
+
+            float[] argumentBuffer = new float[4];
+
+            (Action glFunc, int attributeIndex, float[] buffer, Action process)[] actions =
+            {
+                (() => GL.TexCoord2(argumentBuffer[0], argumentBuffer[1]), mesh.TexcoordAttributeIndex, uvs, null),
+                (() => GL.Normal3(argumentBuffer[0], argumentBuffer[1], argumentBuffer[2]), mesh.NormalAttributeIndex, normals, null),
+                (() => GL.Vertex3(argumentBuffer[0], argumentBuffer[1], argumentBuffer[2]), mesh.PositionAttributeIndex, positions, () =>
+                {
+                    Vector3 pos = new Vector3(argumentBuffer[0], argumentBuffer[1], argumentBuffer[2]);
+                    pos = mvp.MultiplyPoint_With_WDivision(pos);
+                    argumentBuffer[0] = pos.x;
+                    argumentBuffer[1] = pos.y;
+                    argumentBuffer[2] = pos.z;
+                }),
+            };
 
             foreach (var index in mesh.EnumerateIndices())
             {
-                int bufferIndex3 = index * 3;
-                int bufferIndex2 = index * 2;
-                Vector3 pos = new Vector3(positions[bufferIndex3], positions[bufferIndex3 + 1], positions[bufferIndex3 + 2]);
-                pos = mvp.MultiplyPoint_With_WDivision(pos);
-                Vector2 uv = new Vector2(uvs[bufferIndex2], uvs[bufferIndex2 + 1]);
-                Vector3 normal = new Vector3(normals[bufferIndex3], normals[bufferIndex3 + 1], normals[bufferIndex3 + 2]);
-
-                GL.TexCoord2(uv.x, uv.y);
-                GL.Normal3(normal.x, normal.y, normal.z);
-                GL.Vertex3(pos.x, pos.y, 0f);
+                foreach (var action in actions)
+                {
+                    int size = attributes[action.attributeIndex].Size;
+                    int bufferIndex = index * size;
+                    for (int i = 0; i < size; i++) argumentBuffer[i] = action.buffer[bufferIndex + i];
+                    if (action.process != null) action.process();
+                    action.glFunc();
+                }
             }
             GL.End();
         }

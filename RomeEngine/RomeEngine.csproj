@@ -90,6 +90,8 @@
     <Compile Include="Game\UI\CanvasLine.cs" />
     <Compile Include="Game\UI\IHandlable.cs" />
     <Compile Include="Graphics\2D\IGraphics2D.cs" />
+    <Compile Include="Graphics\IMeshAttribute.cs" />
+    <Compile Include="Graphics\IMeshIntAttribute.cs" />
     <Compile Include="Graphics\IVertexBuffer.cs" />
     <Compile Include="Graphics\IGraphics.cs" />
     <Compile Include="Graphics\2D\IGraphicsBrush.cs" />
@@ -103,7 +105,8 @@
     <Compile Include="Game\Rendering\StaticMesh.cs" />
     <Compile Include="Game\Rendering\StaticMeshRenderer.cs" />
     <Compile Include="Graphics\IVertex.cs" />
-    <Compile Include="Graphics\IMeshAttribute.cs" />
+    <Compile Include="Graphics\IMeshFloatAttribute.cs" />
+    <Compile Include="Graphics\MeshAttributeType.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\Vertex.cs" />
     <Compile Include="Graphics\VertexAttributeNormal.cs" />
