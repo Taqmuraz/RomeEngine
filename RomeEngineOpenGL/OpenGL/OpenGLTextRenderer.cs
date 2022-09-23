@@ -39,25 +39,25 @@ namespace RomeEngineOpenGL
                         (
                             new Vector3(0f, 0f, 0f),
                             new Vector3(0f, 0f, -1f),
-                            new Vector2(0f, 1f)
+                            new Vector2(0f, 0f)
                         ),
                         new Vertex
                         (
                             new Vector3(0f, 1f, 0f),
                             new Vector3(0f, 0f, -1f),
-                            new Vector2(0f, 0f)
+                            new Vector2(0f, 1f)
                         ),
                         new Vertex
                         (
                             new Vector3(1f, 1f, 0f),
                             new Vector3(0f, 0f, -1f),
-                            new Vector2(1f, 0f)
+                            new Vector2(1f, 1f)
                         ),
                         new Vertex
                         (
                             new Vector3(1f, 0f, 0f),
                             new Vector3(0f, 0f, -1f),
-                            new Vector2(1f, 1f)
+                            new Vector2(1f, 0f)
                         ),
                     },
                     new int[]
@@ -122,7 +122,7 @@ namespace RomeEngineOpenGL
 
                 float symbolCoordSize = 1f / 16f;
                 float symbolCoordX = (textBytes[i] % 16) * symbolCoordSize;
-                float symbolCoordY = (textBytes[i] / 16) * symbolCoordSize;
+                float symbolCoordY = 1f - ((textBytes[i] / 16) + 1) * symbolCoordSize;
 
                 SetTexture(fontTexture, TextureType.Albedo);
 

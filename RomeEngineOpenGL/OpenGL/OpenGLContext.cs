@@ -33,6 +33,7 @@ namespace RomeEngineOpenGL
         {
             int width = bitmap.Width;
             int height = bitmap.Height;
+            bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             BitmapData data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             int id = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, id);
