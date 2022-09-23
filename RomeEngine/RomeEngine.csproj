@@ -100,8 +100,15 @@
     <Compile Include="Game\Rendering\Renderer.cs" />
     <Compile Include="Game\Rendering\StaticMesh.cs" />
     <Compile Include="Game\Rendering\StaticMeshRenderer.cs" />
+    <Compile Include="Graphics\IVertex.cs" />
+    <Compile Include="Graphics\IVertexAttribute.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\Vertex.cs" />
+    <Compile Include="Graphics\VertexAttributeExtensions.cs" />
+    <Compile Include="Graphics\VertexFloatAttribute.cs" />
+    <Compile Include="Graphics\VertexVector2Attribute.cs" />
+    <Compile Include="Graphics\VertexVector3Attribute.cs" />
+    <Compile Include="Graphics\VertexVector4Attribute.cs" />
     <Compile Include="Input\IInputHandler.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\KeyCode.cs" />

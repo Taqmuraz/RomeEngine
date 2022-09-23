@@ -87,12 +87,15 @@ namespace RomeEngineOpenGL
             foreach (var index in mesh.EnumerateIndices())
             {
                 var vertex = vertices[index];
-                Vector3 pos = mvp.MultiplyPoint_With_WDivision(vertex.Position);
+                var attributes = vertex.Attributes.ToArray();
+                Vector3 pos = mvp.MultiplyPoint_With_WDivision(attributes[0].ReadVector3());
 
                 GL.Color4(Color32.white.WithAlpha(64));
                 GL.Vertex3(pos.x, pos.y, 0f);
-                GL.TexCoord2(vertex.UV.x, vertex.UV.y);
-                GL.Normal3(vertex.Normal.x, vertex.Normal.y, vertex.Normal.z);
+                Vector2 uv = attributes[1].ReadVector2();
+                GL.TexCoord2(uv.x, uv.y);
+                var normal = attributes[2].ReadVector3();
+                GL.Normal3(normal.x, normal.y, normal.z);
             }
             GL.End();
         }

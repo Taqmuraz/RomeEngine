@@ -19,9 +19,9 @@ namespace RomeEngine
         public Vertex[] Vertices { get; set; }
         public int[] Indices { get; set; }
 
-        public IEnumerable<Vertex> EnumerateVertices()
+        public IEnumerable<IVertex> EnumerateVertices()
         {
-            return Vertices == null ? Enumerable.Empty<Vertex>() : Vertices;
+            return Vertices == null ? Enumerable.Empty<IVertex>() : Vertices;
         }
 
         public IEnumerable<int> EnumerateIndices()

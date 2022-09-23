@@ -4,7 +4,7 @@ namespace RomeEngine
 {
     public interface IMesh
     {
-        IEnumerable<Vertex> EnumerateVertices();
+        IEnumerable<IVertex> EnumerateVertices();
         IEnumerable<int> EnumerateIndices();
     }
 }

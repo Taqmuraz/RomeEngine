@@ -67,9 +67,10 @@ namespace RomeEngineOpenGL
                 BindIndicesBuffer(indices);
                 var vertices = mesh.EnumerateVertices().ToArray();
 
-                StoreDataInAttributeList(0, 3, vertices.Select(v => v.Position).SelectMany(v => new[] { v.x, v.y, v.z }).ToArray());
-                StoreDataInAttributeList(1, 2, vertices.Select(v => v.UV).SelectMany(v => new[] { v.x, v.y }).ToArray());
-                StoreDataInAttributeList(2, 3, vertices.Select(v => v.Normal).SelectMany(v => new[] { v.x, v.y, v.z }).ToArray());
+                for (int i = 0; i < vertices[0].AttributesCount; i++)
+                {
+                    StoreDataInAttributeList(i, vertices.Select(v => v.Attributes.ToArray()[i]).ToArray());
+                }
 
                 UnbindVAO();
 
@@ -89,8 +90,11 @@ namespace RomeEngineOpenGL
             int vboID = GL.GenBuffer();
             return vboID;
         }
-        private static void StoreDataInAttributeList(int attributeNumber, int coordinateSize, float[] data)
+        private static void StoreDataInAttributeList(int attributeNumber, IVertexAttribute[] attributes)
         {
+            int coordinateSize = attributes[0].Size;
+            float[] data = attributes.SelectMany(a => a.ToFloatsArray()).ToArray();
+
             int vboID = CreateVBO();
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
             GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);

@@ -93,11 +93,19 @@ namespace OneEngineWindowsFormsApplication
 
             Matrix4x4 mvp = MVP;
 
+            float[] positionsArray = vertices.SelectMany(v => v.Attributes.First().ToFloatsArray()).ToArray();
+
+            Vector3 ReadVertex(int index)
+            {
+                index *= 3;
+                return new Vector3(positionsArray[index], positionsArray[index + 1], positionsArray[index + 2]);
+            }
+
             for (int i = 2; i < indices.Length; i+=3)
             {
-                Vector3 t0 = vertices[indices[i - 2]].Position;
-                Vector3 t1 = vertices[indices[i - 1]].Position;
-                Vector3 t2 = vertices[indices[i]].Position;
+                Vector3 t0 = ReadVertex(indices[i - 2]);
+                Vector3 t1 = ReadVertex(indices[i - 1]);
+                Vector3 t2 = ReadVertex(indices[i]);
                 Vector3 worldNormal = model.MultiplyDirection(Vector3.Cross(t2 - t1, t0 - t1)).normalized;
                 Vector3 worldCenter = model.MultiplyPoint((t0 + t1 + t2) * 0.333f);
 
@@ -108,7 +116,7 @@ namespace OneEngineWindowsFormsApplication
                 Vector3 screenNormal = Vector3.Cross(vertexC - vertexB, vertexA - vertexB).normalized;
                 float cameraDot = Vector3.Dot(Vector3.back, screenNormal);
 
-                if (cameraDot < 0f) triangles.Add((vertexA, vertexB, vertexC, (vertexA + vertexB + vertexC) * 0.333f, worldNormal, worldCenter));
+                if (Cull(cameraDot)) triangles.Add((vertexA, vertexB, vertexC, (vertexA + vertexB + vertexC) * 0.333f, worldNormal, worldCenter));
 
                 var pen = new Pen(Color.Black);
                 graphics.DrawLine(pen, vertexA, vertexB);
@@ -119,7 +127,7 @@ namespace OneEngineWindowsFormsApplication
 
         public void SetCulling(CullingMode cullingMode)
         {
-            throw new System.NotImplementedException();
+            this.cullingMode = cullingMode;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RomeEngine
 {
-    public class Vertex : ISerializable
+    public class Vertex : IVertex
     {
         public Vertex()
         {
@@ -25,5 +25,17 @@ namespace RomeEngine
             yield return new SerializableField(nameof(Normal), Normal, v => Normal = (Vector3)v, typeof(Vector3), false);
             yield return new SerializableField(nameof(UV), UV, v => UV = (Vector2)v, typeof(Vector2), false);
         }
+
+        public IEnumerable<IVertexAttribute> Attributes
+        {
+            get
+            {
+                yield return new VertexVector3Attribute(Position);
+                yield return new VertexVector2Attribute(UV);
+                yield return new VertexVector3Attribute(Normal);
+            }
+        }
+
+        public int AttributesCount => 3;
     }
 }
