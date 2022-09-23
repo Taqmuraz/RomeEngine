@@ -28,7 +28,7 @@ namespace RomeEngineGame
             int diff = DropdownOptions.Length - maxElements;
             if (diff > 0)
             {
-                scroll = (int)canvas.DrawScrollbar(GetHashCode(), 0f, diff, scroll, new Rect(Rect.X + elementWidth, Rect.Y, 30f, Rect.Height), 1, Color32.gray);
+                scroll = (int)canvas.DrawScrollbar(GetHashCode(), 0f, diff, scroll, new Rect(Rect.X + elementWidth, Rect.Y, 30f, Rect.Height * maxElements), 1, Color32.gray);
             } else
             {
                 scroll = 0;

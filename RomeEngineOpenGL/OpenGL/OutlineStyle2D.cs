@@ -25,11 +25,6 @@ namespace RomeEngineOpenGL
             GL.End();
         }
 
-        public void DrawText(string text, Rect rect, TextOptions options)
-        {
-
-        }
-
         public void DrawEllipse(Vector2 center, Vector2 size)
         {
             GL.Begin(PrimitiveType.LineLoop);

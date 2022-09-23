@@ -12,7 +12,7 @@ namespace RomeEngineOpenGL
             depth = InitialDepth;
         }
         protected abstract int InitialDepth { get; }
-        protected float Depth => -depth * 0.0001f;
+        protected float Depth => -depth * 0.00001f;
         protected void NextDepth() => depth++;
 
         protected void MatrixVertex(Vector2 vertex, ref Matrix3x3 matrix)

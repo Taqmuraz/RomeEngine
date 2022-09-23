@@ -4,14 +4,62 @@ using System.Linq;
 
 namespace RomeEngineOpenGL
 {
-    class OpenGLGraphics : IGraphics
+    abstract class OpenGLCommonGraphics
+    {
+        protected abstract OpenGLShader ActiveShader { get; }
+
+        TextureUnit TypeToUnit(TextureType type)
+        {
+            switch (type)
+            {
+                default:
+                case TextureType.Albedo: return TextureUnit.Texture0;
+                case TextureType.Normalmap: return TextureUnit.Texture1;
+            }
+        }
+
+        public void SetTexture(Texture texture, TextureType type)
+        {
+            if (!(texture is OpenGLTexture)) throw new System.ArgumentException($"{nameof(texture)} must be {nameof(OpenGLTexture)} instance");
+            GL.ActiveTexture(TypeToUnit(type));
+            GL.BindTexture(TextureTarget.Texture2D, ((OpenGLTexture)texture).TextureIndex);
+        }
+
+        protected abstract void SetupShader(OpenGLShader shader);
+
+        public void DrawMesh(IMeshIdentifier meshIdentifier)
+        {
+            DrawMesh(meshIdentifier, ActiveShader);
+        }
+        public void DrawMesh(IMeshIdentifier meshIdentifier, OpenGLShader shader)
+        {
+            if (meshIdentifier is OpenGLMeshIdentifier identifier)
+            {
+                shader.Start();
+                SetupShader(shader);
+                GL.BindVertexArray(identifier.VertexArrrayObjectIndex);
+                GL.EnableVertexAttribArray(0);
+                GL.EnableVertexAttribArray(1);
+                GL.EnableVertexAttribArray(2);
+
+                GL.DrawElements(PrimitiveType.Triangles, identifier.VerticesNumber * 3, DrawElementsType.UnsignedInt, 0);
+
+                ActiveShader.Stop();
+            }
+            else
+            {
+                throw new System.ArgumentException($"Mesh identifier must be instance of ${nameof(OpenGLMeshIdentifier)}");
+            }
+        }
+    }
+    class OpenGLGraphics : OpenGLCommonGraphics, IGraphics
     {
         int width;
         int height;
 
-        OpenGLShader standardShader = new OpenGLShader("./Resources/Shaders/vertexShader.glsl", "./Resources/Shaders/fragmentShader.glsl");
+        OpenGLShader standardShader = new OpenGLShader("Default");
 
-        OpenGLShader ActiveShader => standardShader;
+        protected override OpenGLShader ActiveShader => standardShader;
 
         public void Clear(Color32 color)
         {
@@ -39,15 +87,8 @@ namespace RomeEngineOpenGL
             }
         }
 
-        public void Setup(int width, int height)
-        {
-            this.width = width;
-            this.height = height;
-            GL.LoadIdentity();
-        }
-
         Matrix4x4 model, view, projection;
-        double[] matrix = new double[16];
+
         public void SetProjectionMatrix(Matrix4x4 projection)
         {
             this.projection = projection;
@@ -63,57 +104,21 @@ namespace RomeEngineOpenGL
             this.model = model;
         }
 
-        TextureUnit TypeToUnit(TextureType type)
+        public void Setup(int width, int height)
         {
-            switch (type)
-            {
-                default:
-                case TextureType.Albedo: return TextureUnit.Texture0;
-                case TextureType.Normalmap: return TextureUnit.Texture1;
-            }
+            this.width = width;
+            this.height = height;
+            GL.LoadIdentity();
         }
 
-        public void SetTexture(Texture texture, TextureType type)
+        protected override void SetupShader(OpenGLShader shader)
         {
-            if (!(texture is OpenGLTexture)) throw new System.ArgumentException($"{nameof(texture)} must be {nameof(OpenGLTexture)} instance");
-            GL.ActiveTexture(TypeToUnit(type));
-            GL.BindTexture(TextureTarget.Texture2D, ((OpenGLTexture)texture).TextureIndex);
-        }
-
-        void SetupShader()
-        {
-            ActiveShader.SetFloat("ambienceIntencivity", GlobalLight.AmbienceIntencivity);
-            ActiveShader.SetVector3("lightDirection", GlobalLight.LightDirection);
-            ActiveShader.SetVector4("lightColor", GlobalLight.LightColor.ToVector4());
-            ActiveShader.SetMatrix("viewMatrix", view.GetInversed());
-            ActiveShader.SetMatrix("projectionMatrix", projection);
-            ActiveShader.SetMatrix("transformationMatrix", model);
-        }
-
-        public void DrawMesh(IMeshIdentifier meshIdentifier)
-        {
-            if (meshIdentifier is OpenGLMeshIdentifier identifier)
-            {
-                ActiveShader.Start();
-                SetupShader();
-                /*GL.MatrixMode(MatrixMode.Modelview);
-                GL.LoadMatrix((view.GetInversed() * model).ToDoubleArray());
-                GL.MatrixMode(MatrixMode.Projection);
-                GL.LoadMatrix(projection.ToDoubleArray());
-                */
-                GL.BindVertexArray(identifier.VertexArrrayObjectIndex);
-                GL.EnableVertexAttribArray(0);
-                GL.EnableVertexAttribArray(1);
-                GL.EnableVertexAttribArray(2);
-
-                GL.DrawElements(PrimitiveType.Triangles, identifier.VerticesNumber * 3, DrawElementsType.UnsignedInt, 0);
-
-                ActiveShader.Stop();
-            }
-            else
-            {
-                throw new System.ArgumentException($"Mesh identifier must be instance of ${nameof(OpenGLMeshIdentifier)}");
-            }
+            shader.SetFloat("ambienceIntencivity", GlobalLight.AmbienceIntencivity);
+            shader.SetVector3("lightDirection", GlobalLight.LightDirection);
+            shader.SetVector4("lightColor", GlobalLight.LightColor.ToVector4());
+            shader.SetMatrix("viewMatrix", view.GetInversed());
+            shader.SetMatrix("projectionMatrix", projection);
+            shader.SetMatrix("transformationMatrix", model);
         }
 
         public void DrawDynamicMesh(IMesh mesh)

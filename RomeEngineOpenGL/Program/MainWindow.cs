@@ -29,8 +29,8 @@ namespace RomeEngineOpenGL
 
             engine = RomeEngineGame.RomeEngineGame.StartGame(this);
             graphics = new OpenGLGraphics();
-            graphics2D = new OpenGLGraphics2D();
             context = new OpenGLContext();
+            graphics2D = new OpenGLGraphics2D(context);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

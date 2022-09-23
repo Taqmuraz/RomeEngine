@@ -12,12 +12,21 @@ namespace RomeEngineOpenGL
         IStyle2D fillStyle = new FillStyle2D();
         public IGraphicsStyle OutlineStyle => outlineStyle;
         public IGraphicsStyle FillStyle => fillStyle;
+        OpenGLTextRenderer textRenderer;
+
+        public OpenGLGraphics2D(IGraphicsContext context)
+        {
+            textRenderer = new OpenGLTextRenderer(context);
+        }
 
         int width, height;
         public void Setup(int width, int height)
         {
             this.width = width;
             this.height = height;
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+            GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Viewport(0, 0, width, height);
             outlineStyle.Setup();
@@ -60,7 +69,9 @@ namespace RomeEngineOpenGL
 
         public void DrawText(string text, Rect rect, TextOptions options)
         {
-            SetupStyle().DrawText(text, rect, options);
+            var viewportInv = Matrix4x4.CreateViewport(width, height).GetInversed();
+            rect = Rect.FromCenterAndSize(viewportInv.MultiplyPoint(rect.Center), viewportInv.MultiplyVector(rect.Size));
+            textRenderer.DrawText(text, rect, Brush.Color);
         }
 
         public void DrawEllipse(Vector2 center, Vector2 size)

@@ -27,6 +27,14 @@ namespace RomeEngineOpenGL
 
         private static float[] matrixBuffer = new float[MATRIX_SIZE];
 
+        public OpenGLShader(string directoryName) : this
+            (
+            $"./Resources/Shaders/{directoryName}/vertexShader.glsl",
+            $"./Resources/Shaders/{directoryName}/fragmentShader.glsl"
+            )
+        {
+        }
+
         public OpenGLShader(string vertexFile, string fragmentFile)
         {
             vertexShaderID = LoadShader(vertexFile, ShaderType.VertexShader);

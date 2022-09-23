@@ -64,10 +64,5 @@ namespace RomeEngineOpenGL
             NextDepth();
             GL.End();
         }
-
-        public void DrawText(string text, Rect rect, TextOptions options)
-        {
-
-        }
     }
 }

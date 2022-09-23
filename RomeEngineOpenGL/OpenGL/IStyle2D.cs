@@ -13,6 +13,5 @@ namespace RomeEngineOpenGL
         void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB, bool smoothEnding);
         void DrawPolygon(Vector2[] points);
         void DrawRect(Rect rect);
-        void DrawText(string text, Rect rect, TextOptions options);
     }
 }

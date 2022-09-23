@@ -57,6 +57,7 @@
     <Compile Include="OpenGL\OpenGLGraphics.cs" />
     <Compile Include="OpenGL\OpenGLGraphics2D.cs" />
     <Compile Include="OpenGL\OpenGLShader.cs" />
+    <Compile Include="OpenGL\OpenGLTextRenderer.cs" />
     <Compile Include="OpenGL\OutlineStyle2D.cs" />
     <Compile Include="OpenGL\Style2D.cs" />
     <Compile Include="Program\MainWindow.cs" />
