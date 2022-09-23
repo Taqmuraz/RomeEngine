@@ -44,8 +44,11 @@ namespace OneEngineWindowsFormsApplication
 
         void UpdateEngine()
         {
-            engine.UpdateGameState();
-            Refresh();
+            if (Parent.Focused)
+            {
+                engine.UpdateGameState();
+                Refresh();
+            }
         }
 
         void OnMouseButton(Vector2 position, MouseButtons buttons, Action<Vector2, int> callback)
