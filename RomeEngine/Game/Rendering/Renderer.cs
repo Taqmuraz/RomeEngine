@@ -11,6 +11,11 @@ namespace RomeEngine
         {
             renderers.Add(this);
         }
+        [BehaviourEvent]
+        void OnDestroy()
+        {
+            renderers.Remove(this);
+        }
         protected abstract void VisitContext(IGraphicsContext context);
         protected abstract void Draw(IGraphics graphics);
 

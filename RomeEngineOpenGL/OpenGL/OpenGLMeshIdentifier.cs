@@ -4,13 +4,13 @@ namespace RomeEngineOpenGL
 {
     class OpenGLMeshIdentifier : IMeshIdentifier
     {
-        public OpenGLMeshIdentifier(int verticesNumber, int vertexArrrayObjectIndex)
+        public OpenGLMeshIdentifier(int indicesNumber, int vertexArrrayObjectIndex)
         {
             VertexArrrayObjectIndex = vertexArrrayObjectIndex;
-            VerticesNumber = verticesNumber;
+            IndicesNumber = indicesNumber;
         }
 
         public int VertexArrrayObjectIndex { get; }
-        public int VerticesNumber { get; }
+        public int IndicesNumber { get; }
     }
 }

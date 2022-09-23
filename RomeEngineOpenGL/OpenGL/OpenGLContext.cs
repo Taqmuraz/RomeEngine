@@ -62,7 +62,8 @@ namespace RomeEngineOpenGL
             else
             {
                 int vaoID = CreateVAO();
-                BindIndicesBuffer(mesh.EnumerateIndices().ToArray());
+                var indices = mesh.EnumerateIndices().ToArray();
+                BindIndicesBuffer(indices);
                 var vertices = mesh.EnumerateVertices().ToArray();
 
                 StoreDataInAttributeList(0, 3, vertices.Select(v => v.Position).SelectMany(v => new[] { v.x, v.y, v.z }).ToArray());
@@ -71,7 +72,7 @@ namespace RomeEngineOpenGL
 
                 UnbindVAO();
 
-                var identifier = new OpenGLMeshIdentifier(vertices.Length, vaoID);
+                var identifier = new OpenGLMeshIdentifier(indices.Length, vaoID);
                 meshIdentifiers.Add(mesh, identifier);
                 return identifier;
             }

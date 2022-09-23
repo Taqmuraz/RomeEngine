@@ -31,19 +31,56 @@ namespace RomeEngine
 
         public static StaticMesh CreateBoxMesh()
         {
-            Vector3[] vertices = new Vector3[]
+            Vertex[] vertices = new Vertex[]
             {
-                new Vector3(0f, 0f, 0f),
-                new Vector3(0f, 1f, 0f),
-
-                new Vector3(1f, 1f, 0f),
-                new Vector3(1f, 0f, 0f),
-
-                new Vector3(1f, 0f, 1f),
-                new Vector3(1f, 1f, 1f),
-
-                new Vector3(0f, 1f, 1f),
-                new Vector3(0f, 0f, 1f),
+                    new Vertex
+                    (
+                        new Vector3(0f, 0f, 0f),
+                        new Vector3(0f, 0f, 0f),
+                        new Vector2(0f, 0f)
+                    ),
+                    new Vertex
+                    (
+                        new Vector3(0f, 1f, 0f),
+                        new Vector3(0f, 0f, 0f),
+                        new Vector2(0f, 1f)
+                    ),
+                    new Vertex
+                    (
+                        new Vector3(1f, 1f, 0f),
+                        new Vector3(0f, 0f, 0f),
+                        new Vector2(1f, 1f)
+                    ),
+                    new Vertex
+                    (
+                        new Vector3(1f, 0f, 0f),
+                        new Vector3(0f, 0f, 0f),
+                        new Vector2(1f, 0f)
+                    ),
+                    new Vertex
+                    (
+                        new Vector3(1f, 0f, 1f),
+                        new Vector3(0f, 0f, 0f),
+                        new Vector2(1f, 0f)
+                    ),
+                    new Vertex
+                    (
+                        new Vector3(1f, 1f, 1f),
+                        new Vector3(0f, 0f, 0f),
+                        new Vector2(1f, 1f)
+                    ),
+                    new Vertex
+                    (
+                        new Vector3(0f, 1f, 1f),
+                        new Vector3(0f, 0f, 0f),
+                        new Vector2(0f, 1f)
+                    ),
+                    new Vertex
+                    (
+                        new Vector3(0f, 0f, 1f),
+                        new Vector3(0f, 0f, 0f),
+                        new Vector2(0f, 0f)
+                    ),
             };
 
             int[] indices = new int[]
@@ -61,8 +98,8 @@ namespace RomeEngine
                 1, 5, 2,
                 1, 6, 5
             };
-
-            var result = new StaticMesh(vertices.Select(v => v - Vector3.one * 0.5f).Select(v => new Vertex(v, Vector3.zero, Vector2.zero)).ToArray(), indices);
+            foreach (var vert in vertices) vert.Position -= Vector3.one * 0.5f;
+            var result = new StaticMesh(vertices, indices);
             result.RecalculateNormals();
             return result;
         }
@@ -92,17 +129,24 @@ namespace RomeEngine
 
         public void RecalculateNormals()
         {
+            void BlendNormal(Vertex vertex, Vector3 normal)
+            {
+                vertex.Normal = ((vertex.Normal + normal) * 0.5f).normalized;
+            }
+
+            for (int i = 0; i < Vertices.Length; i++) Vertices[i].Normal = Vector3.zero;
+
             for (int i = 2; i < Indices.Length; i+=3)
             {
                 Vector3 t0 = Vertices[Indices[i - 2]].Position;
                 Vector3 t1 = Vertices[Indices[i - 1]].Position;
                 Vector3 t2 = Vertices[Indices[i]].Position;
 
-                Vector3 normal = Vector3.Cross(t0 - t1, t2 - t1).normalized;
+                Vector3 normal = Vector3.Cross(t2 - t1, t0 - t1).normalized;
 
-                Vertices[Indices[i - 2]].Normal = normal;
-                Vertices[Indices[i - 1]].Normal = normal;
-                Vertices[Indices[i]].Normal = normal;
+                BlendNormal(Vertices[Indices[i - 2]], normal);
+                BlendNormal(Vertices[Indices[i - 1]], normal);
+                BlendNormal(Vertices[Indices[i]], normal);
             }
         }
 

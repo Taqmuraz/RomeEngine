@@ -13,6 +13,7 @@ namespace RomeEngineOpenGL
         Rect boxRect;
         Rect uvRect;
         Color32 textColor;
+        float depth;
 
         protected override OpenGLShader ActiveShader => textShader;
 
@@ -20,12 +21,13 @@ namespace RomeEngineOpenGL
         {
             shader.SetVector4("vertexRect", new Vector4(boxRect.X, boxRect.Y, boxRect.Width, boxRect.Height));
             shader.SetVector4("textRect", new Vector4(uvRect.X, uvRect.Y, uvRect.Width, uvRect.Height));
+            shader.SetFloat("depth", depth);
             textShader.SetVector4("textureColor", textColor.ToVector4());
         }
 
         public OpenGLTextRenderer(IGraphicsContext context)
         {
-            fontTexture = (OpenGLTexture)context.LoadTexture("./Resources/Fonts/CenturyCP855.png");
+            fontTexture = (OpenGLTexture)context.LoadTexture("./Resources/Fonts/Arial.png");
             encoding = Encoding.GetEncoding("CP855");
             textShader = new OpenGLShader("Text");
 
@@ -67,12 +69,12 @@ namespace RomeEngineOpenGL
             boxMesh = context.LoadMesh(mesh);
         }
 
-        public void DrawText(string text, Rect rect, Color32 color)
+        public void DrawText(string text, Rect rect, Color32 color, TextOptions textOptions)
         {
-            float totalWidth = rect.Width * 0.9f;
-            float totalHeight = rect.Height * 0.9f;
-            float positionX = rect.X + rect.Width * 0.05f;
-            float positionY = rect.Y + rect.Height * 0.05f;
+            float totalWidth = rect.Width;
+            float totalHeight = rect.Height;
+            float positionX = rect.X;
+            float positionY = rect.Y;
             char lineSeparator = '\n';
 
             int linesCount = 1;
@@ -92,10 +94,13 @@ namespace RomeEngineOpenGL
                 if (currentWidth > maxWidth) maxWidth = currentWidth;
             }
 
-            float defaultWidth = 0.03f;
-            float defaultHeight = 0.05f;
-            float symbolWidth = Mathf.Min(totalWidth / maxWidth, defaultWidth);
-            float symbolHeight = Mathf.Min(totalHeight / linesCount, defaultHeight);
+            float symbolWidth = 0.0015f * textOptions.FontSize;
+            float symbolHeight = 0.004f * textOptions.FontSize;
+            positionX += (totalWidth - symbolWidth * maxWidth) * 0.5f * ((int)textOptions.Alignment & 3);
+            positionY += (totalHeight - symbolHeight * linesCount) * 0.5f * (((int)textOptions.Alignment & 12) - 2);
+            positionX = Mathf.Clamp(positionX, rect.X, totalWidth - symbolWidth * maxWidth);
+
+            if (symbolWidth * maxWidth > totalWidth) symbolWidth = totalWidth / maxWidth;
 
             int x = 0;
             int y = 0;
@@ -124,11 +129,14 @@ namespace RomeEngineOpenGL
                 boxRect = new Rect(positionX + symbolWidth * x, positionY + symbolHeight * y, symbolWidth, symbolHeight);
                 uvRect = new Rect(symbolCoordX, symbolCoordY, symbolCoordSize, symbolCoordSize);
                 textColor = color;
+                depth = Style2D.Depth;
 
                 DrawMesh(boxMesh);
 
                 x++;
             }
+
+            Style2D.NextDepth();
         }
     }
 }

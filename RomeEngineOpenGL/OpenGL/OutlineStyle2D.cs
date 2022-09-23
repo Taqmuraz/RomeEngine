@@ -5,10 +5,12 @@ namespace RomeEngineOpenGL
 {
     class OutlineStyle2D : Style2D, IStyle2D
     {
+        public OutlineStyle2D(IGraphicsContext context) : base(context)
+        {
+        }
+
         public Matrix3x3 Transform { get; set; }
         public IGraphicsBrush Brush { get; set; }
-
-        protected override int InitialDepth => 1000;
 
         public void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB, bool smoothEnding)
         {

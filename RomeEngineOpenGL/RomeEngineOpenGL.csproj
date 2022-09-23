@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="OpenGL\FillStyle2D.cs" />
     <Compile Include="OpenGL\IStyle2D.cs" />
+    <Compile Include="OpenGL\OpenGLCommonGraphics.cs" />
     <Compile Include="OpenGL\OpenGLGraphics.cs" />
     <Compile Include="OpenGL\OpenGLGraphics2D.cs" />
     <Compile Include="OpenGL\OpenGLShader.cs" />

@@ -5,10 +5,12 @@ namespace RomeEngineOpenGL
 {
     class FillStyle2D : Style2D, IStyle2D
     {
+        public FillStyle2D(IGraphicsContext context) : base(context)
+        {
+        }
+
         public Matrix3x3 Transform { get; set; }
         public IGraphicsBrush Brush { get; set; }
-
-        protected override int InitialDepth => 0;
 
         public void DrawEllipse(Vector2 center, Vector2 size)
         {
