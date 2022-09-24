@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -59,30 +60,25 @@ namespace RomeEngine.IO
             Array[] bufferArrays = new Array[buffersCount];
             Array[] newBufferArrays = new Array[buffersCount];
 
+            int[] indicesBuffer = ReadBuffer(TrianglesData.Elements[submeshIndex].Indices, v => int.Parse(v));
+            int newIndicesCount = indicesBuffer.Length / buffersCount;
+            int[] newIndices = new int[newIndicesCount];
+
             for (int i = 0; i < buffersCount; i++)
             {
                 bufferArrays[i] = ReadBuffer(buffers[i].Buffer, buffers[i].Attribute.Properties.First().Type);
-                newBufferArrays[i] = Array.CreateInstance(bufferArrays[i].GetType().GetElementType(), buffers[i].Attribute.Size * (bufferArrays[0].Length / 3));
+                newBufferArrays[i] = Array.CreateInstance(bufferArrays[i].GetType().GetElementType(), buffers[i].Attribute.Size * newIndicesCount);
             }
-
-            int[] indicesBuffer = ReadBuffer(TrianglesData.Elements[submeshIndex].Indices, v => int.Parse(v));
-
-            int verticesCount = bufferArrays[0].Length / 3;
-            int newIndicesCount = indicesBuffer.Length / buffersCount;
-
-            int[] newIndices = new int[newIndicesCount];
-            
 
             for (int i = 0; i < newIndicesCount; i++)
             {
-                int positionIndex = indicesBuffer[i * buffersCount];
-                newIndices[i] = positionIndex;
-
-                for (int bufferIndex = 0; bufferIndex < buffersCount; bufferIndex++)
+                for (int attribute = 0; attribute < buffersCount; attribute++)
                 {
-                    int size = buffers[bufferIndex].Attribute.Size;
-                    for (int element = 0; element < size; element++) newBufferArrays[bufferIndex].SetValue(bufferArrays[bufferIndex].GetValue(indicesBuffer[i * buffersCount + bufferIndex] * size + element), positionIndex * size + element);
+                    int index = indicesBuffer[i * buffersCount + attribute];
+                    int size = buffers[attribute].Attribute.Size;
+                    for (int element = 0; element < size; element++) newBufferArrays[attribute].SetValue(bufferArrays[attribute].GetValue(index * size + element), i * size + element);
                 }
+                newIndices[i] = i;
             }
             var namedBuffers = Enumerable.Range(0, buffersCount).Select(i => (name: buffers[i].Id.Replace($"{id}-", string.Empty), buffer: newBufferArrays[i])).ToDictionary(b => b.name, b => b.buffer);
 
