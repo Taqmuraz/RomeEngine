@@ -12,7 +12,7 @@ namespace RomeEngine.IO
             handlers = new IColladaNodeHandler<ColladaGeometryParsingContext>[]
             {
                 new ColladaDelegateHandler<ColladaGeometryParsingContext>("geometry", (context, node) => context.PushElement(new ColladaRawMesh(node.GetAttribute("id"))), (context, node) => context.PopElement()),
-                new ColladaDelegateHandler<ColladaGeometryParsingContext>("source", (context, node) => context.CurrentMesh.PushElement(new ColladaVertexBuffer()), (context, node) => context.CurrentMesh.PopElement()),
+                new ColladaDelegateHandler<ColladaGeometryParsingContext>("source", (context, node) => context.CurrentMesh.PushElement(new ColladaVertexBuffer(node.GetAttribute("id"))), (context, node) => context.CurrentMesh.PopElement()),
                 new ColladaDelegateHandler<ColladaGeometryParsingContext>("float_array", (context, node) => context.CurrentMesh.WriteBuffer(node.GetValue()), null),
                 new ColladaDelegateHandler<ColladaGeometryParsingContext>("accessor", (context, node) => context.CurrentMesh.WriteAttribute(new ColladaVertexAttribute(node.GetAttribute("source"))), null),
                 new ColladaDelegateHandler<ColladaGeometryParsingContext>("param", (context, node) => context.CurrentMesh.WriteAttributeProperty(node.GetAttribute("name"), node.GetAttribute("type")), null),
@@ -42,7 +42,14 @@ namespace RomeEngine.IO
 
         public void UpdateGameObject(GameObject gameObject)
         {
-            
+            foreach (var mesh in Elements)
+            {
+                for (int i = 0; i < mesh.SubmeshesCount; i++)
+                {
+                    var renderer = gameObject.AddComponent<SkinnedMeshRenderer>();
+                    renderer.SkinnedMesh = mesh.BuildMesh(i);
+                }
+            }
         }
     }
 }

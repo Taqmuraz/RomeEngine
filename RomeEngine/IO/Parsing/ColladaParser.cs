@@ -7,11 +7,11 @@ namespace RomeEngine.IO
 {
     public sealed class ColladaParser : IParser
     {
-        Dictionary<string, IColladaParsingContext> contexts = new Dictionary<string, IColladaParsingContext>();
+        Dictionary<string, IColladaParsingStage> stages = new Dictionary<string, IColladaParsingStage>();
 
         public ColladaParser()
         {
-            contexts = new IColladaParsingContext[]
+            stages = new IColladaParsingStage[]
             {
                new ColladaGeometryParsingContext(),
             }
@@ -34,7 +34,7 @@ namespace RomeEngine.IO
             {
                 if (xmlReader.Depth == 1)
                 {
-                    if (contexts.TryGetValue(xmlReader.Name, out IColladaParsingContext context))
+                    if (stages.TryGetValue(xmlReader.Name, out var context))
                     {
                         currentContext = xmlReader.IsStartElement() ? context : null;
                     }
@@ -52,6 +52,12 @@ namespace RomeEngine.IO
                     }
                 }
             }
+
+            foreach (var context in stages.Values)
+            {
+                context.UpdateGameObject(result);
+            }
+
             return result;
         }
     }

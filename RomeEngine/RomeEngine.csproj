@@ -62,6 +62,7 @@
     <Compile Include="Game\EventsHandler.cs" />
     <Compile Include="Game\Rendering\GlobalLight.cs" />
     <Compile Include="Game\Rendering\MeshRenderer.cs" />
+    <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshRenderer.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
     <Compile Include="Game\SerializableEventsHandler.cs" />
     <Compile Include="Game\Component.cs" />
