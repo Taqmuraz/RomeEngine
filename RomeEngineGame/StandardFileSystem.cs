@@ -75,5 +75,9 @@ namespace RomeEngineGame
         {
             return Path.GetExtension(file);
         }
+        public string FileWithExtension(string file, string extension)
+        {
+            return Path.ChangeExtension(file, extension);
+        }
     }
 }

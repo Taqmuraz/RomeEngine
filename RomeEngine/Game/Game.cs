@@ -77,6 +77,7 @@ namespace RomeEngine
 			SendHandlersMessage("EarlyUpdate");
 
 			// update physics here
+			Routine.UpdateDelayed();
 
 			SendHandlersMessage("Update");
 

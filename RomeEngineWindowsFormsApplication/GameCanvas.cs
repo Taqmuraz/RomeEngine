@@ -89,7 +89,7 @@ namespace OneEngineWindowsFormsApplication
                 dialog.Title = title;
                 dialog.InitialDirectory = Path.GetFullPath(root);
                 dialog.Multiselect = false;
-                dialog.FileOk += (s, e) => callback(dialog.FileName);
+                dialog.FileOk += (s, e) => Routine.StartRoutineDelayed(new SingleCallRoutine(() => callback(dialog.FileName)));
                 dialog.ShowDialog();
             });
             thread.SetApartmentState(System.Threading.ApartmentState.STA);
@@ -104,7 +104,7 @@ namespace OneEngineWindowsFormsApplication
                 dialog.Title = title;
                 dialog.InitialDirectory = Path.GetFullPath(root);
                 dialog.FileName = fileName;
-                dialog.FileOk += (s, e) => callback(dialog.FileName);
+                dialog.FileOk += (s, e) => Routine.StartRoutineDelayed(new SingleCallRoutine(() => callback(dialog.FileName)));
                 dialog.ShowDialog();
             });
             thread.SetApartmentState(System.Threading.ApartmentState.STA);

@@ -7,24 +7,32 @@ namespace RomeEngine.IO
 {
     public sealed class ColladaParser : IParser
     {
-        Dictionary<string, IColladaParsingStage> stages = new Dictionary<string, IColladaParsingStage>();
-
-        public ColladaParser()
-        {
-            stages = new IColladaParsingStage[]
-            {
-               new ColladaGeometryParsingContext(),
-            }
-            .ToDictionary(h => h.RootNodeName);
-        }
-
         public bool CanParse(string fileName)
         {
             return Engine.Instance.Runtime.FileSystem.GetFileExtension(fileName).ToLower() == ".dae";
         }
 
+        class ColladaParsingInfo : IColladaParsingInfo
+        {
+            public ColladaParsingInfo(string sourceFile)
+            {
+                SourceFile = sourceFile;
+            }
+
+            public string SourceFile { get; }
+        }
+
         public ISerializable ParseObject(string fileName)
         {
+            ColladaMaterialsParsingContext materialStage;
+            Dictionary<string, IColladaParsingStage> stages = new IColladaParsingStage[]
+            {
+               new ColladaGeometryParsingContext(),
+               materialStage = new ColladaMaterialsParsingContext(),
+               materialStage.CreateEffectContext(),
+            }
+            .ToDictionary(h => h.RootNodeName);
+
             IColladaParsingContext currentContext = null;
             var xmlReader = XmlReader.Create(fileName);
             var readerNode = new ColladaXmlReaderNode(xmlReader);
@@ -55,7 +63,7 @@ namespace RomeEngine.IO
 
             foreach (var context in stages.Values)
             {
-                context.UpdateGameObject(result);
+                context.UpdateGameObject(result, new ColladaParsingInfo(fileName));
             }
 
             return result;

@@ -85,21 +85,23 @@ namespace RomeEngine
 		}
         public Component GetComponent(Type type)
         {
-            foreach (var component in components.Concat(inOrderToAdd).Except(inOrderToRemove))
+            foreach (var component in EnumerateComponents())
             {
                 if (component.GetType() == type) return component;
             }
             return default;
         }
 
+		IEnumerable<Component> EnumerateComponents() => components.Concat(inOrderToAdd).Except(inOrderToRemove);
+
 		public Component[] GetComponents()
 		{
-			return components.ToArray();
+			return EnumerateComponents().ToArray();
 		}
 
 		public TComponent[] GetComponentsOfType<TComponent>()
 		{
-			return GetComponents().Where(c => c is TComponent).Select(c => (TComponent)(object)c).ToArray();
+			return EnumerateComponents().Where(c => c is TComponent).Select(c => (TComponent)(object)c).ToArray();
 		}
 
         protected sealed override void OnEventCall(string name)

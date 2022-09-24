@@ -2,13 +2,13 @@
 
 namespace RomeEngine.IO
 {
-    public abstract class ColladaStackContainingObject<TElement>
+    public class ColladaStackContainingObject<TElement>
     {
         List<TElement> elementsPassed = new List<TElement>();
         Stack<TElement> elementsStack = new Stack<TElement>();
-        protected IEnumerable<TElement> Elements => elementsPassed;
+        public ReadOnlyArrayList<TElement> Elements => elementsPassed;
 
-        protected TElement CurrentElement => elementsStack.Peek();
+        public TElement CurrentElement => elementsStack.Peek();
 
         public void PushElement(TElement element)
         {

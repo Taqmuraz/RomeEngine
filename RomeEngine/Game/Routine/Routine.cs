@@ -1,10 +1,30 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace RomeEngine
 {
     public sealed class Routine : Component
     {
         IRoutine routine;
+
+        static List<IRoutine> delayedRoutines = new List<IRoutine>();
+
+        public static void StartRoutineDelayed(IRoutine routine)
+        {
+            lock (delayedRoutines)
+            {
+                delayedRoutines.Add(routine);
+            }
+        }
+
+        public static void UpdateDelayed()
+        {
+            lock (delayedRoutines)
+            {
+                foreach (var routine in delayedRoutines) StartRoutine(routine);
+                delayedRoutines.Clear();
+            }
+        }
 
         public static Routine StartRoutine(IRoutine routine)
         {

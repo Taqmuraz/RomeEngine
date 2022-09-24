@@ -18,5 +18,6 @@ namespace RomeEngine
         string CombinePath(string a, string b);
         void WriteAllText(string text, string file);
         void WriteAllBytes(byte[] bytes, string file);
+        string FileWithExtension(string file, string extension);
     }
 }

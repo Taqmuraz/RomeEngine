@@ -6,7 +6,6 @@ namespace RomeEngine.IO
 {
     public sealed class ColladaRawMesh : ColladaStackContainingObject<ColladaVertexBuffer>
     {
-        List<string> indicesList = new List<string>();
         string id;
 
         public ColladaRawMesh(string id)
@@ -17,10 +16,7 @@ namespace RomeEngine.IO
 
         public override string ToString() => id;
 
-        public void WriteIndices(string value)
-        {
-            indicesList.Add(value);
-        }
+        public ColladaStackContainingObject<TrianglesData> TrianglesData { get; } = new ColladaStackContainingObject<TrianglesData>();
 
         public void WriteBuffer(string value)
         {
@@ -53,7 +49,7 @@ namespace RomeEngine.IO
             }
         }
 
-        public int SubmeshesCount => indicesList.Count;
+        public int SubmeshesCount => TrianglesData.Elements.Count;
 
         public SkinnedMesh BuildMesh(int submeshIndex)
         {
@@ -69,7 +65,7 @@ namespace RomeEngine.IO
                 newBufferArrays[i] = Array.CreateInstance(bufferArrays[i].GetType().GetElementType(), buffers[i].Attribute.Size * (bufferArrays[0].Length / 3));
             }
 
-            int[] indicesBuffer = ReadBuffer(indicesList[submeshIndex], v => int.Parse(v));
+            int[] indicesBuffer = ReadBuffer(TrianglesData.Elements[submeshIndex].Indices, v => int.Parse(v));
 
             int verticesCount = bufferArrays[0].Length / 3;
             int newIndicesCount = indicesBuffer.Length / buffersCount;

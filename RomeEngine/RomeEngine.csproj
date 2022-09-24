@@ -63,7 +63,10 @@
     <Compile Include="Game\Rendering\GlobalLight.cs" />
     <Compile Include="Game\Rendering\MeshRenderer.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshRenderer.cs" />
+    <Compile Include="Game\Rendering\StaticMesh\Material.cs" />
+    <Compile Include="Game\Rendering\StaticMesh\SingleTextureMaterial.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
+    <Compile Include="Game\Routine\SingleCallRoutine.cs" />
     <Compile Include="Game\SerializableEventsHandler.cs" />
     <Compile Include="Game\Component.cs" />
     <Compile Include="Game\Debug.cs" />
@@ -119,8 +122,13 @@
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="IO\Parsing\ColladaDelegateHandler.cs" />
+    <Compile Include="IO\Parsing\ColladaEffect.cs" />
+    <Compile Include="IO\Parsing\ColladaEffectsParsingContext.cs" />
+    <Compile Include="IO\Parsing\ColladaMaterial.cs" />
+    <Compile Include="IO\Parsing\ColladaMaterialsParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaParser.cs" />
     <Compile Include="IO\Parsing\ColladaGeometryParsingContext.cs" />
+    <Compile Include="IO\Parsing\ColladaParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaRawMesh.cs" />
     <Compile Include="IO\Parsing\ColladaStackContainingObject.cs" />
     <Compile Include="IO\Parsing\ColladaVertexAttribute.cs" />
@@ -130,9 +138,11 @@
     <Compile Include="IO\Parsing\IColladaNode.cs" />
     <Compile Include="IO\Parsing\IColladaNodeHandler.cs" />
     <Compile Include="IO\Parsing\IColladaParsingContext.cs" />
+    <Compile Include="IO\Parsing\IColladaParsingInfo.cs" />
     <Compile Include="IO\Parsing\IColladaParsingStage.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMesh.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshAttribute.cs" />
+    <Compile Include="IO\Parsing\TrianglesData.cs" />
     <Compile Include="IO\Serialization\ArrayFieldSerializer.cs" />
     <Compile Include="IO\Serialization\BinarySerializationStream.cs" />
     <Compile Include="IO\Serialization\BoolTypeFieldSerializer.cs" />
