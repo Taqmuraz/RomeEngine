@@ -2,7 +2,7 @@
 
 namespace RomeEngine.IO
 {
-    public sealed class SerializableField
+    public class SerializableField
     {
         public SerializableField(string name, object value, Action<object> setter, Type type, bool hideInInspector = false)
         {

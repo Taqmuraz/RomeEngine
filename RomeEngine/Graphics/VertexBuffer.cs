@@ -10,6 +10,11 @@
             array = new TElement[size];
             position = 0;
         }
+        public VertexBuffer(TElement[] array)
+        {
+            this.array = array;
+            position = 0;
+        }
 
         public void Write(TElement value)
         {

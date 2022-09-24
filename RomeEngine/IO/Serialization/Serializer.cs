@@ -146,6 +146,10 @@ namespace RomeEngine.IO
                         return Deserialize(new TextSerializationStream(tr, null));
                     }
                 default:
+                    if (Parser.TryParseFile(file, out ISerializable result))
+                    {
+                        return result;
+                    }
                     throw new InvalidOperationException($"Extension {extension} is not supported to deserialize");
             }
         }

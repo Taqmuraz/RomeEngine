@@ -1,14 +1,15 @@
 ﻿namespace RomeEngine
 {
-    public sealed class StaticMeshRenderer : Renderer
+    public abstract class MeshRenderer<TMesh> : Renderer where TMesh : IMesh
     {
         [SerializeField] public bool CullBackFaces { get; set; } = true;
-        [SerializeField] public StaticMesh StaticMesh { get; set; }
+        protected abstract TMesh Mesh { get; }
         IMeshIdentifier meshIdentifier;
 
         protected override void VisitContext(IGraphicsContext context)
         {
-            meshIdentifier = StaticMesh == null ? null : context.LoadMesh(StaticMesh);
+            var mesh = Mesh;
+            meshIdentifier = mesh == null ? null : context.LoadMesh(mesh);
         }
         protected override void Draw(IGraphics graphics)
         {

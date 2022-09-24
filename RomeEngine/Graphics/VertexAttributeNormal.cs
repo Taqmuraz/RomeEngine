@@ -1,6 +1,6 @@
 ﻿namespace RomeEngine
 {
-    public class VertexAttributeNormal : IMeshFloatAttribute<Vertex>
+    public class VertexAttributeNormal : IStaticMeshAttribute<float>
     {
         public void WriteVertex(IVertexBuffer<float> buffer, Vertex vertex)
         {

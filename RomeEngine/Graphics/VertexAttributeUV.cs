@@ -1,6 +1,6 @@
 ﻿namespace RomeEngine
 {
-    public class VertexAttributeUV : IMeshFloatAttribute<Vertex>
+    public class VertexAttributeUV : IStaticMeshAttribute<float>
     {
         public int Size => 2;
         public MeshAttributeType Type => MeshAttributeType.Float;

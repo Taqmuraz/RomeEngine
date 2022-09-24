@@ -8,13 +8,13 @@ namespace RomeEngine
     {
         public StaticMesh()
         {
-            attributesFloat = new IMeshFloatAttribute<Vertex>[]
+            attributesFloat = new IStaticMeshAttribute<float>[]
             {
                 new VertexAttributePosition(),
                 new VertexAttributeUV(),
                 new VertexAttributeNormal()
             };
-            attributesInt = new IMeshIntAttribute<Vertex>[]
+            attributesInt = new IStaticMeshAttribute<int>[]
             {
             };
 
@@ -162,36 +162,34 @@ namespace RomeEngine
             yield return new SerializableField(nameof(Indices), Indices, v => Indices = (int[])v, typeof(int[]), true);
         }
 
-        IMeshFloatAttribute<Vertex>[] attributesFloat;
-        IMeshIntAttribute<Vertex>[] attributesInt;
+        IStaticMeshAttribute<float>[] attributesFloat;
+        IStaticMeshAttribute<int>[] attributesInt;
         
         public ReadOnlyArray<IMeshAttributeInfo> Attributes { get; }
 
-        public void WriteVerticesToAttributeBuffer(IVertexBuffer<float> buffer, int attributeIndex)
+        void WriteVerticesToAttributeBuffer(IVertexBuffer<float> buffer, int attributeIndex)
         {
-            foreach (var vertex in Vertices) ((IMeshAttribute<Vertex, float>)Attributes[attributeIndex]).WriteVertex(buffer, vertex);
+            foreach (var vertex in Vertices) ((IStaticMeshAttribute<float>)Attributes[attributeIndex]).WriteVertex(buffer, vertex);
         }
-        public void WriteVerticesToAttributeBuffer(IVertexBuffer<int> buffer, int attributeIndex)
+        void WriteVerticesToAttributeBuffer(IVertexBuffer<int> buffer, int attributeIndex)
         {
-            foreach (var vertex in Vertices) ((IMeshAttribute<Vertex, int>)Attributes[attributeIndex]).WriteVertex(buffer, vertex);
+            foreach (var vertex in Vertices) ((IStaticMeshAttribute<int>)Attributes[attributeIndex]).WriteVertex(buffer, vertex);
         }
 
-        int CalculateBufferSize()
+        int CalculateBufferSize(int index)
         {
-            int size = 0;
-            for (int i = 0; i < attributesFloat.Length; i++) size += attributesFloat[i].Size;
-            return size * Vertices.Length;
+            return Attributes[index].Size * Vertices.Length;
         }
 
         public IVertexBuffer<float> CreateVerticesFloatAttributeBuffer(int attributeIndex)
         {
-            var buffer = new VertexBuffer<float>(CalculateBufferSize());
+            var buffer = new VertexBuffer<float>(CalculateBufferSize(attributeIndex));
             WriteVerticesToAttributeBuffer(buffer, attributeIndex);
             return buffer;
         }
         public IVertexBuffer<int> CreateVerticesIntAttributeBuffer(int attributeIndex)
         {
-            var buffer = new VertexBuffer<int>(CalculateBufferSize());
+            var buffer = new VertexBuffer<int>(CalculateBufferSize(attributeIndex));
             WriteVerticesToAttributeBuffer(buffer, attributeIndex);
             return buffer;
         }

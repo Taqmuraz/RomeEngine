@@ -7,9 +7,6 @@ namespace RomeEngine
         IEnumerable<int> EnumerateIndices();
         ReadOnlyArray<IMeshAttributeInfo> Attributes { get; }
 
-        void WriteVerticesToAttributeBuffer(IVertexBuffer<float> buffer, int attributeIndex);
-        void WriteVerticesToAttributeBuffer(IVertexBuffer<int> buffer, int attributeIndex);
-
         IVertexBuffer<float> CreateVerticesFloatAttributeBuffer(int attributeIndex);
         IVertexBuffer<int> CreateVerticesIntAttributeBuffer(int attributeIndex);
 
