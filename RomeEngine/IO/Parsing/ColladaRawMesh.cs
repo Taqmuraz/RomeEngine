@@ -53,6 +53,16 @@ namespace RomeEngine.IO
             }
         }
 
+        public static Vector3[] AsVector3(float[] buffer)
+        {
+            Vector3[] vectors = new Vector3[buffer.Length / 3];
+            for (int i = 0; i < vectors.Length; i++)
+            {
+                vectors[i] = new Vector3(buffer[i * 3], buffer[i * 3 + 1], buffer[i * 3 + 2]);
+            }
+            return vectors;
+        }
+
         public int SubmeshesCount => TrianglesData.Elements.Count;
 
         public bool BuildMesh(int submeshIndex, out SkinnedMesh skinnedMesh)
@@ -95,7 +105,8 @@ namespace RomeEngine.IO
                     (float[])namedBuffers["weights"],
                     (int[])namedBuffers["joints"],
                     newIndices,
-                    JointsInfo.OrderBy(j => j.JointIndex).Select(j => j.JointName).ToArray()
+                    JointsInfo.OrderBy(j => j.JointIndex).Select(j => j.JointName).ToArray(),
+                    JointsInfo.Select(j => j.Matrix).ToArray()
                     );
                 return true;
             }

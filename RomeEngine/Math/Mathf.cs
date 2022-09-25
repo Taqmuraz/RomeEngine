@@ -11,7 +11,8 @@ namespace RomeEngine
 
 		public static float ToFloat(this string value)
 		{
-			if (float.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float result)) return result;
+			if (float.TryParse(value, out float result)) return result;
+			else if (float.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out result)) return result;
 			else return 0f;
 		}
 

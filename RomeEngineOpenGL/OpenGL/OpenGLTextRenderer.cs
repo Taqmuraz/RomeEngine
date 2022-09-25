@@ -6,6 +6,27 @@ namespace RomeEngineOpenGL
 {
     class OpenGLTextRenderer : OpenGLCommonGraphics
     {
+        class OpenGLTextShaderModel : IOpenGLShaderModel
+        {
+            OpenGLTextRenderer textRenderer;
+
+            public OpenGLTextShaderModel(OpenGLTextRenderer textRenderer)
+            {
+                this.textRenderer = textRenderer;
+            }
+
+            public void SetupShader(OpenGLShader shader)
+            {
+                shader.SetVector4("vertexRect", new Vector4(textRenderer.boxRect.X, textRenderer.boxRect.Y, textRenderer.boxRect.Width, textRenderer.boxRect.Height));
+                shader.SetVector4("textRect", new Vector4(textRenderer.uvRect.X, textRenderer.uvRect.Y, textRenderer.uvRect.Width, textRenderer.uvRect.Height));
+                shader.SetFloat("depth", textRenderer.depth);
+                shader.SetVector4("textureColor", textRenderer.textColor.ToVector4());
+            }
+        }
+
+        IOpenGLShaderModel textShaderModel;
+
+
         OpenGLTexture fontTexture;
         Encoding encoding;
         OpenGLShader textShader;
@@ -16,20 +37,15 @@ namespace RomeEngineOpenGL
         float depth;
 
         protected override OpenGLShader ActiveShader => textShader;
-
-        protected override void SetupShader(OpenGLShader shader)
-        {
-            shader.SetVector4("vertexRect", new Vector4(boxRect.X, boxRect.Y, boxRect.Width, boxRect.Height));
-            shader.SetVector4("textRect", new Vector4(uvRect.X, uvRect.Y, uvRect.Width, uvRect.Height));
-            shader.SetFloat("depth", depth);
-            textShader.SetVector4("textureColor", textColor.ToVector4());
-        }
+        protected override IOpenGLShaderModel StandardShaderModel => textShaderModel;
 
         public OpenGLTextRenderer(IGraphicsContext context)
         {
             fontTexture = (OpenGLTexture)context.LoadTexture("./Resources/Fonts/Arial.png");
             encoding = Encoding.GetEncoding("CP855");
             textShader = new OpenGLShader("Text");
+
+            textShaderModel = new OpenGLTextShaderModel(this);
 
             var mesh = new StaticMesh
                 (

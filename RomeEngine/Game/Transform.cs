@@ -39,6 +39,17 @@ namespace RomeEngine
 			set => LocalRotation = value - ParentToWorld.GetEulerRotation();
 		}
 
+		public void ApplyMatrix(Matrix4x4 matrix)
+		{
+			localRotationMatrix.column_0 = matrix.column_0;
+			localRotationMatrix.column_1 = matrix.column_1;
+			localRotationMatrix.column_2 = matrix.column_2;
+			localRotationMatrix.column_3 = new Vector4(0, 0, 0, 1f);
+			localRotationMatrix = localRotationMatrix.WithoutScale();
+			localRotation = localRotationMatrix.GetEulerRotation();
+			LocalPosition = (Vector2)matrix.column_3;
+		}
+
         public override bool IsUnary => true;
 
 		public Vector3 LocalRight => (Vector3)localRotationMatrix.column_0;

@@ -97,7 +97,7 @@ namespace OneEngineWindowsFormsApplication
         public void DrawMesh(IMeshIdentifier meshIdentifier)
         {
             var mesh = context.GetMesh(meshIdentifier);
-            DrawDynamicMesh(mesh);
+            DrawDynamicMesh(mesh, null);
         }
 
         bool Cull(float dot)
@@ -111,7 +111,7 @@ namespace OneEngineWindowsFormsApplication
             }
         }
 
-        public void DrawDynamicMesh(IMesh mesh)
+        public void DrawDynamicMesh(IMesh mesh, ISkinnedMeshInfo skinnedMeshInfo)
         {
             var indices = mesh.EnumerateIndices().ToArray();
             Brush brush;
@@ -154,6 +154,11 @@ namespace OneEngineWindowsFormsApplication
         public void SetCulling(CullingMode cullingMode)
         {
             this.cullingMode = cullingMode;
+        }
+
+        public void DrawSkinnedMesh(IMeshIdentifier meshIdentifier, ISkinnedMeshInfo skinnedMeshInfo)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -62,6 +62,8 @@
     <Compile Include="Game\EventsHandler.cs" />
     <Compile Include="Game\Rendering\GlobalLight.cs" />
     <Compile Include="Game\Rendering\MeshRenderer.cs" />
+    <Compile Include="Game\Rendering\SkinnedMesh\IJointInfo.cs" />
+    <Compile Include="Game\Rendering\SkinnedMesh\ISkinnedMeshInfo.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshRenderer.cs" />
     <Compile Include="Game\Rendering\StaticMesh\Material.cs" />
     <Compile Include="Game\Rendering\StaticMesh\SingleTextureMaterial.cs" />
@@ -135,9 +137,11 @@
     <Compile Include="IO\Parsing\ColladaRawMesh.cs" />
     <Compile Include="IO\Parsing\ColladaSkin.cs" />
     <Compile Include="IO\Parsing\ColladaStackContainingObject.cs" />
+    <Compile Include="IO\Parsing\ColladaTransformInfo.cs" />
     <Compile Include="IO\Parsing\ColladaVertexAttribute.cs" />
     <Compile Include="IO\Parsing\ColladaVertexAttributeProperty.cs" />
     <Compile Include="IO\Parsing\ColladaVertexBuffer.cs" />
+    <Compile Include="IO\Parsing\ColladaVisualSceneParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaXmlReaderNode.cs" />
     <Compile Include="IO\Parsing\IColladaNode.cs" />
     <Compile Include="IO\Parsing\IColladaNodeHandler.cs" />

@@ -97,7 +97,7 @@ namespace RomeEngineOpenGL
 
             for (int i = 0; i < matrices.Length; i++) matrices[i].ToFloatArray(array, i * MATRIX_SIZE);
 
-            GL.UniformMatrix4(location, matrices.Length, false, matrixBuffer);
+            GL.UniformMatrix4(location, matrices.Length, false, array);
         }
 
         public void SetFloat(string name, float value)

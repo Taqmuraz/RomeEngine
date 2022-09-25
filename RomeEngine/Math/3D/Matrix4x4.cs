@@ -34,6 +34,11 @@ namespace RomeEngine
 		{
 		}
 
+		public Vector3 GetScale()
+		{
+			return new Vector3(((Vector3)column_0).length, ((Vector3)column_1).length, ((Vector3)column_2).length);
+		}
+
         public Vector3 GetEulerRotation()
         {
 			float sy = Mathf.Sqrt(column_0.x * column_0.x + column_0.y * column_0.y);
@@ -138,11 +143,21 @@ namespace RomeEngine
 		}
 		public void ToDoubleArray(double[] array, int startIndex = 0)
 		{
-			for (int i = startIndex; i < startIndex + 16; i++) array[i] = this[i % 4, i / 4];
+			for (int i = 0; i < 16; i++) array[i + startIndex] = this[i % 4, i / 4];
 		}
 		public void ToFloatArray(float[] array, int startIndex = 0)
 		{
-			for (int i = startIndex; i < startIndex + 16; i++) array[i] = this[i % 4, i / 4];
+			for (int i = 0; i < 16; i++) array[i + startIndex] = this[i % 4, i / 4];
+		}
+
+		public static Matrix4x4 FromFloatsArray(float[] array, int startIndex = 0)
+		{
+			Matrix4x4 matrix = Matrix4x4.Identity;
+            for (int i = 0; i < 16; i++)
+            {
+				matrix[i % 4, i / 4] = array[i + startIndex];
+            }
+			return matrix;
 		}
 
         public float GetDeterminant()

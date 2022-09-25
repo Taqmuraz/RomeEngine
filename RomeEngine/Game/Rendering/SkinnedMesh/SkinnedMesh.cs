@@ -13,6 +13,8 @@ namespace RomeEngine
         float[] weights;
         int[] joints;
 
+
+        public Matrix4x4[] JointBindings { get; private set; }
         public string[] JointNames { get; private set; }
         public Array[] Buffers => new Array[] { vertices, texcoords, normals, weights, joints };
 
@@ -36,7 +38,8 @@ namespace RomeEngine
             float[] weights,
             int[] joints,
             int[] indices,
-            string[] jointNames) : this()
+            string[] jointNames,
+            Matrix4x4[] jointBindings) : this()
         {
             this.vertices = vertices;
             this.texcoords = texcoords;
@@ -44,7 +47,8 @@ namespace RomeEngine
             this.indices = indices;
             this.weights = weights;
             this.joints = joints;
-            this.JointNames = jointNames;
+            JointNames = jointNames;
+            JointBindings = jointBindings;
         }
 
         public IEnumerable<int> EnumerateIndices()

@@ -24,6 +24,6 @@
         void SetTexture(Texture texture, TextureType type);
         void DrawMesh(IMeshIdentifier meshIdentifier);
         void DrawSkinnedMesh(IMeshIdentifier meshIdentifier, ISkinnedMeshInfo skinnedMeshInfo);
-        void DrawDynamicMesh(IMesh mesh);
+        void DrawDynamicMesh(IMesh mesh, ISkinnedMeshInfo skinnedMeshInfo);
     }
 }

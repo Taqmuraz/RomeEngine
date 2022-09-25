@@ -12,6 +12,11 @@ namespace RomeEngine.IO
             this.previousStageMeshes = previousStageMeshes;
         }
 
+        public ColladaVisualSceneParsingContext CreateVisualSceneParsingContext()
+        {
+            return new ColladaVisualSceneParsingContext(Elements);
+        }
+
         protected override IEnumerable<IColladaNodeHandler<ColladaControllersParsingContext>> CreateHandlers()
         {
             yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("controller", (context, node) => context.PushElement(new ColladaController(node.GetAttribute("id"), node.GetAttribute("name"))), (context, node) => context.PopElement());
@@ -115,14 +120,15 @@ namespace RomeEngine.IO
             jointAttribute.AddProperty("joint1", "int");
             jointAttribute.AddProperty("joint2", "int");
 
-            for (int i = 0; i < weightsBuffer.Length; i += 3)
+            /*for (int i = 0; i < weightsBuffer.Length; i += 3)
             {
                 Vector3 vec = new Vector3(weightsBuffer[i], weightsBuffer[i + 1], weightsBuffer[i + 2]);
-                vec /= vec.x + vec.y + vec.z;
+                float d = vec.x + vec.y + vec.z;
+                if (d != 0) vec /= d;
                 weightsBuffer[i] = vec.x;
                 weightsBuffer[i + 1] = vec.y;
                 weightsBuffer[i + 2] = vec.z;
-            }
+            }*/
 
             rawMesh.PushElement(new ColladaVertexBuffer("weights")
             {
@@ -140,7 +146,7 @@ namespace RomeEngine.IO
 
         static void AppendJointsInfo(ColladaRawMesh rawMesh, ColladaSkin skin)
         {
-            string[] joints = skin.JointNames.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+            Matrix4x4[] matrices = skin.ReadJoints(out string[] joints);
             rawMesh.JointsInfo = Enumerable.Range(0, joints.Length).Select(i => new ColladaJointInfo(joints[i], i)).ToArray();
         }
 

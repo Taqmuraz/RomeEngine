@@ -8,6 +8,8 @@ namespace RomeEngine.IO
         Stack<TElement> elementsStack = new Stack<TElement>();
         public ReadOnlyArrayList<TElement> Elements => elementsPassed;
 
+        public int StackDepth => elementsStack.Count;
+
         public TElement CurrentElement => elementsStack.Peek();
 
         public void PushElement(TElement element)

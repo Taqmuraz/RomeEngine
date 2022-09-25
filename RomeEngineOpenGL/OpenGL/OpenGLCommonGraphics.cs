@@ -6,6 +6,7 @@ namespace RomeEngineOpenGL
     abstract class OpenGLCommonGraphics
     {
         protected abstract OpenGLShader ActiveShader { get; }
+        protected abstract IOpenGLShaderModel StandardShaderModel { get; }
 
         TextureUnit TypeToUnit(TextureType type)
         {
@@ -24,18 +25,16 @@ namespace RomeEngineOpenGL
             GL.BindTexture(TextureTarget.Texture2D, texture == null ? 0 : ((OpenGLTexture)texture).TextureIndex);
         }
 
-        protected abstract void SetupShader(OpenGLShader shader);
-
         public void DrawMesh(IMeshIdentifier meshIdentifier)
         {
-            DrawMesh(meshIdentifier, ActiveShader);
+            DrawMesh(meshIdentifier, ActiveShader, StandardShaderModel);
         }
         public void DrawMesh(IMeshIdentifier meshIdentifier, OpenGLShader shader, IOpenGLShaderModel shaderModel)
         {
             if (meshIdentifier is OpenGLMeshIdentifier identifier)
             {
                 shader.Start();
-                SetupShader(shader);
+                shaderModel.SetupShader(shader);
                 GL.BindVertexArray(identifier.VertexArrrayObjectIndex);
                 var attributes = identifier.SourceMesh.Attributes;
                 for (int i = 0; i < attributes.Length; i++)
@@ -43,7 +42,7 @@ namespace RomeEngineOpenGL
                     GL.EnableVertexAttribArray(i);
                 }
 
-                GL.DrawElements(PrimitiveType.Triangles, identifier.IndicesNumber * 3, DrawElementsType.UnsignedInt, 0);
+                GL.DrawElements(PrimitiveType.Triangles, identifier.IndicesNumber, DrawElementsType.UnsignedInt, 0);
 
                 ActiveShader.Stop();
             }

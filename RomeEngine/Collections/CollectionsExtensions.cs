@@ -25,12 +25,12 @@ public static class CollectionsExtensions
         }
         else return seed;
     }
-	public static int IndexOf<T>(this IEnumerable<T> collection, T element) where T : class
+	public static int IndexOf<T>(this IEnumerable<T> collection, T element)
 	{
 		int index = 0;
 		foreach (var c in collection)
 		{
-			if (c == element) return index;
+			if (c.Equals(element)) return index;
 			index++;
 		}
 		return -1;

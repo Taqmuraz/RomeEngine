@@ -26,12 +26,14 @@ namespace RomeEngine.IO
         {
             ColladaMaterialsParsingContext materialStage;
             ColladaGeometryParsingContext geometryStage;
+            ColladaControllersParsingContext controllersStage;
             Dictionary<string, IColladaParsingStage> stages = new IColladaParsingStage[]
             {
-               geometryStage = new ColladaGeometryParsingContext(),
-               geometryStage.CreateControllersContext(),
-               materialStage = new ColladaMaterialsParsingContext(),
-               materialStage.CreateEffectContext(),
+                geometryStage = new ColladaGeometryParsingContext(),
+                controllersStage = geometryStage.CreateControllersContext(),
+                controllersStage.CreateVisualSceneParsingContext(),
+                materialStage = new ColladaMaterialsParsingContext(),
+                materialStage.CreateEffectContext(),
             }
             .ToDictionary(h => h.RootNodeName);
 
