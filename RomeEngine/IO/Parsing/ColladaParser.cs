@@ -25,15 +25,17 @@ namespace RomeEngine.IO
         public ISerializable ParseObject(string fileName)
         {
             ColladaMaterialsParsingContext materialStage;
+            ColladaGeometryParsingContext geometryStage;
             Dictionary<string, IColladaParsingStage> stages = new IColladaParsingStage[]
             {
-               new ColladaGeometryParsingContext(),
+               geometryStage = new ColladaGeometryParsingContext(),
+               geometryStage.CreateControllersContext(),
                materialStage = new ColladaMaterialsParsingContext(),
                materialStage.CreateEffectContext(),
             }
             .ToDictionary(h => h.RootNodeName);
 
-            IColladaParsingContext currentContext = null;
+            IColladaParsingStage currentContext = null;
             var xmlReader = XmlReader.Create(fileName);
             var readerNode = new ColladaXmlReaderNode(xmlReader);
             var result = new GameObject("Collada Model");
@@ -44,7 +46,14 @@ namespace RomeEngine.IO
                 {
                     if (stages.TryGetValue(xmlReader.Name, out var context))
                     {
-                        currentContext = xmlReader.IsStartElement() ? context : null;
+                        if (xmlReader.IsStartElement())
+                        {
+                            currentContext = context;
+                        } else
+                        {
+                            currentContext.FinalizeStage();
+                            currentContext = null;
+                        }
                     }
                     else
                     {

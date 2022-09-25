@@ -27,6 +27,11 @@ namespace RomeEngine.IO
             }
         }
 
+        public virtual void FinalizeStage()
+        {
+
+        }
+
         protected abstract IEnumerable<IColladaNodeHandler<TContext>> CreateHandlers();
         protected abstract TContext GetContext();
         public abstract void UpdateGameObject(GameObject gameObject, IColladaParsingInfo parsingInfo);

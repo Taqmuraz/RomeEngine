@@ -4,6 +4,11 @@ namespace RomeEngine.IO
 {
     public sealed class ColladaGeometryParsingContext : ColladaParsingContext<ColladaGeometryParsingContext, ColladaRawMesh>, IColladaParsingStage
     {
+        public ColladaControllersParsingContext CreateControllersContext()
+        {
+            return new ColladaControllersParsingContext(Elements);
+        }
+
         protected override IEnumerable<IColladaNodeHandler<ColladaGeometryParsingContext>> CreateHandlers()
         {
             return new IColladaNodeHandler<ColladaGeometryParsingContext>[]

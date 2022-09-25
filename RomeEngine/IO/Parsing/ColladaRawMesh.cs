@@ -16,6 +16,7 @@ namespace RomeEngine.IO
         ColladaVertexBuffer CurrentBuffer => CurrentElement;
 
         public override string ToString() => id;
+        public string Id => id;
 
         public ColladaStackContainingObject<TrianglesData> TrianglesData { get; } = new ColladaStackContainingObject<TrianglesData>();
 

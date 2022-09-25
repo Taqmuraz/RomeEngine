@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using RomeEngine;
@@ -12,9 +13,33 @@ namespace OneEngineWindowsFormsApplication
         PointF[] triangle = new PointF[3];
         CullingMode cullingMode;
 
-        List<(Vector3 t0, Vector3 t1, Vector3 t2, Vector3 center, Vector3 worldNormal, Vector3 worldCenter)> triangles = new List<(Vector3, Vector3, Vector3, Vector3, Vector3, Vector3)>();
+        struct VertexData
+        {
+            public Vector3 position;
+            public Vector2 uv;
+        }
 
-        SafeDictionary<TextureType, Texture> textures = new SafeDictionary<TextureType, Texture>();
+        struct TriangleData
+        {
+            public Vector3 t0;
+            public Vector3 t1;
+            public Vector3 t2;
+            public Vector3 center;
+            public Brush brush;
+
+            public TriangleData(Vector3 t0, Vector3 t1, Vector3 t2, Brush brush)
+            {
+                this.t0 = t0;
+                this.t1 = t1;
+                this.t2 = t2;
+                this.center = (t0 + t1 + t2) * 0.333f;
+                this.brush = brush;
+            }
+        }
+
+        List<TriangleData> triangles = new List<TriangleData>();
+
+        SafeDictionary<TextureType, BitmapTexture> textures = new SafeDictionary<TextureType, BitmapTexture>();
 
         public void SetGraphics(Graphics graphics, GraphicsContext context)
         {
@@ -35,7 +60,7 @@ namespace OneEngineWindowsFormsApplication
                 triangle[0] = t.t0;
                 triangle[1] = t.t1;
                 triangle[2] = t.t2;
-                graphics.FillPolygon(new SolidBrush(Color32.white * ((Vector3.Dot(t.worldNormal, -GlobalLight.LightDirection) + 1f) * 0.5f)), triangle);
+                graphics.FillPolygon(t.brush, triangle);
             }
             triangles.Clear();
         }
@@ -66,7 +91,7 @@ namespace OneEngineWindowsFormsApplication
 
         public void SetTexture(Texture texture, TextureType type)
         {
-            textures[type] = texture;
+            textures[type] = texture as BitmapTexture;
         }
 
         public void DrawMesh(IMeshIdentifier meshIdentifier)
@@ -89,11 +114,12 @@ namespace OneEngineWindowsFormsApplication
         public void DrawDynamicMesh(IMesh mesh)
         {
             var indices = mesh.EnumerateIndices().ToArray();
+            Brush brush;
 
             Matrix4x4 mvp = MVP;
 
             float[] positionsArray = mesh.CreateVerticesFloatAttributeBuffer(mesh.PositionAttributeIndex).ToArray();
-
+            
             Vector3 ReadVertex(int index)
             {
                 index *= 3;
@@ -106,7 +132,6 @@ namespace OneEngineWindowsFormsApplication
                 Vector3 t1 = ReadVertex(indices[i - 1]);
                 Vector3 t2 = ReadVertex(indices[i]);
                 Vector3 worldNormal = model.MultiplyDirection(Vector3.Cross(t2 - t1, t0 - t1)).normalized;
-                Vector3 worldCenter = model.MultiplyPoint((t0 + t1 + t2) * 0.333f);
 
                 Vector3 vertexA = mvp.MultiplyPoint_With_WDivision(t0);
                 Vector3 vertexB = mvp.MultiplyPoint_With_WDivision(t1);
@@ -115,7 +140,9 @@ namespace OneEngineWindowsFormsApplication
                 Vector3 screenNormal = Vector3.Cross(vertexC - vertexB, vertexA - vertexB).normalized;
                 float cameraDot = Vector3.Dot(Vector3.back, screenNormal);
 
-                if (Cull(cameraDot)) triangles.Add((vertexA, vertexB, vertexC, (vertexA + vertexB + vertexC) * 0.333f, worldNormal, worldCenter));
+                brush = new SolidBrush(Color32.white * ((Vector3.Dot(worldNormal, -GlobalLight.LightDirection) + 1f) * 0.5f));
+
+                if (Cull(cameraDot)) triangles.Add(new TriangleData(vertexA, vertexB, vertexC, brush));
 
                 var pen = new Pen(Color.Black);
                 graphics.DrawLine(pen, vertexA, vertexB);

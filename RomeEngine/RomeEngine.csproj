@@ -121,6 +121,8 @@
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\KeyState.cs" />
+    <Compile Include="IO\Parsing\ColladaController.cs" />
+    <Compile Include="IO\Parsing\ColladaControllersParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaDelegateHandler.cs" />
     <Compile Include="IO\Parsing\ColladaEffect.cs" />
     <Compile Include="IO\Parsing\ColladaEffectsParsingContext.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="IO\Parsing\ColladaGeometryParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaRawMesh.cs" />
+    <Compile Include="IO\Parsing\ColladaSkin.cs" />
     <Compile Include="IO\Parsing\ColladaStackContainingObject.cs" />
     <Compile Include="IO\Parsing\ColladaVertexAttribute.cs" />
     <Compile Include="IO\Parsing\ColladaVertexAttributeProperty.cs" />
