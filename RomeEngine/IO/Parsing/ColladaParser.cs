@@ -51,7 +51,6 @@ namespace RomeEngine.IO
                             currentContext = context;
                         } else
                         {
-                            currentContext.FinalizeStage();
                             currentContext = null;
                         }
                     }
@@ -68,6 +67,11 @@ namespace RomeEngine.IO
                         else currentContext.ParseEnd(readerNode);
                     }
                 }
+            }
+
+            foreach (var stage in stages.Values)
+            {
+                stage.FinalizeStage();
             }
 
             foreach (var context in stages.Values)

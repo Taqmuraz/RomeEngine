@@ -10,7 +10,11 @@ namespace RomeEngine
         float[] texcoords;
         float[] normals;
         int[] indices;
-        public Array[] Buffers => new Array[] { vertices, texcoords, normals };
+        float[] weights;
+        int[] joints;
+
+        public string[] JointNames { get; private set; }
+        public Array[] Buffers => new Array[] { vertices, texcoords, normals, weights, joints };
 
         ReadOnlyArray<IMeshAttributeInfo> attributes;
 
@@ -21,14 +25,26 @@ namespace RomeEngine
                 new SkinnedMeshAttribute(3, MeshAttributeType.Float),
                 new SkinnedMeshAttribute(2, MeshAttributeType.Float),
                 new SkinnedMeshAttribute(3, MeshAttributeType.Float),
+                new SkinnedMeshAttribute(3, MeshAttributeType.Float),
+                new SkinnedMeshAttribute(3, MeshAttributeType.Int),
             };
         }
-        public SkinnedMesh(float[] vertices, float[] texcoords, float[] normals, int[] indices) : this()
+        public SkinnedMesh
+            (float[] vertices,
+            float[] texcoords,
+            float[] normals,
+            float[] weights,
+            int[] joints,
+            int[] indices,
+            string[] jointNames) : this()
         {
             this.vertices = vertices;
             this.texcoords = texcoords;
             this.normals = normals;
             this.indices = indices;
+            this.weights = weights;
+            this.joints = joints;
+            this.JointNames = jointNames;
         }
 
         public IEnumerable<int> EnumerateIndices()
@@ -63,6 +79,9 @@ namespace RomeEngine
             yield return new GenericSerializableField<float[]>(nameof(normals), normals, value => normals = value, true);
             yield return new GenericSerializableField<float[]>(nameof(texcoords), texcoords, value => texcoords = value, true);
             yield return new GenericSerializableField<int[]>(nameof(indices), indices, value => indices = value, true);
+            yield return new GenericSerializableField<float[]>(nameof(weights), weights, value => weights = value, true);
+            yield return new GenericSerializableField<int[]>(nameof(joints), joints, value => joints = value, true);
+            yield return new GenericSerializableField<string[]>(nameof(JointNames), JointNames, value => JointNames = value, true);
         }
     }
 }

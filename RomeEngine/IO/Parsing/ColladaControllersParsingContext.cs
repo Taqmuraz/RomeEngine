@@ -44,6 +44,7 @@ namespace RomeEngine.IO
                     {
                         AppendJointWeightIndices(rawMesh, skin);
                         AppendJointWeightBuffers(rawMesh, skin);
+                        AppendJointsInfo(rawMesh, skin);
                     }
                 }
             }
@@ -70,9 +71,9 @@ namespace RomeEngine.IO
         }
         static void AppendJointWeightBuffers (ColladaRawMesh rawMesh, ColladaSkin skin)
         {
-            char[] separators = new char[' '];
+            char[] separators = new char[] { ' ' };
             int[] verticesJointNubers = skin.VerticeWeightNumbers.Split(separators, System.StringSplitOptions.RemoveEmptyEntries).Select(v => int.Parse(v)).ToArray();
-            float[] weights = skin.Weights.Split(separators, System.StringSplitOptions.RemoveEmptyEntries).Select(w => w.ToFloat()).ToArray();
+            float[] weightsRawData = skin.Weights.Split(separators, System.StringSplitOptions.RemoveEmptyEntries).Select(w => w.ToFloat()).ToArray();
             int[] jointWeightIndices = skin.JointWeightIndices.Split(separators, System.StringSplitOptions.RemoveEmptyEntries).Select(j => int.Parse(j)).ToArray();
 
             int jointPerVertex = 3;
@@ -92,7 +93,7 @@ namespace RomeEngine.IO
                     if (jointIndex < joints)
                     {
                         joint = jointWeightIndices[bufferPosition];
-                        weight = weights[jointWeightIndices[bufferPosition + 1]];
+                        weight = weightsRawData[jointWeightIndices[bufferPosition + 1]];
                         bufferPosition += 2;
                     }
                     else
@@ -100,8 +101,8 @@ namespace RomeEngine.IO
                         joint = -1;
                         weight = 0f;
                     }
-                    jointIndices[vertexIndex + jointIndex] = joint;
-                    weightsBuffer[vertexIndex + jointIndex] = weight;
+                    jointIndices[vertexIndex * jointPerVertex + jointIndex] = joint;
+                    weightsBuffer[vertexIndex * jointPerVertex + jointIndex] = weight;
                 }
             }
 
@@ -114,16 +115,33 @@ namespace RomeEngine.IO
             jointAttribute.AddProperty("joint1", "int");
             jointAttribute.AddProperty("joint2", "int");
 
+            for (int i = 0; i < weightsBuffer.Length; i += 3)
+            {
+                Vector3 vec = new Vector3(weightsBuffer[i], weightsBuffer[i + 1], weightsBuffer[i + 2]);
+                vec /= vec.x + vec.y + vec.z;
+                weightsBuffer[i] = vec.x;
+                weightsBuffer[i + 1] = vec.y;
+                weightsBuffer[i + 2] = vec.z;
+            }
+
             rawMesh.PushElement(new ColladaVertexBuffer("weights")
             {
                 Attribute = weightAttribute,
-                Buffer = string.Join(" ", weights)
+                Buffer = string.Join(" ", weightsBuffer)
             });
             rawMesh.PushElement(new ColladaVertexBuffer("joints")
             {
                 Attribute = jointAttribute,
                 Buffer = string.Join(" ", jointIndices)
             });
+            rawMesh.PopElement();
+            rawMesh.PopElement();
+        }
+
+        static void AppendJointsInfo(ColladaRawMesh rawMesh, ColladaSkin skin)
+        {
+            string[] joints = skin.JointNames.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+            rawMesh.JointsInfo = Enumerable.Range(0, joints.Length).Select(i => new ColladaJointInfo(joints[i], i)).ToArray();
         }
 
         public override void UpdateGameObject(GameObject gameObject, IColladaParsingInfo parsingInfo)

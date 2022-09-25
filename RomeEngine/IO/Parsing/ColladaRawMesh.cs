@@ -18,6 +18,8 @@ namespace RomeEngine.IO
         public override string ToString() => id;
         public string Id => id;
 
+        public ColladaJointInfo[] JointsInfo { get; set; }
+
         public ColladaStackContainingObject<TrianglesData> TrianglesData { get; } = new ColladaStackContainingObject<TrianglesData>();
 
         public void WriteBuffer(string value)
@@ -53,7 +55,7 @@ namespace RomeEngine.IO
 
         public int SubmeshesCount => TrianglesData.Elements.Count;
 
-        public SkinnedMesh BuildMesh(int submeshIndex)
+        public bool BuildMesh(int submeshIndex, out SkinnedMesh skinnedMesh)
         {
             var buffers = Elements.ToArray();
             int buffersCount = buffers.Length;
@@ -83,13 +85,25 @@ namespace RomeEngine.IO
             }
             var namedBuffers = Enumerable.Range(0, buffersCount).Select(i => (name: buffers[i].Id.Replace($"{id}-", string.Empty), buffer: newBufferArrays[i])).ToDictionary(b => b.name, b => b.buffer);
 
-            return new SkinnedMesh
-                (
-                (float[])namedBuffers["positions"],
-                (float[])namedBuffers["map-0"],
-                (float[])namedBuffers["normals"],
-                (int[])newIndices
-                );
+            if (namedBuffers.ContainsKey("weights") && namedBuffers.ContainsKey("joints"))
+            {
+                skinnedMesh = new SkinnedMesh
+                    (
+                    (float[])namedBuffers["positions"],
+                    (float[])namedBuffers["map-0"],
+                    (float[])namedBuffers["normals"],
+                    (float[])namedBuffers["weights"],
+                    (int[])namedBuffers["joints"],
+                    newIndices,
+                    JointsInfo.OrderBy(j => j.JointIndex).Select(j => j.JointName).ToArray()
+                    );
+                return true;
+            }
+            else
+            {
+                skinnedMesh = null;
+                return false;
+            }
         }
     }
 }

@@ -7,10 +7,62 @@ namespace RomeEngineOpenGL
 {
     class OpenGLGraphics : OpenGLCommonGraphics, IGraphics
     {
+        class OpenGLDefaultShaderModel : IOpenGLShaderModel
+        {
+            OpenGLGraphics graphics;
+
+            public OpenGLDefaultShaderModel(OpenGLGraphics graphics)
+            {
+                this.graphics = graphics;
+            }
+
+            public void SetupShader(OpenGLShader shader)
+            {
+                shader.SetFloat("ambienceIntencivity", GlobalLight.AmbienceIntencivity);
+                shader.SetVector3("lightDirection", GlobalLight.LightDirection);
+                shader.SetVector4("lightColor", GlobalLight.LightColor.ToVector4());
+                shader.SetMatrix("viewMatrix", graphics.view.GetInversed());
+                shader.SetMatrix("projectionMatrix", graphics.projection);
+                shader.SetMatrix("transformationMatrix", graphics.model);
+            }
+        }
+        class OpenGLSkinShaderModel : IOpenGLShaderModel
+        {
+            OpenGLGraphics graphics;
+
+            public OpenGLSkinShaderModel(OpenGLGraphics graphics)
+            {
+                this.graphics = graphics;
+            }
+
+            public void SetupShader(OpenGLShader shader)
+            {
+                graphics.standardShaderModel.SetupShader(shader);
+
+                var jointsMap = graphics.skinnedMeshInfo.GetJointsMap();
+                Matrix4x4[] joints = new Matrix4x4[jointsMap.Count];
+                foreach (var pair in jointsMap)
+                {
+                    joints[pair.Key] = pair.Value.LocalToWorld;
+                }
+                shader.SetMatrixArray("jointTransforms", joints);
+            }
+        }
+
         int width;
         int height;
 
         OpenGLShader standardShader = new OpenGLShader("Default");
+        OpenGLShader skinShader = new OpenGLShader("Skin");
+        IOpenGLShaderModel standardShaderModel;
+        IOpenGLShaderModel skinShaderModel;
+        ISkinnedMeshInfo skinnedMeshInfo;
+
+        public OpenGLGraphics()
+        {
+            standardShaderModel = new OpenGLDefaultShaderModel(this);
+            skinShaderModel = new OpenGLSkinShaderModel(this);
+        }
 
         protected override OpenGLShader ActiveShader => standardShader;
 
@@ -66,12 +118,7 @@ namespace RomeEngineOpenGL
 
         protected override void SetupShader(OpenGLShader shader)
         {
-            shader.SetFloat("ambienceIntencivity", GlobalLight.AmbienceIntencivity);
-            shader.SetVector3("lightDirection", GlobalLight.LightDirection);
-            shader.SetVector4("lightColor", GlobalLight.LightColor.ToVector4());
-            shader.SetMatrix("viewMatrix", view.GetInversed());
-            shader.SetMatrix("projectionMatrix", projection);
-            shader.SetMatrix("transformationMatrix", model);
+            
         }
 
         public void DrawDynamicMesh(IMesh mesh)
@@ -118,6 +165,12 @@ namespace RomeEngineOpenGL
                 }
             }
             GL.End();
+        }
+
+        public void DrawSkinnedMesh(IMeshIdentifier meshIdentifier, ISkinnedMeshInfo skinnedMeshInfo)
+        {
+            this.skinnedMeshInfo = skinnedMeshInfo;
+            DrawMesh(meshIdentifier, skinShader, standardShaderModel);
         }
     }
 }

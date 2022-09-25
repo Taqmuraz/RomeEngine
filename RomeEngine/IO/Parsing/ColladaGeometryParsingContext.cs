@@ -33,9 +33,12 @@ namespace RomeEngine.IO
             {
                 for (int i = 0; i < mesh.SubmeshesCount; i++)
                 {
-                    var renderer = gameObject.AddComponent<SkinnedMeshRenderer>();
-                    renderer.SkinnedMesh = mesh.BuildMesh(i);
-                    renderer.Material = new SingleTextureMaterial(mesh.TrianglesData.Elements[i].MaterialName);
+                    if (mesh.BuildMesh(i, out SkinnedMesh skinnedMesh))
+                    {
+                        var renderer = gameObject.AddComponent<SkinnedMeshRenderer>();
+                        renderer.SkinnedMesh = skinnedMesh;
+                        renderer.Material = new SingleTextureMaterial(mesh.TrianglesData.Elements[i].MaterialName);
+                    }
                 }
             }
         }

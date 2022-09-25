@@ -127,14 +127,22 @@ namespace RomeEngine
         public float[] ToFloatArray()
         {
 			float[] array = new float[16];
-			for (int i = 0; i < 16; i++) array[i] = this[i % 4, i / 4];
+			ToFloatArray(array);
 			return array;
         }
 		public double[] ToDoubleArray()
 		{
 			double[] array = new double[16];
-			for (int i = 0; i < 16; i++) array[i] = this[i % 4, i / 4];
+			ToDoubleArray(array);
 			return array;
+		}
+		public void ToDoubleArray(double[] array, int startIndex = 0)
+		{
+			for (int i = startIndex; i < startIndex + 16; i++) array[i] = this[i % 4, i / 4];
+		}
+		public void ToFloatArray(float[] array, int startIndex = 0)
+		{
+			for (int i = startIndex; i < startIndex + 16; i++) array[i] = this[i % 4, i / 4];
 		}
 
         public float GetDeterminant()

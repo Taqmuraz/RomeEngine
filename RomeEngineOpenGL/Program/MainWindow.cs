@@ -98,6 +98,8 @@ namespace RomeEngineOpenGL
                 case Key k when k >= Key.Number0 && k <= Key.Number9:return KeyCode.N0 + (k - Key.Number0);
                 case Key k when k >= Key.Keypad0 && k <= Key.Keypad9: return KeyCode.N0 + (k - Key.Keypad0);
                 case Key.Period:return KeyCode.Point;
+                case Key.Minus:
+                case Key.KeypadMinus: return KeyCode.Minus;
             }
         }
 

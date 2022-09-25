@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using RomeEngine;
+using System.Linq;
 
 namespace RomeEngineOpenGL
 {
@@ -90,6 +91,14 @@ namespace RomeEngineOpenGL
             for (int i = 0; i < 16; i++) matrixBuffer[i] = matrix[i % 4, i / 4];
             GL.UniformMatrix4(location, 1, false, matrixBuffer);
         }
+        protected void LoadMatrixArray(int location, Matrix4x4[] matrices)
+        {
+            float[] array = new float[matrices.Length * MATRIX_SIZE];
+
+            for (int i = 0; i < matrices.Length; i++) matrices[i].ToFloatArray(array, i * MATRIX_SIZE);
+
+            GL.UniformMatrix4(location, matrices.Length, false, matrixBuffer);
+        }
 
         public void SetFloat(string name, float value)
         {
@@ -114,6 +123,10 @@ namespace RomeEngineOpenGL
         public void SetMatrix(string name, Matrix4x4 matrix)
         {
             LoadMatrix(GetUniformLocation(name), matrix);
+        }
+        public void SetMatrixArray(string name, Matrix4x4[] array)
+        {
+            LoadMatrixArray(GetUniformLocation(name), array);
         }
 
         protected virtual void BindAttributes()

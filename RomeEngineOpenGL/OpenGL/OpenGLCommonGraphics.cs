@@ -30,7 +30,7 @@ namespace RomeEngineOpenGL
         {
             DrawMesh(meshIdentifier, ActiveShader);
         }
-        public void DrawMesh(IMeshIdentifier meshIdentifier, OpenGLShader shader)
+        public void DrawMesh(IMeshIdentifier meshIdentifier, OpenGLShader shader, IOpenGLShaderModel shaderModel)
         {
             if (meshIdentifier is OpenGLMeshIdentifier identifier)
             {

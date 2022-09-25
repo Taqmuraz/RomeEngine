@@ -126,6 +126,7 @@
     <Compile Include="IO\Parsing\ColladaDelegateHandler.cs" />
     <Compile Include="IO\Parsing\ColladaEffect.cs" />
     <Compile Include="IO\Parsing\ColladaEffectsParsingContext.cs" />
+    <Compile Include="IO\Parsing\ColladaJointInfo.cs" />
     <Compile Include="IO\Parsing\ColladaMaterial.cs" />
     <Compile Include="IO\Parsing\ColladaMaterialsParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaParser.cs" />

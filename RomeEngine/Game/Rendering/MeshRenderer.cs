@@ -20,8 +20,12 @@
                 if (Material != null) Material.PrepareDraw(graphics);
                 else graphics.SetTexture(null, TextureType.Albedo);
                 graphics.SetCulling(CullBackFaces ? CullingMode.Back : CullingMode.None);
-                graphics.DrawMesh(meshIdentifier);
+                
             }
+        }
+        protected virtual void DrawCall(IGraphics graphics, IMeshIdentifier meshIdentifier)
+        {
+            graphics.DrawMesh(meshIdentifier);
         }
     }
 }
