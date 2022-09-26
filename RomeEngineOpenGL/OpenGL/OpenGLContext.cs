@@ -113,8 +113,8 @@ namespace RomeEngineOpenGL
         {
             int vboID = CreateVBO();
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
-            GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(float), data.Select(d => (float)d).ToArray(), BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(attributeNumber, coordinateSize, VertexAttribPointerType.Float, false, 0, 0);
+            GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(attributeNumber, coordinateSize, VertexAttribPointerType.Int, false, 0, 0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
         private static void UnbindVAO()
