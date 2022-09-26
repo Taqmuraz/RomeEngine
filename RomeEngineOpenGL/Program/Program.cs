@@ -11,7 +11,7 @@ namespace RomeEngineOpenGL
             {
                 try
                 {
-                    var mainWindow = new MainWindow(1024, 800, log);
+                    var mainWindow = new MainWindow(1366, 800, log);
                     mainWindow.VSync = OpenTK.VSyncMode.Adaptive;
                     mainWindow.Run();
                 }

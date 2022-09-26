@@ -113,6 +113,7 @@ namespace RomeEngine.IO
                     var renderer = gameObject.AddComponent<SkinnedMeshRenderer>();
                     renderer.SkinnedMesh = mesh;
                     renderer.Material = marerial;
+                    renderer.InitializeBindings();
                 };
                 return true;
             }

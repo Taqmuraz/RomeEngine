@@ -81,10 +81,21 @@ namespace RomeEngineGame
                     {
                         Vector3 start = transform.Parent == null ? Vector3.zero : transform.Parent.Position;
                         Vector3 end = transform.Position;
+                        Vector2 rightEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end + transform.Right);
+                        Vector2 upEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end + transform.Up);
+                        Vector2 forwardEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end + transform.Forward);
                         Vector2 screenStart = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(start);
                         Vector2 screenEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end);
                         sceneCanvas.DrawText(transform.Name, Rect.FromCenterAndSize(screenEnd, new Vector2(100f, 50f)), Color32.white, TextOptions.Default);
                         sceneCanvas.DrawLine(screenStart, screenEnd, Color32.white, 2);
+
+                        if (transform == inspectedGameObject.Transform)
+                        {
+                            sceneCanvas.DrawLine(screenEnd, rightEnd, Color32.red, 5);
+                            sceneCanvas.DrawLine(screenEnd, upEnd, Color32.green, 5);
+                            sceneCanvas.DrawLine(screenEnd, forwardEnd, Color32.blue, 5);
+                        }
+
                         foreach (var child in transform.Children) DrawTransformLine(child);
                     }
 

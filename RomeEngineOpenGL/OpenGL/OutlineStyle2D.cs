@@ -14,7 +14,7 @@ namespace RomeEngineOpenGL
 
         public void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB, bool smoothEnding)
         {
-            Matrix3x3 lineMatrix = Transform * Matrix3x3.WorldTransform(b - a, Vector2.Cross(b - a).normalized, a);
+            /*Matrix3x3 lineMatrix = Transform * Matrix3x3.WorldTransform(b - a, Vector2.Cross(b - a).normalized, a);
             GL.Begin(PrimitiveType.LineLoop);
             GL.Color4(Brush.Color);
             widthA *= 0.5f;
@@ -25,6 +25,7 @@ namespace RomeEngineOpenGL
             MatrixVertex(new Vector2(0f, -widthB), ref lineMatrix);
             NextDepth();
             GL.End();
+            */
         }
 
         public void DrawEllipse(Vector2 center, Vector2 size)

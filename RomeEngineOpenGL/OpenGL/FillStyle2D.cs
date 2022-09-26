@@ -33,10 +33,10 @@ namespace RomeEngineOpenGL
             GL.Color4(Brush.Color);
             widthA *= 0.5f;
             widthB *= 0.5f;
-            MatrixVertex(new Vector2(0f, widthA), ref lineMatrix);
-            MatrixVertex(new Vector2(1f, widthB), ref lineMatrix);
+            MatrixVertex(new Vector2(0f, -widthA), ref lineMatrix);
             MatrixVertex(new Vector2(1f, -widthB), ref lineMatrix);
-            MatrixVertex(new Vector2(0f, -widthB), ref lineMatrix);
+            MatrixVertex(new Vector2(1f, widthB), ref lineMatrix);
+            MatrixVertex(new Vector2(0f, widthB), ref lineMatrix);
             NextDepth();
             GL.End();
         }

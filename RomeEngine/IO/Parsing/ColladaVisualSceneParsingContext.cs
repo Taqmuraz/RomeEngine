@@ -26,18 +26,17 @@ namespace RomeEngine.IO
         {
             var root = new ColladaTransformInfo("SceneRootNode", -1);
             root.Children.AddRange(Elements.Where(e => e.Depth == 0));
-            ApplyTransform(root, gameObject.Transform);
+            ApplyTransform(root, gameObject.Transform, root.Tip);
         }
-        void ApplyTransform(ColladaTransformInfo info, Transform transform)
+        void ApplyTransform(ColladaTransformInfo info, Transform transform, Vector3 tip)
         {
-            transform.ApplyMatrix(info.ReadMatrix());
-            transform.LocalPosition += info.StartOffset;
+            transform.ApplyMatrix(info.ReadMatrix().GetTransponed());
 
             foreach (var child in info.Children)
             {
                 var childTransform = new GameObject(child.Name).Transform;
                 childTransform.Parent = transform;
-                ApplyTransform(child, childTransform);
+                ApplyTransform(child, childTransform, info.Tip);
             }
         }
 

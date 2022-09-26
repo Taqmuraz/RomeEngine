@@ -20,6 +20,7 @@ namespace RomeEngineOpenGL
 
         public MainWindow(int width, int height, TextWriter logStream)
         {
+            Location = new System.Drawing.Point();
             Width = width;
             Height = height;
             Title = "RomeEngine OpenGL";

@@ -47,7 +47,8 @@ namespace RomeEngine
 			localRotationMatrix.column_3 = new Vector4(0, 0, 0, 1f);
 			localRotationMatrix = localRotationMatrix.WithoutScale();
 			localRotation = localRotationMatrix.GetEulerRotation();
-			LocalPosition = (Vector2)matrix.column_3;
+			LocalPosition = (Vector3)matrix.column_3;
+			LocalScale = matrix.GetScale();
 		}
 
         public override bool IsUnary => true;

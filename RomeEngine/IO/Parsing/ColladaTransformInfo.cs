@@ -20,6 +20,8 @@ namespace RomeEngine.IO
 
         public Vector3 StartOffset { get; set; }
 
+        public Vector3 Tip => new Vector3(TipX, TipY, TipZ);
+
         public float TipX { get; set; }
         public float TipY { get; set; }
         public float TipZ { get; set; }

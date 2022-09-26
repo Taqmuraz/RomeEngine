@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public sealed class SkinnedMrshJointInfo : IJointInfo
+    public sealed class SkinnedMeshJointInfo : IJointInfo
     {
-        public SkinnedMrshJointInfo(Transform transform, Matrix4x4 initialState)
+        public SkinnedMeshJointInfo(Transform transform, Matrix4x4 initialState)
         {
             Transform = transform;
             InitialState = initialState;
@@ -17,6 +17,8 @@ namespace RomeEngine
     public sealed class SkinnedMeshRenderer : MeshRenderer<SkinnedMesh>, ISkinnedMeshInfo
     {
         [SerializeField] bool dynamicDraw = false;
+        Dictionary<int, IJointInfo> bindingsMap;
+
         [SerializeField] public SkinnedMesh SkinnedMesh { get; set; }
         protected override SkinnedMesh Mesh => SkinnedMesh;
 
@@ -29,6 +31,11 @@ namespace RomeEngine
             else graphics.DrawSkinnedMesh(meshIdentifier, this);
         }
 
-        public Dictionary<int, IJointInfo> GetJointsMap() => Transform.TraceElement(t => t.Children).Select(t => (index: SkinnedMesh.JointNames.IndexOf(t.Name), joint: t)).Where(t => t.index != -1).ToDictionary(t => t.index, t => (IJointInfo)new SkinnedMrshJointInfo(t.joint, SkinnedMesh.JointBindings[t.index]));
+        public void InitializeBindings()
+        {
+            bindingsMap = Transform.TraceElement(t => t.Children).Select(t => (index: SkinnedMesh.JointNames.IndexOf(t.Name), joint: t)).Where(t => t.index != -1).ToDictionary(t => t.index, t => (IJointInfo)new SkinnedMeshJointInfo(t.joint, t.joint.LocalToWorld * Transform.LocalToWorld.GetInversed()));
+        }
+
+        public Dictionary<int, IJointInfo> GetJointsMap() => bindingsMap;
     }
 }
