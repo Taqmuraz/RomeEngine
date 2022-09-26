@@ -16,9 +16,11 @@ namespace RomeEngine.IO
         {
             elementsStack.Push(element);
         }
-        public void PopElement()
+        public TElement PopElement()
         {
-            elementsPassed.Add(elementsStack.Pop());
+            var pop = elementsStack.Pop();
+            elementsPassed.Add(pop);
+            return pop;
         }
     }
 }

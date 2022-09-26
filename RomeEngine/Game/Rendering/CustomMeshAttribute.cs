@@ -1,8 +1,8 @@
 ﻿namespace RomeEngine
 {
-    public sealed class SkinnedMeshAttribute : IMeshAttributeInfo
+    public sealed class CustomMeshAttribute : IMeshAttributeInfo
     {
-        public SkinnedMeshAttribute(int size, MeshAttributeType type)
+        public CustomMeshAttribute(int size, MeshAttributeType type)
         {
             Size = size;
             Type = type;

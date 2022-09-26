@@ -67,6 +67,8 @@
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshRenderer.cs" />
     <Compile Include="Game\Rendering\StaticMesh\Material.cs" />
     <Compile Include="Game\Rendering\StaticMesh\SingleTextureMaterial.cs" />
+    <Compile Include="Game\Rendering\StaticMesh\StaticBufferMesh.cs" />
+    <Compile Include="Game\Rendering\StaticMesh\StaticBufferMeshRenderer.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
     <Compile Include="Game\Routine\SingleCallRoutine.cs" />
     <Compile Include="Game\SerializableEventsHandler.cs" />
@@ -149,7 +151,7 @@
     <Compile Include="IO\Parsing\IColladaParsingInfo.cs" />
     <Compile Include="IO\Parsing\IColladaParsingStage.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMesh.cs" />
-    <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshAttribute.cs" />
+    <Compile Include="Game\Rendering\CustomMeshAttribute.cs" />
     <Compile Include="IO\Parsing\TrianglesData.cs" />
     <Compile Include="IO\Serialization\ArrayFieldSerializer.cs" />
     <Compile Include="IO\Serialization\BinarySerializationStream.cs" />

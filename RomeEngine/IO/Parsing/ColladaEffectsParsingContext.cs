@@ -22,7 +22,7 @@ namespace RomeEngine.IO
         public override void UpdateGameObject(GameObject gameObject, IColladaParsingInfo parsingInfo)
         {
             var effects = Elements;
-            var skinnedMeshes = gameObject.GetComponentsOfType<SkinnedMeshRenderer>();
+            var skinnedMeshes = gameObject.GetComponentsOfType<MeshRenderer>();
             for (int i = 0; i < skinnedMeshes.Length; i++)
             {
                 var material = (SingleTextureMaterial)skinnedMeshes[i].Material;
@@ -32,7 +32,7 @@ namespace RomeEngine.IO
                 var effect = effects.FirstOrDefault(e => e.EffectName == colladaMaterial.EffectName);
 
                 var fs = Engine.Instance.Runtime.FileSystem;
-                material.TextureFileName = fs.GetFiles(fs.GetParentDirectory(parsingInfo.SourceFile)).FirstOrDefault(p => fs.GetFileNameWithoutExtension(p).Equals(effect.TextureFileName));
+                material.TextureFileName = fs.GetFiles(fs.GetParentDirectory(parsingInfo.SourceFile)).FirstOrDefault(p => fs.GetFileNameWithoutExtension(p).Equals(effect.TextureFileName.Replace("_png", string.Empty)));
                 skinnedMeshes[i].Material = material;
             }
         }

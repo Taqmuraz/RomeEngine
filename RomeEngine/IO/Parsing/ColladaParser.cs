@@ -29,9 +29,9 @@ namespace RomeEngine.IO
             ColladaControllersParsingContext controllersStage;
             Dictionary<string, IColladaParsingStage> stages = new IColladaParsingStage[]
             {
+                new ColladaVisualSceneParsingContext(),
                 geometryStage = new ColladaGeometryParsingContext(),
                 controllersStage = geometryStage.CreateControllersContext(),
-                controllersStage.CreateVisualSceneParsingContext(),
                 materialStage = new ColladaMaterialsParsingContext(),
                 materialStage.CreateEffectContext(),
             }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RomeEngine.IO
 {
@@ -33,11 +34,9 @@ namespace RomeEngine.IO
             {
                 for (int i = 0; i < mesh.SubmeshesCount; i++)
                 {
-                    if (mesh.BuildMesh(i, out SkinnedMesh skinnedMesh))
+                    if (mesh.BuildMesh(i, out var addFunc))
                     {
-                        var renderer = gameObject.AddComponent<SkinnedMeshRenderer>();
-                        renderer.SkinnedMesh = skinnedMesh;
-                        renderer.Material = new SingleTextureMaterial(mesh.TrianglesData.Elements[i].MaterialName);
+                        addFunc(gameObject, new SingleTextureMaterial(mesh.TrianglesData.Elements[i].MaterialName));
                     }
                 }
             }

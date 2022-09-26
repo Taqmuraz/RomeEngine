@@ -70,6 +70,24 @@ namespace RomeEngineGame
 
                     if (Input.GetKeyDown(KeyCode.ShiftKey)) accurateMode = !accurateMode;
 
+                    Matrix4x4 worldToScreen = Matrix4x4.CreateViewport(Screen.Size.x, Screen.Size.y) * Camera.ActiveCamera.WorldToScreenMatrix;
+
+                    if (inspectedGameObject != null)
+                    {
+                        DrawTransformLine(inspectedGameObject.Transform);
+                    }
+
+                    void DrawTransformLine(Transform transform)
+                    {
+                        Vector3 start = transform.Parent == null ? Vector3.zero : transform.Parent.Position;
+                        Vector3 end = transform.Position;
+                        Vector2 screenStart = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(start);
+                        Vector2 screenEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end);
+                        sceneCanvas.DrawText(transform.Name, Rect.FromCenterAndSize(screenEnd, new Vector2(100f, 50f)), Color32.white, TextOptions.Default);
+                        sceneCanvas.DrawLine(screenStart, screenEnd, Color32.white, 2);
+                        foreach (var child in transform.Children) DrawTransformLine(child);
+                    }
+
                     IEnumerator DrawTransform(Transform transform)
                     {
                         if (positionY > 0)

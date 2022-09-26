@@ -1,8 +1,11 @@
 ﻿namespace RomeEngine
 {
-    public abstract class MeshRenderer<TMesh> : Renderer where TMesh : IMesh
+    public abstract class MeshRenderer : Renderer
     {
         [SerializeField] public Material Material { get; set; }
+    }
+    public abstract class MeshRenderer<TMesh> : MeshRenderer where TMesh : IMesh
+    {
         [SerializeField] public bool CullBackFaces { get; set; } = true;
         protected abstract TMesh Mesh { get; }
         IMeshIdentifier meshIdentifier;

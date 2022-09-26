@@ -121,7 +121,7 @@ namespace RomeEngineOpenGL
 
         public void DrawDynamicMesh(IMesh mesh, ISkinnedMeshInfo skinnedMeshInfo)
         {
-            var mvp = projection * view.GetInversed();
+            var vp = projection * view.GetInversed();
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
@@ -147,8 +147,10 @@ namespace RomeEngineOpenGL
 
             for (int i = 0; i < jointsMap.Count; i++)
             {
-                jointsMatrices[i] = jointsMap[i].Transform.LocalToWorld * jointsMap[i].InitialState.GetInversed();
+                jointsMatrices[i] = jointsMap[i].Transform.ParentToWorld * (jointsMap[i].Transform.LocalMatrix * jointsMap[i].InitialState.GetInversed());
             }
+
+            return;
 
             (Action glFunc, int attributeIndex, float[] buffer, Action<int> process)[] actions =
             {
@@ -181,7 +183,7 @@ namespace RomeEngineOpenGL
                         }
                     }
 
-                    pos = mvp.MultiplyPoint_With_WDivision(totalPos);
+                    pos = vp.MultiplyPoint_With_WDivision(totalPos);
                     argumentBuffer[0] = pos.x;
                     argumentBuffer[1] = pos.y;
                     argumentBuffer[2] = pos.z;

@@ -12,11 +12,6 @@ namespace RomeEngine.IO
             this.previousStageMeshes = previousStageMeshes;
         }
 
-        public ColladaVisualSceneParsingContext CreateVisualSceneParsingContext()
-        {
-            return new ColladaVisualSceneParsingContext(Elements);
-        }
-
         protected override IEnumerable<IColladaNodeHandler<ColladaControllersParsingContext>> CreateHandlers()
         {
             yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("controller", (context, node) => context.PushElement(new ColladaController(node.GetAttribute("id"), node.GetAttribute("name"))), (context, node) => context.PopElement());
@@ -147,7 +142,7 @@ namespace RomeEngine.IO
         static void AppendJointsInfo(ColladaRawMesh rawMesh, ColladaSkin skin)
         {
             Matrix4x4[] matrices = skin.ReadJoints(out string[] joints);
-            rawMesh.JointsInfo = Enumerable.Range(0, joints.Length).Select(i => new ColladaJointInfo(joints[i], i)).ToArray();
+            rawMesh.JointsInfo = Enumerable.Range(0, joints.Length).Select(i => new ColladaJointInfo(joints[i], i, matrices[i])).ToArray();
         }
 
         public override void UpdateGameObject(GameObject gameObject, IColladaParsingInfo parsingInfo)

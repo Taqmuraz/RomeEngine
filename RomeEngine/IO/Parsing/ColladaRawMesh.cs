@@ -65,7 +65,7 @@ namespace RomeEngine.IO
 
         public int SubmeshesCount => TrianglesData.Elements.Count;
 
-        public bool BuildMesh(int submeshIndex, out SkinnedMesh skinnedMesh)
+        public bool BuildMesh(int submeshIndex, out Action<GameObject, Material> skinnedMeshRendererAddFunc)
         {
             var buffers = Elements.ToArray();
             int buffersCount = buffers.Length;
@@ -97,23 +97,41 @@ namespace RomeEngine.IO
 
             if (namedBuffers.ContainsKey("weights") && namedBuffers.ContainsKey("joints"))
             {
-                skinnedMesh = new SkinnedMesh
+                skinnedMeshRendererAddFunc = (gameObject, marerial) =>
+                {
+                    var mesh = new SkinnedMesh
                     (
-                    (float[])namedBuffers["positions"],
-                    (float[])namedBuffers["map-0"],
-                    (float[])namedBuffers["normals"],
-                    (float[])namedBuffers["weights"],
-                    (int[])namedBuffers["joints"],
-                    newIndices,
-                    JointsInfo.OrderBy(j => j.JointIndex).Select(j => j.JointName).ToArray(),
-                    JointsInfo.Select(j => j.Matrix).ToArray()
+                        (float[])namedBuffers["positions"],
+                        (float[])namedBuffers["map-0"],
+                        (float[])namedBuffers["normals"],
+                        (float[])namedBuffers["weights"],
+                        (int[])namedBuffers["joints"],
+                        newIndices,
+                        JointsInfo.OrderBy(j => j.JointIndex).Select(j => j.JointName).ToArray(),
+                        JointsInfo.Select(j => j.Matrix).ToArray()
                     );
+                    var renderer = gameObject.AddComponent<SkinnedMeshRenderer>();
+                    renderer.SkinnedMesh = mesh;
+                    renderer.Material = marerial;
+                };
                 return true;
             }
             else
             {
-                skinnedMesh = null;
-                return false;
+                skinnedMeshRendererAddFunc = (gameObject, material) =>
+                {
+                    var mesh = new StaticBufferMesh
+                    (
+                        (float[])namedBuffers["positions"],
+                        (float[])namedBuffers["map-0"],
+                        (float[])namedBuffers["normals"],
+                        newIndices
+                    );
+                    var renderer = gameObject.AddComponent<StaticBufferMeshRenderer>();
+                    renderer.StaticBufferMesh = mesh;
+                    renderer.Material = material;
+                };
+                return true;
             }
         }
     }

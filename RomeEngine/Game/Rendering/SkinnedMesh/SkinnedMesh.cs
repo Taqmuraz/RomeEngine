@@ -24,11 +24,11 @@ namespace RomeEngine
         {
             attributes = new IMeshAttributeInfo[]
             {
-                new SkinnedMeshAttribute(3, MeshAttributeType.Float),
-                new SkinnedMeshAttribute(2, MeshAttributeType.Float),
-                new SkinnedMeshAttribute(3, MeshAttributeType.Float),
-                new SkinnedMeshAttribute(3, MeshAttributeType.Float),
-                new SkinnedMeshAttribute(3, MeshAttributeType.Int),
+                new CustomMeshAttribute(3, MeshAttributeType.Float),
+                new CustomMeshAttribute(2, MeshAttributeType.Float),
+                new CustomMeshAttribute(3, MeshAttributeType.Float),
+                new CustomMeshAttribute(3, MeshAttributeType.Float),
+                new CustomMeshAttribute(3, MeshAttributeType.Int),
             };
         }
         public SkinnedMesh

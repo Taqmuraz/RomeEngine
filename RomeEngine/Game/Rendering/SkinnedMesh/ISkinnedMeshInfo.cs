@@ -4,6 +4,6 @@ namespace RomeEngine
 {
     public interface ISkinnedMeshInfo
     {
-        Dictionary<int, Transform> GetJointsMap();
+        Dictionary<int, IJointInfo> GetJointsMap();
     }
 }
