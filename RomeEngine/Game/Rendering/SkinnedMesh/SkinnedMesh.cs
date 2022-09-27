@@ -13,8 +13,7 @@ namespace RomeEngine
         float[] weights;
         int[] joints;
 
-
-        public Matrix4x4[] JointBindings { get; private set; }
+        public PolygonFormat PolygonFormat { get; }
         public string[] JointNames { get; private set; }
         public Array[] Buffers => new Array[] { vertices, texcoords, normals, weights, joints };
 
@@ -39,7 +38,7 @@ namespace RomeEngine
             int[] joints,
             int[] indices,
             string[] jointNames,
-            Matrix4x4[] jointBindings) : this()
+            PolygonFormat polygonFormat) : this()
         {
             this.vertices = vertices;
             this.texcoords = texcoords;
@@ -48,7 +47,7 @@ namespace RomeEngine
             this.weights = weights;
             this.joints = joints;
             JointNames = jointNames;
-            JointBindings = jointBindings;
+            PolygonFormat = polygonFormat;
         }
 
         public IEnumerable<int> EnumerateIndices()

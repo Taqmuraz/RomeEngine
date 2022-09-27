@@ -115,6 +115,7 @@
     <Compile Include="Game\Rendering\StaticMesh\StaticMeshRenderer.cs" />
     <Compile Include="Graphics\IVertex.cs" />
     <Compile Include="Graphics\MeshAttributeType.cs" />
+    <Compile Include="Graphics\PolygonFormat.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\Vertex.cs" />
     <Compile Include="Graphics\VertexAttributeNormal.cs" />
@@ -130,6 +131,9 @@
     <Compile Include="IO\Parsing\ColladaDelegateHandler.cs" />
     <Compile Include="IO\Parsing\ColladaEffect.cs" />
     <Compile Include="IO\Parsing\ColladaEffectsParsingContext.cs" />
+    <Compile Include="IO\Parsing\ColladaExtensions.cs" />
+    <Compile Include="IO\Parsing\ColladaImage.cs" />
+    <Compile Include="IO\Parsing\ColladaImageParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaJointInfo.cs" />
     <Compile Include="IO\Parsing\ColladaMaterial.cs" />
     <Compile Include="IO\Parsing\ColladaMaterialsParsingContext.cs" />
@@ -137,6 +141,8 @@
     <Compile Include="IO\Parsing\ColladaGeometryParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaParsingContext.cs" />
     <Compile Include="IO\Parsing\ColladaRawMesh.cs" />
+    <Compile Include="IO\Parsing\ColladaSemantic.cs" />
+    <Compile Include="IO\Parsing\ColladaSemanticModel.cs" />
     <Compile Include="IO\Parsing\ColladaSkin.cs" />
     <Compile Include="IO\Parsing\ColladaStackContainingObject.cs" />
     <Compile Include="IO\Parsing\ColladaTransformInfo.cs" />
@@ -152,7 +158,7 @@
     <Compile Include="IO\Parsing\IColladaParsingStage.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMesh.cs" />
     <Compile Include="Game\Rendering\CustomMeshAttribute.cs" />
-    <Compile Include="IO\Parsing\TrianglesData.cs" />
+    <Compile Include="IO\Parsing\ColladaPolygonsData.cs" />
     <Compile Include="IO\Serialization\ArrayFieldSerializer.cs" />
     <Compile Include="IO\Serialization\BinarySerializationStream.cs" />
     <Compile Include="IO\Serialization\BoolTypeFieldSerializer.cs" />

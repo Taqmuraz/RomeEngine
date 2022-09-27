@@ -13,5 +13,7 @@ namespace RomeEngine
         int PositionAttributeIndex { get; }
         int TexcoordAttributeIndex { get; }
         int NormalAttributeIndex { get; }
+
+        PolygonFormat PolygonFormat { get; }
     }
 }

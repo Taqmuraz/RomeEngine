@@ -21,7 +21,7 @@ namespace RomeEngine.IO
             if (string.IsNullOrEmpty(line)) return null;
             try
             {
-                var row = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var row = line.SeparateString();
                 return row.Length < 2 ? string.Empty : row[1];
             }
             catch (Exception ex)

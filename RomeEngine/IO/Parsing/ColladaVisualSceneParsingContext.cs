@@ -5,6 +5,10 @@ namespace RomeEngine.IO
 {
     public sealed class ColladaVisualSceneParsingContext : ColladaParsingContext<ColladaVisualSceneParsingContext, ColladaTransformInfo>
     {
+        public ColladaVisualSceneParsingContext(ColladaSemanticModel semanticModel) : base(semanticModel)
+        {
+        }
+
         protected override IEnumerable<IColladaNodeHandler<ColladaVisualSceneParsingContext>> CreateHandlers()
         {
             yield return new ColladaDelegateHandler<ColladaVisualSceneParsingContext>("visual_scene", (context, node) => context.PushElement(new ColladaTransformInfo("visual_scene_root", context.StackDepth)), (context, node) => context.PopElement());
@@ -18,6 +22,8 @@ namespace RomeEngine.IO
             yield return new ColladaDelegateHandler<ColladaVisualSceneParsingContext>("tip_x", (context, node) => context.CurrentElement.TipX = node.GetValue().ToFloat(), null);
             yield return new ColladaDelegateHandler<ColladaVisualSceneParsingContext>("tip_y", (context, node) => context.CurrentElement.TipY = node.GetValue().ToFloat(), null);
             yield return new ColladaDelegateHandler<ColladaVisualSceneParsingContext>("tip_z", (context, node) => context.CurrentElement.TipZ = node.GetValue().ToFloat(), null);
+
+            yield return new ColladaDelegateHandler<ColladaVisualSceneParsingContext>("instance_material", (context, node) => context.SemanticModel.AddSemantic(new ColladaSemantic(node.GetAttribute("target"), node.GetAttribute("symbol"))), null);
         }
 
         protected override ColladaVisualSceneParsingContext GetContext() => this;

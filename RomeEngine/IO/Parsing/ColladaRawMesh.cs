@@ -20,7 +20,7 @@ namespace RomeEngine.IO
 
         public ColladaJointInfo[] JointsInfo { get; set; }
 
-        public ColladaStackContainingObject<TrianglesData> TrianglesData { get; } = new ColladaStackContainingObject<TrianglesData>();
+        public ColladaStackContainingObject<ColladaPolygonsData> TrianglesData { get; } = new ColladaStackContainingObject<ColladaPolygonsData>();
 
         public void WriteBuffer(string value)
         {
@@ -36,10 +36,9 @@ namespace RomeEngine.IO
             CurrentBuffer.Attribute.AddProperty(name, type);
         }
 
-        static char[] separators = new char[] { ' ' };
         static T[] ReadBuffer<T>(string buffer, Func<string, T> parseFunc)
         {
-            return buffer.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(v => parseFunc(v)).ToArray();
+            return buffer.SeparateString().Select(v => parseFunc(v)).ToArray();
         }
         static Array ReadBuffer(string buffer, string bufferType)
         {
@@ -65,7 +64,7 @@ namespace RomeEngine.IO
 
         public int SubmeshesCount => TrianglesData.Elements.Count;
 
-        public bool BuildMesh(int submeshIndex, out Action<GameObject, Material> skinnedMeshRendererAddFunc)
+        public bool BuildMesh(int submeshIndex, ColladaSemanticModel semanticModel, out Action<GameObject, Material> skinnedMeshRendererAddFunc)
         {
             var buffers = Elements.ToArray();
             int buffersCount = buffers.Length;
@@ -93,22 +92,22 @@ namespace RomeEngine.IO
                 }
                 newIndices[i] = i;
             }
-            var namedBuffers = Enumerable.Range(0, buffersCount).Select(i => (name: buffers[i].Id.Replace($"{id}-", string.Empty), buffer: newBufferArrays[i])).ToDictionary(b => b.name, b => b.buffer);
+            var namedBuffers = Enumerable.Range(0, buffersCount).Select(i => (name: semanticModel.GetSemantic(buffers[i].Id).Value.ToLower(), buffer: newBufferArrays[i])).ToDictionary(b => b.name, b => b.buffer);
 
-            if (namedBuffers.ContainsKey("weights") && namedBuffers.ContainsKey("joints"))
+            if (namedBuffers.ContainsKey("weight") && namedBuffers.ContainsKey("joint"))
             {
                 skinnedMeshRendererAddFunc = (gameObject, marerial) =>
                 {
                     var mesh = new SkinnedMesh
                     (
-                        (float[])namedBuffers["positions"],
-                        (float[])namedBuffers["map-0"],
-                        (float[])namedBuffers["normals"],
-                        (float[])namedBuffers["weights"],
-                        (int[])namedBuffers["joints"],
+                        (float[])namedBuffers["position"],
+                        (float[])namedBuffers["texcoord"],
+                        (float[])namedBuffers["normal"],
+                        (float[])namedBuffers["weight"],
+                        (int[])namedBuffers["joint"],
                         newIndices,
                         JointsInfo.OrderBy(j => j.JointIndex).Select(j => j.JointName).ToArray(),
-                        JointsInfo.Select(j => j.Matrix).ToArray()
+                        TrianglesData.Elements[submeshIndex].PolygonFormat
                     );
                     var renderer = gameObject.AddComponent<SkinnedMeshRenderer>();
                     renderer.SkinnedMesh = mesh;
@@ -123,10 +122,11 @@ namespace RomeEngine.IO
                 {
                     var mesh = new StaticBufferMesh
                     (
-                        (float[])namedBuffers["positions"],
-                        (float[])namedBuffers["map-0"],
-                        (float[])namedBuffers["normals"],
-                        newIndices
+                        (float[])namedBuffers["position"],
+                        (float[])namedBuffers["texcoord"],
+                        (float[])namedBuffers["normal"],
+                        newIndices,
+                        TrianglesData.Elements[submeshIndex].PolygonFormat
                     );
                     var renderer = gameObject.AddComponent<StaticBufferMeshRenderer>();
                     renderer.StaticBufferMesh = mesh;

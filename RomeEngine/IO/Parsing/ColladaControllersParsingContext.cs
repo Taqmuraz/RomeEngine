@@ -7,26 +7,25 @@ namespace RomeEngine.IO
     {
         ReadOnlyArrayList<ColladaRawMesh> previousStageMeshes;
 
-        public ColladaControllersParsingContext(ReadOnlyArrayList<ColladaRawMesh> previousStageMeshes)
+        public ColladaControllersParsingContext(ReadOnlyArrayList<ColladaRawMesh> previousStageMeshes, ColladaSemanticModel semanticModel) : base(semanticModel)
         {
             this.previousStageMeshes = previousStageMeshes;
         }
 
         protected override IEnumerable<IColladaNodeHandler<ColladaControllersParsingContext>> CreateHandlers()
         {
+            void HandleBuffer(ColladaControllersParsingContext context, IColladaNode node)
+            {
+                context.CurrentElement.CurrentElement.CurrentElement.Buffer = node.GetValue();
+            }
+
             yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("controller", (context, node) => context.PushElement(new ColladaController(node.GetAttribute("id"), node.GetAttribute("name"))), (context, node) => context.PopElement());
             yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("skin", (context, node) => context.CurrentElement.PushElement(new ColladaSkin(node.GetAttribute("source"))), (context, node) => context.CurrentElement.PopElement());
-            yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("Name_array", (context, node) => context.CurrentElement.CurrentElement.JointNames = node.GetValue(), null);
-            yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("float_array", (context, node) =>
-            {
-                string name = node.GetAttribute("id").Replace($"{context.CurrentElement.Id}-", string.Empty);
-                switch (name)
-                {
-                    case "bind_poses-array": context.CurrentElement.CurrentElement.BindingPositions = node.GetValue(); break;
-                    case "weights-array": context.CurrentElement.CurrentElement.Weights = node.GetValue(); break;
-                    default:return;
-                }
-            }, null);
+            yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("Name_array", HandleBuffer, null);
+            yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("float_array", HandleBuffer, null);
+            yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("source", (context, node) => context.CurrentElement.CurrentElement.PushElement(new ColladaVertexBuffer(node.GetAttribute("id"))), (context, node) => context.CurrentElement.CurrentElement.PopElement());
+            yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("input", (context, node) => context.SemanticModel.AddSemantic(new ColladaSemantic(node.GetAttribute("semantic"), node.GetAttribute("source"))), null);
+            yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("param", (context, node) => context.SemanticModel.AddSemantic(new ColladaSemantic(node.GetAttribute("name"), context.CurrentElement.CurrentElement.CurrentElement.Id)), null);
             yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("vcount", (context, node) => context.CurrentElement.CurrentElement.VerticeWeightNumbers = node.GetValue(), null);
             yield return new ColladaDelegateHandler<ColladaControllersParsingContext>("v", (context, node) => context.CurrentElement.CurrentElement.JointWeightIndices = node.GetValue(), null);
         }
@@ -50,13 +49,12 @@ namespace RomeEngine.IO
             }
         }
 
-        static void AppendJointWeightIndices(ColladaRawMesh mesh, ColladaSkin skin)
+        void AppendJointWeightIndices(ColladaRawMesh mesh, ColladaSkin skin)
         {
-            char separator = ' ';
             foreach (var submesh in mesh.TrianglesData.Elements)
             {
                 string indices = submesh.Indices;
-                string[] indicesArray = indices.Split(new char[] { separator }, System.StringSplitOptions.RemoveEmptyEntries);
+                string[] indicesArray = indices.SeparateString();
                 List<string> newIndicesList = new List<string>();
                 int stride = mesh.Elements.Count;
                 for (int i = 0; i < indicesArray.Length; i+=stride)
@@ -66,15 +64,17 @@ namespace RomeEngine.IO
                     newIndicesList.Add(positionIndex);
                     newIndicesList.Add(positionIndex);
                 }
-                submesh.Indices = string.Join(separator.ToString(), newIndicesList);
+                submesh.Indices = string.Join(" ", newIndicesList);
             }
         }
-        static void AppendJointWeightBuffers (ColladaRawMesh rawMesh, ColladaSkin skin)
+        void AppendJointWeightBuffers (ColladaRawMesh rawMesh, ColladaSkin skin)
         {
-            char[] separators = new char[] { ' ' };
-            int[] verticesJointNubers = skin.VerticeWeightNumbers.Split(separators, System.StringSplitOptions.RemoveEmptyEntries).Select(v => int.Parse(v)).ToArray();
-            float[] weightsRawData = skin.Weights.Split(separators, System.StringSplitOptions.RemoveEmptyEntries).Select(w => w.ToFloat()).ToArray();
-            int[] jointWeightIndices = skin.JointWeightIndices.Split(separators, System.StringSplitOptions.RemoveEmptyEntries).Select(j => int.Parse(j)).ToArray();
+            var weightsTextBuffer = skin.Elements.First(b => SemanticModel.GetSemantic(b.Id).Value.ToLower().Equals("weight"));
+            var jointsTextBuffer = skin.Elements.First(b => SemanticModel.GetSemantic(b.Id).Value.ToLower().Equals("joint"));
+
+            int[] verticesJointNubers = skin.VerticeWeightNumbers.SeparateString().Select(v => int.Parse(v)).ToArray();
+            float[] weightsRawData = weightsTextBuffer.Buffer.SeparateString().Select(w => w.ToFloat()).ToArray();
+            int[] jointWeightIndices = skin.JointWeightIndices.SeparateString().Select(j => int.Parse(j)).ToArray();
 
             int jointPerVertex = 3;
 
@@ -125,12 +125,12 @@ namespace RomeEngine.IO
                 weightsBuffer[i + 2] = vec.z;
             }*/
 
-            rawMesh.PushElement(new ColladaVertexBuffer("weights")
+            rawMesh.PushElement(new ColladaVertexBuffer(weightsTextBuffer.Id)
             {
                 Attribute = weightAttribute,
                 Buffer = string.Join(" ", weightsBuffer)
             });
-            rawMesh.PushElement(new ColladaVertexBuffer("joints")
+            rawMesh.PushElement(new ColladaVertexBuffer(jointsTextBuffer.Id)
             {
                 Attribute = jointAttribute,
                 Buffer = string.Join(" ", jointIndices)
@@ -139,10 +139,10 @@ namespace RomeEngine.IO
             rawMesh.PopElement();
         }
 
-        static void AppendJointsInfo(ColladaRawMesh rawMesh, ColladaSkin skin)
+        void AppendJointsInfo(ColladaRawMesh rawMesh, ColladaSkin skin)
         {
-            Matrix4x4[] matrices = skin.ReadJoints(out string[] joints);
-            rawMesh.JointsInfo = Enumerable.Range(0, joints.Length).Select(i => new ColladaJointInfo(joints[i], i, matrices[i])).ToArray();
+            var joints = skin.Elements.First(e => SemanticModel.GetSemantic(e.Id).Value.ToLower() == "joint").Buffer.SeparateString();
+            rawMesh.JointsInfo = Enumerable.Range(0, joints.Length).Select(i => new ColladaJointInfo(joints[i], i)).ToArray();
         }
 
         public override void UpdateGameObject(GameObject gameObject, IColladaParsingInfo parsingInfo)

@@ -8,6 +8,5 @@
         }
 
         public string EffectName { get; }
-        public string TextureFileName { get; set; }
     }
 }

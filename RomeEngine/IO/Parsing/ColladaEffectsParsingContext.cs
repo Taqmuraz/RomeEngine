@@ -7,7 +7,7 @@ namespace RomeEngine.IO
     {
         ReadOnlyArrayList<ColladaMaterial> previousStageMaterials;
 
-        public ColladaEffectsParsingContext(ReadOnlyArrayList<ColladaMaterial> previousStageMaterials)
+        public ColladaEffectsParsingContext(ReadOnlyArrayList<ColladaMaterial> previousStageMaterials, ColladaSemanticModel semanticModel) : base(semanticModel)
         {
             this.previousStageMaterials = previousStageMaterials;
         }
@@ -17,23 +17,27 @@ namespace RomeEngine.IO
         protected override IEnumerable<IColladaNodeHandler<ColladaEffectsParsingContext>> CreateHandlers()
         {
             yield return new ColladaDelegateHandler<ColladaEffectsParsingContext>("effect", (context, node) => context.PushElement(new ColladaEffect(node.GetAttribute("id"))), (context, node) => context.PopElement());
-            yield return new ColladaDelegateHandler<ColladaEffectsParsingContext>("init_from", (context, node) => context.CurrentElement.TextureFileName = node.GetValue(), null);
+            yield return new ColladaDelegateHandler<ColladaEffectsParsingContext>("init_from", (context, node) =>
+            {
+                context.SemanticModel.AddSemantic(new ColladaSemantic(node.GetValue(), context.CurrentElement.EffectName));
+            }, null);
         }
         public override void UpdateGameObject(GameObject gameObject, IColladaParsingInfo parsingInfo)
         {
-            var effects = Elements;
             var skinnedMeshes = gameObject.GetComponentsOfType<MeshRenderer>();
             for (int i = 0; i < skinnedMeshes.Length; i++)
             {
                 var material = (SingleTextureMaterial)skinnedMeshes[i].Material;
-                var colladaMaterial = previousStageMaterials.FirstOrDefault(m => m.MaterialName == material.MaterialName);
 
-                if (colladaMaterial == null) continue;
-                var effect = effects.FirstOrDefault(e => e.EffectName == colladaMaterial.EffectName);
+                if (material.MaterialName == null) continue;
+
+                var materialName = SemanticModel.GetSemantic(material.MaterialName).Value;
+                var effectName = SemanticModel.GetSemantic(materialName).Value;
+                var imageName = SemanticModel.GetSemantic(effectName).Value;
+                var textureFileName = SemanticModel.GetSemantic(imageName).Value;
 
                 var fs = Engine.Instance.Runtime.FileSystem;
-                material.TextureFileName = fs.GetFiles(fs.GetParentDirectory(parsingInfo.SourceFile)).FirstOrDefault(p => fs.GetFileNameWithoutExtension(p).Equals(effect.TextureFileName.Replace("_png", string.Empty)));
-                skinnedMeshes[i].Material = material;
+                material.TextureFileName = fs.CombinePath(fs.GetParentDirectory(parsingInfo.SourceFile), textureFileName);
             }
         }
         protected override ColladaEffectsParsingContext GetContext() => this;

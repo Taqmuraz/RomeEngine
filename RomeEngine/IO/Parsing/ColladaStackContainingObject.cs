@@ -22,5 +22,7 @@ namespace RomeEngine.IO
             elementsPassed.Add(pop);
             return pop;
         }
+
+        public bool IsEmpty() => elementsStack.Count == 0;
     }
 }

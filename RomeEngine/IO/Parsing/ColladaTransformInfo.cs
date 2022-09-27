@@ -28,7 +28,7 @@ namespace RomeEngine.IO
 
         public Matrix4x4 ReadMatrix()
         {
-            float[] floats = Matrix.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries).Select(m => m.ToFloat()).ToArray();
+            float[] floats = Matrix.SeparateString().Select(m => m.ToFloat()).ToArray();
             return Matrix4x4.FromFloatsArray(floats);
         }
 

@@ -24,16 +24,18 @@ namespace RomeEngine.IO
 
         public ISerializable ParseObject(string fileName)
         {
+            var semanticModel = new ColladaSemanticModel();
             ColladaMaterialsParsingContext materialStage;
             ColladaGeometryParsingContext geometryStage;
             ColladaControllersParsingContext controllersStage;
             Dictionary<string, IColladaParsingStage> stages = new IColladaParsingStage[]
             {
-                new ColladaVisualSceneParsingContext(),
-                geometryStage = new ColladaGeometryParsingContext(),
+                new ColladaVisualSceneParsingContext(semanticModel),
+                geometryStage = new ColladaGeometryParsingContext(semanticModel),
                 controllersStage = geometryStage.CreateControllersContext(),
-                materialStage = new ColladaMaterialsParsingContext(),
+                materialStage = new ColladaMaterialsParsingContext(semanticModel),
                 materialStage.CreateEffectContext(),
+                new ColladaImageParsingContext(semanticModel),
             }
             .ToDictionary(h => h.RootNodeName);
 

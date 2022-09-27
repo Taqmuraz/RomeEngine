@@ -27,6 +27,7 @@ namespace RomeEngine
             Indices = indices;
         }
 
+        public PolygonFormat PolygonFormat => PolygonFormat.Triangles;
         public Vertex[] Vertices { get; set; }
         public int[] Indices { get; set; }
 

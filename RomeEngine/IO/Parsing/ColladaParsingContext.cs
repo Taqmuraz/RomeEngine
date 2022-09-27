@@ -7,8 +7,11 @@ namespace RomeEngine.IO
     {
         Dictionary<string, IColladaNodeHandler<TContext>> handlers;
 
-        public ColladaParsingContext()
+        protected ColladaSemanticModel SemanticModel { get; }
+
+        public ColladaParsingContext(ColladaSemanticModel semanticModel)
         {
+            SemanticModel = semanticModel;
             handlers = CreateHandlers().ToDictionary(h => h.Name);
         }
 

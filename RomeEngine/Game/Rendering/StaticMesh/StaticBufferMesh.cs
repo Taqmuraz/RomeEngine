@@ -24,12 +24,15 @@ namespace RomeEngine
             };
         }
 
-        public StaticBufferMesh(float[] vertices, float[] texcoords, float[] normals, int[] indices) : this()
+        public PolygonFormat PolygonFormat { get; }
+
+        public StaticBufferMesh(float[] vertices, float[] texcoords, float[] normals, int[] indices, PolygonFormat polygonFormat) : this()
         {
             this.vertices = vertices;
             this.texcoords = texcoords;
             this.normals = normals;
             this.indices = indices;
+            PolygonFormat = polygonFormat;
         }
 
         public IEnumerable<int> EnumerateIndices()
