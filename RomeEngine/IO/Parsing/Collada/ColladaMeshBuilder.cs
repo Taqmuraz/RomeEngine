@@ -12,7 +12,7 @@ namespace RomeEngine.IO
             var skins = rootEntity["library_controllers"]["controller"]["skin"];
             foreach (var geometry in geometries)
             {
-                var meshes = geometries["mesh"];
+                var meshes = geometry["mesh"];
                 var skin = skins.FirstOrDefault(s => s.Properties["source"] == geometry.Properties["id"]);
                 foreach (var mesh in meshes)
                 {
