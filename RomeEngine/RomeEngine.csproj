@@ -131,11 +131,13 @@
     <Compile Include="IO\Parsing\Collada\ColladaEntity.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaEntityCollection.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaEntityProperty.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaMeshBuilder.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaNode.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaNodeAttribute.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaParser.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaPropertiesCollection.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaXmlDocumentNode.cs" />
+    <Compile Include="IO\Parsing\Collada\IColladaBuilder.cs" />
     <Compile Include="IO\Parsing\Collada\IColladaNode.cs" />
     <Compile Include="IO\Parsing\Collada\IColladaNodeHandler.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMesh.cs" />

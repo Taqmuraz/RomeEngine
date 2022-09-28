@@ -46,7 +46,7 @@ namespace RomeEngine.IO
 
             IColladaNodeHandler[] handlers = new IColladaNodeHandler[]
             {
-                new ColladaDelegateNodeHandler("input", node => CurrentNode().AddChild(context.GetSource(node.GetAttribute("source").Value).ChangeType(node.GetAttribute("semantic").Value.ToLower())), null),
+                new ColladaDelegateNodeHandler("input", node => CurrentNode().AddChild(context.GetSource(node.GetAttribute("source").Value).ChangeType(node.GetAttribute("semantic").Value.ToLower()).AddAttributes(node.Attributes)), null),
 
                 defaultHandler
             };
@@ -82,6 +82,16 @@ namespace RomeEngine.IO
             TraceNode(xmlDocument.DocumentElement);
 
             var colladaEntity = rootNode.BuildEntity();
+
+            IColladaBuilder[] builders = new IColladaBuilder[]
+            {
+                new ColladaMeshBuilder()
+            };
+
+            foreach (var builder in builders)
+            {
+                builder.BuildGameObject(result, colladaEntity);
+            }
 
             return result;
         }

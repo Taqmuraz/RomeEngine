@@ -16,6 +16,7 @@ namespace RomeEngine.IO
         public int Count => properties.Count;
 
         public ColladaEntityProperty this[string name] => properties[name];
+        public bool HasProperty(string name) => properties.ContainsKey(name);
 
         public IEnumerator<ColladaEntityProperty> GetEnumerator()
         {

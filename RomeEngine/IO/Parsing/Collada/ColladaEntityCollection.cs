@@ -17,5 +17,8 @@ namespace RomeEngine.IO
         IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
 
         public ColladaEntityCollection this[string type] => new ColladaEntityCollection(source.SelectMany(s => s[type]));
+        public bool IsEmpty => !source.Any();
+        public ColladaEntity Single() => source.Single();
+        public ColladaEntityCollection Concat(ColladaEntityCollection other) => new ColladaEntityCollection(source.Concat(other.source));
     }
 }

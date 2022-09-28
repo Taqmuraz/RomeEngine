@@ -14,6 +14,11 @@ namespace RomeEngine.IO
         }
 
         public ColladaNode ChangeType(string type) => ((NodeType, _) = (type, this)).Item2;
+        public ColladaNode AddAttributes(IEnumerable<ColladaNodeAttribute> attributes)
+        {
+            this.attributes = this.attributes.Concat(attributes.Except(attributes.Where(a => this.attributes.Any(n => n.Name == a.Name)))).ToArray();
+            return this;
+        }
 
         public string NodeType { get; private set; }
         public string Id { get; }

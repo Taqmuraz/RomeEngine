@@ -9,7 +9,7 @@ namespace RomeEngine.IO
 
         public ColladaEntity(string type, string value, ColladaNodeAttribute[] properties, ColladaEntity[] children)
         {
-            Type = type;
+            Type = type.ToLower();
             Value = value;
             Properties = new ColladaPropertiesCollection(properties.Select(p => new ColladaEntityProperty(p.Name, p.Value)).ToArray());
             this.children = children;

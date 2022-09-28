@@ -18,7 +18,7 @@ namespace RomeEngine.IO
 
         public ColladaNodeAttribute GetAttribute(string name) => Attributes.First(a => a.Name == name);
 
-        public string GetValue() => node.Value;
+        public string GetValue() => node.ChildNodes.Cast<XmlNode>().FirstOrDefault(c => c.NodeType == XmlNodeType.Text)?.Value;
 
         public bool HasAttribute(string name) => Attributes.Any(a => a.Name == name);
     }
