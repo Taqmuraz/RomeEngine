@@ -35,4 +35,11 @@ public static class CollectionsExtensions
 		}
 		return -1;
 	}
+
+	public static char[] StringSeparators { get; } = new char[] { ' ', '\n', '\r', '\t' };
+
+	public static string[] SeparateString(this string source)
+	{
+		return source.Split(StringSeparators, StringSplitOptions.RemoveEmptyEntries);
+	}
 }

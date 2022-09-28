@@ -1,8 +1,8 @@
 ﻿namespace RomeEngine.IO
 {
-    public interface IColladaParsingContext
+    public interface IColladaNodeHandler
     {
-        string RootNodeName { get; }
+        bool CanParse(IColladaNode node);
         void ParseStart(IColladaNode node);
         void ParseEnd(IColladaNode node);
     }
