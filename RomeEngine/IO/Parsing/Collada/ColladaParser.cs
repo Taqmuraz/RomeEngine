@@ -87,11 +87,13 @@ namespace RomeEngine.IO
             {
                 new ColladaMeshBuilder(),
                 new ColladaSkeletonBuilder(),
+                new ColladaMaterialBuilder(),
             };
+            var parsingInfo = new ColladaParsingInfo(fileName);
 
             foreach (var builder in builders)
             {
-                builder.BuildGameObject(result, colladaEntity);
+                builder.BuildGameObject(result, colladaEntity, parsingInfo);
             }
 
             return result;

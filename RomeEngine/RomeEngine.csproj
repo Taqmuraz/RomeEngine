@@ -131,10 +131,12 @@
     <Compile Include="IO\Parsing\Collada\ColladaEntity.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaEntityCollection.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaEntityProperty.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaMaterialBuilder.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaMeshBuilder.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaNode.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaNodeAttribute.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaParser.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaParsingInfo.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaPropertiesCollection.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaSkeletonBuilder.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaXmlDocumentNode.cs" />

@@ -5,7 +5,7 @@ namespace RomeEngine.IO
 {
     public sealed class ColladaSkeletonBuilder : IColladaBuilder
     {
-        public void BuildGameObject(GameObject gameObject, ColladaEntity rootEntity)
+        public void BuildGameObject(GameObject gameObject, ColladaEntity rootEntity, ColladaParsingInfo info)
         {
             var visualScenes = rootEntity["library_visual_scenes"]["visual_scene"]["node"];
 

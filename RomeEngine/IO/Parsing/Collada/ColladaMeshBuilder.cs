@@ -6,7 +6,7 @@ namespace RomeEngine.IO
 {
     public sealed class ColladaMeshBuilder : IColladaBuilder
     {
-        public void BuildGameObject(GameObject gameObject, ColladaEntity rootEntity)
+        public void BuildGameObject(GameObject gameObject, ColladaEntity rootEntity, ColladaParsingInfo info)
         {
             var geometries = rootEntity["library_geometries"]["geometry"];
             var skins = rootEntity["library_controllers"]["controller"]["skin"];

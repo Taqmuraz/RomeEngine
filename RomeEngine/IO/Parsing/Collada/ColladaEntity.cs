@@ -20,6 +20,11 @@ namespace RomeEngine.IO
         public string Value { get; }
         public ColladaPropertiesCollection Properties { get; }
 
+        public ColladaEntityCollection Search(string type)
+        {
+            return new ColladaEntityCollection(this.TraceElement(c => c.Children).Where(t => t.Type == type));
+        }
+
         public override string ToString() => $"{Type}, {children.Length} children, {string.Join(", ", Properties.Select(p => p.ToString()))} properties";
 
         public ColladaEntityCollection this[string type] => new ColladaEntityCollection(children.Where(c => c.Type == type));
