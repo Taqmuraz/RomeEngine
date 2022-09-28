@@ -17,6 +17,8 @@ namespace RomeEngine
         public string[] JointNames { get; private set; }
         public Array[] Buffers => new Array[] { vertices, texcoords, normals, weights, joints };
 
+        public static int MaxJointsSupported => 3;
+
         ReadOnlyArray<IMeshAttributeInfo> attributes;
 
         public SkinnedMesh()
@@ -26,8 +28,8 @@ namespace RomeEngine
                 new CustomMeshAttribute(3, MeshAttributeType.Float),
                 new CustomMeshAttribute(2, MeshAttributeType.Float),
                 new CustomMeshAttribute(3, MeshAttributeType.Float),
-                new CustomMeshAttribute(3, MeshAttributeType.Float),
-                new CustomMeshAttribute(3, MeshAttributeType.Int),
+                new CustomMeshAttribute(MaxJointsSupported, MeshAttributeType.Float),
+                new CustomMeshAttribute(MaxJointsSupported, MeshAttributeType.Int),
             };
         }
         public SkinnedMesh

@@ -136,6 +136,7 @@
     <Compile Include="IO\Parsing\Collada\ColladaNodeAttribute.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaParser.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaPropertiesCollection.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaSkeletonBuilder.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaXmlDocumentNode.cs" />
     <Compile Include="IO\Parsing\Collada\IColladaBuilder.cs" />
     <Compile Include="IO\Parsing\Collada\IColladaNode.cs" />

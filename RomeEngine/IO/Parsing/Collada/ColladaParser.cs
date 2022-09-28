@@ -85,7 +85,8 @@ namespace RomeEngine.IO
 
             IColladaBuilder[] builders = new IColladaBuilder[]
             {
-                new ColladaMeshBuilder()
+                new ColladaMeshBuilder(),
+                new ColladaSkeletonBuilder(),
             };
 
             foreach (var builder in builders)

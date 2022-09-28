@@ -68,8 +68,8 @@ namespace RomeEngine.IO
                 if (skinEntity != null)
                 {
                     HandleSkinBuffers(skinEntity, out float[] weights, out int[] joints, out jointNames, ref indices, buffers.Count);
-                    buffers.Add(new Buffer(weights, 3, 3));
-                    buffers.Add(new Buffer(joints, 3, 4));
+                    buffers.Add(new Buffer(weights, SkinnedMesh.MaxJointsSupported, 3));
+                    buffers.Add(new Buffer(joints, SkinnedMesh.MaxJointsSupported, 4));
                 }
 
                 int vertexStride = buffers.Count;
@@ -149,7 +149,7 @@ namespace RomeEngine.IO
             var jwIndices = indicesBuffer.SeparateString().Select(i => int.Parse(i)).ToArray();
 
             int indicesOffset = 0;
-            int maxJoints = 3;
+            int maxJoints = SkinnedMesh.MaxJointsSupported;
             int stride = 2;
             weights = new float[numbers.Length * maxJoints];
             joints = new int[numbers.Length * maxJoints];
@@ -157,23 +157,44 @@ namespace RomeEngine.IO
             for (int n = 0; n < numbers.Length; n++)
             {
                 int number = numbers[n];
-                for (int j = 0; j < maxJoints; j++)
+                bool normalize = false;
+
+                int maxNumber = Math.Max(number, maxJoints);
+
+                (float weight, int joint)[] vertexWeights = new (float, int)[maxNumber];
+
+                for (int i = 0; i < maxNumber; i++)
                 {
-                    float weight;
-                    int joint;
-                    if (j < number)
-                    {
-                        joint = jwIndices[indicesOffset + stride * j];
-                        weight = weightsRaw[jwIndices[indicesOffset + stride * j + 1]];
-                        indicesOffset += stride;
-                    }
-                    else
-                    {
-                        joint = -1;
-                        weight = 0f;
-                    }
-                    weights[n] = weight;
-                    joints[n] = joint;
+                    vertexWeights[i] = (0f, -1);
+                }
+
+                for (int i = 0; i < number; i++)
+                {
+                    vertexWeights[i] = (weightsRaw[jwIndices[indicesOffset + 1]], jwIndices[indicesOffset]);
+                    indicesOffset += stride;
+                }
+
+                if (number > maxJoints)
+                {
+                    vertexWeights = vertexWeights.OrderByDescending(w => w.weight).Take(maxJoints).ToArray();
+                    normalize = true;
+                }
+
+                if (normalize)
+                {
+                    Vector3 vertexWeight = new Vector3(vertexWeights[0].weight, vertexWeights[1].weight, vertexWeights[2].weight);
+                    float sum = vertexWeight.x + vertexWeight.y + vertexWeight.z;
+                    if (sum != 0) vertexWeight /= sum;
+
+                    vertexWeights[0].weight = vertexWeight.x;
+                    vertexWeights[1].weight = vertexWeight.y;
+                    vertexWeights[2].weight = vertexWeight.z;
+                }
+
+                for (int i = 0; i < maxJoints; i++)
+                {
+                    weights[n * maxJoints + i] = vertexWeights[i].weight;
+                    joints[n * maxJoints + i] = vertexWeights[i].joint;
                 }
             }
 

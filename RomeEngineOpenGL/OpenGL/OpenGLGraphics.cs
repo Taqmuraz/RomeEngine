@@ -181,7 +181,7 @@ namespace RomeEngineOpenGL
                         }
                     }
 
-                    pos = vp.MultiplyPoint_With_WDivision(pos);
+                    pos = vp.MultiplyPoint_With_WDivision(totalPos);
                     argumentBuffer[0] = pos.x;
                     argumentBuffer[1] = pos.y;
                     argumentBuffer[2] = pos.z;

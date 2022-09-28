@@ -9,7 +9,7 @@ in vec3 joints;
 out vec2 uv;
 out vec3 surfaceNormal;
 
-const int MAX_TRANSFORMS = 50;
+const int MAX_TRANSFORMS = 100;
 
 uniform float time;
 uniform mat4 transformationMatrix;
