@@ -43,32 +43,10 @@ namespace RomeEngineOpenGL
 
             graphics.Setup(Width, Height);
             engine.UpdateGraphics3D(graphics, context);
+            graphics.RenderScene();
             graphics2D.Setup(Width, Height);
             engine.UpdateGraphics2D(graphics2D);
-            
-            /*GL.ClearColor(Color32.gray);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            graphics2D.Setup(Width, Height);
-            graphics2D.Brush = new SingleColorBrush(Color32.red);
-            graphics2D.Style = graphics2D.FillStyle;
-            graphics2D.DrawRect(new Rect(0f, 0f, 150f, 200f));
-            graphics2D.DrawRect(new Rect(150f, 0f, 150f, 50f));
-            graphics2D.DrawRect(new Rect(Width * 0.5f - 100, 387.5f, 200, 30));
-
-            /*
-            GL.ClearColor(Color32.gray);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            GL.Viewport(0, 0, Width, Height);
-            GL.Begin(PrimitiveType.Triangles);
-            GL.Color4(Color32.red);
-            GL.Vertex2(0f, 0.5f);
-            GL.Vertex2(0.5f, 0.5f);
-            float t = Time.CurrentTime * 10f;
-            GL.Vertex2(Mathf.Cos(t), Mathf.Sin(t));
-            GL.End();
-            */
+            graphics2D.RenderScene();
 
             SwapBuffers();
         }

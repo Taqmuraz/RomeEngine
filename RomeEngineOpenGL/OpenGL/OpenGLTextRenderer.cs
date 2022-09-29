@@ -8,44 +8,38 @@ namespace RomeEngineOpenGL
     {
         class OpenGLTextShaderModel : IOpenGLShaderModel
         {
-            OpenGLTextRenderer textRenderer;
+            Rect boxRect;
+            Rect uvRect;
+            float depth;
+            Color32 textColor;
 
-            public OpenGLTextShaderModel(OpenGLTextRenderer textRenderer)
+            public OpenGLTextShaderModel(Rect boxRect, Rect uvRect, float depth, Color32 textColor)
             {
-                this.textRenderer = textRenderer;
+                this.boxRect = boxRect;
+                this.uvRect = uvRect;
+                this.depth = depth;
+                this.textColor = textColor;
             }
 
             public void SetupShader(OpenGLShader shader)
             {
-                shader.SetVector4("vertexRect", new Vector4(textRenderer.boxRect.X, textRenderer.boxRect.Y, textRenderer.boxRect.Width, textRenderer.boxRect.Height));
-                shader.SetVector4("textRect", new Vector4(textRenderer.uvRect.X, textRenderer.uvRect.Y, textRenderer.uvRect.Width, textRenderer.uvRect.Height));
-                shader.SetFloat("depth", textRenderer.depth);
-                shader.SetVector4("textureColor", textRenderer.textColor.ToVector4());
+                shader.SetVector4("vertexRect", new Vector4(boxRect.X, boxRect.Y, boxRect.Width, boxRect.Height));
+                shader.SetVector4("textRect", new Vector4(uvRect.X, uvRect.Y, uvRect.Width, uvRect.Height));
+                shader.SetFloat("depth", depth);
+                shader.SetVector4("textureColor", textColor.ToVector4());
             }
         }
-
-        IOpenGLShaderModel textShaderModel;
-
 
         OpenGLTexture fontTexture;
         Encoding encoding;
         OpenGLShader textShader;
         IMeshIdentifier boxMesh;
-        Rect boxRect;
-        Rect uvRect;
-        Color32 textColor;
-        float depth;
-
-        protected override OpenGLShader ActiveShader => textShader;
-        protected override IOpenGLShaderModel StandardShaderModel => textShaderModel;
 
         public OpenGLTextRenderer(IGraphicsContext context)
         {
             fontTexture = (OpenGLTexture)context.LoadTexture("./Resources/Fonts/Arial.png");
             encoding = Encoding.GetEncoding("CP855");
             textShader = new OpenGLShader("Text");
-
-            textShaderModel = new OpenGLTextShaderModel(this);
 
             var mesh = new StaticMesh
                 (
@@ -142,12 +136,12 @@ namespace RomeEngineOpenGL
 
                 SetTexture(fontTexture, TextureType.Albedo);
 
-                boxRect = new Rect(positionX + symbolWidth * x, positionY + symbolHeight * y, symbolWidth, symbolHeight);
-                uvRect = new Rect(symbolCoordX, symbolCoordY, symbolCoordSize, symbolCoordSize);
-                textColor = color;
-                depth = Style2D.Depth;
+                var boxRect = new Rect(positionX + symbolWidth * x, positionY + symbolHeight * y, symbolWidth, symbolHeight);
+                var uvRect = new Rect(symbolCoordX, symbolCoordY, symbolCoordSize, symbolCoordSize);
+                var textColor = color;
+                var depth = Style2D.Depth;
 
-                DrawMesh(boxMesh);
+                DrawMesh(boxMesh, textShader, new OpenGLTextShaderModel(boxRect, uvRect, depth, textColor));
 
                 x++;
             }

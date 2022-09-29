@@ -32,5 +32,10 @@ namespace RomeEngineOpenGL
             rect = Rect.FromCenterAndSize(viewportInv.MultiplyPoint(rect.Center), viewportInv.MultiplyVector(rect.Size));
             textRenderer.DrawText(text, rect, color, options);
         }
+
+        public void RenderScene()
+        {
+            textRenderer.RenderScene();
+        }
     }
 }

@@ -1,8 +1,8 @@
-in vec3 position;
-in vec2 textureCoords;
-in vec3 normal;
-in JOINT_VEC weights;
-in JOINT_VEC joints;
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec2 textureCoords;
+layout (location = 2) in vec3 normal;
+layout (location = 3) in JOINT_VEC weights;
+layout (location = 4) in JOINT_VEC joints;
 
 out vec2 uv;
 out vec3 surfaceNormal;

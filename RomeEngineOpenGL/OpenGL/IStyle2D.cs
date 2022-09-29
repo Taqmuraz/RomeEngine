@@ -12,5 +12,7 @@ namespace RomeEngineOpenGL
         void DrawPolygon(Vector2[] points);
         void DrawRect(Rect rect);
         void DrawText(string text, Rect rect, Color32 color, TextOptions options);
+
+        void RenderScene();
     }
 }

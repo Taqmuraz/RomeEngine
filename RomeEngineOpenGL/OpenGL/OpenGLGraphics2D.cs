@@ -19,6 +19,12 @@ namespace RomeEngineOpenGL
             fillStyle = new FillStyle2D(context);
         }
 
+        public void RenderScene()
+        {
+            outlineStyle.RenderScene();
+            fillStyle.RenderScene();
+        }
+
         int width, height;
         public void Setup(int width, int height)
         {

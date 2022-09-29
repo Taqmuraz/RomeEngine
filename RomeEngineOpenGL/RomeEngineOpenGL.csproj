@@ -52,7 +52,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OpenGL\CustomOpenGLShaderParameter.cs" />
     <Compile Include="OpenGL\FillStyle2D.cs" />
+    <Compile Include="OpenGL\IOpenGLShaderParameter.cs" />
     <Compile Include="OpenGL\IOpenGLShaderPostProcessor.cs" />
     <Compile Include="OpenGL\IStyle2D.cs" />
     <Compile Include="OpenGL\OpenGLCommonGraphics.cs" />
@@ -61,8 +63,11 @@
     <Compile Include="OpenGL\OpenGLShader.cs" />
     <Compile Include="OpenGL\IOpenGLShaderModel.cs" />
     <Compile Include="OpenGL\OpenGLShaderMacro.cs" />
+    <Compile Include="OpenGL\OpenGLShaderModel.cs" />
     <Compile Include="OpenGL\OpenGLTextRenderer.cs" />
     <Compile Include="OpenGL\OutlineStyle2D.cs" />
+    <Compile Include="OpenGL\SkinnedOpenGLShaderModel.cs" />
+    <Compile Include="OpenGL\StaticOpenGLShaderModel.cs" />
     <Compile Include="OpenGL\Style2D.cs" />
     <Compile Include="Program\MainWindow.cs" />
     <Compile Include="OpenGL\OpenGLContext.cs" />
