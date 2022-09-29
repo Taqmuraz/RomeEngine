@@ -8,7 +8,7 @@ namespace RomeEngine.IO
         public abstract bool CanSerializeType(Type type);
 
         protected abstract int GetCollectionLength(object collection);
-        protected abstract object CreateCollection(Type collectionType, int length);
+        protected abstract object CreateCollection(Type collectionType, int length, ISerializationContext context);
         protected abstract void ReadElement(object collection, int index, ISerializationContext context);
         protected abstract void WriteElement(object collection, int index, ISerializationContext context);
 
@@ -24,6 +24,7 @@ namespace RomeEngine.IO
             {
                 int length = GetCollectionLength(collection);
                 context.Stream.WriteInt(length);
+                ProcessCollection(context, collection);
                 for (int i = 0; i < length; i++)
                 {
                     WriteElement(collection, i, context);
@@ -31,11 +32,13 @@ namespace RomeEngine.IO
             }
         }
 
+        protected virtual void ProcessCollection(ISerializationContext context, IEnumerable collection) { }
+
         public object DeserializeField(Type type, ISerializationContext context)
         {
             int length = context.Stream.ReadInt();
             if (length == -1) return null;
-            object collection = CreateCollection(type, length);
+            object collection = CreateCollection(type, length, context);
             for (int i = 0; i < length; i++)
             {
                 ReadElement(collection, i, context);

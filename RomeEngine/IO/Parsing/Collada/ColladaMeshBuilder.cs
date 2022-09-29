@@ -24,72 +24,20 @@ namespace RomeEngine.IO
 
         sealed class Buffer
         {
-            public Buffer(Array array, int stride, int offset)
+            public Buffer(Array array, int stride, int offset, MeshAttributeFormat type)
             {
                 Array = array;
                 Stride = stride;
                 Offset = offset;
+                Type = type;
             }
 
             public Array Array { get; }
             public int Stride { get; }
             public int Offset { get; }
-        }
+            public MeshAttributeFormat Type { get; }
 
-        class ColladaVertexEqualityProvider : IEqualityComparer<ColladaVertex>
-        {
-            public bool Equals(ColladaVertex a, ColladaVertex b)
-            {
-                return a.IsEqualTo(b);
-            }
-
-            public int GetHashCode(ColladaVertex vertex)
-            {
-                return vertex.CalculateHashCode();
-            }
-        }
-
-        class ColladaVertex
-        {
-            int[] attributeIndices;
-            List<Buffer> buffers;
-
-            public ColladaVertex(List<Buffer> buffersInfo, int id)
-            {
-                attributeIndices = new int[buffersInfo.Count];
-                this.buffers = buffersInfo;
-                Id = id;
-            }
-
-            public int CalculateHashCode()
-            {
-                return attributeIndices[0];
-            }
-
-            public int Id { get; }
-
-            public bool IsEqualTo(ColladaVertex vertex)
-            {
-                return vertex.attributeIndices[0] == attributeIndices[0];
-            }
-
-            public void SetIndex(int number, int index)
-            {
-                attributeIndices[number] = index;
-            }
-
-            public int PositionIndex => attributeIndices[0];
-
-            public void HandleBuffer(int attribute, Array source, Array destination, int pointer)
-            {
-                int length = buffers[attribute].Stride;
-                for (int i = 0; i < length; i++)
-                {
-                    destination.SetValue(source.GetValue(attributeIndices[attribute] * length + i), pointer + i);
-                }
-            }
-
-            public override string ToString() => string.Join(", ", attributeIndices);
+            public MeshAttribute CreateAttribute() => new MeshAttribute(Array, Stride, Type, Offset);
         }
 
         static void HandleMesh(GameObject gameObject, ColladaEntity meshEntity, ColladaEntity skinEntity)
@@ -111,9 +59,9 @@ namespace RomeEngine.IO
                 Func<ColladaEntity, int> getStrideFunc = e => e["technique_common"]["accessor"].Single().Properties["stride"].GetInt();
                 (int index, int stride)[] strideCheck = new (int, int)[] { (0, 3), (1, 2), (2, 3) };
 
-                buffers.Add(new Buffer(floatParseFunc(positionsBuffer.SeparateString()), getStrideFunc(positions), vertices.Properties["offset"].GetInt()));
-                buffers.Add(new Buffer(floatParseFunc(texcoordsBuffer.SeparateString()), getStrideFunc(texcoords), texcoords.Properties["offset"].GetInt()));
-                buffers.Add(new Buffer(floatParseFunc(normalsBuffer.SeparateString()), getStrideFunc(normals), normals.Properties["offset"].GetInt()));
+                buffers.Add(new Buffer(floatParseFunc(positionsBuffer.SeparateString()), getStrideFunc(positions), vertices.Properties["offset"].GetInt(), MeshAttributeFormat.Float8Bit));
+                buffers.Add(new Buffer(floatParseFunc(texcoordsBuffer.SeparateString()), getStrideFunc(texcoords), texcoords.Properties["offset"].GetInt(), MeshAttributeFormat.UFloat8Bit));
+                buffers.Add(new Buffer(floatParseFunc(normalsBuffer.SeparateString()), getStrideFunc(normals), normals.Properties["offset"].GetInt(), MeshAttributeFormat.Float8Bit));
 
                 if (strideCheck.Any(s => buffers[s.index].Stride != s.stride))
                 {
@@ -124,44 +72,26 @@ namespace RomeEngine.IO
 
                 if (skinEntity != null)
                 {
-                    HandleSkinBuffers(skinEntity, out float[] weights, out int[] joints, out jointNames, ref indices, buffers.Count);
-                    buffers.Add(new Buffer(weights, SkinnedMesh.MaxJointsSupported, 3));
-                    buffers.Add(new Buffer(joints, SkinnedMesh.MaxJointsSupported, 4));
+                    HandleSkinBuffers(skinEntity, out Buffer weights, out Buffer joints, out jointNames, ref indices, buffers.Count);
+                    buffers.Add(weights);
+                    buffers.Add(joints);
                 }
 
                 int vertexStride = buffers.Count;
                 int verticesCount = indices.Length / vertexStride;
 
-                Dictionary<int, ColladaVertex> verticesMap = new Dictionary<int, ColladaVertex>();
-                List<int> newIndices = new List<int>();
-                int vertexId = 0;
+                var newIndices = Enumerable.Range(0, verticesCount).ToArray();
+
+                var resultBuffers = buffers.Select(b => new Buffer(Array.CreateInstance(b.Array.GetType().GetElementType(), verticesCount * b.Stride), b.Stride, b.Offset, b.Type)).ToArray();
 
                 for (int i = 0; i < verticesCount; i++)
                 {
-                    int positionIndex = indices[i * vertexStride];
-                    if (verticesMap.TryGetValue(positionIndex, out ColladaVertex exist))
-                    {
-                        newIndices.Add(exist.Id);
-                        continue;
-                    }
-                    var vertex = new ColladaVertex(buffers, vertexId++);
-                    newIndices.Add(vertex.Id);
-                    verticesMap.Add(positionIndex, vertex);
-                    for (int bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
-                    {
-                        int index = indices[i * vertexStride + buffers[bufferIndex].Offset];
-                        vertex.SetIndex(bufferIndex, index);
-                    }
-                }
-                var verticesArray = verticesMap.Values.ToArray();
-
-                var resultBuffers = buffers.Select(b => Array.CreateInstance(b.Array.GetType().GetElementType(), verticesArray.Length * b.Stride)).ToArray();
-
-                for (int i = 0; i < verticesArray.Length; i++)
-                {
                     for (int buffer = 0; buffer < buffers.Count; buffer++)
                     {
-                        verticesArray[i].HandleBuffer(buffer, buffers[buffer].Array, resultBuffers[buffer], i * buffers[buffer].Stride);
+                        int index = indices[i * vertexStride + buffers[buffer].Offset];
+                        int stride = buffers[buffer].Stride;
+
+                        for (int element = 0; element < stride; element++) resultBuffers[buffer].Array.SetValue(buffers[buffer].Array.GetValue(index * stride + element), i * stride + element);
                     }
                 }
 
@@ -192,12 +122,8 @@ namespace RomeEngine.IO
                     renderer = skinnedMeshRenderer;
                     skinnedMeshRenderer.SkinnedMesh = new SkinnedMesh
                         (
-                            (float[])resultBuffers[0],
-                            (float[])resultBuffers[1],
-                            (float[])resultBuffers[2],
-                            (float[])resultBuffers[3],
-                            (int[])resultBuffers[4],
-                            newIndices.ToArray(),
+                            resultBuffers.Select(r => r.CreateAttribute()).ToArray(),
+                            newIndices,
                             jointNames,
                             matrices,
                             polygonFormat
@@ -209,17 +135,15 @@ namespace RomeEngine.IO
                     renderer = staticBufferMeshRenderer;
                     staticBufferMeshRenderer.StaticBufferMesh = new StaticBufferMesh
                         (
-                            (float[])resultBuffers[0],
-                            (float[])resultBuffers[1],
-                            (float[])resultBuffers[2],
-                            newIndices.ToArray(),
+                            resultBuffers.Select(r => r.CreateAttribute()).ToArray(),
+                            newIndices,
                             polygonFormat
                         );
                 }
                 if (submeshEntity.Properties.HasProperty("material")) renderer.Material = new SingleTextureMaterial(submeshEntity.Properties["material"].Value);
             }
         }
-        static void HandleSkinBuffers(ColladaEntity skinEntity, out float[] weights, out int[] joints, out string[] jointNames, ref int[] indices, int indexStride)
+        static void HandleSkinBuffers(ColladaEntity skinEntity, out Buffer weights, out Buffer joints, out string[] jointNames, ref int[] indices, int indexStride)
         {
             var weightsBuffer = skinEntity["vertex_weights"]["weight"]["float_array"].Single().Value;
             var jointsBuffer = skinEntity["vertex_weights"]["joint"]["name_array"].Single().Value;
@@ -234,8 +158,8 @@ namespace RomeEngine.IO
             int indicesOffset = 0;
             int maxJoints = SkinnedMesh.MaxJointsSupported;
             int stride = 2;
-            weights = new float[numbers.Length * maxJoints];
-            joints = new int[numbers.Length * maxJoints];
+            var weightsArray = new float[numbers.Length * maxJoints];
+            var jointsArray = new int[numbers.Length * maxJoints];
 
             for (int n = 0; n < numbers.Length; n++)
             {
@@ -265,19 +189,17 @@ namespace RomeEngine.IO
 
                 if (normalize)
                 {
-                    Vector3 vertexWeight = new Vector3(vertexWeights[0].weight, vertexWeights[1].weight, vertexWeights[2].weight);
-                    float sum = vertexWeight.x + vertexWeight.y + vertexWeight.z;
-                    if (sum != 0) vertexWeight /= sum;
-
-                    vertexWeights[0].weight = vertexWeight.x;
-                    vertexWeights[1].weight = vertexWeight.y;
-                    vertexWeights[2].weight = vertexWeight.z;
+                    float sum = vertexWeights.Select(v => v.weight).Sum();
+                    if (sum != 0)
+                    {
+                        for (int i = 0; i < vertexWeights.Length; i++) vertexWeights[i].weight /= sum;
+                    }
                 }
 
                 for (int i = 0; i < maxJoints; i++)
                 {
-                    weights[n * maxJoints + i] = vertexWeights[i].weight;
-                    joints[n * maxJoints + i] = vertexWeights[i].joint;
+                    weightsArray[n * maxJoints + i] = vertexWeights[i].weight;
+                    jointsArray[n * maxJoints + i] = vertexWeights[i].joint;
                 }
             }
 
@@ -295,6 +217,9 @@ namespace RomeEngine.IO
                 newIndices[v * newIndexStride + 4] = indices[v * indexStride];
             }
             indices = newIndices;
+
+            weights = new Buffer(weightsArray, 3, 3, MeshAttributeFormat.UFloat8Bit);
+            joints = new Buffer(jointsArray, 3, 4, MeshAttributeFormat.UInt8Bit);
         }
     }
 }

@@ -70,13 +70,13 @@ namespace RomeEngineOpenGL
 
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    switch (attributes[i].Type)
+                    switch (attributes[i].Type.Type)
                     {
-                        case MeshAttributeType.Float:
-                            StoreDataInAttributeListFloat(i, attributes[i].Size, mesh.CreateVerticesFloatAttributeBuffer(i).ToArray());
+                        case MeshAttributeFormatType.Float:
+                            StoreDataInAttributeListFloat(attributes[i].Layout, attributes[i].ElementSize, (float[])mesh.CreateVerticesAttributeBuffer(i).ToArray());
                             break;
-                        case MeshAttributeType.Int:
-                            StoreDataInAttributeListInt(i, attributes[i].Size, mesh.CreateVerticesIntAttributeBuffer(i).ToArray());
+                        case MeshAttributeFormatType.Int:
+                            StoreDataInAttributeListInt(attributes[i].Layout, attributes[i].ElementSize, (int[])mesh.CreateVerticesAttributeBuffer(i).ToArray());
                             break;
                         default:
                             throw new System.InvalidOperationException($"Mesh attribute type {attributes[i].Type} is not supported");
@@ -113,7 +113,7 @@ namespace RomeEngineOpenGL
         {
             int vboID = CreateVBO();
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
-            GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(int), data, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(attributeNumber, coordinateSize, VertexAttribPointerType.Int, false, 0, 0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }

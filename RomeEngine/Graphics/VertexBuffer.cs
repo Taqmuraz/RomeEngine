@@ -1,29 +1,16 @@
-﻿namespace RomeEngine
-{
-    public sealed class VertexBuffer<TElement> : IVertexBuffer<TElement>
-    {
-        int position;
-        TElement[] array;
+﻿using System;
 
-        public VertexBuffer(int size)
-        {
-            array = new TElement[size];
-            position = 0;
-        }
-        public VertexBuffer(TElement[] array)
+namespace RomeEngine
+{
+    public sealed class VertexBuffer : IVertexBuffer
+    {
+        Array array;
+
+        public VertexBuffer(Array array)
         {
             this.array = array;
-            position = 0;
         }
 
-        public void Write(TElement value)
-        {
-            array[position++] = value;
-        }
-
-        public TElement[] ToArray()
-        {
-            return array;
-        }
+        public Array ToArray() => array;
     }
 }

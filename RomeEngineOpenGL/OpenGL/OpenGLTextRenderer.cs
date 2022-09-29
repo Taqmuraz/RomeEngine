@@ -41,40 +41,31 @@ namespace RomeEngineOpenGL
             encoding = Encoding.GetEncoding("CP855");
             textShader = new OpenGLShader("Text");
 
-            var mesh = new StaticMesh
+            var mesh = new StaticBufferMesh
                 (
-                    new Vertex[]
+                    new[]
                     {
-                        new Vertex
-                        (
-                            new Vector3(0f, 0f, 0f),
-                            new Vector3(0f, 0f, -1f),
-                            new Vector2(0f, 0f)
-                        ),
-                        new Vertex
-                        (
-                            new Vector3(0f, 1f, 0f),
-                            new Vector3(0f, 0f, -1f),
-                            new Vector2(0f, 1f)
-                        ),
-                        new Vertex
-                        (
-                            new Vector3(1f, 1f, 0f),
-                            new Vector3(0f, 0f, -1f),
-                            new Vector2(1f, 1f)
-                        ),
-                        new Vertex
-                        (
-                            new Vector3(1f, 0f, 0f),
-                            new Vector3(0f, 0f, -1f),
-                            new Vector2(1f, 0f)
-                        ),
+                    new MeshAttribute(new float[]
+                    {
+                        0f, 0f, 0f,
+                        1f, 0f, 0f,
+                        1f, 1f, 0f,
+                        0f, 1f, 0f,
+                    }, 3, MeshAttributeFormat.Float, 0),
+                    new MeshAttribute(new float[]
+                    {
+                        0f, 0f,
+                        1f, 0f,
+                        1f, 1f,
+                        0f, 1f
+                    }, 2, MeshAttributeFormat.Float, 1)
                     },
                     new int[]
                     {
                         0, 1, 2,
                         2, 3, 0
-                    }
+                    },
+                    PolygonFormat.Triangles
                 );
             boxMesh = context.LoadMesh(mesh);
         }

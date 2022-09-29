@@ -63,5 +63,29 @@ namespace RomeEngine.IO
         {
             WriteString(type.FullName);
         }
+
+        public short ReadShort()
+        {
+            stream.Read(fourBytesBuffer, 0, 2);
+            return BitConverter.ToInt16(fourBytesBuffer, 0);
+        }
+
+        public byte ReadByte()
+        {
+            stream.Read(fourBytesBuffer, 0, 1);
+            return fourBytesBuffer[0];
+        }
+
+        public void WriteShort(short value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        public void WriteByte(byte value)
+        {
+            fourBytesBuffer[0] = value;
+            stream.Write(fourBytesBuffer, 0, 1);
+        }
     }
 }

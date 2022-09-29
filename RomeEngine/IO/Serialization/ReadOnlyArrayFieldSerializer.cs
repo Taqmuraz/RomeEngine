@@ -10,7 +10,7 @@ namespace RomeEngine.IO
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ReadOnlyArray<>);
         }
-        protected override object CreateCollection(Type collectionType, int length)
+        protected override object CreateCollection(Type collectionType, int length, ISerializationContext context)
         {
             return Array.CreateInstance(collectionType.GetGenericArguments().First(), length);
         }

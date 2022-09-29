@@ -72,6 +72,10 @@
     <Compile Include="Game\Rendering\StaticMesh\StaticBufferMeshRenderer.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
     <Compile Include="Game\Routine\SingleCallRoutine.cs" />
+    <Compile Include="Graphics\MeshAttributeFormat\MeshFloatAttributeFormat.cs" />
+    <Compile Include="Graphics\MeshAttributeFormat\MeshIntAttributeFormat.cs" />
+    <Compile Include="Graphics\MeshAttributeFormat\IMeshAttributeFormat.cs" />
+    <Compile Include="Graphics\MeshAttributeFormat\MeshAttributeFormatType.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaAnimation.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaAnimationBlendMode.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaSingleBoneAnimation.cs" />
@@ -111,7 +115,6 @@
     <Compile Include="Game\UI\IHandlable.cs" />
     <Compile Include="Graphics\2D\IGraphics2D.cs" />
     <Compile Include="Graphics\IMeshAttribute.cs" />
-    <Compile Include="Graphics\IStaticMeshAttribute.cs" />
     <Compile Include="Graphics\IVertexBuffer.cs" />
     <Compile Include="Graphics\IGraphics.cs" />
     <Compile Include="Graphics\2D\IGraphicsBrush.cs" />
@@ -122,16 +125,10 @@
     <Compile Include="Graphics\IMeshAttributeInfo.cs" />
     <Compile Include="Graphics\IMeshIdentifier.cs" />
     <Compile Include="Game\Rendering\Renderer.cs" />
-    <Compile Include="Game\Rendering\StaticMesh\StaticMesh.cs" />
-    <Compile Include="Game\Rendering\StaticMesh\StaticMeshRenderer.cs" />
     <Compile Include="Graphics\IVertex.cs" />
-    <Compile Include="Graphics\MeshAttributeType.cs" />
+    <Compile Include="Graphics\MeshAttributeFormat\MeshAttributeFormat.cs" />
     <Compile Include="Graphics\PolygonFormat.cs" />
     <Compile Include="Graphics\Texture.cs" />
-    <Compile Include="Graphics\Vertex.cs" />
-    <Compile Include="Graphics\VertexAttributeNormal.cs" />
-    <Compile Include="Graphics\VertexAttributeUV.cs" />
-    <Compile Include="Graphics\VertexAttributePosition.cs" />
     <Compile Include="Graphics\VertexBuffer.cs" />
     <Compile Include="Input\IInputHandler.cs" />
     <Compile Include="Input\Input.cs" />
@@ -156,7 +153,7 @@
     <Compile Include="IO\Parsing\Collada\IColladaNode.cs" />
     <Compile Include="IO\Parsing\Collada\IColladaNodeHandler.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMesh.cs" />
-    <Compile Include="Game\Rendering\CustomMeshAttribute.cs" />
+    <Compile Include="Game\Rendering\MeshAttribute.cs" />
     <Compile Include="IO\Serialization\ArrayFieldSerializer.cs" />
     <Compile Include="IO\Serialization\BinarySerializationStream.cs" />
     <Compile Include="IO\Serialization\BoolTypeFieldSerializer.cs" />

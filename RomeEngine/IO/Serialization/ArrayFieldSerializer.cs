@@ -12,9 +12,14 @@ namespace RomeEngine.IO
             return typeof(Array).IsAssignableFrom(type);
         }
 
-        protected override object CreateCollection(Type collectionType, int length)
+        protected override object CreateCollection(Type collectionType, int length, ISerializationContext context)
         {
-            return Array.CreateInstance(collectionType.GetElementType(), length);
+            var elementType = context.Stream.ReadType();
+            return Array.CreateInstance(elementType, length);
+        }
+        protected override void ProcessCollection(ISerializationContext context, IEnumerable collection)
+        {
+            context.Stream.WriteType(collection.GetType().GetElementType());
         }
 
         protected override void ReadElement(object collection, int index, ISerializationContext context)

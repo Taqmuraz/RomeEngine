@@ -17,7 +17,7 @@ namespace RomeEngine.IO
             return ((IList)collection).Count;
         }
 
-        protected override object CreateCollection(Type collectionType, int length)
+        protected override object CreateCollection(Type collectionType, int length, ISerializationContext context)
         {
             return collectionType.GetConstructors().First(c => c.GetParameters().Length == 0).Invoke(new object[0]);
         }
