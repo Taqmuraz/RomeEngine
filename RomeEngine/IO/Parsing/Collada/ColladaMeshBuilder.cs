@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,6 +34,62 @@ namespace RomeEngine.IO
             public Array Array { get; }
             public int Stride { get; }
             public int Offset { get; }
+        }
+
+        class ColladaVertexEqualityProvider : IEqualityComparer<ColladaVertex>
+        {
+            public bool Equals(ColladaVertex a, ColladaVertex b)
+            {
+                return a.IsEqualTo(b);
+            }
+
+            public int GetHashCode(ColladaVertex vertex)
+            {
+                return vertex.CalculateHashCode();
+            }
+        }
+
+        class ColladaVertex
+        {
+            int[] attributeIndices;
+            List<Buffer> buffers;
+
+            public ColladaVertex(List<Buffer> buffersInfo, int id)
+            {
+                attributeIndices = new int[buffersInfo.Count];
+                this.buffers = buffersInfo;
+                Id = id;
+            }
+
+            public int CalculateHashCode()
+            {
+                return attributeIndices[0];
+            }
+
+            public int Id { get; }
+
+            public bool IsEqualTo(ColladaVertex vertex)
+            {
+                return vertex.attributeIndices[0] == attributeIndices[0];
+            }
+
+            public void SetIndex(int number, int index)
+            {
+                attributeIndices[number] = index;
+            }
+
+            public int PositionIndex => attributeIndices[0];
+
+            public void HandleBuffer(int attribute, Array source, Array destination, int pointer)
+            {
+                int length = buffers[attribute].Stride;
+                for (int i = 0; i < length; i++)
+                {
+                    destination.SetValue(source.GetValue(attributeIndices[attribute] * length + i), pointer + i);
+                }
+            }
+
+            public override string ToString() => string.Join(", ", attributeIndices);
         }
 
         static void HandleMesh(GameObject gameObject, ColladaEntity meshEntity, ColladaEntity skinEntity)
@@ -75,20 +132,36 @@ namespace RomeEngine.IO
                 int vertexStride = buffers.Count;
                 int verticesCount = indices.Length / vertexStride;
 
-                Array[] resultBuffers = buffers.Select(b => Array.CreateInstance(b.Array.GetType().GetElementType(), b.Stride * verticesCount)).ToArray();
-                int[] resultIndices = Enumerable.Range(0, verticesCount).ToArray();
+                Dictionary<int, ColladaVertex> verticesMap = new Dictionary<int, ColladaVertex>();
+                List<int> newIndices = new List<int>();
+                int vertexId = 0;
 
-                for (int bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
+                for (int i = 0; i < verticesCount; i++)
                 {
-                    var buffer = buffers[bufferIndex];
-
-                    for (int i = 0; i < verticesCount; i++)
+                    int positionIndex = indices[i * vertexStride];
+                    if (verticesMap.TryGetValue(positionIndex, out ColladaVertex exist))
                     {
-                        int index = indices[i * vertexStride + buffer.Offset];
-                        for (int element = 0; element < buffer.Stride; element++)
-                        {
-                            resultBuffers[bufferIndex].SetValue(buffer.Array.GetValue(index * buffer.Stride + element), i * buffer.Stride + element);
-                        }
+                        newIndices.Add(exist.Id);
+                        continue;
+                    }
+                    var vertex = new ColladaVertex(buffers, vertexId++);
+                    newIndices.Add(vertex.Id);
+                    verticesMap.Add(positionIndex, vertex);
+                    for (int bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
+                    {
+                        int index = indices[i * vertexStride + buffers[bufferIndex].Offset];
+                        vertex.SetIndex(bufferIndex, index);
+                    }
+                }
+                var verticesArray = verticesMap.Values.ToArray();
+
+                var resultBuffers = buffers.Select(b => Array.CreateInstance(b.Array.GetType().GetElementType(), verticesArray.Length * b.Stride)).ToArray();
+
+                for (int i = 0; i < verticesArray.Length; i++)
+                {
+                    for (int buffer = 0; buffer < buffers.Count; buffer++)
+                    {
+                        verticesArray[i].HandleBuffer(buffer, buffers[buffer].Array, resultBuffers[buffer], i * buffers[buffer].Stride);
                     }
                 }
 
@@ -124,7 +197,7 @@ namespace RomeEngine.IO
                             (float[])resultBuffers[2],
                             (float[])resultBuffers[3],
                             (int[])resultBuffers[4],
-                            resultIndices,
+                            newIndices.ToArray(),
                             jointNames,
                             matrices,
                             polygonFormat
@@ -139,7 +212,7 @@ namespace RomeEngine.IO
                             (float[])resultBuffers[0],
                             (float[])resultBuffers[1],
                             (float[])resultBuffers[2],
-                            resultIndices,
+                            newIndices.ToArray(),
                             polygonFormat
                         );
                 }
