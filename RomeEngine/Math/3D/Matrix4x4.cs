@@ -55,7 +55,7 @@ namespace RomeEngine
 				y = (float)Math.Atan2(-column_0.z, sy);
 				z = (float)Math.Atan2(-column_0.y, column_0.x);
 			}
-			return new Vector3(x, y, z);
+			return new Vector3(x, y, z) * Mathf.Rad2Deg;
         }
 
         public static Matrix4x4 CreateViewport(float width, float height)

@@ -1,10 +1,8 @@
-#version 400 core
-
 in vec3 position;
 in vec2 textureCoords;
 in vec3 normal;
-in vec3 weights;
-in vec3 joints;
+in JOINT_VEC weights;
+in JOINT_VEC joints;
 
 out vec2 uv;
 out vec3 surfaceNormal;

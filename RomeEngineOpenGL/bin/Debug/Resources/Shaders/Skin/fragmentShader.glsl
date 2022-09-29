@@ -1,5 +1,3 @@
-#version 400 core
-
 in vec2 uv;
 in vec3 surfaceNormal;
 

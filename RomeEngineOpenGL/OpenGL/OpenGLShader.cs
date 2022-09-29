@@ -10,6 +10,17 @@ namespace RomeEngineOpenGL
         private int vertexShaderID;
         private int fragmentShaderID;
 
+        static IOpenGLShaderPostProcessor[] ShaderPostProcessors { get; }
+
+        static OpenGLShader()
+        {
+            ShaderPostProcessors = new IOpenGLShaderPostProcessor[]
+            {
+                new OpenGLShaderMacro($"#define JOINT_VEC vec{SkinnedMesh.MaxJointsSupported}"),
+                new OpenGLShaderMacro("#version 400 core"),
+            };
+        }
+
         public int GetProgramID()
         {
             return programID;
@@ -154,8 +165,15 @@ namespace RomeEngineOpenGL
                 }
             }
 
+            var shaderCode = shaderSource.ToString();
+
+            foreach (var postprocessor in ShaderPostProcessors)
+            {
+                shaderCode = postprocessor.Process(shaderCode);
+            }
+
             int shaderID = GL.CreateShader(type);
-            GL.ShaderSource(shaderID, shaderSource.ToString());
+            GL.ShaderSource(shaderID, shaderCode);
             GL.CompileShader(shaderID);
             GL.GetShader(shaderID, ShaderParameter.CompileStatus, out int p);
             if (p == 0)
