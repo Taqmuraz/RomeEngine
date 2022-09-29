@@ -1,20 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using RomeEngine.IO;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RomeEngine
 {
-    public sealed class SkinnedMeshJointInfo : IJointInfo
-    {
-        public SkinnedMeshJointInfo(Transform transform, Matrix4x4 initialState)
-        {
-            Transform = transform;
-            InitialState = initialState;
-        }
-
-        public Transform Transform { get; }
-        public Matrix4x4 InitialState { get; }
-    }
-    public sealed class SkinnedMeshRenderer : MeshRenderer<SkinnedMesh>, ISkinnedMeshInfo
+    public sealed class SkinnedMeshRenderer : MeshRenderer<SkinnedMesh>, ISkinnedMeshInfo, ISerializationHandler
     {
         [SerializeField] bool dynamicDraw = false;
         Dictionary<int, IJointInfo> bindingsMap;
@@ -37,5 +27,15 @@ namespace RomeEngine
         }
 
         public Dictionary<int, IJointInfo> GetJointsMap() => bindingsMap;
+
+        void ISerializationHandler.OnSerialize()
+        {
+
+        }
+
+        void ISerializationHandler.OnDeserialize()
+        {
+            InitializeBindings();
+        }
     }
 }

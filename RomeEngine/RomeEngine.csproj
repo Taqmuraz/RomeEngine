@@ -64,6 +64,7 @@
     <Compile Include="Game\Rendering\MeshRenderer.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\IJointInfo.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\ISkinnedMeshInfo.cs" />
+    <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshJointInfo.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshRenderer.cs" />
     <Compile Include="Game\Rendering\StaticMesh\Material.cs" />
     <Compile Include="Game\Rendering\StaticMesh\SingleTextureMaterial.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="IO\Parsing\Collada\ColladaSingleBoneFrame.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaTransitionAnimation.cs" />
     <Compile Include="IO\Parsing\Collada\IColladaAnimation.cs" />
+    <Compile Include="IO\Serialization\EnumSerializer.cs" />
     <Compile Include="IO\Serialization\Matrix4x4Serializer.cs" />
     <Compile Include="IO\Serialization\Serializable.cs" />
     <Compile Include="Game\SerializableEventsHandler.cs" />

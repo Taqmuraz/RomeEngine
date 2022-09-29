@@ -51,6 +51,7 @@ namespace RomeEngine.IO
             yield return new BoolTypeFieldSerializer();
             yield return new ReadOnlyArrayFieldSerializer();
             yield return new Matrix4x4Serializer();
+            yield return new EnumSerializer();
         }
 
         public void Serialize(ISerializable serializable, ISerializationStream stream)
