@@ -1,10 +1,9 @@
 ﻿using RomeEngine.IO;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RomeEngine
 {
-    public abstract class SerializableEventsHandler : EventsHandler, ISerializable
+    public abstract class Serializable<TSerializable> : ISerializable where TSerializable : new()
     {
         public IEnumerable<SerializableField> EnumerateFields()
         {

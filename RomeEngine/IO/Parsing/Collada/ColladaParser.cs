@@ -88,6 +88,7 @@ namespace RomeEngine.IO
                 new ColladaMeshBuilder(),
                 new ColladaSkeletonBuilder(),
                 new ColladaMaterialBuilder(),
+                new ColladaAnimationBuilder(),
             };
             var parsingInfo = new ColladaParsingInfo(fileName);
 

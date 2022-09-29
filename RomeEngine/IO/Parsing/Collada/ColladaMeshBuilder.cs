@@ -107,6 +107,15 @@ namespace RomeEngine.IO
                 if (skinEntity != null)
                 {
                     var skinnedMeshRenderer = gameObject.AddComponent<SkinnedMeshRenderer>();
+                    var bindingPoses = skinEntity["joints"]["inv_bind_matrix"]["float_array"].Single().Value.SeparateString().Select(s => s.ToFloat()).ToArray();
+
+                    Matrix4x4[] matrices = new Matrix4x4[bindingPoses.Length / 16];
+
+                    for (int i = 0; i < matrices.Length; i++)
+                    {
+                        matrices[i] = Matrix4x4.FromFloatsArray(bindingPoses, i * 16).GetTransponed().GetInversed();
+                    }
+
                     renderer = skinnedMeshRenderer;
                     skinnedMeshRenderer.SkinnedMesh = new SkinnedMesh
                         (
@@ -117,6 +126,7 @@ namespace RomeEngine.IO
                             (int[])resultBuffers[4],
                             resultIndices,
                             jointNames,
+                            matrices,
                             polygonFormat
                         );
                 }

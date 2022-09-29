@@ -1,6 +1,6 @@
 ﻿namespace RomeEngine
 {
-    public enum PolygonFormat
+    public enum PolygonFormat : int
     {
         Triangles,
         Polygons

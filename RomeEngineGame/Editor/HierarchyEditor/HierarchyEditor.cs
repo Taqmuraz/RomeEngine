@@ -86,7 +86,7 @@ namespace RomeEngineGame
                         Vector2 forwardEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end + transform.Forward);
                         Vector2 screenStart = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(start);
                         Vector2 screenEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end);
-                        sceneCanvas.DrawText(transform.Name, Rect.FromCenterAndSize(screenEnd, new Vector2(100f, 50f)), Color32.white, TextOptions.Default);
+                        //sceneCanvas.DrawText(transform.Name, Rect.FromCenterAndSize(screenEnd, new Vector2(100f, 50f)), Color32.white, TextOptions.Default);
                         sceneCanvas.DrawLine(screenStart, screenEnd, Color32.white, 2);
 
                         if (transform == inspectedGameObject.Transform)
@@ -101,6 +101,10 @@ namespace RomeEngineGame
 
                     IEnumerator DrawTransform(Transform transform)
                     {
+                        if (positionX > 3)
+                        {
+                            yield break;
+                        }
                         if (positionY > 0)
                         {
                             string name = transform.Name;

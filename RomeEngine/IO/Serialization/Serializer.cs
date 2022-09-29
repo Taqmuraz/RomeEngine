@@ -50,6 +50,7 @@ namespace RomeEngine.IO
             yield return new Color32Serializer();
             yield return new BoolTypeFieldSerializer();
             yield return new ReadOnlyArrayFieldSerializer();
+            yield return new Matrix4x4Serializer();
         }
 
         public void Serialize(ISerializable serializable, ISerializationStream stream)

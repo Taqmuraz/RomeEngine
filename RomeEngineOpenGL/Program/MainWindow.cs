@@ -37,6 +37,7 @@ namespace RomeEngineOpenGL
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+            Title = (1f / Time.DeltaTime).ToString("F2");
 
             engine.UpdateGameState();
 

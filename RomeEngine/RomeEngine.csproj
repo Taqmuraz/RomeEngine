@@ -71,6 +71,14 @@
     <Compile Include="Game\Rendering\StaticMesh\StaticBufferMeshRenderer.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
     <Compile Include="Game\Routine\SingleCallRoutine.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaAnimation.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaAnimationBlendMode.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaSingleBoneAnimation.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaSingleBoneFrame.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaTransitionAnimation.cs" />
+    <Compile Include="IO\Parsing\Collada\IColladaAnimation.cs" />
+    <Compile Include="IO\Serialization\Matrix4x4Serializer.cs" />
+    <Compile Include="IO\Serialization\Serializable.cs" />
     <Compile Include="Game\SerializableEventsHandler.cs" />
     <Compile Include="Game\Component.cs" />
     <Compile Include="Game\Debug.cs" />
@@ -92,6 +100,7 @@
     <Compile Include="Game\Routine\IRoutine.cs" />
     <Compile Include="Game\Routine\Routine.cs" />
     <Compile Include="Game\Screen.cs" />
+    <Compile Include="IO\Serialization\SerializationExtensions.cs" />
     <Compile Include="Game\SerializeFieldAttribute.cs" />
     <Compile Include="Game\Time.cs" />
     <Compile Include="Game\Transform.cs" />
@@ -126,6 +135,7 @@
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\KeyState.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaAnimationBuilder.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaContext.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaDelegateHandler.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaEntity.cs" />

@@ -41,21 +41,30 @@ namespace RomeEngine
 
         public Vector3 GetEulerRotation()
         {
-			float sy = Mathf.Sqrt(column_0.x * column_0.x + column_0.y * column_0.y);
-			float x, y, z;
-			if (sy < 1e-6f)
+			double x, y, z;
+			Matrix4x4 rotation = WithoutScale();
+			double sy = Math.Sqrt(rotation[0, 0] * rotation[0, 0] + rotation[1, 0] * rotation[1, 0]);
+
+			bool singular = sy < 1e-6;
+
+
+			if (!singular)
 			{
-				x = (float)Math.Atan2(-column_2.y, column_1.y);
-				y = (float)Math.Atan2(-column_0.z, sy);
-				z = 0f;
+				x = Math.Atan2(rotation[2, 1], rotation[2, 2]);
+
+				y = Math.Atan2(-rotation[2, 0], sy);
+
+				z = Math.Atan2(rotation[1, 0], rotation[0, 0]);
 			}
 			else
 			{
-				x = (float)Math.Atan2(column_1.z, column_2.z);
-				y = (float)Math.Atan2(-column_0.z, sy);
-				z = (float)Math.Atan2(-column_0.y, column_0.x);
+				x = Math.Atan2(-rotation[1, 2], rotation[1, 1]);
+
+				y = Math.Atan2(-rotation[2, 0], sy);
+
+				z = 0;
 			}
-			return new Vector3(x, y, z) * Mathf.Rad2Deg;
+			return new Vector3((float)x, (float)y, (float)z) * Mathf.Rad2Deg;
         }
 
         public static Matrix4x4 CreateViewport(float width, float height)
@@ -232,14 +241,6 @@ namespace RomeEngine
 			return string.Format("{0}\n{1}\n{2}\n{3}", column_0.ToString(), column_1.ToString(), column_2.ToString(), column_3.ToString());
 		}
 
-		public Matrix4x4 Transpose(Vector3 position)
-		{
-			return new Matrix4x4(column_0, column_1, column_2, new Vector4(position.x, position.y, position.z, 1f));
-		}
-		public Matrix4x4 Translate(Vector3 position)
-		{
-			return new Matrix4x4(this.column_0, this.column_1, this.column_2, this.column_3 + new Vector4(position.x, position.y, position.z, 0f));
-		}
 		public static Matrix4x4 CreateWorldMatrix(Vector3 right, Vector3 up, Vector3 forward, Vector3 position)
 		{
 			return new Matrix4x4(right, up, forward, new Vector4(position.x, position.y, position.z, 1f));

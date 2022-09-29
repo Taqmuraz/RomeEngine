@@ -33,7 +33,7 @@ namespace RomeEngine
 
         public void InitializeBindings()
         {
-            bindingsMap = Transform.TraceElement(t => t.Children).Select(t => (index: SkinnedMesh.JointNames.IndexOf(t.Name), joint: t)).Where(t => t.index != -1).ToDictionary(t => t.index, t => (IJointInfo)new SkinnedMeshJointInfo(t.joint, t.joint.LocalToWorld * Transform.LocalToWorld.GetInversed()));
+            bindingsMap = Transform.TraceElement(t => t.Children).Select(t => (index: SkinnedMesh.JointNames.IndexOf(t.Name), joint: t)).Where(t => t.index != -1).ToDictionary(t => t.index, t => (IJointInfo)new SkinnedMeshJointInfo(t.joint, SkinnedMesh.BindMatrices[t.index]));
         }
 
         public Dictionary<int, IJointInfo> GetJointsMap() => bindingsMap;

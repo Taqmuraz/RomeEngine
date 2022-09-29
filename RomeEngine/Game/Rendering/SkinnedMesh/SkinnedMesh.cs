@@ -12,8 +12,11 @@ namespace RomeEngine
         int[] indices;
         float[] weights;
         int[] joints;
+        Matrix4x4[] bindPoses;
 
-        public PolygonFormat PolygonFormat { get; }
+        public Matrix4x4[] BindMatrices => bindPoses;
+
+        public PolygonFormat PolygonFormat { get; private set; }
         public string[] JointNames { get; private set; }
         public Array[] Buffers => new Array[] { vertices, texcoords, normals, weights, joints };
 
@@ -40,6 +43,7 @@ namespace RomeEngine
             int[] joints,
             int[] indices,
             string[] jointNames,
+            Matrix4x4[] bindPoses,
             PolygonFormat polygonFormat) : this()
         {
             this.vertices = vertices;
@@ -50,6 +54,7 @@ namespace RomeEngine
             this.joints = joints;
             JointNames = jointNames;
             PolygonFormat = polygonFormat;
+            this.bindPoses = bindPoses;
         }
 
         public IEnumerable<int> EnumerateIndices()
@@ -87,6 +92,8 @@ namespace RomeEngine
             yield return new GenericSerializableField<float[]>(nameof(weights), weights, value => weights = value, true);
             yield return new GenericSerializableField<int[]>(nameof(joints), joints, value => joints = value, true);
             yield return new GenericSerializableField<string[]>(nameof(JointNames), JointNames, value => JointNames = value, true);
+            yield return new GenericSerializableField<int>(nameof(PolygonFormat), (int)PolygonFormat, value => PolygonFormat = (PolygonFormat)value, true);
+            yield return new GenericSerializableField<Matrix4x4[]>(nameof(bindPoses), bindPoses, value => bindPoses = value, true);
         }
     }
 }
