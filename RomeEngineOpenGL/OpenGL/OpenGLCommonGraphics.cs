@@ -8,6 +8,13 @@ namespace RomeEngineOpenGL
         protected abstract OpenGLShader ActiveShader { get; }
         protected abstract IOpenGLShaderModel StandardShaderModel { get; }
 
+        class MeshDrawInfo
+        {
+            public IOpenGLShaderModel ShaderModel { get; }
+            public OpenGLShader Shader { get; }
+            public IMeshIdentifier Mesh { get; }
+        }
+
         TextureUnit TypeToUnit(TextureType type)
         {
             switch (type)

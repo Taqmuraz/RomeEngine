@@ -2,7 +2,7 @@
 using System.Drawing;
 using RomeEngine;
 
-namespace OneEngineWindowsFormsApplication
+namespace RomeEngineWindowsFormsApplication
 {
     class GraphicsContext : IGraphicsContext
     {

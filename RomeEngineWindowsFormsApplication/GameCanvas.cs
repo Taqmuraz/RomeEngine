@@ -3,8 +3,9 @@ using System.IO;
 using System.Windows.Forms;
 
 using RomeEngine;
+using RomeEngine.SystemDrawing;
 
-namespace OneEngineWindowsFormsApplication
+namespace RomeEngineWindowsFormsApplication
 {
     class GameCanvas : Panel, IEngineRuntine, ISystemInfo
     {

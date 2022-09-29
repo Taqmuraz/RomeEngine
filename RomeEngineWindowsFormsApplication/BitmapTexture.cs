@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using RomeEngine;
 
-namespace OneEngineWindowsFormsApplication
+namespace RomeEngineWindowsFormsApplication
 {
     class BitmapTexture : Texture
     {

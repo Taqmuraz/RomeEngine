@@ -47,11 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapTexture.cs" />
-    <Compile Include="CanvasBrush.cs" />
-    <Compile Include="CanvasOutlineStyle.cs" />
-    <Compile Include="CanvasFillStyle.cs" />
-    <Compile Include="CanvasGraphics2D.cs" />
-    <Compile Include="CanvasStyleBase.cs" />
     <Compile Include="GameCanvas.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -60,7 +55,6 @@
     </Compile>
     <Compile Include="CanvasGraphics3D.cs" />
     <Compile Include="GraphicsContext.cs" />
-    <Compile Include="ICanvasStyle.cs" />
     <Compile Include="MeshIdentifier.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,6 +85,10 @@
     <ProjectReference Include="..\RomeEngineGame\RomeEngineGame.csproj">
       <Project>{3A6C8B9F-4F72-4D65-B53B-E50D2B2F0230}</Project>
       <Name>RomeEngineGame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RomeEngineSystemDrawing\RomeEngineSystemDrawing.csproj">
+      <Project>{66add848-c609-4e8e-910f-ff44ea028a19}</Project>
+      <Name>RomeEngineSystemDrawing</Name>
     </ProjectReference>
     <ProjectReference Include="..\RomeEngine\RomeEngine.csproj">
       <Project>{bfb7b952-3abf-4258-9427-07d40ff4c0e1}</Project>
