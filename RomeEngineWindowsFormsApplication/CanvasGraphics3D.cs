@@ -118,7 +118,7 @@ namespace RomeEngineWindowsFormsApplication
 
             Matrix4x4 mvp = MVP;
 
-            float[] positionsArray = (float[])mesh.CreateVerticesAttributeBuffer(mesh.PositionAttributeIndex).ToArray();
+            float[] positionsArray = mesh.CreateVerticesFloatAttributeBuffer(mesh.PositionAttributeIndex).ToArray();
             
             Vector3 ReadVertex(int index)
             {

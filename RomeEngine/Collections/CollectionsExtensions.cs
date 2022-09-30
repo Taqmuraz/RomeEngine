@@ -42,12 +42,4 @@ public static class CollectionsExtensions
 	{
 		return source.Split(StringSeparators, StringSplitOptions.RemoveEmptyEntries);
 	}
-
-	public static IEnumerable<TResult> Select<TSource, TResult>(this Array array, Func<TSource, TResult> func)
-	{
-		foreach (TSource element in array)
-		{
-			yield return func(element);
-		}
-	}
 }

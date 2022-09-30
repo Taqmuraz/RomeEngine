@@ -7,7 +7,8 @@ namespace RomeEngine
         IEnumerable<int> EnumerateIndices();
         ReadOnlyArray<IMeshAttributeInfo> Attributes { get; }
 
-        IVertexBuffer CreateVerticesAttributeBuffer(int attributeIndex);
+        IVertexBuffer<float> CreateVerticesFloatAttributeBuffer(int attributeIndex);
+        IVertexBuffer<int> CreateVerticesIntAttributeBuffer(int attributeIndex);
 
         int PositionAttributeIndex { get; }
         int TexcoordAttributeIndex { get; }

@@ -14,36 +14,31 @@ namespace RomeEngine.IO
         {
             return Array.CreateInstance(collectionType.GetGenericArguments().First(), length);
         }
+        protected override IFieldSerializer[] SerializersToRead(ISerializationContext context)
+        {
+            return new IFieldSerializer[] { Serializer.GetSerializerForType(context.Stream.ReadType()) };
+        }
+        protected override IFieldSerializer[] SerializersToWrite(object collection, ISerializationContext context)
+        {
+            var type = collection.GetType().GetElementType();
+            var serializer = Serializer.GetSerializerForType(type);
+            context.Stream.WriteType(type);
+            return new[] { serializer };
+        }
         protected override int GetCollectionLength(object collection)
         {
             return ((IList)collection).Count;
         }
-        protected override void ReadElement(object collection, int index, ISerializationContext context)
+        protected override void ReadElement(object collection, int index, ISerializationContext context, IFieldSerializer[] serializers)
         {
             var array = (Array)collection;
-            string serializerIndex = context.Stream.ReadString();
-            if (serializerIndex == Serializer.EmptySerializerKey)
-            {
-                return;
-            }
-            var serializer = Serializer.FieldSerializers[serializerIndex];
-            array.SetValue(serializer.DeserializeField(collection.GetType().GetElementType(), context), index);
+            array.SetValue(serializers[0].DeserializeField(collection.GetType().GetElementType(), context), index);
         }
-        protected override void WriteElement(object collection, int index, ISerializationContext context)
+        protected override void WriteElement(object collection, int index, ISerializationContext context, IFieldSerializer[] serializers)
         {
             var array = (IList)collection;
             var element = array[index];
-            if (element != null)
-            {
-                var serializer = Serializer.FieldSerializers.Values.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
-                if (serializer != null)
-                {
-                    context.Stream.WriteString(Serializer.GetSerializerKey(serializer));
-                    serializer.SerializeField(element, context);
-                    return;
-                }
-            }
-            context.Stream.WriteString(Serializer.EmptySerializerKey);
+            serializers[0].SerializeField(element, context);
         }
     }
 }

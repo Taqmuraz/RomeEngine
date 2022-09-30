@@ -74,11 +74,11 @@ namespace RomeEngineOpenGL
             GL.Viewport(0, 0, width, height);
 
             var attributes = mesh.Attributes;
-            float[] positions = (float[])mesh.CreateVerticesAttributeBuffer(mesh.PositionAttributeIndex).ToArray();
-            float[] uvs = (float[])mesh.CreateVerticesAttributeBuffer(mesh.TexcoordAttributeIndex).ToArray();
-            float[] normals = (float[])mesh.CreateVerticesAttributeBuffer(mesh.NormalAttributeIndex).ToArray();
-            float[] weights = (float[])mesh.CreateVerticesAttributeBuffer(3).ToArray();
-            int[] joints = (int[])mesh.CreateVerticesAttributeBuffer(4).ToArray();
+            float[] positions = mesh.CreateVerticesFloatAttributeBuffer(mesh.PositionAttributeIndex).ToArray();
+            float[] uvs = mesh.CreateVerticesFloatAttributeBuffer(mesh.TexcoordAttributeIndex).ToArray();
+            float[] normals = mesh.CreateVerticesFloatAttributeBuffer(mesh.NormalAttributeIndex).ToArray();
+            float[] weights = mesh.CreateVerticesFloatAttributeBuffer(3).ToArray();
+            int[] joints = mesh.CreateVerticesIntAttributeBuffer(4).ToArray();
 
             float[] argumentBuffer = new float[4];
 
@@ -138,7 +138,7 @@ namespace RomeEngineOpenGL
             {
                 foreach (var action in actions)
                 {
-                    int size = attributes[action.attributeIndex].ElementSize;
+                    int size = attributes[action.attributeIndex].Size;
                     int bufferIndex = index * size;
                     for (int i = 0; i < size; i++) argumentBuffer[i] = action.buffer[bufferIndex + i];
                     if (action.process != null) action.process(index);

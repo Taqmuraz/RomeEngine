@@ -21,45 +21,52 @@ namespace RomeEngine.IO
             return collectionType.GetConstructors().First(c => c.GetParameters().Length == 0).Invoke(new object[0]);
         }
 
-        protected override void ReadElement(object collection, int index, ISerializationContext context)
+        protected override IFieldSerializer[] SerializersToRead(ISerializationContext context)
+        {
+            return new IFieldSerializer[]
+            {
+                Serializer.GetSerializerForType(context.Stream.ReadType()),
+                Serializer.GetSerializerForType(context.Stream.ReadType())
+            };
+        }
+        protected override IFieldSerializer[] SerializersToWrite(object collection, ISerializationContext context)
+        {
+            var type = collection.GetType();
+            IFieldSerializer[] serializers = new IFieldSerializer[2];
+            if (type.IsGenericType)
+            {
+                var args = collection.GetType().GetGenericArguments();
+                context.Stream.WriteType(args[0]);
+                context.Stream.WriteType(args[1]);
+                serializers[0] = Serializer.GetSerializerForType(args[0]);
+                serializers[1] = Serializer.GetSerializerForType(args[1]);
+            }
+            else
+            {
+                context.Stream.WriteType(typeof(object));
+                context.Stream.WriteType(typeof(object));
+                serializers[0] = serializers[1] = Serializer.GetSerializerForType(typeof(object));
+            }
+            return serializers;
+        }
+
+        protected override void ReadElement(object collection, int index, ISerializationContext context, IFieldSerializer[] serializers)
         {
             var dictionary = (IDictionary)collection;
-            string serializerIndex = context.Stream.ReadString();
-            if (serializerIndex == Serializer.EmptySerializerKey) return;
-            var serializer = Serializer.FieldSerializers[serializerIndex];
-            var key = serializer.DeserializeField(collection.GetType().GetElementType(), context);
-
-            object value = null;
-            serializerIndex = context.Stream.ReadString();
-            if (serializerIndex != Serializer.EmptySerializerKey)
-            {
-                serializer = Serializer.FieldSerializers[serializerIndex];
-                value = serializer.DeserializeField(collection.GetType().GetElementType(), context);
-            }
+            var key = serializers[0].DeserializeField(collection.GetType().GetGenericArguments()[0], context);
+            object value = serializers[1].DeserializeField(collection.GetType().GetGenericArguments()[1], context);
             dictionary.Add(key, value);
         }
 
-        protected override void WriteElement(object collection, int index, ISerializationContext context)
+        protected override void WriteElement(object collection, int index, ISerializationContext context, IFieldSerializer[] serializers)
         {
             var dictionary = ((IDictionary)collection);
             var key = dictionary.Keys.Cast<object>().ToArray()[index];
-            var serializer = Serializer.FieldSerializers.Values.FirstOrDefault(s => s.CanSerializeType(key.GetType()));
-            if (serializer == null) return;
-            context.Stream.WriteString(Serializer.GetSerializerKey(serializer));
+            var serializer = serializers[0];
             serializer.SerializeField(key, context);
 
             var element = dictionary[key];
-            if (element != null)
-            {
-                serializer = Serializer.FieldSerializers.Values.FirstOrDefault(s => s.CanSerializeType(element.GetType()));
-                if (serializer != null)
-                {
-                    context.Stream.WriteString(Serializer.GetSerializerKey(serializer));
-                    serializer.SerializeField(element, context);
-                    return;
-                }
-            }
-            context.Stream.WriteString(Serializer.EmptySerializerKey);
+            serializers[1].SerializeField(element, context);
         }
     }
 }

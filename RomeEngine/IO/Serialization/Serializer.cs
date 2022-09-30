@@ -25,11 +25,13 @@ namespace RomeEngine.IO
             public ISerializationStream Stream { get; }
         }
 
-        public static string EmptySerializerKey { get; } = "Empty";
-
         public static string GetSerializerKey(IFieldSerializer serializer)
         {
             return serializer.GetType().Name;
+        }
+        public static IFieldSerializer GetSerializerForType(Type type)
+        {
+            return FieldSerializers.Values.First(s => s.CanSerializeType(type));
         }
 
         static Serializer()
@@ -52,6 +54,9 @@ namespace RomeEngine.IO
             yield return new ReadOnlyArrayFieldSerializer();
             yield return new Matrix4x4Serializer();
             yield return new EnumSerializer();
+
+            // empty
+            yield return new EmptySerializer();
         }
 
         public void Serialize(ISerializable serializable, ISerializationStream stream)
@@ -73,11 +78,7 @@ namespace RomeEngine.IO
                 stream.WriteInt(fieldsArray.Length);
                 foreach (var field in fieldsArray)
                 {
-                    var serializer = FieldSerializers.Values.FirstOrDefault(f => f.CanSerializeType(field.Type));
-                    if (serializer == null)
-                    {
-                        throw new InvalidOperationException($"Can't serialize field with type {field.Type.FullName}");
-                    }
+                    var serializer = GetSerializerForType(field.Type);
                     stream.WriteString(field.Name);
                     stream.WriteString(GetSerializerKey(serializer));
                     serializer.SerializeField(field.Value, context);
@@ -119,10 +120,6 @@ namespace RomeEngine.IO
                     if (fieldsMap.TryGetValue(fieldName, out SerializableField field))
                     {
                         string serializerIndex = stream.ReadString();
-                        if (serializerIndex == Serializer.EmptySerializerKey)
-                        {
-                            throw new InvalidOperationException($"Can't deserialize field with type {field.Type.FullName}");
-                        }
                         var serializer = FieldSerializers[serializerIndex];
                         field.Setter(serializer.DeserializeField(field.Type, context));
                     }

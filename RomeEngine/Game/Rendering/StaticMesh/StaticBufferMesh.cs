@@ -6,18 +6,31 @@ namespace RomeEngine
 {
     public sealed class StaticBufferMesh : IMesh, ISerializable
     {
+        float[] vertices;
+        float[] texcoords;
+        float[] normals;
         int[] indices;
-        MeshAttribute[] attributes;
+
+
+        float[][] Buffers => new float[][] { vertices, texcoords, normals };
 
         public StaticBufferMesh()
         {
+            Attributes = new IMeshAttributeInfo[]
+            {
+                new CustomMeshAttribute(3, MeshAttributeType.Float),
+                new CustomMeshAttribute(2, MeshAttributeType.Float),
+                new CustomMeshAttribute(3, MeshAttributeType.Float),
+            };
         }
 
         public PolygonFormat PolygonFormat { get; }
 
-        public StaticBufferMesh(MeshAttribute[] attributes, int[] indices, PolygonFormat polygonFormat) : this()
+        public StaticBufferMesh(float[] vertices, float[] texcoords, float[] normals, int[] indices, PolygonFormat polygonFormat) : this()
         {
-            this.attributes = attributes;
+            this.vertices = vertices;
+            this.texcoords = texcoords;
+            this.normals = normals;
             this.indices = indices;
             PolygonFormat = polygonFormat;
         }
@@ -27,7 +40,17 @@ namespace RomeEngine
             return indices;
         }
 
-        public ReadOnlyArray<IMeshAttributeInfo> Attributes => attributes;
+        public ReadOnlyArray<IMeshAttributeInfo> Attributes { get; }
+
+        public IVertexBuffer<float> CreateVerticesFloatAttributeBuffer(int attributeIndex)
+        {
+            return new VertexBuffer<float>(Buffers[attributeIndex]);
+        }
+
+        public IVertexBuffer<int> CreateVerticesIntAttributeBuffer(int attributeIndex)
+        {
+            throw new NotImplementedException();
+        }
 
         public int PositionAttributeIndex => 0;
         public int TexcoordAttributeIndex => 1;
@@ -35,13 +58,10 @@ namespace RomeEngine
 
         public IEnumerable<SerializableField> EnumerateFields()
         {
-            yield return new GenericSerializableField<MeshAttribute[]>(nameof(attributes), attributes, value => attributes = value, true);
+            yield return new GenericSerializableField<float[]>(nameof(vertices), vertices, value => vertices = value, true);
+            yield return new GenericSerializableField<float[]>(nameof(texcoords), texcoords, value => texcoords = value, true);
+            yield return new GenericSerializableField<float[]>(nameof(normals), normals, value => normals = value, true);
             yield return new GenericSerializableField<int[]>(nameof(indices), indices, value => indices = value, true);
-        }
-
-        public IVertexBuffer CreateVerticesAttributeBuffer(int attributeIndex)
-        {
-            return new VertexBuffer(attributes[attributeIndex].Type.ConvertFromAttributeBuffer(attributes[attributeIndex].Buffer));
         }
     }
 }

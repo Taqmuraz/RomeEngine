@@ -69,25 +69,5 @@ namespace RomeEngine.IO
         {
             textWriter.WriteLine($"type {type.FullName}");
         }
-
-        public short ReadShort()
-        {
-            throw new NotImplementedException();
-        }
-
-        public byte ReadByte()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteShort(short value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteByte(byte value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

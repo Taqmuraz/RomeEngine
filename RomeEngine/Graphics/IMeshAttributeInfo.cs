@@ -2,8 +2,7 @@
 {
     public interface IMeshAttributeInfo
     {
-        int ElementSize { get; }
-        int Layout { get; }
-        MeshAttributeFormat Type { get; }
+        int Size { get; }
+        MeshAttributeType Type { get; }
     }
 }
