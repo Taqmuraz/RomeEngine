@@ -4,7 +4,7 @@ namespace RomeEngineGame
 {
     public interface IControlAgent
     {
-        Vector2 InputMovement { get; }
+        Vector3 InputMovement { get; }
         IControlAction GetAction();
     }
 }

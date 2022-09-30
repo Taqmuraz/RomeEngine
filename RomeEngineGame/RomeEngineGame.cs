@@ -56,11 +56,26 @@ namespace RomeEngineGame
         static GameScene GamePlayScene()
         {
             var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
+            var light = new GameObjectInstancer(() =>
+            {
+                var lightObject = new GameObject("Light").AddComponent<GlobalLight>();
+
+                lightObject.Transform.LocalRotation = new Vector3(45f, 135f, 0f);
+                GlobalLight.LightColor = Color32.white;
+                GlobalLight.AmbienceIntencivity = 0.2f;
+
+                return lightObject.GameObject;
+            });
+
             var scene = new GameScene("Game scene");
             scene.AddGameObjectInstancer(camera);
+            scene.AddGameObjectInstancer(light);
+
+            scene.AddGameObjectInstancer(new GameObjectInstancer(() => new GameObject("Terrain").AddComponent<TerrainRenderer>().GameObject));
+
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
             {
-                var player = Resources.Load<GameObject>("Models/HumanWithSwordIdle.bin");
+                var player = Resources.Load<GameObject>("Models/Knight.bin");
                 player.AddComponent<PlayerController>();
                 return player;
             }));

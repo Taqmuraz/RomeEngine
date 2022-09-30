@@ -11,17 +11,18 @@ namespace RomeEngineGame
         [BehaviourEvent]
         void Update()
         {
-            var inputMovement = HumanController.GetControlAgent().InputMovement.WithY(0f).normalized;
-            if (inputMovement.x != 0)
+            var inputMovement = HumanController.GetControlAgent().InputMovement.normalized;
+            if (inputMovement != new Vector2())
             {
-                //HumanController.Transform.FlipY = inputMovement.x < 0f;
-                HumanController.HumanAnimator.PlayAnimationWithTransition(GetMovementAnimationName());
+                HumanController.HumanAnimator.PlayAnimation(GetMovementAnimationName());
             }
             else
             {
-                HumanController.HumanAnimator.PlayAnimationWithTransition(GetIdleAnimationName());
+                HumanController.HumanAnimator.PlayAnimation(GetIdleAnimationName());
             }
-            HumanController.Transform.Position += inputMovement * Time.DeltaTime * MovementSpeed;
+            Vector3 moveDirection = new Vector3(inputMovement.x, 0f, inputMovement.z);
+            HumanController.Transform.Position += moveDirection * Time.DeltaTime * MovementSpeed;
+            HumanController.Transform.Rotation = Matrix4x4.LookRotation(moveDirection, Vector3.up).GetEulerRotation();
         }
     }
 }

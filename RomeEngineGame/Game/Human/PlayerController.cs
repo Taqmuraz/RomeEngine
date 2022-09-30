@@ -18,7 +18,24 @@ namespace RomeEngineGame
 
         public override IControlAgent GetControlAgent() => this;
 
-        public Vector2 InputMovement => Input.GetWASD();
+        public Vector3 InputMovement
+        {
+            get
+            {
+                Vector3 dir = Input.GetWASD();
+                return Camera.ActiveCamera.Transform.LocalToWorld.MultiplyDirection(new Vector3(dir.x, 0f, dir.y));
+            }
+        }
+
+        [BehaviourEvent]
+        void Update()
+        {
+            var camera = Camera.ActiveCamera;
+            Vector2 mouse = Input.MouseDelta * 15f * Time.DeltaTime;
+            camera.Transform.LocalRotation += new Vector3(mouse.y, mouse.x, 0f);
+
+            camera.Transform.Position = Transform.Position - camera.Transform.Forward * 4f + Vector3.up;
+        }
 
         public IControlAction GetAction()
         {
