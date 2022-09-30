@@ -14,15 +14,16 @@ namespace RomeEngineGame
             var inputMovement = HumanController.GetControlAgent().InputMovement.normalized;
             if (inputMovement != new Vector2())
             {
-                HumanController.HumanAnimator.PlayAnimation(GetMovementAnimationName());
+                HumanController.HumanAnimator.PlayAnimationWithTransition(GetMovementAnimationName());
+
+                Vector3 moveDirection = new Vector3(inputMovement.x, 0f, inputMovement.z);
+                HumanController.Transform.Position += moveDirection * Time.DeltaTime * MovementSpeed;
+                HumanController.Transform.Rotation = Matrix4x4.LookRotation(Vector3.Lerp(HumanController.Transform.Forward, moveDirection, Time.DeltaTime * 15f), Vector3.up).GetEulerRotation();
             }
             else
             {
-                HumanController.HumanAnimator.PlayAnimation(GetIdleAnimationName());
+                HumanController.HumanAnimator.PlayAnimationWithTransition(GetIdleAnimationName());
             }
-            Vector3 moveDirection = new Vector3(inputMovement.x, 0f, inputMovement.z);
-            HumanController.Transform.Position += moveDirection * Time.DeltaTime * MovementSpeed;
-            HumanController.Transform.Rotation = Matrix4x4.LookRotation(moveDirection, Vector3.up).GetEulerRotation();
         }
     }
 }

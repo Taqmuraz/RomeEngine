@@ -65,6 +65,7 @@
     <Compile Include="Editor\Inspector\Vector2FieldInspector.cs" />
     <Compile Include="Editor\HierarchyEditor\HierarchyEditor.cs" />
     <Compile Include="Editor\Inspector\Vector3FieldInspector.cs" />
+    <Compile Include="Samples\TerrainRenderer.cs" />
     <Compile Include="StandardFileSystem.cs" />
     <Compile Include="Samples\EulerRotationAnimation.cs" />
     <Compile Include="Game\HumanState\HumanAirAttackState.cs" />

@@ -8,7 +8,7 @@ namespace RomeEngineGame
         IMeshIdentifier meshIdentifier;
         Texture terrainTexture;
 
-        static Vector2 Tiling { get; } = new Vector2(10f, 10f);
+        static Vector2 Tiling { get; } = new Vector2(30f, 30f);
 
         [BehaviourEvent]
         void Start()

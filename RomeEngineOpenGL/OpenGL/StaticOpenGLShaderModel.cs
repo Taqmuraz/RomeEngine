@@ -22,6 +22,7 @@ namespace RomeEngineOpenGL
             yield return new CustomOpenGLShaderParameter(shader => shader.SetVector3("lightDirection", GlobalLight.LightDirection));
             yield return new CustomOpenGLShaderParameter(shader => shader.SetVector4("lightColor", GlobalLight.LightColor.ToVector4()));
             yield return new CustomOpenGLShaderParameter(shader => shader.SetFloat("ambienceIntencivity", GlobalLight.AmbienceIntencivity));
+            yield return new CustomOpenGLShaderParameter(shader => shader.SetFloat("lightIntencivity", GlobalLight.LightIntencivity));
             yield return new CustomOpenGLShaderParameter(shader => shader.SetFloat("time", Time.CurrentTime));
         }
     }

@@ -11,9 +11,10 @@ namespace RomeEngine
 
 		static readonly KeyInfo emptyKey = new EmptyKeyInfo();
 
-		static Vector2 lastMousePosition;
 		public static Vector2 MousePosition { get; private set; }
-		public static Vector2 MouseDelta => MousePosition - lastMousePosition;
+		public static Vector2 MouseDelta { get; private set; }
+
+		public static CursorState CursorState { get; set; } = CursorState.None;
 
 		class EmptyKeyInfo : KeyInfo
 		{
@@ -30,9 +31,22 @@ namespace RomeEngine
 
 		}
 
+		static void UpdateCursor()
+		{
+			var cursor = Engine.Instance.Runtime.SystemInfo.Cursor;
+			if (CursorState.HasFlag(CursorState.Locked))
+			{
+				cursor.SetPosition(Screen.Size * 0.5f);
+			}
+			cursor.SetVisible(!CursorState.HasFlag(CursorState.Hidden));
+
+		}
+
 		public static void UpdateInput()
 		{
-			lastMousePosition = MousePosition;
+			MouseDelta = Vector2.zero;
+			UpdateCursor();
+
 			lock (keys)
 			{
 				foreach (var key in keys)
@@ -118,7 +132,6 @@ namespace RomeEngine
 
 		public void OnMouseMove(Vector2 point)
 		{
-			lastMousePosition = MousePosition;
 			MousePosition = point;
 		}
 
@@ -128,5 +141,10 @@ namespace RomeEngine
 			lock (keysToUpdate) keysToUpdate.Add(((KeyCode)button, KeyState.Up));
 			MousePosition = point;
 		}
-	}
+
+        public void OnMouseDelta(Vector2 delta)
+        {
+			MouseDelta = delta;
+        }
+    }
 }

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace RomeEngineOpenGL
 {
-    class MainWindow : GameWindow, IEngineRuntine, ISystemInfo
+    class MainWindow : GameWindow, IEngineRuntine, ISystemInfo, IMouseCursor
     {
         TextWriter logStream;
         IInputHandler inputHandler;
@@ -17,6 +17,7 @@ namespace RomeEngineOpenGL
         IGraphicsContext context;
         OpenGLGraphics graphics;
         OpenGLGraphics2D graphics2D;
+        RomeEngine.Vector2? desiredMousePosition;
 
         public MainWindow(int width, int height, TextWriter logStream)
         {
@@ -37,8 +38,6 @@ namespace RomeEngineOpenGL
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-            Title = (1f / Time.DeltaTime).ToString("F2");
-
             engine.UpdateGameState();
 
             graphics.Setup(Width, Height);
@@ -94,6 +93,12 @@ namespace RomeEngineOpenGL
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
             inputHandler.OnMouseMove(e.Position);
+            inputHandler.OnMouseDelta(new RomeEngine.Vector2(e.XDelta, e.YDelta));
+            if (desiredMousePosition.HasValue)
+            {
+                Mouse.SetPosition(desiredMousePosition.Value.x, desiredMousePosition.Value.y);
+                desiredMousePosition = null;
+            }
         }
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
@@ -147,5 +152,22 @@ namespace RomeEngineOpenGL
         public ISystemInfo SystemInfo => this;
         public IFileSystem FileSystem { get; } = new StandardFileSystem();
         public RomeEngine.Vector2 ScreenSize => new RomeEngine.Vector2(Width, Height);
+
+        void IMouseCursor.SetPosition(RomeEngine.Vector2 position)
+        {
+            desiredMousePosition = position;
+        }
+
+        void IMouseCursor.SetVisible(bool visible)
+        {
+            CursorVisible = visible;
+        }
+
+        IMouseCursor ISystemInfo.Cursor => this;
+
+        void IEngineRuntine.Close()
+        {
+            Close();
+        }
     }
 }

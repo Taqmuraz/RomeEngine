@@ -96,5 +96,9 @@ namespace RomeEngineGame
         public void OnMouseUp(Vector2 mousePosition, int button)
         {
         }
+
+        public void OnMouseDelta(Vector2 delta)
+        {
+        }
     }
 }

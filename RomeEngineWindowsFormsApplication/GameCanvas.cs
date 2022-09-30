@@ -7,7 +7,7 @@ using RomeEngine.SystemDrawing;
 
 namespace RomeEngineWindowsFormsApplication
 {
-    class GameCanvas : Panel, IEngineRuntine, ISystemInfo
+    class GameCanvas : Panel, IEngineRuntine, ISystemInfo, IMouseCursor
     {
         TextWriter log;
         IEngine engine;
@@ -113,5 +113,23 @@ namespace RomeEngineWindowsFormsApplication
         }
 
         public IFileSystem FileSystem { get; } = new RomeEngineGame.StandardFileSystem();
+
+        public void Close()
+        {
+            ((Form)Parent).Close();
+        }
+
+        IMouseCursor ISystemInfo.Cursor => this;
+
+        void IMouseCursor.SetPosition(Vector2 position)
+        {
+            Cursor.Position = new System.Drawing.Point((int)position.x, (int)position.y);
+        }
+
+        void IMouseCursor.SetVisible(bool visible)
+        {
+            if (visible) Cursor.Show();
+            else Cursor.Hide();
+        }
     }
 }

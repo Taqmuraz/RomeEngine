@@ -11,5 +11,6 @@ namespace RomeEngine
         void ShowFileWriteDialog(string root, string fileName, string title, Action<string> callback);
         ISystemInfo SystemInfo { get; }
         IFileSystem FileSystem { get; }
+        void Close();
     }
 }

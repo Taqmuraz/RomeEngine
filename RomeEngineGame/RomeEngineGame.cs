@@ -55,21 +55,32 @@ namespace RomeEngineGame
         }
         static GameScene GamePlayScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
+            var camera = new GameObjectInstancer(() =>
+            {
+                var instance = new GameObject("Camera").AddComponent<Camera>();
+                instance.ClearColor = new Color32(0.3f, 0.5f, 0.6f, 1f);
+                return instance.GameObject;
+            });
             var light = new GameObjectInstancer(() =>
             {
                 var lightObject = new GameObject("Light").AddComponent<GlobalLight>();
 
-                lightObject.Transform.LocalRotation = new Vector3(45f, 135f, 0f);
-                GlobalLight.LightColor = Color32.white;
-                GlobalLight.AmbienceIntencivity = 0.2f;
+                lightObject.Transform.LocalRotation = new Vector3(75f, 135f, 0f);
+                lightObject.Setup(0.2f, 0.4f, Color32.white);
 
                 return lightObject.GameObject;
+            });
+            var house = new GameObjectInstancer(() =>
+            {
+                var model = Resources.Load<GameObject>("Models/Buildings/House.bin");
+                model.Transform.Position = new Vector3(10f, 0f, 0f);
+                return model;
             });
 
             var scene = new GameScene("Game scene");
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(light);
+            scene.AddGameObjectInstancer(house);
 
             scene.AddGameObjectInstancer(new GameObjectInstancer(() => new GameObject("Terrain").AddComponent<TerrainRenderer>().GameObject));
 
@@ -83,7 +94,7 @@ namespace RomeEngineGame
             {
                 var canvas = new GameObject("Loop test").AddComponent<EditorCanvas>();
                 canvas.TextColor = Color32.white;
-                Routine.StartRoutine(new ActionRoutine(() => canvas.DrawText(((int)Mathf.Loop(Time.CurrentTime, 10, 20)).ToString(), new Rect(25, 25, 200, 50), TextOptions.Default)));
+                Routine.StartRoutine(new ActionRoutine(() => canvas.DrawText((1f / Time.DeltaTime).ToString("F1"), new Rect(25, 25, 200, 50), TextOptions.Default)));
                 return canvas.GameObject;
             });
             return scene;

@@ -35,6 +35,12 @@ namespace RomeEngineGame
             camera.Transform.LocalRotation += new Vector3(mouse.y, mouse.x, 0f);
 
             camera.Transform.Position = Transform.Position - camera.Transform.Forward * 4f + Vector3.up;
+            Input.CursorState = CursorState.HiddenAndLocked;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Engine.Quit();
+            }
         }
 
         public IControlAction GetAction()

@@ -8,6 +8,7 @@ uniform vec4 textureColor;
 uniform vec4 lightColor;
 uniform vec3 lightDirection;
 uniform float ambienceIntencivity;
+uniform float lightIntencivity;
 
 void main (void)
 {
@@ -15,7 +16,7 @@ void main (void)
 	
 	float nDotl = dot (surfaceNormal, -lightDirection);
 	
-	out_Color = clr + ((nDotl < 0.0) ? vec4(nDotl, nDotl, nDotl, 0) : lightColor * nDotl) * ambienceIntencivity;
+	out_Color = clr + ((nDotl < 0.0) ? vec4(nDotl, nDotl, nDotl, 0) : lightColor * nDotl) * lightIntencivity + lightColor * ambienceIntencivity;
 }
 
 

@@ -50,6 +50,7 @@
     <Compile Include="Engine\IEngine.cs" />
     <Compile Include="Engine\IEngineRuntine.cs" />
     <Compile Include="Engine\IFileSystem.cs" />
+    <Compile Include="Engine\IMouseCursor.cs" />
     <Compile Include="Engine\ISystemInfo.cs" />
     <Compile Include="Game\Animation\Animation.cs" />
     <Compile Include="Game\Animation\AnimationFrame.cs" />
@@ -71,7 +72,9 @@
     <Compile Include="Game\Rendering\StaticMesh\StaticBufferMesh.cs" />
     <Compile Include="Game\Rendering\StaticMesh\StaticBufferMeshRenderer.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
+    <Compile Include="Game\Routine\RepeatingActionRoutine.cs" />
     <Compile Include="Game\Routine\SingleCallRoutine.cs" />
+    <Compile Include="Input\CursorState.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaAnimation.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaAnimationBlendMode.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaSingleBoneAnimation.cs" />

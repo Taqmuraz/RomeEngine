@@ -58,6 +58,11 @@ namespace RomeEngine.IO
                 }
             }
         }
+        public (ColladaSingleBoneFrame first, ColladaSingleBoneFrame last) GenerateFrame(float time)
+        {
+            GenerateFrame(time, out var first, out var last, BlendMode);
+            return (first, last);
+        }
 
         public string BoneName => boneName;
 

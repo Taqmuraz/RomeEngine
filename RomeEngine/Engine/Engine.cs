@@ -1,4 +1,6 @@
-﻿namespace RomeEngine
+﻿using System;
+
+namespace RomeEngine
 {
     public sealed class Engine : IEngine
     {
@@ -36,6 +38,11 @@
         public void UpdateGraphics3D(IGraphics graphics, IGraphicsContext context)
         {
             Game.UpdateGraphics3D(graphics, context);
+        }
+
+        public static void Quit()
+        {
+            Instance.Runtime.Close();
         }
     }
 }
