@@ -10,7 +10,7 @@ namespace RomeEngine
 		public Vector4 column_3;
 
 		public static readonly Matrix4x4 Identity = new Matrix4x4(new Vector4(1f, 0f, 0f, 0f), new Vector4(0f, 1f, 0f, 0f), new Vector4(0f, 0f, 1f, 0f), new Vector4(0f, 0f, 0f, 1f));
-		public Vector4 GetLine(int index)
+		Vector4 GetLine(int index)
 		{
 			switch (index)
 			{
@@ -18,6 +18,18 @@ namespace RomeEngine
 				case 1: return new Vector4(column_0.y, column_1.y, column_2.y, column_3.y);
 				case 2: return new Vector4(column_0.z, column_1.z, column_2.z, column_3.z);
 				case 3: return new Vector4(column_0.w, column_1.w, column_2.w, column_3.w);
+				default: return new Vector4();
+			}
+		}
+
+        public Vector4 GetColumn(int index)
+		{
+			switch (index)
+			{
+				case 0: return column_0;
+				case 1: return column_1;
+				case 2: return column_2;
+				case 3: return column_3;
 				default: return new Vector4();
 			}
 		}
@@ -335,7 +347,10 @@ namespace RomeEngine
 			result.column_2 = -result.column_2;
 			return result;
 		}
-
+		public Vector3 MultiplyPoint3x4(Vector3 vector)
+		{
+			return (Vector3)column_3 + (Vector3)(column_0 * vector.x) + (Vector3)(column_1 * vector.y) + (Vector3)(column_2 * vector.z);
+		}
 		public Vector3 MultiplyPoint(Vector3 point)
 		{
 			return (Vector3)(this * new Vector4(point.x, point.y, point.z, 1f));

@@ -1,6 +1,6 @@
 ﻿namespace RomeEngine
 {
-	public struct Vector4
+    public struct Vector4
 	{
 		public float x, y, z, w;
 

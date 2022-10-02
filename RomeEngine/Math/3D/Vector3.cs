@@ -162,6 +162,34 @@ namespace RomeEngine
 		public static readonly Vector3 forward = new Vector3 (0, 0, 1);
 		public static readonly Vector3 back = new Vector3 (0, 0, -1);
 
+		public Vector3 Min(Vector3 v)
+		{
+			return new Vector3
+				(
+					Mathf.Min(x, v.x),
+					Mathf.Min(y, v.y),
+					Mathf.Min(z, v.z)
+				);
+		}
+		public Vector3 Max(Vector3 v)
+		{
+			return new Vector3
+				(
+					Mathf.Max(x, v.x),
+					Mathf.Max(y, v.y),
+					Mathf.Max(z, v.z)
+				);
+		}
+		public Vector3 Clamp(Vector3 min, Vector3 max)
+		{
+			return new Vector3
+				(
+					Mathf.Clamp(x, min.x, max.x),
+					Mathf.Clamp(y, min.y, max.y),
+					Mathf.Clamp(z, min.z, max.z)
+				);
+		}
+
 		public float this[int index]
 		{
 			get
