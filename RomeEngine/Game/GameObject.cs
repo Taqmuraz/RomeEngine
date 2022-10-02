@@ -5,7 +5,8 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public sealed class GameObject : Game.GameThreadHandler, ISerializationHandler
+
+    public sealed class GameObject : Game.GameThreadHandler, ISerializationHandler, IInstantiatable<GameObject>
 	{
 		[SerializeField(HideInInspector = true)]
 		public Transform Transform { get; private set; }
@@ -24,6 +25,12 @@ namespace RomeEngine
 			GameScene.ActiveScene.AddGameObject(this);
 			Name = name;
 			Transform = AddComponent<Transform>();
+		}
+		private GameObject(string name, IEnumerable<Component> components)
+		{
+			Name = name;
+			this.components.AddRange(components);
+			GameScene.ActiveScene.AddGameObject(this);
 		}
 
 		[SerializeField(HideInInspector = true)] List<Component> components = new List<Component>();
@@ -129,5 +136,12 @@ namespace RomeEngine
 			Update();
 			CallEvent("Start");
 		}
+
+        GameObject IInstantiatable<GameObject>.CreateInstance()
+        {
+			var components = GetComponents().Select(c => ((IInstantiatable<Component>)c).CreateInstance()).ToList();
+			var instance = new GameObject($"{Name}_Copy", components);
+			return instance;
+        }
     }
 }

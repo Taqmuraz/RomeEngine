@@ -80,7 +80,7 @@ namespace RomeEngine
                     }
                 }
             }
-            else
+            else if (locatables.Count != 0)
             {
                 acceptor.AcceptLocatables(locatables);
             }

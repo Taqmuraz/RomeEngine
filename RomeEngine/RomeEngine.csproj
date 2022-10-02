@@ -59,6 +59,18 @@
     <Compile Include="Game\Animation\FramesTransitionAnimation.cs" />
     <Compile Include="Game\Animation\Animator.cs" />
     <Compile Include="Game\BehaviourEventAttribute.cs" />
+    <Compile Include="Game\IInstantiatable.cs" />
+    <Compile Include="Game\Physics\CollisionInfo.cs" />
+    <Compile Include="Game\Physics\ContactInfo.cs" />
+    <Compile Include="Game\Physics\IPhysicalBody.cs" />
+    <Compile Include="Game\Physics\Physics.cs" />
+    <Compile Include="Game\Physics\Shapes\BoxShape.cs" />
+    <Compile Include="Game\Physics\Shapes\MeshShapeTriangle.cs" />
+    <Compile Include="Game\Physics\Shapes\SphereShape.cs" />
+    <Compile Include="Game\Physics\Shapes\MeshShape.cs" />
+    <Compile Include="Game\Physics\SimpleDynamicBody.cs" />
+    <Compile Include="Game\Physics\SphereCollider.cs" />
+    <Compile Include="Game\Physics\StaticBody.cs" />
     <Compile Include="Game\Rendering\Camera.cs" />
     <Compile Include="Game\EventsHandler.cs" />
     <Compile Include="Game\Rendering\GlobalLight.cs" />
@@ -186,6 +198,7 @@
     <Compile Include="IO\Serialization\TypesMap.cs" />
     <Compile Include="IO\Serialization\Vector2Serializer.cs" />
     <Compile Include="IO\Serialization\Vector3Serializer.cs" />
+    <Compile Include="Math\3D\Bounds.cs" />
     <Compile Include="Math\3D\Matrix4x4.cs" />
     <Compile Include="Math\Color32.cs" />
     <Compile Include="Math\Mathf.cs" />
@@ -204,9 +217,15 @@
     <Compile Include="Graphics\2D\TextOptions.cs" />
     <Compile Include="Game\UI\CanvasCircle.cs" />
     <Compile Include="Graphics\2D\TextAlignment.cs" />
+    <Compile Include="Game\Physics\Collider.cs" />
+    <Compile Include="Game\Physics\ColliderShapeType.cs" />
+    <Compile Include="Game\Physics\IColliderShape.cs" />
+    <Compile Include="Templates\CustomTreeAcceptor.cs" />
+    <Compile Include="Templates\ILocatable.cs" />
+    <Compile Include="Templates\ITreeAcceptor.cs" />
+    <Compile Include="Templates\Octotree.cs" />
+    <Compile Include="Templates\OctotreeNode.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Physics\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

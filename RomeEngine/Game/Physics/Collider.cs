@@ -6,7 +6,7 @@ namespace RomeEngine
 {
     public abstract class Collider : Component, ILocatable
     {
-        static IPhysicalBody DefaultBody { get; } = new StaticBody(0.5f, 1f);
+        static IPhysicalBody DefaultBody { get; } = new StaticBody(1f, 1f);
         static List<Collider> colliders = new List<Collider>();
 
         [BehaviourEvent]
@@ -35,6 +35,8 @@ namespace RomeEngine
         protected abstract IColliderShape Shape { get; }
         public IPhysicalBody PhysicalBody { get; set; }
 
+        protected abstract void UpdateShape();
+
         public static void UpdatePhysics()
         {
             lock (colliders)
@@ -44,6 +46,8 @@ namespace RomeEngine
                 var shapesTree = new Octotree<Collider>(bounds, 5, 6);
                 foreach (var collider in colliders)
                 {
+                    if (collider.PhysicalBody != null) collider.PhysicalBody.Update();
+                    collider.UpdateShape();
                     shapesTree.AddLocatable(collider);
                 }
                 shapesTree.VisitTree(new CustomTreeAcceptor<Collider>(locatables =>
@@ -53,7 +57,7 @@ namespace RomeEngine
                     {
                         foreach (var second in checkList)
                         {
-                            if (first.PhysicalBody == null && second.PhysicalBody == null) continue;
+                            if (first == second || (first.PhysicalBody == null && second.PhysicalBody == null)) continue;
 
                             var contactType = (ColliderShapeType)(((int)first.Shape.ShapeType << 16) & (int)second.Shape.ShapeType);
                             if (functions.TryGetValue(contactType, out var func))
@@ -85,6 +89,10 @@ namespace RomeEngine
                 firstBody.ApplyForceAtPoint(contactPoint, contactLine * effect0);
                 secondBody.ApplyForceAtPoint(contactPoint, contactLine * effect1);
             }
+        }
+        static void SphereVsMesh(IPhysicalBody sphereBody, IPhysicalBody meshBody, SphereShape sphereShape, MeshShape meshShape)
+        {
+
         }
 
         bool ILocatable.IsInsideBox(Bounds box)

@@ -11,18 +11,24 @@ namespace RomeEngine.IO
 
         public static T Load<T>(string file) where T : ISerializable
         {
-            file = Engine.Instance.Runtime.FileSystem.CombinePath(ResourcesGlobalPath, file);
-
             if (cache.TryGetValue(file, out ISerializable value))
             {
                 return (T)value;
             }
             else
             {
-                var result = (T)new Serializer().DeserializeFile(file);
+                var result = LoadFromFile<T>(file);
                 cache.Add(file, result);
                 return result;
             }
+        }
+        static T LoadFromFile<T>(string file) where T : ISerializable
+        {
+            return (T)new Serializer().DeserializeFile(Engine.Instance.Runtime.FileSystem.CombinePath(ResourcesGlobalPath, file));
+        }
+        public static T LoadInstance<T>(string file) where T : ISerializable, IInstantiatable<T>
+        {
+            return LoadFromFile<T>(file);
         }
         public static (T result, string fileName)[] LoadAll<T>(string directory) where T : ISerializable
         {

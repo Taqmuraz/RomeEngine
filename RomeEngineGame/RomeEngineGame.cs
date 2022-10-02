@@ -86,10 +86,22 @@ namespace RomeEngineGame
 
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
             {
-                var player = Resources.Load<GameObject>("Models/Knight.bin");
+                var player = Resources.LoadInstance<GameObject>("Models/Knight.bin");
                 player.AddComponent<PlayerController>();
+                var collider = player.AddComponent<SphereCollider>();
+                collider.PhysicalBody = new SimpleDynamicBody(player.Transform);
+                player.Transform.Position = new Vector3(0f, 10f, 0f);
                 return player;
             }));
+
+            scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
+            {
+                var sphere = Resources.LoadInstance<GameObject>("Models/Knight.bin");
+                sphere.Transform.Position = new Vector3();
+                sphere.AddComponent<SphereCollider>();
+                return sphere;
+            }));
+
             scene.AddGameObjectInstancer(() =>
             {
                 var canvas = new GameObject("Loop test").AddComponent<EditorCanvas>();

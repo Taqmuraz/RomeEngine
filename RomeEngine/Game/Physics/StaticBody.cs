@@ -20,5 +20,10 @@
 
         public float RestitutionCoefficient { get; set; } = 0.5f;
         public float Mass { get; set; } = 1f;
+
+        public void Update()
+        {
+
+        }
     }
 }

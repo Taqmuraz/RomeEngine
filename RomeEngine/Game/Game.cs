@@ -76,7 +76,7 @@ namespace RomeEngine
 
 			SendHandlersMessage("EarlyUpdate");
 
-			// update physics here
+			Collider.UpdatePhysics();
 			Routine.UpdateDelayed();
 
 			SendHandlersMessage("Update");

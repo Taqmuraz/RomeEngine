@@ -6,5 +6,6 @@
         Vector3 GetVelocityAtPoint(Vector3 point);
         float RestitutionCoefficient { get; }
         float Mass { get; }
+        void Update();
     }
 }
