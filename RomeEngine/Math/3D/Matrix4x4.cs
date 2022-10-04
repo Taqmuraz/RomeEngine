@@ -218,7 +218,7 @@ namespace RomeEngine
 			{
 				for (int i_y = 0; i_y < 4; i_y++)
 				{
-					resoult[i_x, i_y] = (-1f).Pow(i_x + i_y) * MinorStage(i_x, i_y);
+					resoult[i_x, i_y] = (((i_x + i_y) & 1) == 0 ? 1f : -1f) * MinorStage(i_x, i_y);
 				}
 			}
 			return resoult;
