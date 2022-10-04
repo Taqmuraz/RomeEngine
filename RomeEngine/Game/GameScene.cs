@@ -2,7 +2,7 @@
 
 namespace RomeEngine
 {
-	public class GameScene
+	public class GameScene : IEventsHandler
 	{
 		List<GameObjectInstancer> instancers = new List<GameObjectInstancer>();
 		List<GameObject> gameObjects = new List<GameObject>();
@@ -69,5 +69,13 @@ namespace RomeEngine
 
 			ActiveScene = emptyScene;
 		}
-	}
+
+        public void CallEvent(string name)
+        {
+			foreach (var gameObject in gameObjects.ToArray())
+			{
+				gameObject.CallEvent(name);
+			}
+        }
+    }
 }

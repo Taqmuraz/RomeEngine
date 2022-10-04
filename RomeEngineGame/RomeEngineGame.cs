@@ -91,7 +91,7 @@ namespace RomeEngineGame
                 player.AddComponent<PlayerController>();
                 //var collider = player.AddComponent<SphereCollider>();
                 //collider.PhysicalBody = new SimpleDynamicBody(player.Transform);
-                player.Transform.Position = new Vector3(0f, 10f, 0f);
+                player.Transform.Position = new Vector3(0f, 0f, 0f);
                 return player;
             }));
 
@@ -99,6 +99,7 @@ namespace RomeEngineGame
             {
                 var sphere = Resources.LoadInstance<GameObject>("Models/Knight.bin");
                 sphere.Name = "Sphere";
+                sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
                 sphere.Transform.Position = new Vector3();
                 sphere.AddComponent<SphereCollider>();
                 return sphere;

@@ -5,17 +5,11 @@ namespace RomeEngine
 {
 	public static class Game
 	{
-		static List<SerializableEventsHandler> gameHandlers = new List<SerializableEventsHandler>();
-		static List<SerializableEventsHandler> handlersToAdd = new List<SerializableEventsHandler>();
-		static List<SerializableEventsHandler> handlersToRemove = new List<SerializableEventsHandler>();
-
 		public abstract class GameThreadHandler : SerializableEventsHandler
 		{
-			bool m_active;
 			public bool IsActive
 			{
-				get => m_active && !destroyed;
-				set => m_active = value;
+				get => !destroyed;
 			}
 
 			bool destroyed;
@@ -23,12 +17,6 @@ namespace RomeEngine
 			public GameThreadHandler()
 			{
 				
-			}
-
-			protected void Activate()
-			{
-				IsActive = true;
-				handlersToAdd.Add(this);
 			}
 
 			public void Destroy()
@@ -43,30 +31,7 @@ namespace RomeEngine
 				{
 					Debug.Log(ex.ToString());
 				}
-				handlersToRemove.Add(this);
 				destroyed = true;
-			}
-		}
-		static void SendHandlersMessage(string message)
-		{
-			if (handlersToAdd.Count != 0) gameHandlers.AddRange(handlersToAdd);
-			for (int i = 0; i < handlersToRemove.Count; i++) gameHandlers.Remove(handlersToRemove[i]);
-			handlersToAdd.Clear();
-			handlersToRemove.Clear();
-
-			lock (gameHandlers)
-			{
-				foreach (var handler in gameHandlers.ToArray())
-				{
-					try
-					{
-						handler.CallEvent(message);
-					}
-					catch (System.Exception ex)
-					{
-						Debug.Log(ex.ToString());
-					}
-				}
 			}
 		}
 
@@ -75,32 +40,37 @@ namespace RomeEngine
 			GameScenes.gameScenes[1].LoadScene();
 		}
 
+		static void SendMessageToActiveScene(string message)
+		{
+			GameScene.ActiveScene?.CallEvent(message);
+		}
+
 		public static void UpdateGameState()
 		{
 			Time.Update();
 
-			SendHandlersMessage("EarlyUpdate");
+			SendMessageToActiveScene("EarlyUpdate");
 
 			Collider.UpdatePhysics();
 			Routine.UpdateDelayed();
 
-			SendHandlersMessage("Update");
+			SendMessageToActiveScene("Update");
 
-			SendHandlersMessage("LateUpdate");
+			SendMessageToActiveScene("LateUpdate");
 
 			Input.UpdateInput();
 		}
 		public static void UpdateGraphics2D(IGraphics2D graphics2D)
 		{
-			SendHandlersMessage("OnPreRender2D");
+			SendMessageToActiveScene("OnPreRender2D");
 			Renderer2D.Update2DGraphics(graphics2D);
-			SendHandlersMessage("OnPostRender2D");
+			SendMessageToActiveScene("OnPostRender2D");
 		}
 		public static void UpdateGraphics3D(IGraphics graphics, IGraphicsContext context)
 		{
-			SendHandlersMessage("OnPreRender");
+			SendMessageToActiveScene("OnPreRender");
 			Renderer.UpdateGraphics(graphics, context);
-			SendHandlersMessage("OnPostRender");
+			SendMessageToActiveScene("OnPostRender");
 		}
 	}
 }

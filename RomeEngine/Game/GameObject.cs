@@ -25,7 +25,6 @@ namespace RomeEngine
 		{
 			Name = name;
 			Transform = AddComponent<Transform>();
-			Activate();
 			GameScene.ActiveScene.AddGameObject(this);
 		}
 
@@ -141,7 +140,6 @@ namespace RomeEngine
 			instance.components.AddRange(components);
 			instance.Transform = (Transform)components.First(c => c is Transform);
 			instance.Name = $"{Name}_Copy";
-			instance.Activate();
 			instance.CallEvent("Start");
 			GameScene.ActiveScene.AddGameObject(instance);
 			return instance;
