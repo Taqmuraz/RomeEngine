@@ -48,7 +48,7 @@ namespace RomeEngineOpenGL
 
         public void SetViewMatrix(Matrix4x4 view)
         {
-            this.view = view;
+            this.view = view.GetInversed();
         }
 
         public void SetModelMatrix(Matrix4x4 model)
@@ -65,7 +65,7 @@ namespace RomeEngineOpenGL
 
         public void DrawDynamicMesh(IMesh mesh, ISkinnedMeshInfo skinnedMeshInfo)
         {
-            var vp = projection * view.GetInversed();
+            var vp = projection * view;
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
@@ -91,7 +91,7 @@ namespace RomeEngineOpenGL
 
             for (int i = 0; i < jointsMap.Count; i++)
             {
-                jointsMatrices[i] = jointsMap[i].Transform.LocalToWorld * jointsMap[i].InitialState.GetInversed();
+                jointsMatrices[i] = jointsMap[i].Transform.LocalToWorld * jointsMap[i].InversedInitialState;
             }
 
             (Action glFunc, int attributeIndex, float[] buffer, Action<int> process)[] actions =

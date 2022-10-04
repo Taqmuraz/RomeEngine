@@ -17,7 +17,7 @@ namespace RomeEngineOpenGL
         protected override IEnumerable<IOpenGLShaderParameter> CreateParameters()
         {
             yield return new CustomOpenGLShaderParameter(shader => shader.SetMatrix("transformationMatrix", model));
-            yield return new CustomOpenGLShaderParameter(shader => shader.SetMatrix("viewMatrix", view.GetInversed()));
+            yield return new CustomOpenGLShaderParameter(shader => shader.SetMatrix("viewMatrix", view));
             yield return new CustomOpenGLShaderParameter(shader => shader.SetMatrix("projectionMatrix", projection));
             yield return new CustomOpenGLShaderParameter(shader => shader.SetVector3("lightDirection", GlobalLight.LightDirection));
             yield return new CustomOpenGLShaderParameter(shader => shader.SetVector4("lightColor", GlobalLight.LightColor.ToVector4()));

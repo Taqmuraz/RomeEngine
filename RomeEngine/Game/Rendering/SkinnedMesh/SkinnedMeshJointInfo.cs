@@ -5,10 +5,10 @@
         public SkinnedMeshJointInfo(Transform transform, Matrix4x4 initialState)
         {
             Transform = transform;
-            InitialState = initialState;
+            InversedInitialState = initialState;
         }
 
         public Transform Transform { get; }
-        public Matrix4x4 InitialState { get; }
+        public Matrix4x4 InversedInitialState { get; }
     }
 }

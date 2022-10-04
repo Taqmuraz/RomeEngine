@@ -95,15 +95,19 @@ namespace RomeEngineGame
                 return player;
             }));
 
-            scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
+            for (int i = 0; i < 5; i++)
             {
-                var sphere = Resources.LoadInstance<GameObject>("Models/Knight.bin");
-                sphere.Name = "Sphere";
-                sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
-                sphere.Transform.Position = new Vector3();
-                sphere.AddComponent<SphereCollider>();
-                return sphere;
-            }));
+                int index = i;
+                scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
+                {
+                    var sphere = Resources.LoadInstance<GameObject>("Models/Knight.bin");
+                    sphere.Name = "Sphere";
+                    sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
+                    sphere.Transform.Position = new Vector3(index / 10, 0f, index % 10);
+                    sphere.AddComponent<SphereCollider>();
+                    return sphere;
+                }));
+            }
 
             scene.AddGameObjectInstancer(() =>
             {
