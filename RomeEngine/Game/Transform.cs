@@ -9,6 +9,11 @@ namespace RomeEngine
 
 		public ReadOnlyArrayList<Transform> Children => children;
 
+		public Transform()
+		{
+			LocalScale = Vector3.one;
+		}
+
 		[SerializeField] public Vector3 LocalPosition { get; set; }
 		[SerializeField]
 		public Vector3 LocalRotation
@@ -25,7 +30,7 @@ namespace RomeEngine
 		Matrix4x4 localRotationMatrix = Matrix4x4.Identity;
 		Vector3 localRotation;
 
-		[SerializeField] public Vector3 LocalScale { get; set; } = Vector3.one;
+		[SerializeField] public Vector3 LocalScale { get; set; }
 
 		public Vector3 Position
 		{

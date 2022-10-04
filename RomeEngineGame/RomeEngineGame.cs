@@ -72,7 +72,7 @@ namespace RomeEngineGame
             });
             var house = new GameObjectInstancer(() =>
             {
-                var model = Resources.Load<GameObject>("Models/Buildings/House.bin");
+                var model = Resources.LoadInstance<GameObject>("Models/Buildings/House.bin");
                 model.Transform.Position = new Vector3(10f, 0f, 0f);
                 return model;
             });
@@ -87,9 +87,10 @@ namespace RomeEngineGame
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
             {
                 var player = Resources.LoadInstance<GameObject>("Models/Knight.bin");
+                player.Name = "Player";
                 player.AddComponent<PlayerController>();
-                var collider = player.AddComponent<SphereCollider>();
-                collider.PhysicalBody = new SimpleDynamicBody(player.Transform);
+                //var collider = player.AddComponent<SphereCollider>();
+                //collider.PhysicalBody = new SimpleDynamicBody(player.Transform);
                 player.Transform.Position = new Vector3(0f, 10f, 0f);
                 return player;
             }));
@@ -97,6 +98,7 @@ namespace RomeEngineGame
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
             {
                 var sphere = Resources.LoadInstance<GameObject>("Models/Knight.bin");
+                sphere.Name = "Sphere";
                 sphere.Transform.Position = new Vector3();
                 sphere.AddComponent<SphereCollider>();
                 return sphere;

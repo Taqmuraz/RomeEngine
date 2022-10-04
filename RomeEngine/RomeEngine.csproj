@@ -59,7 +59,15 @@
     <Compile Include="Game\Animation\FramesTransitionAnimation.cs" />
     <Compile Include="Game\Animation\Animator.cs" />
     <Compile Include="Game\BehaviourEventAttribute.cs" />
-    <Compile Include="Game\IInstantiatable.cs" />
+    <Compile Include="Game\Instancing\ArrayInstancer.cs" />
+    <Compile Include="Game\Instancing\ArrayListInstancer.cs" />
+    <Compile Include="Game\Instancing\EmptyInstancer.cs" />
+    <Compile Include="Game\Instancing\IInstancer.cs" />
+    <Compile Include="Game\Instancing\IInstantiatable.cs" />
+    <Compile Include="Game\Instancing\InstantiatableExtensions.cs" />
+    <Compile Include="Game\Instancing\SerializableInstancer.cs" />
+    <Compile Include="Game\Instancing\SourceObjectInstancer.cs" />
+    <Compile Include="Game\ISourceObject.cs" />
     <Compile Include="Game\Physics\CollisionInfo.cs" />
     <Compile Include="Game\Physics\ContactInfo.cs" />
     <Compile Include="Game\Physics\IPhysicalBody.cs" />
@@ -80,7 +88,7 @@
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshJointInfo.cs" />
     <Compile Include="Game\Rendering\SkinnedMesh\SkinnedMeshRenderer.cs" />
     <Compile Include="Game\Rendering\StaticMesh\Material.cs" />
-    <Compile Include="Game\Rendering\StaticMesh\SingleTextureMaterial.cs" />
+    <Compile Include="Game\Rendering\SingleTextureMaterial.cs" />
     <Compile Include="Game\Rendering\StaticMesh\StaticBufferMesh.cs" />
     <Compile Include="Game\Rendering\StaticMesh\StaticBufferMeshRenderer.cs" />
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />

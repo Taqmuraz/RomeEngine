@@ -22,6 +22,11 @@ namespace RomeEngine
 
 			public GameThreadHandler()
 			{
+				
+			}
+
+			protected void Activate()
+			{
 				IsActive = true;
 				handlersToAdd.Add(this);
 			}

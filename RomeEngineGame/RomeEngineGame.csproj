@@ -58,6 +58,7 @@
     <Compile Include="Editor\Inspector\IntFieldInspector.cs" />
     <Compile Include="Editor\Inspector\IObjectInspector.cs" />
     <Compile Include="Editor\Inspector\ListFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\MaterialFieldInspector.cs" />
     <Compile Include="Editor\Inspector\MeshFieldInspector.cs" />
     <Compile Include="Editor\Inspector\ObjectInspector.cs" />
     <Compile Include="Editor\Inspector\PrimitiveTypeFieldInspector.cs" />

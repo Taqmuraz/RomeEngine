@@ -28,7 +28,7 @@ namespace RomeEngine.IO
         }
         public static T LoadInstance<T>(string file) where T : ISerializable, IInstantiatable<T>
         {
-            return LoadFromFile<T>(file);
+            return Load<T>(file).CreateInstance();
         }
         public static (T result, string fileName)[] LoadAll<T>(string directory) where T : ISerializable
         {

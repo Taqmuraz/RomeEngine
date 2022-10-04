@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public sealed class SkinnedMeshRenderer : MeshRenderer<SkinnedMesh>, ISkinnedMeshInfo, ISerializationHandler
+    public sealed class SkinnedMeshRenderer : MeshRenderer<SkinnedMesh>, ISkinnedMeshInfo
     {
         [SerializeField] bool dynamicDraw = false;
         Dictionary<int, IJointInfo> bindingsMap;
@@ -28,12 +28,8 @@ namespace RomeEngine
 
         public Dictionary<int, IJointInfo> GetJointsMap() => bindingsMap;
 
-        void ISerializationHandler.OnSerialize()
-        {
-
-        }
-
-        void ISerializationHandler.OnDeserialize()
+        [BehaviourEvent]
+        void Start()
         {
             InitializeBindings();
         }

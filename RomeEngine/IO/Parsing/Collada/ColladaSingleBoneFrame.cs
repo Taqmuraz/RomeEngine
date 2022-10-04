@@ -1,7 +1,9 @@
 ﻿namespace RomeEngine.IO
 {
-    public sealed class ColladaSingleBoneFrame : Serializable<ColladaSingleBoneFrame>
+    public sealed class ColladaSingleBoneFrame : Serializable<ColladaSingleBoneFrame>, ISourceObject
     {
+        ISerializable ISourceObject.CloneSourceReference() => this;
+
         [SerializeField] Vector3 localPosition;
         [SerializeField] Vector3 localRotation;
         [SerializeField] Vector3 localScale;

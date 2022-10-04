@@ -4,8 +4,10 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public sealed class StaticMesh : IMesh, ISerializable
+    public sealed class StaticMesh : IMesh, ISourceObject
     {
+        ISerializable ISourceObject.CloneSourceReference() => this;
+
         public StaticMesh()
         {
             attributesFloat = new IStaticMeshAttribute<float>[]

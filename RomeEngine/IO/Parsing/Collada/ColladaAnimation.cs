@@ -3,8 +3,10 @@ using System.Linq;
 
 namespace RomeEngine.IO
 {
-    public sealed class ColladaAnimation : Animation, IColladaAnimation
+    public sealed class ColladaAnimation : Animation, IColladaAnimation, ISourceObject
     {
+        ISerializable ISourceObject.CloneSourceReference() => this;
+
         [SerializeField] ColladaSingleBoneAnimation[] boneAnimations;
 
         public ReadOnlyArray<ColladaSingleBoneAnimation> BoneAnimations => boneAnimations;

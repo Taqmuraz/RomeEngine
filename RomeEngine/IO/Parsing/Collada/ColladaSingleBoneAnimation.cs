@@ -2,8 +2,10 @@
 
 namespace RomeEngine.IO
 {
-    public sealed class ColladaSingleBoneAnimation : Serializable<ColladaSingleBoneAnimation>
+    public sealed class ColladaSingleBoneAnimation : Serializable<ColladaSingleBoneAnimation>, ISourceObject
     {
+        ISerializable ISourceObject.CloneSourceReference() => this;
+
         [SerializeField] ColladaSingleBoneFrame[] frames;
         [SerializeField] string boneName;
         [SerializeField] public ColladaAnimationBlendMode BlendMode { get; set; } = ColladaAnimationBlendMode.Loop;

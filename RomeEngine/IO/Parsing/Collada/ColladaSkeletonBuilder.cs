@@ -11,7 +11,7 @@ namespace RomeEngine.IO
 
             foreach (var scene in visualScenes)
             {
-                var sceneRoot = new GameObject().Transform;
+                var sceneRoot = new GameObject("SceneRoot").Transform;
                 sceneRoot.Parent = gameObject.Transform;
                 ApplyTransform(sceneRoot, scene);
             }
@@ -29,7 +29,7 @@ namespace RomeEngine.IO
             transform.ApplyMatrix(matrix);
             foreach (var child in node["node"])
             {
-                var newChild = new GameObject().Transform;
+                var newChild = new GameObject("NewChild").Transform;
                 newChild.Parent = transform;
                 ApplyTransform(newChild, child);
             }

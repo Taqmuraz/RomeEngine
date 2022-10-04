@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RomeEngine
 {
-    public sealed class StaticBufferMesh : IMesh, ISerializable
+    public sealed class StaticBufferMesh : IMesh, ISourceObject
     {
         float[] vertices;
         float[] texcoords;
@@ -63,5 +63,7 @@ namespace RomeEngine
             yield return new GenericSerializableField<float[]>(nameof(normals), normals, value => normals = value, true);
             yield return new GenericSerializableField<int[]>(nameof(indices), indices, value => indices = value, true);
         }
+
+        ISerializable ISourceObject.CloneSourceReference() => this;
     }
 }

@@ -27,6 +27,7 @@ namespace RomeEngineGame
                 new ListFieldInspector(),
                 new ArrayFieldInspector(),
                 new MeshFieldInspector(),
+                new MaterialFieldInspector(),
                 new SerializableFieldInspector(),
                 new DefaultFieldInspector(),
             };

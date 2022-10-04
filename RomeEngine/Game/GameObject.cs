@@ -15,21 +15,17 @@ namespace RomeEngine
 		[SerializeField]
 		public int Layer { get; set; }
 
-		public GameObject() : this("NewGameObject")
+		[Obsolete("Zero argument GameObject constructor only might be used in serialization", true)]
+		public GameObject()
 		{
 
 		}
 
 		public GameObject(string name)
 		{
-			GameScene.ActiveScene.AddGameObject(this);
 			Name = name;
 			Transform = AddComponent<Transform>();
-		}
-		private GameObject(string name, IEnumerable<Component> components)
-		{
-			Name = name;
-			this.components.AddRange(components);
+			Activate();
 			GameScene.ActiveScene.AddGameObject(this);
 		}
 
@@ -74,7 +70,7 @@ namespace RomeEngine
 		}
 
 		[BehaviourEvent]
-		void Update()
+		void UpdateComponents()
 		{
 			components.AddRange(inOrderToAdd);
 			inOrderToAdd.Clear();
@@ -128,20 +124,32 @@ namespace RomeEngine
 
 		void ISerializationHandler.OnSerialize()
 		{
-			Update();
+			UpdateComponents();
 		}
 
 		void ISerializationHandler.OnDeserialize()
 		{
-			Update();
-			CallEvent("Start");
+			UpdateComponents();
 		}
 
         GameObject IInstantiatable<GameObject>.CreateInstance()
         {
-			var components = GetComponents().Select(c => ((IInstantiatable<Component>)c).CreateInstance()).ToList();
-			var instance = new GameObject($"{Name}_Copy", components);
+			Dictionary<ISerializable, ISerializable> objectsMap = new Dictionary<ISerializable, ISerializable>();
+			var instance = (GameObject)Activator.CreateInstance(GetType());
+			objectsMap.Add(this, instance);
+			var components = GetComponents().Select(c => (Component)c.CreateSerializableInstance(objectsMap)).ToList();
+			instance.components.AddRange(components);
+			instance.Transform = (Transform)components.First(c => c is Transform);
+			instance.Name = $"{Name}_Copy";
+			instance.Activate();
+			instance.CallEvent("Start");
+			GameScene.ActiveScene.AddGameObject(instance);
 			return instance;
         }
+
+		public static GameObject Instantiate(GameObject source)
+		{
+			return ((IInstantiatable<GameObject>)source).CreateInstance();
+		}
     }
 }

@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 namespace RomeEngine
 {
-    public sealed class SkinnedMesh : IMesh, ISerializable
+    public sealed class SkinnedMesh : IMesh, ISourceObject
     {
+        ISerializable ISourceObject.CloneSourceReference() => this;
+
         float[] vertices;
         float[] texcoords;
         float[] normals;
