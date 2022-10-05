@@ -95,7 +95,7 @@ namespace RomeEngineGame
                 return player;
             }));
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 50; i++)
             {
                 int index = i;
                 scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
@@ -104,7 +104,7 @@ namespace RomeEngineGame
                     sphere.Name = "Sphere";
                     sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
                     sphere.Transform.Position = new Vector3(index / 10, 0f, index % 10);
-                    sphere.AddComponent<SphereCollider>();
+                    //sphere.AddComponent<SphereCollider>();
                     return sphere;
                 }));
             }

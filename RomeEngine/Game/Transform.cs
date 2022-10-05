@@ -22,7 +22,7 @@ namespace RomeEngine
 			set
 			{
 				localPosition = value;
-				UpdateLocal();
+				MarkToUpdate();
 			}
 		}
 		[SerializeField]
@@ -34,11 +34,10 @@ namespace RomeEngine
 			}
 			set
 			{
-				localRotationMatrix = Matrix4x4.CreateRotationMatrix(localRotation = value);
-				UpdateLocal();
+				localRotation = value;
+				MarkToUpdate();
 			}
 		}
-		Matrix4x4 localRotationMatrix = Matrix4x4.Identity;
 		Vector3 localRotation;
 
 		Vector3 localScale;
@@ -49,7 +48,7 @@ namespace RomeEngine
 			set
 			{
 				localScale = value;
-				UpdateLocal();
+				MarkToUpdate();
 			}
 		}
 
@@ -74,9 +73,9 @@ namespace RomeEngine
 
         public override bool IsUnary => true;
 
-		public Vector3 LocalRight => (Vector3)localRotationMatrix.column_0;
-		public Vector3 LocalUp => (Vector3)localRotationMatrix.column_1;
-		public Vector3 LocalForward => (Vector3)localRotationMatrix.column_2;
+		public Vector3 LocalRight => (Vector3)LocalMatrix.column_0;
+		public Vector3 LocalUp => (Vector3)LocalMatrix.column_1;
+		public Vector3 LocalForward => (Vector3)LocalMatrix.column_2;
 
 		public Vector3 Right => ParentToWorld.MultiplyDirection(LocalRight);
 		public Vector3 Up => ParentToWorld.MultiplyDirection(LocalUp);
@@ -94,23 +93,57 @@ namespace RomeEngine
 			return this;
         }
 
+		bool hasToUpdate;
+
+		void MarkToUpdate()
+		{
+			hasToUpdate = true;
+		}
+
 		void UpdateLocal()
 		{
-			LocalMatrix = Matrix4x4.CreateWorldMatrix(LocalRight * LocalScale.x, LocalUp * LocalScale.y, LocalForward * LocalScale.z, LocalPosition);
+			hasToUpdate = false;
+			Matrix4x4 rotationMatrix = Matrix4x4.CreateRotationMatrix(localRotation);
+			LocalMatrix = Matrix4x4.CreateWorldMatrix((Vector3)rotationMatrix.column_0 * LocalScale.x, (Vector3)rotationMatrix.column_1 * LocalScale.y, (Vector3)rotationMatrix.column_2 * LocalScale.z, LocalPosition);
 			LocalToWorld = ParentToWorld * LocalMatrix;
 			foreach (var child in children) child.UpdateParent(LocalToWorld);
 		}
 		void UpdateParent(Matrix4x4 parentToWorld)
 		{
 			ParentToWorld = parentToWorld;
-			UpdateLocal();
+			MarkToUpdate();
 		}
 
-		public Matrix4x4 LocalToWorld { get; private set; } = Matrix4x4.Identity;
+		Matrix4x4 localToWorld = Matrix4x4.Identity;
+		Matrix4x4 localMatrix = Matrix4x4.Identity;
+
+		public Matrix4x4 LocalToWorld
+		{
+			get
+			{
+				if (hasToUpdate)
+				{
+					UpdateLocal();
+				}
+				return localToWorld;
+			}
+			set => localToWorld = value;
+		}
 
 		public Matrix4x4 ParentToWorld { get; private set; } = Matrix4x4.Identity;
 
-		public Matrix4x4 LocalMatrix { get; private set; } = Matrix4x4.Identity;
+		public Matrix4x4 LocalMatrix
+		{
+			get
+			{
+				if (hasToUpdate)
+				{
+					UpdateLocal();
+				}
+				return localMatrix;
+			}
+			set => localMatrix = value;
+		}
 
 		public Transform Parent
 		{
