@@ -14,7 +14,17 @@ namespace RomeEngine
 			LocalScale = Vector3.one;
 		}
 
-		[SerializeField] public Vector3 LocalPosition { get; set; }
+		Vector3 localPosition;
+		[SerializeField]
+		public Vector3 LocalPosition
+		{
+			get => localPosition;
+			set
+			{
+				localPosition = value;
+				UpdateLocal();
+			}
+		}
 		[SerializeField]
 		public Vector3 LocalRotation
 		{
@@ -25,12 +35,23 @@ namespace RomeEngine
 			set
 			{
 				localRotationMatrix = Matrix4x4.CreateRotationMatrix(localRotation = value);
+				UpdateLocal();
 			}
 		}
 		Matrix4x4 localRotationMatrix = Matrix4x4.Identity;
 		Vector3 localRotation;
 
-		[SerializeField] public Vector3 LocalScale { get; set; }
+		Vector3 localScale;
+		[SerializeField]
+		public Vector3 LocalScale
+		{
+			get => localScale;
+			set
+			{
+				localScale = value;
+				UpdateLocal();
+			}
+		}
 
 		public Vector3 Position
 		{
@@ -73,20 +94,23 @@ namespace RomeEngine
 			return this;
         }
 
-        public Matrix4x4 LocalToWorld
+		void UpdateLocal()
 		{
-			get
-			{
-				if (Parent != null)
-				{
-					return Parent.LocalToWorld * LocalMatrix;
-				}
-				return LocalMatrix;
-			}
+			LocalMatrix = Matrix4x4.CreateWorldMatrix(LocalRight * LocalScale.x, LocalUp * LocalScale.y, LocalForward * LocalScale.z, LocalPosition);
+			LocalToWorld = ParentToWorld * LocalMatrix;
+			foreach (var child in children) child.UpdateParent(LocalToWorld);
 		}
-		public Matrix4x4 ParentToWorld => Parent == null ? Matrix4x4.Identity : Parent.LocalToWorld;
+		void UpdateParent(Matrix4x4 parentToWorld)
+		{
+			ParentToWorld = parentToWorld;
+			UpdateLocal();
+		}
 
-		public Matrix4x4 LocalMatrix => Matrix4x4.CreateWorldMatrix(LocalRight * LocalScale.x, LocalUp * LocalScale.y, LocalForward * LocalScale.z, LocalPosition);
+		public Matrix4x4 LocalToWorld { get; private set; } = Matrix4x4.Identity;
+
+		public Matrix4x4 ParentToWorld { get; private set; } = Matrix4x4.Identity;
+
+		public Matrix4x4 LocalMatrix { get; private set; } = Matrix4x4.Identity;
 
 		public Transform Parent
 		{
@@ -106,6 +130,11 @@ namespace RomeEngine
 				if (parent != null)
 				{
 					parent.children.Add(this);
+					UpdateParent(parent.LocalToWorld);
+				}
+				else
+				{
+					UpdateParent(Matrix4x4.Identity);
 				}
 			}
 		}
