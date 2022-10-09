@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -52,7 +53,7 @@ namespace RomeEngine.IO
             };
 
             var xmlDocument = new XmlDocument();
-            var result = new GameObject("Collada Model");
+            var result = GameObject.CreateInactive("Collada source");
             xmlDocument.Load(fileName);
 
             void TraceNode(XmlNode node)

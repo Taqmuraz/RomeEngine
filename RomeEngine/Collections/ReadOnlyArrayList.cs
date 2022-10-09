@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public sealed class ReadOnlyArrayList<T> : IEnumerable<T>
 {
-	List<T> list;
+	IList<T> list;
 
 	public int Count => list == null ? 0 : list.Count;
 
-	private ReadOnlyArrayList(List<T> list)
+	public ReadOnlyArrayList(IList<T> list)
 	{
 		this.list = list;
 	}

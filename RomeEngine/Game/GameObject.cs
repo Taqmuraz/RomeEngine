@@ -28,6 +28,20 @@ namespace RomeEngine
 			GameScene.ActiveScene.AddGameObject(this);
 		}
 
+		public static GameObject CreateInactive(string name)
+		{
+			var result = (GameObject)Activator.CreateInstance(typeof(GameObject));
+			result.Transform = result.AddComponent<Transform>();
+			result.Name = name;
+			return result;
+		}
+
+		[BehaviourEvent]
+		void OnDestroy()
+		{
+			GameScene.ActiveScene.RemoveGameObject(this);
+		}
+
 		[SerializeField(HideInInspector = true)] List<Component> components = new List<Component>();
 		[SerializeField(HideInInspector = true)] List<Component> inOrderToAdd = new List<Component>();
 		[SerializeField(HideInInspector = true)] List<Component> inOrderToRemove = new List<Component>();
@@ -47,7 +61,10 @@ namespace RomeEngine
 
             ((IInitializable<GameObject>)component).Initialize(this);
             inOrderToAdd.Add(component);
-            component.CallEvent("Start");
+			if (IsActive)
+			{
+				component.CallEvent("Start");
+			}
             return component;
         }
 
@@ -69,7 +86,7 @@ namespace RomeEngine
 		}
 
 		[BehaviourEvent]
-		void UpdateComponents()
+		void Update()
 		{
 			components.AddRange(inOrderToAdd);
 			inOrderToAdd.Clear();
@@ -119,16 +136,20 @@ namespace RomeEngine
 					Debug.Log(ex.ToString());
 				}
 			}
+			foreach (var child in Transform.Children)
+			{
+				child.GameObject.CallEvent(name);
+			}
 		}
 
 		void ISerializationHandler.OnSerialize()
 		{
-			UpdateComponents();
+			Update();
 		}
 
 		void ISerializationHandler.OnDeserialize()
 		{
-			UpdateComponents();
+			Update();
 		}
 
         GameObject IInstantiatable<GameObject>.CreateInstance()

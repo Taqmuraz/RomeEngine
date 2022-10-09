@@ -7,21 +7,28 @@ namespace RomeEngine
 	{
 		public abstract class GameThreadHandler : SerializableEventsHandler
 		{
-			public bool IsActive
-			{
-				get => !destroyed;
-			}
-
-			bool destroyed;
+			public bool IsActive { get; private set; }
+			public bool IsDestroyed { get; private set; }
 
 			public GameThreadHandler()
 			{
 				
 			}
 
+			[BehaviourEvent]
+			void OnActivate()
+			{
+				IsActive = true;
+			}
+			[BehaviourEvent]
+			void OnDeactivate()
+			{
+				IsActive = false;
+			}
+
 			public void Destroy()
 			{
-				if (destroyed) return;
+				if (IsDestroyed) return;
 
 				try
 				{
@@ -31,7 +38,7 @@ namespace RomeEngine
 				{
 					Debug.Log(ex.ToString());
 				}
-				destroyed = true;
+				IsDestroyed = true;
 			}
 		}
 

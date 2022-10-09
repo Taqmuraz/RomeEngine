@@ -40,7 +40,7 @@ namespace RomeEngineGame
 
             (string title, Func<bool> condition, Action action)[] buttons = new (string, Func<bool>, Action)[]
             {
-                ("Import animation", () => true, () => Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select animation", file => Animation = (Animation)new Serializer().DeserializeFile(file))),
+                ("Import animation", () => true, () => Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select animation", file => Animation = Resources.Load<Animation>(file))),
                 ("Export animation", () => Animation != null, () => Engine.Instance.Runtime.ShowFileWriteDialog("./", $"Animation{Serializer.BinaryFormatExtension}", "Select animation", file => new Serializer().SerializeFile(Animation, file))),
                 ("Create new animation", () => true, () => Animation = new FrameBasedAnimation(new [] { CreateFrame(0f) })),
                 ("Add frame", () => Animation is FrameBasedAnimation, () =>

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\CollectionsExtensions.cs" />
+    <Compile Include="Collections\DynamicLinkedList.cs" />
     <Compile Include="Collections\ReadOnlyArray.cs" />
     <Compile Include="Collections\ReadOnlyArrayList.cs" />
     <Compile Include="Collections\SafeDictionary.cs" />

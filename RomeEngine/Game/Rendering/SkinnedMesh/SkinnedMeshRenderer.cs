@@ -18,7 +18,10 @@ namespace RomeEngine
             {
                 if (Mesh != null) graphics.DrawDynamicMesh(Mesh, this);
             }
-            else graphics.DrawSkinnedMesh(meshIdentifier, this);
+            else if (bindingsMap != null)
+            {
+                graphics.DrawSkinnedMesh(meshIdentifier, this);
+            }
         }
 
         public void InitializeBindings()
@@ -31,7 +34,7 @@ namespace RomeEngine
         [BehaviourEvent]
         void Start()
         {
-            InitializeBindings();
+            Routine.StartRoutineDelayed(new DelayedActionRoutine(InitializeBindings, 0.1f));
         }
     }
 }
