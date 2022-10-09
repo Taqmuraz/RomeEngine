@@ -9,12 +9,12 @@ namespace RomeEngine.IO
     {
         public override bool CanSerializeType(Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>);
+            return type.IsGenericType && typeof(ICollection).IsAssignableFrom(type) && typeof(IList<>).MakeGenericType(type.GetGenericArguments()[0]).IsAssignableFrom(type);
         }
 
         protected override int GetCollectionLength(object collection)
         {
-            return ((IList)collection).Count;
+            return ((ICollection)collection).Count;
         }
 
         protected override object CreateCollection(Type collectionType, int length, ISerializationContext context)

@@ -6,7 +6,7 @@ using System.Linq;
 namespace RomeEngine
 {
 
-    public sealed class GameObject : Game.GameThreadHandler, ISerializationHandler, IInstantiatable<GameObject>
+    public sealed class GameObject : Game.GameThreadHandler, IInstantiatable<GameObject>
 	{
 		[SerializeField(HideInInspector = true)]
 		public Transform Transform { get; private set; }
@@ -42,9 +42,7 @@ namespace RomeEngine
 			GameScene.ActiveScene.RemoveGameObject(this);
 		}
 
-		[SerializeField(HideInInspector = true)] List<Component> components = new List<Component>();
-		[SerializeField(HideInInspector = true)] List<Component> inOrderToAdd = new List<Component>();
-		[SerializeField(HideInInspector = true)] List<Component> inOrderToRemove = new List<Component>();
+		[SerializeField(HideInInspector = true)] DynamicLinkedList<Component> components = new DynamicLinkedList<Component>();
 
 		public override string ToString()
 		{
@@ -60,7 +58,7 @@ namespace RomeEngine
             if (component.IsUnary && GetComponent(type) != null) throw new System.ArgumentException("GameObject cant have two unary Components of the same type");
 
             ((IInitializable<GameObject>)component).Initialize(this);
-            inOrderToAdd.Add(component);
+            components.Add(component);
 			if (IsActive)
 			{
 				component.CallEvent("Start");
@@ -82,21 +80,12 @@ namespace RomeEngine
 			{
 				Debug.Log(ex);
 			}
-			inOrderToRemove.Add(component);
-		}
-
-		[BehaviourEvent]
-		void Update()
-		{
-			components.AddRange(inOrderToAdd);
-			inOrderToAdd.Clear();
-			for (int i = 0; i < inOrderToRemove.Count; i++) components.Remove(inOrderToRemove[i]);
-			inOrderToRemove.Clear();
+			components.Remove(component);
 		}
 
 		public TComponent GetComponent<TComponent> ()
 		{
-			foreach (var component in components.Concat(inOrderToAdd).Except(inOrderToRemove))
+			foreach (var component in components)
 			{
 				if (component is TComponent t) return t;
 			}
@@ -104,23 +93,21 @@ namespace RomeEngine
 		}
         public Component GetComponent(Type type)
         {
-            foreach (var component in EnumerateComponents())
+            foreach (var component in components)
             {
                 if (component.GetType() == type) return component;
             }
             return default;
         }
 
-		IEnumerable<Component> EnumerateComponents() => components.Concat(inOrderToAdd).Except(inOrderToRemove);
-
 		public Component[] GetComponents()
 		{
-			return EnumerateComponents().ToArray();
+			return components.ToArray();
 		}
 
 		public TComponent[] GetComponentsOfType<TComponent>()
 		{
-			return EnumerateComponents().Where(c => c is TComponent).Select(c => (TComponent)(object)c).ToArray();
+			return components.Where(c => c is TComponent).Select(c => (TComponent)(object)c).ToArray();
 		}
 
         protected sealed override void OnEventCall(string name)
@@ -140,16 +127,6 @@ namespace RomeEngine
 			{
 				child.GameObject.CallEvent(name);
 			}
-		}
-
-		void ISerializationHandler.OnSerialize()
-		{
-			Update();
-		}
-
-		void ISerializationHandler.OnDeserialize()
-		{
-			Update();
 		}
 
         GameObject IInstantiatable<GameObject>.CreateInstance()

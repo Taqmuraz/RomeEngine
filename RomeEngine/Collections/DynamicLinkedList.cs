@@ -1,8 +1,9 @@
-﻿using System;
+﻿using RomeEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public sealed class DynamicLinkedList<T> : IList<T>
+public sealed class DynamicLinkedList<T> : IList<T>, IList
 {
     sealed class DynamicLinkedListNode
     {
@@ -14,6 +15,10 @@ public sealed class DynamicLinkedList<T> : IList<T>
 
         public T Value { get; set; }
         public DynamicLinkedListNode Next { get; set; }
+    }
+
+    public DynamicLinkedList()
+    {
     }
 
     DynamicLinkedListNode First { get; set; }
@@ -169,6 +174,15 @@ public sealed class DynamicLinkedList<T> : IList<T>
             return count;
         }
     }
+
+    public void AddRange(IEnumerable<T> elements)
+    {
+        foreach (var element in elements)
+        {
+            Add(element);
+        }
+    }
+
     public bool IsReadOnly => false;
 
     public IEnumerator<T> GetEnumerator()
@@ -185,4 +199,51 @@ public sealed class DynamicLinkedList<T> : IList<T>
     {
         return GetEnumerator();
     }
+
+    void ICollection.CopyTo(Array array, int index)
+    {
+        DynamicLinkedListNode node = First;
+        while (node != null)
+        {
+            array.SetValue(node.Value, index++);
+            node = node.Next;
+        }
+    }
+
+    object ICollection.SyncRoot => this;
+    bool ICollection.IsSynchronized => false;
+
+    int IList.Add(object value)
+    {
+        Add((T)value);
+        return Count;
+    }
+
+    bool IList.Contains(object value)
+    {
+        return Contains((T)value);
+    }
+
+    int IList.IndexOf(object value)
+    {
+        return IndexOf((T)value);
+    }
+
+    void IList.Insert(int index, object value)
+    {
+        Insert(index, (T)value);
+    }
+
+    void IList.Remove(object value)
+    {
+        Remove((T)value);
+    }
+
+    object IList.this[int index]
+    {
+        get => this[index];
+        set => this[index] = (T)value;
+    }
+
+    bool IList.IsFixedSize => false;
 }

@@ -66,7 +66,7 @@ namespace RomeEngineGame
                 var lightObject = new GameObject("Light").AddComponent<GlobalLight>();
 
                 lightObject.Transform.LocalRotation = new Vector3(75f, 135f, 0f);
-                lightObject.Setup(0.2f, 0.4f, Color32.white);
+                lightObject.Setup(0.1f, 0.3f, Color32.white);
 
                 return lightObject.GameObject;
             });
@@ -86,7 +86,7 @@ namespace RomeEngineGame
 
             scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
             {
-                var player = Resources.LoadInstance<GameObject>("Models/Knight.bin");
+                var player = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
                 player.Name = "Player";
                 player.AddComponent<PlayerController>();
                 //var collider = player.AddComponent<SphereCollider>();
@@ -95,12 +95,12 @@ namespace RomeEngineGame
                 return player;
             }));
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 10; i++)
             {
                 int index = i;
                 scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
                 {
-                    var sphere = Resources.LoadInstance<GameObject>("Models/Knight.bin");
+                    var sphere = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
                     sphere.Name = "Sphere";
                     sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
                     sphere.Transform.Position = new Vector3(index / 10, 0f, index % 10);
