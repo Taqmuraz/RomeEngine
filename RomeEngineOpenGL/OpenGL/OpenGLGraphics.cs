@@ -91,7 +91,7 @@ namespace RomeEngineOpenGL
 
             for (int i = 0; i < jointsMap.Count; i++)
             {
-                jointsMatrices[i] = jointsMap[i].Transform.LocalToWorld * jointsMap[i].InversedInitialState;
+                jointsMatrices[i] = jointsMap[i].JointMatrix;
             }
 
             (Action glFunc, int attributeIndex, float[] buffer, Action<int> process)[] actions =

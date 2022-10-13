@@ -2,13 +2,14 @@
 {
     public sealed class SkinnedMeshJointInfo : IJointInfo
     {
-        public SkinnedMeshJointInfo(Transform transform, Matrix4x4 initialState)
+        public SkinnedMeshJointInfo(Transform transform, Matrix4x4 inversedInitialState)
         {
-            Transform = transform;
-            InversedInitialState = initialState;
+            this.transform = transform;
+            this.inversedInitialState = inversedInitialState;
         }
 
-        public Transform Transform { get; }
-        public Matrix4x4 InversedInitialState { get; }
+        Transform transform;
+        Matrix4x4 inversedInitialState;
+        public Matrix4x4 JointMatrix => transform.LocalToWorld * inversedInitialState;
     }
 }

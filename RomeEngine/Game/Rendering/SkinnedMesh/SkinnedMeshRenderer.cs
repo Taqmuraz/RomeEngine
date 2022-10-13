@@ -24,17 +24,19 @@ namespace RomeEngine
             }
         }
 
-        public void InitializeBindings()
-        {
-            bindingsMap = Transform.TraceElement(t => t.Children).Select(t => (index: SkinnedMesh.JointNames.IndexOf(t.Name), joint: t)).Where(t => t.index != -1).ToDictionary(t => t.index, t => (IJointInfo)new SkinnedMeshJointInfo(t.joint, SkinnedMesh.BindMatrices[t.index].GetInversed()));
-        }
-
         public Dictionary<int, IJointInfo> GetJointsMap() => bindingsMap;
 
         [BehaviourEvent]
-        void Start()
+        void LateUpdate()
         {
-            Routine.StartRoutineDelayed(new DelayedActionRoutine(InitializeBindings, 0.1f));
+            if (bindingsMap == null)
+            {
+                bindingsMap = Transform.TraceElement(t => t.Children)
+                    .Select(t => (index: SkinnedMesh.JointNames.IndexOf(t.Name), joint: t))
+                    .Where(t => t.index != -1)
+                    .ToDictionary<(int index, Transform joint), int, IJointInfo>
+                    (t => t.index, t => new SkinnedMeshJointInfo(t.joint, SkinnedMesh.BindMatrices[t.index].GetInversed()));
+            }
         }
     }
 }

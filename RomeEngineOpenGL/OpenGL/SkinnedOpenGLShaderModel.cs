@@ -23,7 +23,7 @@ namespace RomeEngineOpenGL
                 {
                     foreach (var pair in jointsMap)
                     {
-                        joints[pair.Key] = pair.Value.Transform.LocalToWorld * pair.Value.InversedInitialState;
+                        joints[pair.Key] = pair.Value.JointMatrix;
                     }
                     shader.SetMatrixArray("jointTransforms", joints);
                 }),

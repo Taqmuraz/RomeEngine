@@ -15,11 +15,6 @@ namespace RomeEngine.IO
                 sceneRoot.Parent = gameObject.Transform;
                 ApplyTransform(sceneRoot, scene);
             }
-
-            foreach (var skinnedMesh in gameObject.GetComponentsOfType<SkinnedMeshRenderer>())
-            {
-                skinnedMesh.InitializeBindings();
-            }
         }
         void ApplyTransform(Transform transform, ColladaEntity node)
         {
