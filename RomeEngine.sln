@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomeEngineOpenGL", "RomeEng
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomeEngineSystemDrawing", "RomeEngineSystemDrawing\RomeEngineSystemDrawing.csproj", "{66ADD848-C609-4E8E-910F-FF44EA028A19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AthensEnvironment", "AthensEnvironment\AthensEnvironment.csproj", "{04F5A3BC-2D4B-42EF-B89F-72639523C4C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomeEngineStandardExplorerDialog", "RomeEngineStandardExplorerDialog\RomeEngineStandardExplorerDialog.csproj", "{900BDF69-48B5-48F8-9DDA-4DEFCEAA158D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{66ADD848-C609-4E8E-910F-FF44EA028A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66ADD848-C609-4E8E-910F-FF44EA028A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66ADD848-C609-4E8E-910F-FF44EA028A19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04F5A3BC-2D4B-42EF-B89F-72639523C4C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04F5A3BC-2D4B-42EF-B89F-72639523C4C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04F5A3BC-2D4B-42EF-B89F-72639523C4C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04F5A3BC-2D4B-42EF-B89F-72639523C4C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{900BDF69-48B5-48F8-9DDA-4DEFCEAA158D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{900BDF69-48B5-48F8-9DDA-4DEFCEAA158D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{900BDF69-48B5-48F8-9DDA-4DEFCEAA158D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{900BDF69-48B5-48F8-9DDA-4DEFCEAA158D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

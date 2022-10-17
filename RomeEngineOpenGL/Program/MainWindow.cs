@@ -5,7 +5,6 @@ using RomeEngine;
 using RomeEngineGame;
 using System;
 using System.IO;
-using System.Windows.Forms;
 
 namespace RomeEngineOpenGL
 {
@@ -121,32 +120,12 @@ namespace RomeEngineOpenGL
 
         public void ShowFileOpenDialog(string root, string title, Action<string> callback)
         {
-            var thread = new System.Threading.Thread(() =>
-            {
-                var dialog = new OpenFileDialog();
-                dialog.Title = title;
-                dialog.InitialDirectory = Path.GetFullPath(root);
-                dialog.Multiselect = false;
-                dialog.FileOk += (s, e) => Routine.StartRoutineDelayed(new SingleCallRoutine(() => callback(dialog.FileName)));
-                dialog.ShowDialog();
-            });
-            thread.SetApartmentState(System.Threading.ApartmentState.STA);
-            thread.Start();
+            RomeEngineStandardExplorerDialog.StandardFileDialog.ShowFileOpenDialog(root, title, callback);
         }
 
         public void ShowFileWriteDialog(string root, string fileName, string title, Action<string> callback)
         {
-            var thread = new System.Threading.Thread(() =>
-            {
-                var dialog = new SaveFileDialog();
-                dialog.Title = title;
-                dialog.InitialDirectory = Path.GetFullPath(root);
-                dialog.FileName = fileName;
-                dialog.FileOk += (s, e) => Routine.StartRoutineDelayed(new SingleCallRoutine(() => callback(dialog.FileName)));
-                dialog.ShowDialog();
-            });
-            thread.SetApartmentState(System.Threading.ApartmentState.STA);
-            thread.Start();
+            RomeEngineStandardExplorerDialog.StandardFileDialog.ShowFileWriteDialog(root, fileName, title, callback);
         }
 
         public ISystemInfo SystemInfo => this;

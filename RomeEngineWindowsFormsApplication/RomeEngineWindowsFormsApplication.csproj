@@ -86,6 +86,10 @@
       <Project>{3A6C8B9F-4F72-4D65-B53B-E50D2B2F0230}</Project>
       <Name>RomeEngineGame</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RomeEngineStandardExplorerDialog\RomeEngineStandardExplorerDialog.csproj">
+      <Project>{900bdf69-48b5-48f8-9dda-4defceaa158d}</Project>
+      <Name>RomeEngineStandardExplorerDialog</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RomeEngineSystemDrawing\RomeEngineSystemDrawing.csproj">
       <Project>{66add848-c609-4e8e-910f-ff44ea028a19}</Project>
       <Name>RomeEngineSystemDrawing</Name>
