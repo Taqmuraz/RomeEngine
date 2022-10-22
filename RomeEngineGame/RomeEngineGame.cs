@@ -70,17 +70,10 @@ namespace RomeEngineGame
 
                 return lightObject.GameObject;
             });
-            var house = new GameObjectInstancer(() =>
-            {
-                var model = Resources.LoadInstance<GameObject>("Models/Buildings/House.bin");
-                model.Transform.Position = new Vector3(10f, 0f, 0f);
-                return model;
-            });
 
             var scene = new GameScene("Game scene");
             scene.AddGameObjectInstancer(camera);
             scene.AddGameObjectInstancer(light);
-            scene.AddGameObjectInstancer(house);
 
             scene.AddGameObjectInstancer(new GameObjectInstancer(() => new GameObject("Terrain").AddComponent<TerrainRenderer>().GameObject));
 
