@@ -19,9 +19,9 @@ namespace RomeEngineGame
             Vector2 menuSize = new Vector2(300f, 25f);
             var screenSize = Screen.Size;
             canvas = GameObject.AddComponent<EditorCanvas>();
-            EditorMenu.ShowMenu<DropdownMenu>(canvas, menu => GameScenes.gameScenes[menu.SelectedOption].LoadScene(),
+            EditorMenu.ShowMenu<DropdownMenu>(canvas, menu => GameScenes.gameScenes[menu.SelectedOption + 1].LoadScene(),
                 new Rect(screenSize.x * 0.5f - menuSize.x * 0.5f, screenSize.y * 0.5f - menuSize.y * 0.5f, menuSize.x, menuSize.y))
-                .DropdownOptions = GameScenes.gameScenes.Select(s => s.Name).ToArray();
+                .DropdownOptions = GameScenes.gameScenes.Skip(1).Select(s => s.Name).ToArray();
         }
     }
     public static class RomeEngineGame
@@ -100,10 +100,13 @@ namespace RomeEngineGame
                 int index = i;
                 scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
                 {
-                    var sphere = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
+                    var sphere = Resources.LoadInstance<GameObject>("Models/Knight.bin");
                     sphere.Name = "Sphere";
                     sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
-                    sphere.Transform.Position = new Vector3(index / 10, 0f, index % 10);
+                    float angle = 36f * index;
+                    sphere.Transform.Position = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * 3f;
+                    sphere.Transform.Rotation = new Vector3(0f, -angle + 90f, 0f);
+
                     //sphere.AddComponent<SphereCollider>();
                     return sphere;
                 }));

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 using RomeEngine;
 
@@ -6,6 +7,11 @@ namespace RomeEngineGame
 {
     public class StandardFileSystem : IFileSystem
     {
+        public string RelativePath(string path)
+        {
+            var absoluteDirectory = Path.GetFullPath("./");
+            return path.Replace(absoluteDirectory.TrimEnd('/', '\\'), ".");
+        }
         public TextReader ReadText(string file)
         {
             return new StreamReader(file);

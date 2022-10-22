@@ -35,7 +35,7 @@ namespace RomeEngine.IO
                 if (imageEntity == null) continue;
 
                 var fs = Engine.Instance.Runtime.FileSystem;
-                material.TextureFileName = fs.CombinePath(fs.GetParentDirectory(info.SourceFilePath), imageEntity["init_from"].Single().Value);
+                material.TextureFileName = fs.RelativePath(fs.CombinePath(fs.GetParentDirectory(info.SourceFilePath), imageEntity["init_from"].Single().Value));
             }
         }
     }

@@ -16,6 +16,7 @@ namespace RomeEngine
         string GetParentDirectory(string directory);
         string GetFullPath(string relativePath);
         string CombinePath(string a, string b);
+        string RelativePath(string path);
         void WriteAllText(string text, string file);
         void WriteAllBytes(byte[] bytes, string file);
         string FileWithExtension(string file, string extension);

@@ -21,7 +21,7 @@ namespace RomeEngineGame
                 ("Cancel", () => { }),
                 ("New single texture", () =>
                 {
-                    Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select texture", file => setter(new SingleTextureMaterial("New material") { TextureFileName = file }));
+                    Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select texture", file => setter(new SingleTextureMaterial("New material") { TextureFileName = Engine.Instance.Runtime.FileSystem.RelativePath(file) }));
                 }),
             };
 

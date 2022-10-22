@@ -116,7 +116,8 @@ namespace RomeEngineGame
                         positionY++;
                     }
                 }
-                foreach (var obj in GameScene.ActiveScene.GameObjects)
+                foreach (var obj in GameScene.ActiveScene.GameObjects.SelectMany(g => g.TraceElement(l => l.Transform.Children.Select(c => c.GameObject)))
+                    .Where(g => g.GetComponents().Any(c => !(c is Transform))))
                 {
                     DrawTransform(obj.Transform);
                 }

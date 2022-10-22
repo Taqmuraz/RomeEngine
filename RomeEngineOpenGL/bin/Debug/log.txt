@@ -1,0 +1,13 @@
+System.OutOfMemoryException: Выдано исключение типа "System.OutOfMemoryException".
+   в System.String.CreateStringFromEncoding(Byte* bytes, Int32 byteLength, Encoding encoding)
+   в System.Text.ASCIIEncoding.GetString(Byte[] bytes, Int32 byteIndex, Int32 byteCount)
+   в System.Text.Encoding.GetString(Byte[] bytes)
+   в RomeEngine.IO.BinarySerializationStream.ReadString() в D:\VisualStudioProjects\RomeEngine\RomeEngine\IO\Serialization\BinarySerializationStream.cs:строка 23
+   в RomeEngine.IO.Serializer.Deserialize(ISerializationStream stream) в D:\VisualStudioProjects\RomeEngine\RomeEngine\IO\Serialization\Serializer.cs:строка 119
+   в RomeEngine.IO.Serializer.DeserializeFile(String file) в D:\VisualStudioProjects\RomeEngine\RomeEngine\IO\Serialization\Serializer.cs:строка 140
+   в RomeEngine.IO.Resources.LoadFromFile[T](String file) в D:\VisualStudioProjects\RomeEngine\RomeEngine\IO\Resources.cs:строка 27
+   в RomeEngine.IO.Resources.Load[T](String file) в D:\VisualStudioProjects\RomeEngine\RomeEngine\IO\Resources.cs:строка 20
+   в RomeEngine.IO.Resources.LoadInstance[T](String file) в D:\VisualStudioProjects\RomeEngine\RomeEngine\IO\Resources.cs:строка 31
+   в RomeEngineGame.RomeEngineGame.<>c.<GamePlayScene>b__3_2() в D:\VisualStudioProjects\RomeEngine\RomeEngineGame\RomeEngineGame.cs:строка 75
+   в RomeEngine.GameObjectInstancer.Instantiate() в D:\VisualStudioProjects\RomeEngine\RomeEngine\Game\GameObjectInstancer.cs:строка 17
+   в RomeEngine.GameScene.LoadScene() в D:\VisualStudioProjects\RomeEngine\RomeEngine\Game\GameScene.cs:строка 56
