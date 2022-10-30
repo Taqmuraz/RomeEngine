@@ -13,5 +13,9 @@ namespace RomeEngineGame
         {
             return value;
         }
+        protected override string ObjectToString(object value)
+        {
+            return value == null ? "null" : value.ToString();
+        }
     }
 }

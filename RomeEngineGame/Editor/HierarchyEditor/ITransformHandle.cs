@@ -5,6 +5,6 @@ namespace RomeEngineGame
 {
     public interface ITransformHandle
     {
-        void DrawHandle(Transform transform, Canvas canvas);
+        void DrawHandle(HierarchyTransform transform, Canvas canvas);
     }
 }

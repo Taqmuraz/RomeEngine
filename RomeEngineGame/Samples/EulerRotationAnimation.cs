@@ -13,7 +13,7 @@ namespace RomeEngineGame
         [BehaviourEvent]
         void Update()
         {
-            Transform.LocalRotation += euler * Time.DeltaTime;
+            Transform.Rotation += euler * Time.DeltaTime;
         }
     }
 }

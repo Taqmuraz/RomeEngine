@@ -24,7 +24,7 @@ namespace RomeEngine
 
 		public static ISerializable CreateSerializableInstance(this ISerializable source, Dictionary<ISerializable, ISerializable> objectsMap)
 		{
-			var instance = (ISerializable)source.GetType().GetConstructor(new Type[0]).Invoke(new object[0]);
+			var instance = (ISerializable)Activator.CreateInstance(source.GetType(), true);
 			objectsMap.Add(source, instance);
 			var fieldsMap = instance.EnumerateFields().ToDictionary(f => f.Name);
 			foreach (var field in source.EnumerateFields())

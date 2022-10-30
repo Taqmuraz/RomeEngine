@@ -13,7 +13,6 @@ namespace RomeEngine.IO
             var colladaAnimation = new ColladaAnimation(animations);
             var animator = gameObject.AddComponent<Animator>();
             animator.PlayAnimation(colladaAnimation);
-            gameObject.Transform.LocalScale = Vector3.one * 0.01f;
         }
     }
 }

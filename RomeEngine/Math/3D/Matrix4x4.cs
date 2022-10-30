@@ -257,6 +257,15 @@ namespace RomeEngine
 		{
 			return new Matrix4x4(right, up, forward, new Vector4(position.x, position.y, position.z, 1f));
 		}
+		public static Matrix4x4 CreateWorldMatrix(Vector3 position, Vector3 rotation, Vector3 scale)
+		{
+			Matrix4x4 matrix = CreateRotationMatrix(rotation);
+			matrix.column_0 *= scale.x;
+			matrix.column_1 *= scale.y;
+			matrix.column_2 *= scale.z;
+			matrix.column_3 += position;
+			return matrix;
+		}
 		public static Matrix4x4 CreateWorldMatrix(Vector3 position, Vector3 size)
 		{
 			return new Matrix4x4(new Vector3(size.x, 0f, 0f), new Vector3(0f, size.y, 0f), new Vector3(0f, 0f, size.z), new Vector4(position.x, position.y, position.z, 1f));

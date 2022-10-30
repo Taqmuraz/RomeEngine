@@ -77,7 +77,7 @@
     <Compile Include="Game\Instancing\SerializableInstancer.cs" />
     <Compile Include="Game\Instancing\SourceObjectInstancer.cs" />
     <Compile Include="Game\ISourceObject.cs" />
-    <Compile Include="Game\ITransform.cs" />
+    <Compile Include="Game\Transform\ITransform.cs" />
     <Compile Include="Game\Physics\CollisionInfo.cs" />
     <Compile Include="Game\Physics\ContactInfo.cs" />
     <Compile Include="Game\Physics\IPhysicalBody.cs" />
@@ -104,6 +104,7 @@
     <Compile Include="Game\Routine\DelayedActionRoutine.cs" />
     <Compile Include="Game\Routine\RepeatingActionRoutine.cs" />
     <Compile Include="Game\Routine\SingleCallRoutine.cs" />
+    <Compile Include="Game\Transform\Transform.cs" />
     <Compile Include="Input\CursorState.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaAnimation.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaAnimationBlendMode.cs" />
@@ -140,7 +141,7 @@
     <Compile Include="IO\Serialization\SerializationExtensions.cs" />
     <Compile Include="Game\SerializeFieldAttribute.cs" />
     <Compile Include="Game\Time.cs" />
-    <Compile Include="Game\Transform.cs" />
+    <Compile Include="Game\Transform\HierarchyTransform.cs" />
     <Compile Include="Game\UI\Canvas.cs" />
     <Compile Include="Game\UI\CanvasLine.cs" />
     <Compile Include="Game\UI\IHandlable.cs" />

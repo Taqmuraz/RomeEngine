@@ -36,16 +36,16 @@ namespace RomeEngine
         {
             var bone = bonesMap[a.BoneName];
             if (bone == null) return;
-            bone.LocalPosition = Vector3.Lerp(a.position, b.position, blend);
-            bone.LocalRotation = Vector3.LerpRotation(a.rotation, b.rotation, blend);
+            bone.Position = Vector3.Lerp(a.position, b.position, blend);
+            bone.Rotation = Vector3.LerpRotation(a.rotation, b.rotation, blend);
         }
 
         public static void Apply(AnimationFrameElement element, SafeDictionary<string, ITransform> bonesMap)
         {
             var bone = bonesMap[element.BoneName];
             if (bone == null) return;
-            bone.LocalPosition = element.position;
-            bone.LocalRotation = element.rotation;
+            bone.Position = element.position;
+            bone.Rotation = element.rotation;
         }
     }
 }

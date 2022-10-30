@@ -13,12 +13,7 @@ namespace RomeEngine
 
         Vector3 Position { get; set; }
         Vector3 Rotation { get; set; }
-
-        Vector3 LocalPosition { get; set; }
-        Vector3 LocalRotation { get; set; }
-        Vector3 LocalScale { get; set; }
-
-        ITransform Parent { get; set; }
+        Vector3 Scale { get; set; }
 
         void ApplyMatrix(Matrix4x4 matrix);
     }

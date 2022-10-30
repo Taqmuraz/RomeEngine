@@ -36,10 +36,10 @@ namespace RomeEngineGame
         {
             var camera = Camera.ActiveCamera;
             Vector2 mouse = Input.MouseDelta * 15f * Time.DeltaTime;
-            Vector3 euler = camera.Transform.LocalRotation;
+            Vector3 euler = camera.Transform.Rotation;
             euler += new Vector3(mouse.y, mouse.x, 0f);
             euler.x = Mathf.Clamp(euler.x, -30f, 80f);
-            camera.Transform.LocalRotation = euler;
+            camera.Transform.Rotation = euler;
 
             camera.Transform.Position = Transform.Position - camera.Transform.Forward * 4f + Vector3.up;
             Input.CursorState = CursorState.HiddenAndLocked;

@@ -7,11 +7,8 @@ namespace RomeEngine
 {
     public sealed class GameObject : CompositeGameEntity, IInstantiatable<GameObject>, IGameObject
     {
-        [SerializeField]
-        public Transform Transform { get; private set; }
-        ITransform IGameObject.Transform => Transform;
-        [SerializeField]
-        public string Name { get; set; }
+        [SerializeField] public ITransform Transform { get; private set; }
+        [SerializeField] public string Name { get; set; }
 
         bool IsActive { get; set; }
         bool IsOnActivationProcess { get; set; }
@@ -50,7 +47,7 @@ namespace RomeEngine
         public GameObject(string name)
         {
             Name = name;
-            Transform = new Transform(name);
+            Transform = new Transform();
             AppendEntity(Transform);
         }
 
@@ -136,14 +133,13 @@ namespace RomeEngine
             instance.AppendEntities(entitiesMap.Values);
             instance.Transform = (Transform)entitiesMap[Transform];
             instance.Name = Name;
-            ActivateForActiveScene();
+            instance.ActivateForActiveScene();
             return instance;
         }
 
         public static GameObject Instantiate(GameObject source, IGameObjectActivityProvider activityProvider)
         {
             var instance = ((IInstantiatable<GameObject>)source).CreateInstance();
-            ((IGameObject)instance).Activate(activityProvider);
             return instance;
         }
     }

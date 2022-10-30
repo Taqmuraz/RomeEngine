@@ -65,7 +65,7 @@ namespace RomeEngineGame
             {
                 var lightObject = new GameObject("Light").AddComponent<GlobalLight>();
 
-                lightObject.Transform.LocalRotation = new Vector3(75f, 135f, 0f);
+                lightObject.Transform.Rotation = new Vector3(75f, 135f, 0f);
                 lightObject.Setup(0.1f, 0.3f, Color32.white);
 
                 return lightObject.GameObject;

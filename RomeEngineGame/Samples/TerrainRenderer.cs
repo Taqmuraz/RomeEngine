@@ -24,7 +24,7 @@ namespace RomeEngineGame
                     },
                     new int[] { 0, 2, 1, 0, 3, 2 }
                 );
-            Transform.LocalScale = new Vector3(100f, 100f, 100f);
+            Transform.Scale = new Vector3(100f, 100f, 100f);
             terrainMaterial = terrainMaterial ?? new SingleTextureMaterial("Terrain material") { TextureFileName = "./Resources/Textures/Grass.jpg" };
         }
 

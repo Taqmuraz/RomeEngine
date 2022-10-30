@@ -25,9 +25,9 @@
 
         public static void Apply(ColladaSingleBoneFrame a, ColladaSingleBoneFrame b, ITransform bone, float blend)
         {
-            bone.LocalPosition = Vector3.Lerp(a.localPosition, b.localPosition, blend);
-            bone.LocalRotation = Vector3.LerpRotation(a.localRotation, b.localRotation, blend);
-            bone.LocalScale = Vector3.Lerp(a.localScale, b.localScale, blend);
+            bone.Position = Vector3.Lerp(a.localPosition, b.localPosition, blend);
+            bone.Rotation = Vector3.LerpRotation(a.localRotation, b.localRotation, blend);
+            bone.Scale = Vector3.Lerp(a.localScale, b.localScale, blend);
         }
 
         public ColladaSingleBoneFrame CopyWithTimeCode(float timeCode)

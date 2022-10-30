@@ -3,9 +3,9 @@
     public sealed class SimpleDynamicBody : IPhysicalBody
     {
         Vector3 totalForce;
-        Transform transform;
+        ITransform transform;
 
-        public SimpleDynamicBody(Transform transform)
+        public SimpleDynamicBody(ITransform transform)
         {
             this.transform = transform;
         }

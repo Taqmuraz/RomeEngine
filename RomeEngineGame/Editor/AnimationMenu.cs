@@ -35,7 +35,7 @@ namespace RomeEngineGame
 
             AnimationFrame CreateFrame(float timeCode)
             {
-                return new AnimationFrame(Animator.Bones.Select(b => new AnimationFrameElement(b.Name, b.Transform.LocalPosition, b.Transform.LocalRotation, b.Transform.LocalScale)).ToArray(), timeCode);
+                return new AnimationFrame(Animator.Bones.Select(b => new AnimationFrameElement(b.Name, b.Transform.Position, b.Transform.Rotation, b.Transform.Scale)).ToArray(), timeCode);
             }
 
             (string title, Func<bool> condition, Action action)[] buttons = new (string, Func<bool>, Action)[]
