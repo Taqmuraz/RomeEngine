@@ -14,7 +14,7 @@ namespace RomeEngine.IO
             animations = last.BoneAnimations.Join(next.BoneAnimations, b => b.BoneName, b => b.BoneName, (a, b) => new ColladaSingleBoneAnimation(a.BoneName, a.GenerateFrame(time).last.CopyWithTimeCode(0f), b.First.CopyWithTimeCode(length)) { BlendMode = ColladaAnimationBlendMode.Clamp }).ToArray();
         }
 
-        public override void Apply(SafeDictionary<string, Transform> bonesMap, float time)
+        public override void Apply(SafeDictionary<string, ITransform> bonesMap, float time)
         {
             for (int i = 0; i < animations.Length; i++)
             {

@@ -5,35 +5,30 @@ namespace RomeEngine
 {
     public class Animator : Component
     {
-        [SerializeField(HideInInspector = true)] Animation animation;
+        [SerializeField] Animation animation;
         public Animation Animation => animation;
-        SafeDictionary<string, Transform> bonesMap;
+        SafeDictionary<string, ITransform> bonesMap;
         float timeStart;
         bool isStopped;
+        ISkeleton skeleton;
 
         public float LocalTime => (Time.CurrentTime - timeStart) * PlaybackSpeed;
 
         [SerializeField] public float PlaybackSpeed { get; set; } = 1f;
 
-        public IEnumerable<Transform> Bones => bonesMap.Values;
+        public IEnumerable<SkeletonBone> Bones => skeleton.Bones;
 
-        protected virtual Transform GetRoot()
+        protected virtual ISkeleton CreateSkeleton()
         {
-            return Transform;
+            return GameObject.GetComponent<ISkeleton>();
         }
 
         [BehaviourEvent]
         void Start()
         {
-            bonesMap = new SafeDictionary<string, Transform>();
-            TraceBones(GetRoot(), bonesMap);
+            skeleton = CreateSkeleton();
+            bonesMap = skeleton.Bones.ToDictionary(b => b.Name, b => b.Transform);
         }
-        void TraceBones(Transform root, SafeDictionary<string, Transform> map)
-        {
-            map[root.Name] = root;
-            foreach (var child in root.Children) TraceBones(child, map);
-        }
-
         [BehaviourEvent]
         void Update()
         {

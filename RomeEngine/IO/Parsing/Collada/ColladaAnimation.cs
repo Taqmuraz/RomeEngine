@@ -20,7 +20,7 @@ namespace RomeEngine.IO
             boneAnimations = animationEntities.Select(a => new ColladaSingleBoneAnimation(a)).ToArray();
         }
 
-        public override void Apply(SafeDictionary<string, Transform> bonesMap, float time)
+        public override void Apply(SafeDictionary<string, ITransform> bonesMap, float time)
         {
             foreach (var boneAnimation in boneAnimations) boneAnimation.Apply(bonesMap, time);
         }

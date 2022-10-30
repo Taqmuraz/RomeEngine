@@ -105,7 +105,7 @@ namespace RomeEngine.IO
             for (int i = 0; i < length; i++)
             {
                 var type = stream.ReadType();
-                var constructor = type.GetConstructors().FirstOrDefault(c => c.GetParameters().Length == 0);
+                var constructor = type.GetConstructors(SerializationExtensions.AnyMemberFlags).FirstOrDefault(c => c.GetParameters().Length == 0);
                 if (constructor == null) throw new InvalidOperationException($"Type {type.FullName} doesn't contain zero-argument constructor");
                 objects.Add((ISerializable)constructor.Invoke(new object[0]));
             }

@@ -13,17 +13,19 @@ namespace RomeEngineGame
 
         public void Inspect(string name, object value, Action<object> setter, Type type, EditorCanvas canvas, InspectorMenu inspectorMenu)
         {
+            inspectorMenu.AllocateField(out Rect nameRect, out Rect valueRect);
+            if (!string.IsNullOrEmpty(name)) canvas.DrawText(name, nameRect, inspectorMenu.NameTextOptions);
+
             if (value == null)
             {
-                inspectorMenu.AllocateField(out Rect nameRect, out Rect valueRect);
-                if (!string.IsNullOrEmpty(name)) canvas.DrawText(name, nameRect, inspectorMenu.NameTextOptions);
                 canvas.DrawText("null", valueRect, inspectorMenu.ValueTextOptions);
             }
             else
             {
-                canvas.DrawRectWithText(type.Name, inspectorMenu.GetNextRect(), new TextOptions() { FontSize = 20f, Alignment = TextAlignment.MiddleCenter});
-                var obj = (ISerializable)value;
-                inspectorMenu.GetObjectInspector(obj).Inspect(obj, inspectorMenu, canvas);
+                if (canvas.DrawButton("Inspect", valueRect, inspectorMenu.ValueTextOptions))
+                {
+                    inspectorMenu.Inspect((ISerializable)value);
+                }
             }
         }
     }

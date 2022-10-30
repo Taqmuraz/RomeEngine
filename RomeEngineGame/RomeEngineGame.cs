@@ -19,9 +19,9 @@ namespace RomeEngineGame
             Vector2 menuSize = new Vector2(300f, 25f);
             var screenSize = Screen.Size;
             canvas = GameObject.AddComponent<EditorCanvas>();
-            EditorMenu.ShowMenu<DropdownMenu>(canvas, menu => GameScenes.gameScenes[menu.SelectedOption + 1].LoadScene(),
+            EditorMenu.ShowMenu<DropdownMenu>(canvas, menu => GameScenes.GameScenesList[menu.SelectedOption + 1].LoadScene(),
                 new Rect(screenSize.x * 0.5f - menuSize.x * 0.5f, screenSize.y * 0.5f - menuSize.y * 0.5f, menuSize.x, menuSize.y))
-                .DropdownOptions = GameScenes.gameScenes.Skip(1).Select(s => s.Name).ToArray();
+                .DropdownOptions = GameScenes.GameScenesList.Skip(1).Select(s => s.Name).ToArray();
         }
     }
     public static class RomeEngineGame
@@ -29,7 +29,7 @@ namespace RomeEngineGame
         public static IEngine StartGame(IEngineRuntine runtime)
         {
             var engine = new Engine();
-            GameScenes.InitializeGameScenes(LevelSelectScene(), new GameScene[] { AnimationEditorScene(), GamePlayScene() });
+            GameScenes.InitializeGameScenes(new GameScene[] { LevelSelectScene(), AnimationEditorScene(), GamePlayScene() });
             engine.Initialize(runtime);
             return engine;
         }

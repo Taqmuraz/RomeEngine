@@ -2,7 +2,7 @@
 
 namespace RomeEngine.IO
 {
-    public sealed class ColladaSingleBoneAnimation : Serializable<ColladaSingleBoneAnimation>, ISourceObject
+    public sealed class ColladaSingleBoneAnimation : Serializable, ISourceObject
     {
         ISerializable ISourceObject.CloneSourceReference() => this;
 
@@ -10,7 +10,7 @@ namespace RomeEngine.IO
         [SerializeField] string boneName;
         [SerializeField] public ColladaAnimationBlendMode BlendMode { get; set; } = ColladaAnimationBlendMode.Loop;
 
-        public ColladaSingleBoneAnimation()
+        ColladaSingleBoneAnimation()
         {
         }
 
@@ -68,7 +68,7 @@ namespace RomeEngine.IO
 
         public string BoneName => boneName;
 
-        public void Apply(SafeDictionary<string, Transform> bonesMap, float time)
+        public void Apply(SafeDictionary<string, ITransform> bonesMap, float time)
         {
             GenerateFrame(time, out var firstFrame, out var lastFrame, BlendMode);
             float blend = (Mathf.Loop(time, First.TimeCode, Last.TimeCode) - firstFrame.TimeCode) / (lastFrame.TimeCode - firstFrame.TimeCode);

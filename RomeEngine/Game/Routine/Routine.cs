@@ -29,7 +29,7 @@ namespace RomeEngine
         public static Routine StartRoutine(IRoutine routine)
         {
             if (routine == null) throw new System.ArgumentNullException(nameof(routine));
-            var instance = new GameObject("Routine").AddComponent<Routine>();
+            var instance = new GameObject("Routine").ActivateForActiveScene().AddComponent<Routine>();
             instance.routine = routine;
             return instance;
         }
@@ -42,12 +42,19 @@ namespace RomeEngine
 
         public void Stop()
         {
-            GameObject.Destroy();
+            GameObject.Deactivate(GameScene.ActiveScene);
         }
         [BehaviourEvent]
         void Update()
         {
-            if (routine != null) if (!routine.NextStep()) routine = null;
+            if (routine != null)
+            {
+                if (!routine.NextStep())
+                {
+                    routine = null;
+                    GameObject.Deactivate(GameScene.ActiveScene);
+                }
+            }
         }
     }
 }

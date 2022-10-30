@@ -11,22 +11,26 @@ namespace RomeEngine.IO
 
             foreach (var scene in visualScenes)
             {
-                var sceneRoot = GameObject.CreateInactive("SceneRoot").Transform;
+                var sceneRoot = new Transform("SceneRoot");
                 sceneRoot.Parent = gameObject.Transform;
-                ApplyTransform(sceneRoot, scene);
+                var hierarchy = gameObject.AddComponent<ColladaSkeletonHierarchy>();
+                ApplyTransform(sceneRoot, scene, hierarchy);
             }
         }
-        void ApplyTransform(Transform transform, ColladaEntity node)
+        void ApplyTransform(Transform parent, ColladaEntity node, ColladaSkeletonHierarchy hierarchy)
         {
-            transform.GameObject.Name = node.Properties["name"].Value;
+            string name = node.Properties["name"].Value;
             var matrixNode = node["matrix"];
             Matrix4x4 matrix = matrixNode.IsEmpty ? Matrix4x4.Identity : Matrix4x4.FromFloatsArray(node["matrix"].Single().Value.SeparateString().Select(s => s.ToFloat()).ToArray()).GetTransponed();
+            var transform = new Transform(node.Properties["name"].Value);
+            transform.Parent = parent;
             transform.ApplyMatrix(matrix);
+
+            hierarchy.AddBone(new SkeletonBone(name, transform));
+
             foreach (var child in node["node"])
             {
-                var newChild = GameObject.CreateInactive("NewChild").Transform;
-                newChild.Parent = transform;
-                ApplyTransform(newChild, child);
+                ApplyTransform(transform, child, hierarchy);
             }
         }
     }

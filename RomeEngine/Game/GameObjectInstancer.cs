@@ -2,7 +2,7 @@
 {
 	public class GameObjectInstancer
 	{
-		public delegate GameObject InstantiateDelegate ();
+		public delegate IGameObject InstantiateDelegate ();
 
 		InstantiateDelegate instantiateFunc;
 
@@ -12,7 +12,7 @@
 			this.instantiateFunc = instantiateFunc;
 		}
 
-		public GameObject Instantiate()
+		public IGameObject Instantiate()
 		{
 			return instantiateFunc();
 		}

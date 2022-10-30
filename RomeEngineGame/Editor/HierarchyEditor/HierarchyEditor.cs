@@ -15,7 +15,7 @@ namespace RomeEngineGame
             EditorCanvas canvas = GameObject.AddComponent<EditorCanvas>();
             var canvasRect = new Rect(Vector2.zero, Screen.Size);
             InspectorMenu inspectorMenu = new InspectorMenu() { Rect = new Rect(canvasRect.Width * 0.75f, 0f, canvasRect.Width * 0.25f, canvasRect.Height) };
-            GameObject inspectedGameObject = null;
+            IGameObject inspectedGameObject = null;
             bool accurateMode = false;
             int scroll = 0;
 
@@ -39,7 +39,7 @@ namespace RomeEngineGame
 
                 if (canvas.DrawButton("Create root", new Rect(0f, 0f, elementWidth, elementHeight), TextOptions.Default))
                 {
-                    EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => new GameObject(menu.InputString)).WithHeader("New transform name");
+                    EditorMenu.ShowMenu<StringInputMenu>(canvas, menu => new GameObject(menu.InputString).ActivateForActiveScene()).WithHeader("New transform name");
                 }
                 if (canvas.DrawButton("Import hierarchy", new Rect(0f, elementHeight, elementWidth, elementHeight), TextOptions.Default))
                 {
@@ -76,50 +76,43 @@ namespace RomeEngineGame
                     DrawTransformLine(inspectedGameObject.Transform);
                 }
 
-                void DrawTransformLine(Transform transform)
+                void DrawTransformLine(ITransform transform)
                 {
-                    Vector3 start = transform.Parent == null ? Vector3.zero : transform.Parent.Position;
-                    Vector3 end = transform.Position;
-                    Vector2 rightEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end + transform.Right);
-                    Vector2 upEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end + transform.Up);
-                    Vector2 forwardEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end + transform.Forward);
-                    Vector2 screenStart = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(start);
-                    Vector2 screenEnd = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(end);
-                    //sceneCanvas.DrawText(transform.Name, Rect.FromCenterAndSize(screenEnd, new Vector2(100f, 50f)), Color32.white, TextOptions.Default);
-                    sceneCanvas.DrawLine(screenStart, screenEnd, Color32.white, 2);
-
+                    Vector3 pos = transform.Position;
+                    Vector2 rightPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos + transform.Right);
+                    Vector2 upPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos + transform.Up);
+                    Vector2 forwardPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos + transform.Forward);
+                    Vector2 screenPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos);
+                    
                     if (transform == inspectedGameObject.Transform)
                     {
-                        sceneCanvas.DrawLine(screenEnd, rightEnd, Color32.red, 5);
-                        sceneCanvas.DrawLine(screenEnd, upEnd, Color32.green, 5);
-                        sceneCanvas.DrawLine(screenEnd, forwardEnd, Color32.blue, 5);
+                        sceneCanvas.DrawLine(screenPos, rightPos, Color32.red, 5);
+                        sceneCanvas.DrawLine(screenPos, upPos, Color32.green, 5);
+                        sceneCanvas.DrawLine(screenPos, forwardPos, Color32.blue, 5);
                     }
-
-                    foreach (var child in transform.Children) DrawTransformLine(child);
                 }
 
-                void DrawTransform(Transform transform)
+                void DrawGameObject(IGameObject gameObject)
                 {
                     if (positionY > 0)
                     {
-                        string name = transform.Name;
-                        if (transform.Parent != null) name = $"{transform.Parent.Children.IndexOf(transform) + 1}){name}";
-                        if (canvas.DrawButton(transform.Name, new Rect(positionX * indent, positionY * elementHeight, elementWidth - positionX * indent - elementHeight, elementHeight), TextOptions.Default))
+                        string name = gameObject.Name;
+
+                        if (canvas.DrawButton(name, new Rect(positionX * indent, positionY * elementHeight, elementWidth - positionX * indent - elementHeight, elementHeight), TextOptions.Default))
                         {
-                            inspectorMenu.Inspect(inspectedGameObject = transform.GameObject);
+                            inspectorMenu.Inspect(inspectedGameObject = gameObject);
                         }
 
                         if (canvas.DrawButton("-", new Rect(elementWidth - elementHeight, elementHeight * positionY, elementHeight, elementHeight), TextOptions.Default))
                         {
-                            transform.GameObject.Destroy();
+                            gameObject.Deactivate(GameScene.ActiveScene);
                         }
                         positionY++;
                     }
                 }
-                foreach (var obj in GameScene.ActiveScene.GameObjects.SelectMany(g => g.TraceElement(l => l.Transform.Children.Select(c => c.GameObject)))
-                    .Where(g => g.GetComponents().Any(c => !(c is Transform))))
+                foreach (var obj in GameScene.ActiveScene.GameObjects)
                 {
-                    DrawTransform(obj.Transform);
+                    DrawGameObject(obj);
                 }
             }
         }

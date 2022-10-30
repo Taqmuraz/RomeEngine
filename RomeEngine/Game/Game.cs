@@ -5,48 +5,6 @@ namespace RomeEngine
 {
 	public static class Game
 	{
-		public abstract class GameThreadHandler : SerializableEventsHandler
-		{
-			public bool IsActive { get; private set; }
-			public bool IsDestroyed { get; private set; }
-
-			public GameThreadHandler()
-			{
-				
-			}
-
-			[BehaviourEvent]
-			void OnActivate()
-			{
-				IsActive = true;
-			}
-			[BehaviourEvent]
-			void OnDeactivate()
-			{
-				IsActive = false;
-			}
-
-			public void Destroy()
-			{
-				if (IsDestroyed) return;
-
-				try
-				{
-					CallEvent("OnDestroy");
-				}
-				catch (System.Exception ex)
-				{
-					Debug.Log(ex.ToString());
-				}
-				IsDestroyed = true;
-			}
-		}
-
-		public static void InitializeGame()
-		{
-			GameScenes.gameScenes[1].LoadScene();
-		}
-
 		static void SendMessageToActiveScene(string message)
 		{
 			GameScene.ActiveScene?.CallEvent(message);

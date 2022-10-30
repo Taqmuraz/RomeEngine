@@ -32,7 +32,7 @@ namespace RomeEngine
             yield return new SerializableField(nameof(position), scale, value => scale = (Vector3)value, typeof(Vector3));
         }
 
-        public static void ApplyBlended(AnimationFrameElement a, AnimationFrameElement b, SafeDictionary<string, Transform> bonesMap, float blend)
+        public static void ApplyBlended(AnimationFrameElement a, AnimationFrameElement b, SafeDictionary<string, ITransform> bonesMap, float blend)
         {
             var bone = bonesMap[a.BoneName];
             if (bone == null) return;
@@ -40,7 +40,7 @@ namespace RomeEngine
             bone.LocalRotation = Vector3.LerpRotation(a.rotation, b.rotation, blend);
         }
 
-        public static void Apply(AnimationFrameElement element, SafeDictionary<string, Transform> bonesMap)
+        public static void Apply(AnimationFrameElement element, SafeDictionary<string, ITransform> bonesMap)
         {
             var bone = bonesMap[element.BoneName];
             if (bone == null) return;

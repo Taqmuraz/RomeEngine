@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RomeEngine
 {
-    public abstract class Serializable<TSerializable> : ISerializable where TSerializable : new()
+    public abstract class Serializable : ISerializable
     {
         public IEnumerable<SerializableField> EnumerateFields()
         {

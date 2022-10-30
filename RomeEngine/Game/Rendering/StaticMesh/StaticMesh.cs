@@ -161,8 +161,8 @@ namespace RomeEngine
 
         public IEnumerable<SerializableField> EnumerateFields()
         {
-            yield return new SerializableField(nameof(Vertices), Vertices, v => Vertices = (Vertex[])v, typeof(Vertex[]), true);
-            yield return new SerializableField(nameof(Indices), Indices, v => Indices = (int[])v, typeof(int[]), true);
+            yield return new SerializableField(nameof(Vertices), Vertices, v => Vertices = (Vertex[])v, typeof(Vertex[]));
+            yield return new SerializableField(nameof(Indices), Indices, v => Indices = (int[])v, typeof(int[]));
         }
 
         IStaticMeshAttribute<float>[] attributesFloat;

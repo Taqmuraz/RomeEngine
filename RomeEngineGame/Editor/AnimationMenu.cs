@@ -35,7 +35,7 @@ namespace RomeEngineGame
 
             AnimationFrame CreateFrame(float timeCode)
             {
-                return new AnimationFrame(Animator.Bones.Select(b => new AnimationFrameElement(b.Name, b.LocalPosition, b.LocalRotation, b.LocalScale)).ToArray(), timeCode);
+                return new AnimationFrame(Animator.Bones.Select(b => new AnimationFrameElement(b.Name, b.Transform.LocalPosition, b.Transform.LocalRotation, b.Transform.LocalScale)).ToArray(), timeCode);
             }
 
             (string title, Func<bool> condition, Action action)[] buttons = new (string, Func<bool>, Action)[]
@@ -106,7 +106,7 @@ namespace RomeEngineGame
                         }
                         if (canvas.DrawButton("Apply frame", new Rect(rect.X + elementWidth * 2f, posY, elementWidth, elementHeight), TextOptions.Default))
                         {
-                            AnimationFrame.ApplyBlended(frame, frame, Animator.Bones.ToDictionary(b => b.Name), 0f);
+                            AnimationFrame.ApplyBlended(frame, frame, Animator.Bones.ToDictionary(b => b.Name, b => b.Transform), 0f);
                             //Animator.PlayAnimationFrame(Animation, frame.TimeCode);
                         }
                         if (canvas.DrawButton("Write frame", new Rect(rect.X + elementWidth * 3f, posY, elementWidth, elementHeight), TextOptions.Default))

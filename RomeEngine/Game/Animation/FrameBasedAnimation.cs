@@ -20,7 +20,7 @@ namespace RomeEngine
 
         public float Length => Frames[Frames.Length - 1].TimeCode;
 
-        public override void Apply(SafeDictionary<string, Transform> bonesMap, float time)
+        public override void Apply(SafeDictionary<string, ITransform> bonesMap, float time)
         {
             if (Frames == null || Frames.Length == 0) return;
 

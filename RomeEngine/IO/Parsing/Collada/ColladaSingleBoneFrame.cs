@@ -1,6 +1,6 @@
 ﻿namespace RomeEngine.IO
 {
-    public sealed class ColladaSingleBoneFrame : Serializable<ColladaSingleBoneFrame>, ISourceObject
+    public sealed class ColladaSingleBoneFrame : Serializable, ISourceObject
     {
         ISerializable ISourceObject.CloneSourceReference() => this;
 
@@ -9,7 +9,7 @@
         [SerializeField] Vector3 localScale;
         [SerializeField] float timeCode;
 
-        public ColladaSingleBoneFrame()
+        ColladaSingleBoneFrame()
         {
         }
 
@@ -23,7 +23,7 @@
 
         public float TimeCode => timeCode;
 
-        public static void Apply(ColladaSingleBoneFrame a, ColladaSingleBoneFrame b, Transform bone, float blend)
+        public static void Apply(ColladaSingleBoneFrame a, ColladaSingleBoneFrame b, ITransform bone, float blend)
         {
             bone.LocalPosition = Vector3.Lerp(a.localPosition, b.localPosition, blend);
             bone.LocalRotation = Vector3.LerpRotation(a.localRotation, b.localRotation, blend);

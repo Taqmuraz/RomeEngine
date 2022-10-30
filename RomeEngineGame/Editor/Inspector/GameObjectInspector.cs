@@ -12,24 +12,17 @@ namespace RomeEngineGame
         }
         protected override void AfterInspect(ISerializable inspectedObject, InspectorMenu inspectorMenu, EditorCanvas canvas)
         {
-            var gameObject = (GameObject)inspectedObject;
+            var gameObject = (IGameObject)inspectedObject;
             var components = gameObject.GetComponents();
 
             foreach (var component in components)
             {
-                Rect labelRect;
-                if (component is Transform)
+                inspectorMenu.AllocateField(out Rect labelRect, out Rect valueRect);
+                if (canvas.DrawButton("Destroy", valueRect, new TextOptions() { FontSize = 20f, Alignment = TextAlignment.MiddleCenter }))
                 {
-                    labelRect = inspectorMenu.GetNextRect();
+                    component.Destroy();
                 }
-                else
-                {
-                    inspectorMenu.AllocateField(out labelRect, out Rect valueRect);
-                    if (canvas.DrawButton("Destroy", valueRect, new TextOptions() { FontSize = 20f, Alignment = TextAlignment.MiddleCenter }))
-                    {
-                        component.Destroy();
-                    }
-                }
+
                 canvas.DrawRectWithText(component.GetType().Name, labelRect, new TextOptions() { FontSize = 20f, Alignment = TextAlignment.MiddleCenter });
 
                 inspectorMenu.GetObjectInspector(component).Inspect(component, inspectorMenu, canvas);

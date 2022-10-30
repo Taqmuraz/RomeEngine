@@ -15,7 +15,7 @@ namespace RomeEngine
             Time.StartTime();
             runtine.SetInputHandler(new Input());
 
-            GameScenes.LoadScene(1);
+            GameScenes.LoadScene(0);
         }
 
         public void UpdateGameState()

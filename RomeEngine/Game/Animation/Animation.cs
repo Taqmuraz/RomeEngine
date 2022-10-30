@@ -5,7 +5,7 @@ namespace RomeEngine
 {
     public abstract class Animation : ISerializable
     {
-        public abstract void Apply(SafeDictionary<string, Transform> bonesMap, float time);
+        public abstract void Apply(SafeDictionary<string, ITransform> bonesMap, float time);
         public abstract IEnumerable<SerializableField> EnumerateFields();
         public abstract Animation CreateTransition(Animation nextAnimation, float time, float length);
     }

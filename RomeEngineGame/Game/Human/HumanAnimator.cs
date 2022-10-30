@@ -8,11 +8,6 @@ namespace RomeEngineGame
         static SafeDictionary<string, Animation> animationsMap;
         string lastAnimation;
 
-        protected override Transform GetRoot()
-        {
-            return Transform.Children[0];
-        }
-
         static HumanAnimator()
         {
             var animations = Resources.LoadAll<Animation>("Animations");

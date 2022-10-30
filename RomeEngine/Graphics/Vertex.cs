@@ -21,9 +21,9 @@ namespace RomeEngine
 
         public IEnumerable<SerializableField> EnumerateFields()
         {
-            yield return new SerializableField(nameof(Position), Position, v => Position = (Vector3)v, typeof(Vector3), false);
-            yield return new SerializableField(nameof(Normal), Normal, v => Normal = (Vector3)v, typeof(Vector3), false);
-            yield return new SerializableField(nameof(UV), UV, v => UV = (Vector2)v, typeof(Vector2), false);
+            yield return new SerializableField(nameof(Position), Position, v => Position = (Vector3)v, typeof(Vector3));
+            yield return new SerializableField(nameof(Normal), Normal, v => Normal = (Vector3)v, typeof(Vector3));
+            yield return new SerializableField(nameof(UV), UV, v => UV = (Vector2)v, typeof(Vector2));
         }
     }
 }

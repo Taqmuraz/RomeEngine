@@ -9,7 +9,7 @@ namespace RomeEngineGame
             BeforeInspect(inspectedObject, inspectorMenu, canvas);
             foreach (var field in inspectedObject.EnumerateFields())
             {
-                if (!field.HideInInspector) inspectorMenu.GetFieldInspector(field.Type).Inspect(field.Name, field.Value, field.Setter, field.Type, canvas, inspectorMenu);
+                inspectorMenu.GetFieldInspector(field.Type).Inspect(field.Name, field.Value, field.Setter, field.Type, canvas, inspectorMenu);
             }
             AfterInspect(inspectedObject, inspectorMenu, canvas);
         }

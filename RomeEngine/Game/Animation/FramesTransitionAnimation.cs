@@ -15,7 +15,7 @@ namespace RomeEngine
         public AnimationFrame FirstFrame { get; private set; }
         public AnimationFrame LastFrame { get; private set; }
 
-        public override void Apply(SafeDictionary<string, Transform> bonesMap, float time)
+        public override void Apply(SafeDictionary<string, ITransform> bonesMap, float time)
         {
             if (time < LastFrame.TimeCode)
             {

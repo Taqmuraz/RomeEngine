@@ -26,7 +26,7 @@ namespace RomeEngine
             yield return new SerializableField(nameof(TimeCode), TimeCode, value => TimeCode = (float)value, typeof(float));
         }
 
-        public static void Apply(AnimationFrame animationFrame, SafeDictionary<string, Transform> bonesMap)
+        public static void Apply(AnimationFrame animationFrame, SafeDictionary<string, ITransform> bonesMap)
         {
             foreach (var element in animationFrame.FrameElements)
             {
@@ -34,7 +34,7 @@ namespace RomeEngine
             }
         }
 
-        public static void ApplyBlended(AnimationFrame a, AnimationFrame b, SafeDictionary<string, Transform> bonesMap, float blend)
+        public static void ApplyBlended(AnimationFrame a, AnimationFrame b, SafeDictionary<string, ITransform> bonesMap, float blend)
         {
             var elements = a.FrameElements.Join(b.FrameElements, k => k.BoneName, k => k.BoneName, (ka, kb) => (ka, kb));
             foreach (var element in elements) AnimationFrameElement.ApplyBlended(element.ka, element.kb, bonesMap, blend); 

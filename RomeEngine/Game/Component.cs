@@ -1,22 +1,16 @@
 ﻿namespace RomeEngine
 {
-    public class Component : SerializableEventsHandler, IInitializable<GameObject>
+    public class Component : SerializableEventsHandler, IInitializable<IGameObject>, IGameEntity
 	{
-		[SerializeField(HideInInspector = true)] bool destroyed;
+		[SerializeField] bool destroyed;
 
 		public string Name => GameObject.Name;
 		public virtual bool IsUnary { get; }
 
-		public virtual Transform Transform => GetTransform();
-		internal protected virtual Transform GetTransform()
-		{
-			return transform;
-		}
-		[SerializeField(HideInInspector = true)]
-		Transform transform;
-		[SerializeField(HideInInspector = true)]
-		GameObject gameObject;
-		public GameObject GameObject => gameObject;
+		public virtual ITransform Transform => gameObject.Transform;
+		[SerializeField]
+		IGameObject gameObject;
+		public IGameObject GameObject => gameObject;
 
 		protected override void OnEventCall(string name)
 		{
@@ -27,23 +21,18 @@
 			}
 		}
 
-		void IInitializable<GameObject>.Initialize(GameObject arg)
+		void IInitializable<IGameObject>.Initialize(IGameObject arg)
 		{
 			gameObject = arg;
-			transform = GameObject.Transform;
-		}
-
-		[BehaviourEvent]
-		void OnDestroy()
-		{
-			destroyed = true;
+			gameObject.Activate(this);
 		}
 
 		public void Destroy()
 		{
 			if (!destroyed)
 			{
-				GameObject.RemoveComponent(this);
+				GameObject.Deactivate(this);
+				destroyed = true;
 			}
 		}
 

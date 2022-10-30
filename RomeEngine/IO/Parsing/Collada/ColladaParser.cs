@@ -53,7 +53,7 @@ namespace RomeEngine.IO
             };
 
             var xmlDocument = new XmlDocument();
-            var result = GameObject.CreateInactive("Collada source");
+            var result = new GameObject("Collada source");
             xmlDocument.Load(fileName);
 
             void TraceNode(XmlNode node)

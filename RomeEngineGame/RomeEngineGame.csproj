@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Editor\DropdownMenu.cs" />
+    <Compile Include="Editor\HierarchyEditor\ITransformHandle.cs" />
     <Compile Include="Editor\Inspector\AnimatorInspector.cs" />
     <Compile Include="Editor\Inspector\ArrayFieldInspector.cs" />
     <Compile Include="Editor\Inspector\BoolFieldInspector.cs" />

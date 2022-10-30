@@ -2,13 +2,13 @@
 
 namespace RomeEngine
 {
-	public class GameScene : IEventsHandler
+	public class GameScene : IEventsHandler, IGameObjectActivityProvider
 	{
 		List<GameObjectInstancer> instancers = new List<GameObjectInstancer>();
-		DynamicLinkedList<GameObject> gameObjects = new DynamicLinkedList<GameObject>();
+		DynamicLinkedList<IGameObject> gameObjects = new DynamicLinkedList<IGameObject>();
 
 		public string Name { get; private set; }
-		public ReadOnlyArrayList<GameObject> GameObjects => new ReadOnlyArrayList<GameObject>(gameObjects);
+		public ReadOnlyArrayList<IGameObject> GameObjects => new ReadOnlyArrayList<IGameObject>(gameObjects);
 
 		static readonly GameScene emptyScene = new GameScene("Empty");
 
@@ -27,15 +27,15 @@ namespace RomeEngine
 		{
 			instancers.Add(new GameObjectInstancer(instantiateFunc));
 		}
-		public void AddGameObject(GameObject gameObject)
+		void IGameObjectActivityProvider.Activate(IGameObject gameObject)
 		{
 			gameObjects.Add(gameObject);
-			gameObject.CallEvent("OnActivate");
+			gameObject.CallEvent("Start");
 		}
-		public void RemoveGameObject(GameObject gameObject)
+		void IGameObjectActivityProvider.Deactivate(IGameObject gameObject)
 		{
 			gameObjects.Remove(gameObject);
-			gameObject.CallEvent("OnDeactivate");
+			gameObject.CallEvent("OnDestroy");
 		}
 
 		public void LoadScene()
@@ -53,7 +53,7 @@ namespace RomeEngine
 			{
 				try
 				{
-					instancer.Instantiate();
+					instancer.Instantiate().Activate(this);
 				}
 				catch (System.Exception ex)
 				{
@@ -71,8 +71,9 @@ namespace RomeEngine
 
 			foreach (var gameObject in gameObjects)
 			{
-				gameObject.Destroy();
+				gameObject.CallEvent("OnDestroy");
 			}
+			gameObjects.Clear();
 
 			ActiveScene = emptyScene;
 		}

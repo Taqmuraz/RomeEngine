@@ -59,7 +59,15 @@
     <Compile Include="Game\Animation\FrameBasedAnimation.cs" />
     <Compile Include="Game\Animation\FramesTransitionAnimation.cs" />
     <Compile Include="Game\Animation\Animator.cs" />
+    <Compile Include="Game\Animation\ISkeleton.cs" />
+    <Compile Include="Game\Animation\SkeletonBone.cs" />
     <Compile Include="Game\BehaviourEventAttribute.cs" />
+    <Compile Include="Game\GameEntity\CompositeGameEntity.cs" />
+    <Compile Include="Game\GameEntity\CompositeGameEntityBuilder.cs" />
+    <Compile Include="Game\GameEntity\IGameEntity.cs" />
+    <Compile Include="Game\IGameEntityActivityProvider.cs" />
+    <Compile Include="Game\IGameObject.cs" />
+    <Compile Include="Game\IGameObjectActivityProvider.cs" />
     <Compile Include="Game\Instancing\ArrayInstancer.cs" />
     <Compile Include="Game\Instancing\ArrayListInstancer.cs" />
     <Compile Include="Game\Instancing\EmptyInstancer.cs" />
@@ -69,6 +77,7 @@
     <Compile Include="Game\Instancing\SerializableInstancer.cs" />
     <Compile Include="Game\Instancing\SourceObjectInstancer.cs" />
     <Compile Include="Game\ISourceObject.cs" />
+    <Compile Include="Game\ITransform.cs" />
     <Compile Include="Game\Physics\CollisionInfo.cs" />
     <Compile Include="Game\Physics\ContactInfo.cs" />
     <Compile Include="Game\Physics\IPhysicalBody.cs" />
@@ -100,6 +109,7 @@
     <Compile Include="IO\Parsing\Collada\ColladaAnimationBlendMode.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaSingleBoneAnimation.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaSingleBoneFrame.cs" />
+    <Compile Include="IO\Parsing\Collada\ColladaSkeletonHierarchy.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaTransitionAnimation.cs" />
     <Compile Include="IO\Parsing\Collada\IColladaAnimation.cs" />
     <Compile Include="IO\Serialization\EmptySerializer.cs" />
