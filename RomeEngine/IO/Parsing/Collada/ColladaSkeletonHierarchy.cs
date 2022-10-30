@@ -15,6 +15,12 @@ namespace RomeEngine.IO
         IEnumerable<SkeletonBone> ISkeleton.Bones => bones;
 
         [BehaviourEvent]
+        void Start()
+        {
+            Root.UpdateHierarchy();
+        }
+
+        [BehaviourEvent]
         void OnPreRender()
         {
             if (Root != null)

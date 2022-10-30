@@ -8,7 +8,6 @@ namespace RomeEngine
     public sealed class GameObject : CompositeGameEntity, IInstantiatable<GameObject>, IGameObject
     {
         [SerializeField] public ITransform Transform { get; private set; }
-        [SerializeField] public string Name { get; set; }
 
         bool IsActive { get; set; }
         bool IsOnActivationProcess { get; set; }
@@ -19,7 +18,7 @@ namespace RomeEngine
 
         }
 
-        void IGameObject.Activate(IGameObjectActivityProvider activityProvider)
+        protected override void Activate(IGameEntityActivityProvider activityProvider)
         {
             if (!IsActive)
             {
@@ -29,7 +28,7 @@ namespace RomeEngine
                 IsOnActivationProcess = false;
             }
         }
-        void IGameObject.Deactivate(IGameObjectActivityProvider activityProvider)
+        protected override void Deactivate(IGameEntityActivityProvider activityProvider)
         {
             if (IsActive)
             {
@@ -48,7 +47,7 @@ namespace RomeEngine
         {
             Name = name;
             Transform = new Transform();
-            AppendEntity(Transform);
+            Transform.Activate(this);
         }
 
         public override string ToString()
@@ -130,14 +129,17 @@ namespace RomeEngine
             var instance = (GameObject)Activator.CreateInstance(GetType(), true);
             objectsMap.Add(this, instance);
             var entitiesMap = InnerEntities.ToDictionary(c => c, c => (IGameEntity)c.CreateSerializableInstance(objectsMap));
-            instance.AppendEntities(entitiesMap.Values);
+            foreach (var entity in entitiesMap)
+            {
+                entity.Value.Activate(instance);
+            }
             instance.Transform = (Transform)entitiesMap[Transform];
             instance.Name = Name;
             instance.ActivateForActiveScene();
             return instance;
         }
 
-        public static GameObject Instantiate(GameObject source, IGameObjectActivityProvider activityProvider)
+        public static GameObject Instantiate(GameObject source)
         {
             var instance = ((IInstantiatable<GameObject>)source).CreateInstance();
             return instance;

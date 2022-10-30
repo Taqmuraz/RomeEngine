@@ -15,7 +15,7 @@ namespace RomeEngineGame
             EditorCanvas canvas = GameObject.AddComponent<EditorCanvas>();
             var canvasRect = new Rect(Vector2.zero, Screen.Size);
             InspectorMenu inspectorMenu = new InspectorMenu() { Rect = new Rect(canvasRect.Width * 0.75f, 0f, canvasRect.Width * 0.25f, canvasRect.Height) };
-            IGameObject inspectedGameObject = null;
+            IGameEntity inspectedEntity = null;
             bool accurateMode = false;
             int scroll = 0;
 
@@ -46,7 +46,7 @@ namespace RomeEngineGame
                     Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select GameObject file", file => Resources.LoadInstance<GameObject>(file));
                 }
 
-                int transformsCount = GameScene.ActiveScene.GameObjects.Count;
+                int transformsCount = GameScene.ActiveScene.GameEntities.Count;
                 int scrollMax = transformsCount - (int)((canvasRect.Height - elementHeight) / elementHeight);
 
                 if (scrollMax > 0)
@@ -58,12 +58,12 @@ namespace RomeEngineGame
                 int positionX = 0;
                 int positionY = 3 - scroll;
 
-                if (inspectedGameObject != null)
+                if (inspectedEntity != null)
                 {
                     positionY++;
                     if (canvas.DrawButton("Export hierarchy", new Rect(0f, elementHeight * 2f, elementWidth, elementHeight), TextOptions.Default))
                     {
-                        Engine.Instance.Runtime.ShowFileWriteDialog("./", inspectedGameObject.Name + Serializer.BinaryFormatExtension, "Select export path", file => new Serializer().SerializeFile(inspectedGameObject, file));
+                        Engine.Instance.Runtime.ShowFileWriteDialog("./", inspectedEntity.Name + Serializer.BinaryFormatExtension, "Select export path", file => new Serializer().SerializeFile(inspectedEntity, file));
                     }
                 }
 
@@ -71,9 +71,9 @@ namespace RomeEngineGame
 
                 Matrix4x4 worldToScreen = Matrix4x4.CreateViewport(Screen.Size.x, Screen.Size.y) * Camera.ActiveCamera.WorldToScreenMatrix;
 
-                if (inspectedGameObject != null)
+                if (inspectedEntity is IGameObject gameObject)
                 {
-                    DrawTransformLine(inspectedGameObject.Transform);
+                    DrawTransformLine(gameObject.Transform);
                 }
 
                 void DrawTransformLine(ITransform transform)
@@ -83,36 +83,33 @@ namespace RomeEngineGame
                     Vector2 upPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos + transform.Up);
                     Vector2 forwardPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos + transform.Forward);
                     Vector2 screenPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos);
-                    
-                    if (transform == inspectedGameObject.Transform)
-                    {
-                        sceneCanvas.DrawLine(screenPos, rightPos, Color32.red, 5);
-                        sceneCanvas.DrawLine(screenPos, upPos, Color32.green, 5);
-                        sceneCanvas.DrawLine(screenPos, forwardPos, Color32.blue, 5);
-                    }
+
+                    sceneCanvas.DrawLine(screenPos, rightPos, Color32.red, 5);
+                    sceneCanvas.DrawLine(screenPos, upPos, Color32.green, 5);
+                    sceneCanvas.DrawLine(screenPos, forwardPos, Color32.blue, 5);
                 }
 
-                void DrawGameObject(IGameObject gameObject)
+                void DrawGameObject(IGameEntity gameEntity)
                 {
                     if (positionY > 0)
                     {
-                        string name = gameObject.Name;
+                        string name = gameEntity.Name;
 
                         if (canvas.DrawButton(name, new Rect(positionX * indent, positionY * elementHeight, elementWidth - positionX * indent - elementHeight, elementHeight), TextOptions.Default))
                         {
-                            inspectorMenu.Inspect(inspectedGameObject = gameObject);
+                            inspectorMenu.Inspect(inspectedEntity = gameEntity);
                         }
 
                         if (canvas.DrawButton("-", new Rect(elementWidth - elementHeight, elementHeight * positionY, elementHeight, elementHeight), TextOptions.Default))
                         {
-                            gameObject.Deactivate(GameScene.ActiveScene);
+                            gameEntity.Deactivate(GameScene.ActiveScene);
                         }
                         positionY++;
                     }
                 }
-                foreach (var obj in GameScene.ActiveScene.GameObjects)
+                foreach (var entity in GameScene.ActiveScene.GameEntities)
                 {
-                    DrawGameObject(obj);
+                    DrawGameObject(entity);
                 }
             }
         }

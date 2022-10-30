@@ -7,10 +7,15 @@ namespace RomeEngine
     {
         [SerializeField] DynamicLinkedList<IGameEntity> innerEntities;
         protected IEnumerable<IGameEntity> InnerEntities => innerEntities;
+        [SerializeField] public string Name { get; set; }
 
         public CompositeGameEntity()
         {
             innerEntities = new DynamicLinkedList<IGameEntity>();
+        }
+        public CompositeGameEntity(string name) : this()
+        {
+            Name = name;
         }
 
         public void AppendEntity(IGameEntity gameEntity)
@@ -34,5 +39,11 @@ namespace RomeEngine
         }
         protected virtual void BeforeCallEvent(string name) { }
         protected virtual void AfterCallEvent(string name) { }
+
+        protected virtual void Activate(IGameEntityActivityProvider activityProvider) { }
+        protected virtual void Deactivate(IGameEntityActivityProvider activityProvider) { }
+
+        void IGameEntity.Activate(IGameEntityActivityProvider activityProvider) => Activate(activityProvider);
+        void IGameEntity.Deactivate(IGameEntityActivityProvider activityProvider) => Deactivate(activityProvider);
     }
 }

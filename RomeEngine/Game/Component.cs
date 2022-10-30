@@ -40,5 +40,15 @@
 		{
 			return $"({GetType().Name}){GameObject.Name}";
 		}
+
+        void IGameEntity.Activate(IGameEntityActivityProvider activityProvider)
+        {
+			activityProvider.Activate(this);
+        }
+
+        void IGameEntity.Deactivate(IGameEntityActivityProvider activityProvider)
+        {
+			activityProvider.Deactivate(this);
+        }
     }
 }

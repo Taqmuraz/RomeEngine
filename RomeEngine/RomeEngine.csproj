@@ -67,7 +67,6 @@
     <Compile Include="Game\GameEntity\IGameEntity.cs" />
     <Compile Include="Game\IGameEntityActivityProvider.cs" />
     <Compile Include="Game\IGameObject.cs" />
-    <Compile Include="Game\IGameObjectActivityProvider.cs" />
     <Compile Include="Game\Instancing\ArrayInstancer.cs" />
     <Compile Include="Game\Instancing\ArrayListInstancer.cs" />
     <Compile Include="Game\Instancing\EmptyInstancer.cs" />
@@ -121,7 +120,7 @@
     <Compile Include="Game\Component.cs" />
     <Compile Include="Game\Debug.cs" />
     <Compile Include="Game\GameObject.cs" />
-    <Compile Include="Game\GameObjectInstancer.cs" />
+    <Compile Include="Game\GameEntityInstancer.cs" />
     <Compile Include="Game\GameScene.cs" />
     <Compile Include="Game\GameScenes.cs" />
     <Compile Include="Game\Game.cs" />

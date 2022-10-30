@@ -2,13 +2,13 @@
 
 namespace RomeEngine
 {
-	public class GameScene : IEventsHandler, IGameObjectActivityProvider
+	public class GameScene : IEventsHandler, IGameEntityActivityProvider
 	{
-		List<GameObjectInstancer> instancers = new List<GameObjectInstancer>();
-		DynamicLinkedList<IGameObject> gameObjects = new DynamicLinkedList<IGameObject>();
+		List<GameEntityInstancer> instancers = new List<GameEntityInstancer>();
+		DynamicLinkedList<IGameEntity> gameEntities = new DynamicLinkedList<IGameEntity>();
 
 		public string Name { get; private set; }
-		public ReadOnlyArrayList<IGameObject> GameObjects => new ReadOnlyArrayList<IGameObject>(gameObjects);
+		public ReadOnlyArrayList<IGameEntity> GameEntities => new ReadOnlyArrayList<IGameEntity>(gameEntities);
 
 		static readonly GameScene emptyScene = new GameScene("Empty");
 
@@ -19,23 +19,23 @@ namespace RomeEngine
 
         public static GameScene ActiveScene { get; private set; } = emptyScene;
 
-		public void AddGameObjectInstancer (GameObjectInstancer instancer)
+		public void AddGameEntityInstancer (GameEntityInstancer instancer)
 		{
 			instancers.Add(instancer);
 		}
-		public void AddGameObjectInstancer(GameObjectInstancer.InstantiateDelegate instantiateFunc)
+		public void AddGameEntityInstancer(GameEntityInstancer.InstantiateDelegate instantiateFunc)
 		{
-			instancers.Add(new GameObjectInstancer(instantiateFunc));
+			instancers.Add(new GameEntityInstancer(instantiateFunc));
 		}
-		void IGameObjectActivityProvider.Activate(IGameObject gameObject)
+		void IGameEntityActivityProvider.Activate(IGameEntity gameEntity)
 		{
-			gameObjects.Add(gameObject);
-			gameObject.CallEvent("Start");
+			gameEntities.Add(gameEntity);
+			gameEntity.CallEvent("Start");
 		}
-		void IGameObjectActivityProvider.Deactivate(IGameObject gameObject)
+		void IGameEntityActivityProvider.Deactivate(IGameEntity gameEntity)
 		{
-			gameObjects.Remove(gameObject);
-			gameObject.CallEvent("OnDestroy");
+			gameEntities.Remove(gameEntity);
+			gameEntity.CallEvent("OnDestroy");
 		}
 
 		public void LoadScene()
@@ -69,20 +69,20 @@ namespace RomeEngine
 				return;
 			}
 
-			foreach (var gameObject in gameObjects)
+			foreach (var gameEntity in gameEntities)
 			{
-				gameObject.CallEvent("OnDestroy");
+				gameEntity.CallEvent("OnDestroy");
 			}
-			gameObjects.Clear();
+			gameEntities.Clear();
 
 			ActiveScene = emptyScene;
 		}
 
         public void CallEvent(string name)
         {
-			foreach (var gameObject in gameObjects)
+			foreach (var gameEntity in gameEntities)
 			{
-				gameObject.CallEvent(name);
+				gameEntity.CallEvent(name);
 			}
         }
     }

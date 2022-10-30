@@ -23,7 +23,7 @@
         Vector3 position;
         Vector3 rotation;
         Vector3 scale = Vector3.one;
-        [SerializeField] bool hasChanges;
+        bool hasChanges;
 
         [SerializeField] public Vector3 Position
         {
@@ -64,5 +64,10 @@
             Position = (Vector3)matrix.column_3;
             Scale = matrix.GetScale();
         }
+
+        string IGameEntity.Name => ToString();
+
+        void IGameEntity.Activate(IGameEntityActivityProvider activityProvider) => activityProvider.Activate(this);
+        void IGameEntity.Deactivate(IGameEntityActivityProvider activityProvider) => activityProvider.Deactivate(this);
     }
 }

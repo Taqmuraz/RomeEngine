@@ -7,6 +7,7 @@ namespace RomeEngine
         [SerializeField] ITransform parent;
         [SerializeField] List<HierarchyTransform> children = new List<HierarchyTransform>();
         [SerializeField] string name;
+        string IGameEntity.Name => name;
 
         public ReadOnlyArrayList<HierarchyTransform> Children => children;
 
@@ -107,6 +108,17 @@ namespace RomeEngine
         {
             get => LocalScale;
             set => LocalScale = value;
+        }
+
+        void IGameEntity.Activate(IGameEntityActivityProvider activityProvider)
+        {
+            UpdateHierarchy();
+            activityProvider.Activate(this);
+        }
+
+        void IGameEntity.Deactivate(IGameEntityActivityProvider activityProvider)
+        {
+            activityProvider.Deactivate(this);
         }
     }
 }

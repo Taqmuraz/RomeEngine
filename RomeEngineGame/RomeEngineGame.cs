@@ -35,18 +35,18 @@ namespace RomeEngineGame
         }
         static GameScene LevelSelectScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
+            var camera = new GameEntityInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
             var scene = new GameScene("Level select scene");
-            scene.AddGameObjectInstancer(camera);
-            scene.AddGameObjectInstancer(new GameObjectInstancer(() => new GameObject("Level select menu").AddComponent<LevelSelectMenu>().GameObject));
+            scene.AddGameEntityInstancer(camera);
+            scene.AddGameEntityInstancer(new GameEntityInstancer(() => new GameObject("Level select menu").AddComponent<LevelSelectMenu>().GameObject));
             return scene;
         }
         static GameScene AnimationEditorScene()
         {
-            var camera = new GameObjectInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
+            var camera = new GameEntityInstancer(() => new GameObject("Camera").AddComponent<Camera>().GameObject);
             var scene = new GameScene("Editor scene");
-            scene.AddGameObjectInstancer(camera);
-            scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
+            scene.AddGameEntityInstancer(camera);
+            scene.AddGameEntityInstancer(new GameEntityInstancer(() =>
             {
                 var modelEditor = new GameObject("ModelEditor").AddComponent<HierarchyEditor>();
                 return modelEditor.GameObject;
@@ -55,13 +55,13 @@ namespace RomeEngineGame
         }
         static GameScene GamePlayScene()
         {
-            var camera = new GameObjectInstancer(() =>
+            var camera = new GameEntityInstancer(() =>
             {
                 var instance = new GameObject("Camera").AddComponent<Camera>();
                 instance.ClearColor = new Color32(0.3f, 0.5f, 0.6f, 1f);
                 return instance.GameObject;
             });
-            var light = new GameObjectInstancer(() =>
+            var light = new GameEntityInstancer(() =>
             {
                 var lightObject = new GameObject("Light").AddComponent<GlobalLight>();
 
@@ -72,12 +72,12 @@ namespace RomeEngineGame
             });
 
             var scene = new GameScene("Game scene");
-            scene.AddGameObjectInstancer(camera);
-            scene.AddGameObjectInstancer(light);
+            scene.AddGameEntityInstancer(camera);
+            scene.AddGameEntityInstancer(light);
 
-            scene.AddGameObjectInstancer(new GameObjectInstancer(() => new GameObject("Terrain").AddComponent<TerrainRenderer>().GameObject));
+            scene.AddGameEntityInstancer(new GameEntityInstancer(() => new GameObject("Terrain").AddComponent<TerrainRenderer>().GameObject));
 
-            scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
+            scene.AddGameEntityInstancer(new GameEntityInstancer(() =>
             {
                 var player = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
                 player.Name = "Player";
@@ -91,9 +91,9 @@ namespace RomeEngineGame
             for (int i = 0; i < 10; i++)
             {
                 int index = i;
-                scene.AddGameObjectInstancer(new GameObjectInstancer(() =>
+                scene.AddGameEntityInstancer(new GameEntityInstancer(() =>
                 {
-                    var sphere = Resources.LoadInstance<GameObject>("Models/Knight.bin");
+                    var sphere = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
                     sphere.Name = "Sphere";
                     sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
                     float angle = 36f * index;
@@ -105,7 +105,7 @@ namespace RomeEngineGame
                 }));
             }
 
-            scene.AddGameObjectInstancer(() =>
+            scene.AddGameEntityInstancer(() =>
             {
                 var canvas = new GameObject("Loop test").AddComponent<EditorCanvas>();
                 canvas.TextColor = Color32.white;

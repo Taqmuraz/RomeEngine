@@ -1,12 +1,12 @@
 ﻿namespace RomeEngine
 {
-	public class GameObjectInstancer
+	public class GameEntityInstancer
 	{
 		public delegate IGameObject InstantiateDelegate ();
 
 		InstantiateDelegate instantiateFunc;
 
-		public GameObjectInstancer(InstantiateDelegate instantiateFunc)
+		public GameEntityInstancer(InstantiateDelegate instantiateFunc)
 		{
 			if (instantiateFunc == null) throw new System.ArgumentNullException("instantiateFunc");
 			this.instantiateFunc = instantiateFunc;
