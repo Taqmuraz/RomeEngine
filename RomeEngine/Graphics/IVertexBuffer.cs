@@ -1,8 +1,6 @@
 ﻿namespace RomeEngine
 {
-    public interface IVertexBuffer<TElement>
+    public interface IVertexBuffer<TElement> : IBuffer<TElement>
     {
-        void Write(TElement value);
-        TElement[] ToArray();
     }
 }

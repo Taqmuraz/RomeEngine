@@ -14,5 +14,10 @@ namespace RomeEngineMeshGeneration
             }
             return stream.BuildMesh(provider.Descriptor, provider.Builder);
         }
+        public static IAsyncProcessHandle GenerateMeshAsync(IMeshGenerationProvider provider, Action<IMesh> callback)
+        {
+            var process = new AsyncProcess<IMesh>(() => GenerateMesh(provider), callback);
+            return process.Start();
+        }
     }
 }

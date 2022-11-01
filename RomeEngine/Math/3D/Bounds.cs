@@ -110,23 +110,31 @@ namespace RomeEngine
 		Vector3 PointOnAxis(Vector3 origin, Vector3 direction, float axisValue, int axis)
 		{
 			float length = Mathf.Abs(axisValue - origin[axis]);
-			return origin + direction * length;
+			return origin + direction * (length / direction[axis]);
+		}
+
+		void ClampRay(Ray ray, int axis, ref float rMin, ref float rMax)
+		{
+			if (ray.direction[axis] != 0f)
+			{
+				float r0 = (Min[axis] - ray.origin[axis]) / ray.direction[axis];
+				float r1 = (Max[axis] - ray.origin[axis]) / ray.direction[axis];
+				rMin = Mathf.Max(rMin, Mathf.Min(r0, r1));
+				rMax = Mathf.Min(rMax, Mathf.Max(r0, r1));
+			}
 		}
 
         public bool IntersectsRay(Ray ray)
         {
-			Vector3 max = Max;
-			Vector3 min = Min;
-			Vector3 minP = ray.origin;
-			Vector3 maxP = ray.origin;
+			float rMin = float.NegativeInfinity;
+			float rMax = float.PositiveInfinity;
 
-			for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
-				minP = PointOnAxis(minP, ray.direction, min[i], i);
-				maxP = PointOnAxis(maxP, ray.direction, max[i], i);
-			}
+				ClampRay(ray, i, ref rMin, ref rMax);
+            }
 
-			return (minP - maxP).length > Mathf.Epsilon;
+			return rMax >= rMin;
         }
     }
 }

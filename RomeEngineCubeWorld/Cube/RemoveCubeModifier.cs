@@ -8,9 +8,9 @@
         {
         }
 
-        public Cube ModifyCube(Cube cube)
+        public void ModifyCube(ICube cube)
         {
-            return cube.WithId(0);
+            cube.ChangeId(0);
         }
     }
 }

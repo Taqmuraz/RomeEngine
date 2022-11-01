@@ -4,13 +4,13 @@ namespace RomeEngineCubeWorld
 {
     public sealed class CubeCustomModifier : ICubeModifier
     {
-        Func<Cube, Cube> modifier;
+        Action<ICube> modifier;
 
-        public CubeCustomModifier(Func<Cube, Cube> modifier)
+        public CubeCustomModifier(Action<ICube> modifier)
         {
             this.modifier = modifier;
         }
 
-        public Cube ModifyCube(Cube cube) => modifier(cube);
+        public void ModifyCube(ICube cube) => modifier(cube);
     }
 }

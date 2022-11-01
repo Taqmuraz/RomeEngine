@@ -32,10 +32,10 @@ namespace RomeEngineCubeWorld
 
             if (Input.GetKeyDown(KeyCode.MouseL))
             {
-                if (cubeWorld.RaycastCube(new Ray(camera.Transform.Position, camera.Transform.Forward), out CubeCoords coords))
+                cubeWorld.RaycastCubeAsync(new Ray(camera.Transform.Position, camera.Transform.Forward), cube =>
                 {
-                    cubeWorld.ModifyCube(RemoveCubeModifier.Instance, coords);
-                }
+                    cubeWorld.ModifyCube(RemoveCubeModifier.Instance, cube.Position);
+                });
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))

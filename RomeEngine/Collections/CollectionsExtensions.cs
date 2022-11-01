@@ -36,6 +36,43 @@ public static class CollectionsExtensions
 		return -1;
 	}
 
+	public static TElement FindMin<TElement, TValue>(this IEnumerable<TElement> collection, Func<TElement, TValue> valueGetter) where TValue : IComparable
+	{
+		TValue min = default;
+		bool hasMin = false;
+		TElement minElement = default;
+
+		foreach (var element in collection)
+		{
+			var value = valueGetter(element);
+			if (!hasMin || value.CompareTo(min) < 0)
+			{
+				hasMin = true;
+				min = value;
+				minElement = element;
+			}
+		}
+		return minElement;
+	}
+	public static TElement FindMax<TElement, TValue>(this IEnumerable<TElement> collection, Func<TElement, TValue> valueGetter) where TValue : IComparable
+	{
+		TValue max = default;
+		bool hasMax = false;
+		TElement maxElement = default;
+
+		foreach (var element in collection)
+		{
+			var value = valueGetter(element);
+			if (!hasMax || value.CompareTo(max) > 0)
+			{
+				hasMax = true;
+				max = value;
+				maxElement = element;
+			}
+		}
+		return maxElement;
+	}
+
 	public static char[] StringSeparators { get; } = new char[] { ' ', '\n', '\r', '\t' };
 
 	public static string[] SeparateString(this string source)

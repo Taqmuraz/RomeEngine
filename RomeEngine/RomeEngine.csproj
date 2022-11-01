@@ -42,8 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Async\AsyncProcess.cs" />
+    <Compile Include="Async\IAsyncProcessHandle.cs" />
+    <Compile Include="Collections\Buffer.cs" />
     <Compile Include="Collections\CollectionsExtensions.cs" />
     <Compile Include="Collections\DynamicLinkedList.cs" />
+    <Compile Include="Collections\IBuffer.cs" />
     <Compile Include="Collections\ReadOnlyArray.cs" />
     <Compile Include="Collections\ReadOnlyArrayList.cs" />
     <Compile Include="Collections\SafeDictionary.cs" />

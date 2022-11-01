@@ -2,6 +2,6 @@
 {
     public interface ICubeModifier
     {
-        Cube ModifyCube(Cube cube);
+        void ModifyCube(ICube cube);
     }
 }

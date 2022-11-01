@@ -52,6 +52,8 @@ namespace RomeEngine
                             }
                         }
                     }
+
+                    locatables.Clear();
                 }
             }
         }

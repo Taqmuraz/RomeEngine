@@ -9,9 +9,9 @@
             this.id = id;
         }
 
-        public Cube ModifyCube(Cube cube)
+        public void ModifyCube(ICube cube)
         {
-            return cube.WithId(id);
+            cube.ChangeId(id);
         }
     }
 }

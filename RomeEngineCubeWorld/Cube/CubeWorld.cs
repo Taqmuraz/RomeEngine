@@ -1,4 +1,5 @@
 ﻿using RomeEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,33 +66,65 @@ namespace RomeEngineCubeWorld
         void IGameEntity.Activate(IGameEntityActivityProvider activityProvider) => activityProvider.Activate(this);
         void IGameEntity.Deactivate(IGameEntityActivityProvider activityProvider) => activityProvider.Activate(this);
 
-        public bool RaycastCube(Ray ray, out CubeCoords cube)
+        const int BufferSize = 200;
+        static IBuffer<ICube> nonAllocRaycastBuffer = new Buffer<ICube>(BufferSize);
+
+        public bool RaycastCube(Ray ray, out ICube cube)
         {
-            var cubes = RaycastCubes(ray);
-            if (cubes.Length != 0)
+            nonAllocRaycastBuffer.Reset();
+
+            RaycastCubesNonAlloc(ray, nonAllocRaycastBuffer);
+
+            if (nonAllocRaycastBuffer.Position != 0)
             {
-                cube = cubes[0];
+                cube = nonAllocRaycastBuffer.Enumerate().FindMin(c => (c.Position - ray.origin).length);
                 return true;
             }
             else
             {
-                cube = new CubeCoords();
+                cube = null;
                 return false;
             }
         }
-        public CubeCoords[] RaycastCubes(Ray ray)
+        public void RaycastCubesNonAlloc(Ray ray, IBuffer<ICube> buffer)
         {
-            List<CubeCoords> result = new List<CubeCoords>();
-
             chunksTree.VisitTree(new CustomTreeAcceptor<ICubeChunk>(chunks =>
             {
                 foreach (var chunk in chunks)
                 {
-                    result.AddRange(chunk.RaycastCubes(new Ray(ray.origin - chunk.Position, ray.direction)).Select(c => c + chunk.Position));
+                    var chunkRay = new Ray(ray.origin - chunk.Position, ray.direction);
+                    chunk.RaycastCubesNonAlloc(chunkRay, buffer);
                 }
             }, box => box.IntersectsRay(ray)));
+        }
 
-            return result.ToArray();
+        public IAsyncProcessHandle RaycastCubeAsync(Ray ray, Action<ICube> callback)
+        {
+            var process = new AsyncProcess<ICube>(() =>
+            {
+                if (RaycastCube(ray, out ICube cube))
+                {
+                    return cube;
+                }
+                return null;
+            }, cube =>
+            {
+                if (cube != null) callback(cube);
+            });
+
+            return process.Start();
+        }
+
+        public IAsyncProcessHandle RaycastCubesAsunc(Ray ray, Action<IEnumerable<ICube>> callback)
+        {
+            var process = new AsyncProcess<IEnumerable<ICube>>(() =>
+            {
+                var buffer = new Buffer<ICube>(BufferSize);
+                RaycastCubesNonAlloc(ray, buffer);
+                return buffer.Enumerate();
+            }, callback);
+
+            return process.Start();
         }
     }
 }
