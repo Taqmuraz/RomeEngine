@@ -1,6 +1,6 @@
 ﻿using RomeEngine;
 
-namespace RomeEngineGame
+namespace RomeEngineEditor
 {
     public abstract class HumanBlockState : HumanControlActorState
     {

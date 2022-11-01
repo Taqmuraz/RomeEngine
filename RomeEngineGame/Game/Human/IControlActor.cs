@@ -1,4 +1,4 @@
-﻿namespace RomeEngineGame
+﻿namespace RomeEngineEditor
 {
     public interface IControlActor
     {

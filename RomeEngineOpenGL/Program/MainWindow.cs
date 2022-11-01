@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using RomeEngine;
-using RomeEngineGame;
+using RomeEngineEditor;
 using System;
 using System.IO;
 
@@ -28,7 +28,7 @@ namespace RomeEngineOpenGL
 
             context = new OpenGLContext();
 
-            engine = RomeEngineGame.RomeEngineGame.StartGame(this);
+            engine = RomeEngineEditor.RomeEngineGame.StartGame(this);
             graphics = new OpenGLGraphics();
             context = new OpenGLContext();
             graphics2D = new OpenGLGraphics2D(context);

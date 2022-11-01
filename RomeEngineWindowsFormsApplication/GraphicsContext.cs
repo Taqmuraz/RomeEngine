@@ -27,5 +27,12 @@ namespace RomeEngineWindowsFormsApplication
                 return identifier;
             }
         }
+
+        public void UnloadMesh(IMeshIdentifier identifier)
+        {
+            var mesh = meshes[identifier];
+            meshes.Remove(identifier);
+            identifiers.Remove(mesh);
+        }
     }
 }

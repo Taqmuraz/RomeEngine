@@ -1,4 +1,6 @@
-﻿namespace RomeEngine
+﻿using System;
+
+namespace RomeEngine
 {
     public sealed class VertexBuffer<TElement> : IVertexBuffer<TElement>
     {
@@ -24,6 +26,26 @@
         public TElement[] ToArray()
         {
             return array;
+        }
+    }
+    public sealed class VertexBuffer : IVertexBuffer
+    {
+        int position;
+        Array buffer;
+
+        public VertexBuffer(int size, MeshAttributeType type)
+        {
+            buffer = Array.CreateInstance(type.GetElementType(), size);
+        }
+
+        public void Write(object value)
+        {
+            buffer.SetValue(value, position++);
+        }
+
+        public Array ToArray()
+        {
+            return buffer;
         }
     }
 }

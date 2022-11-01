@@ -3,7 +3,7 @@ using System.IO;
 
 using RomeEngine;
 
-namespace RomeEngineGame
+namespace RomeEngineEditor
 {
     public class StandardFileSystem : IFileSystem
     {

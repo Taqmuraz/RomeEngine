@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RomeEngineGame
+namespace RomeEngineEditor
 {
     public sealed class CustomControlAgentAction : IControlAction
     {

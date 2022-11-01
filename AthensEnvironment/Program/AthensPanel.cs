@@ -40,7 +40,7 @@ namespace AthensEnvironment
         }
 
         ISystemInfo IEngineRuntine.SystemInfo => this;
-        IFileSystem IEngineRuntine.FileSystem { get; } = new RomeEngineGame.StandardFileSystem();
+        IFileSystem IEngineRuntine.FileSystem { get; } = new RomeEngineEditor.StandardFileSystem();
 
         void IEngineRuntine.Close()
         {

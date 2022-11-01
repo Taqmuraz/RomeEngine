@@ -1,7 +1,7 @@
 ﻿using RomeEngine;
 using System.Linq;
 
-namespace RomeEngineGame
+namespace RomeEngineEditor
 {
     public abstract class HumanController : Component
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RomeEngineGame
+namespace RomeEngineEditor
 {
     public abstract class StateMachine<TKey, TState> : EventsHandler
         where TState : IState<TKey>

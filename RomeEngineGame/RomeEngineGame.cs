@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RomeEngineGame
+namespace RomeEngineEditor
 {
     public sealed class LevelSelectMenu : Component
     {

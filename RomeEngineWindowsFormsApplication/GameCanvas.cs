@@ -35,7 +35,7 @@ namespace RomeEngineWindowsFormsApplication
             SetBounds(0, 0, width, height);
 
             this.log = log;
-            engine = RomeEngineGame.RomeEngineGame.StartGame(this);
+            engine = RomeEngineEditor.RomeEngineGame.StartGame(this);
 
             Timer timer = new Timer();
             timer.Tick += (s, e) => UpdateEngine();
@@ -92,7 +92,7 @@ namespace RomeEngineWindowsFormsApplication
             RomeEngineStandardExplorerDialog.StandardFileDialog.ShowFileWriteDialog(root, fileName, title, callback);
         }
 
-        public IFileSystem FileSystem { get; } = new RomeEngineGame.StandardFileSystem();
+        public IFileSystem FileSystem { get; } = new RomeEngineEditor.StandardFileSystem();
 
         public void Close()
         {

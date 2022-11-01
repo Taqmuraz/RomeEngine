@@ -12,6 +12,7 @@ namespace RomeEngineOpenGL
         }
 
         public int VertexArrrayObjectIndex { get; }
+        public int[] VertexBufferObjectIndices { get; }
         public int IndicesNumber { get; }
         public IMesh SourceMesh { get; }
     }

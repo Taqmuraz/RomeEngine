@@ -1,7 +1,7 @@
 ﻿using RomeEngine;
 using RomeEngine.IO;
 
-namespace RomeEngineGame
+namespace RomeEngineEditor
 {
     public sealed class HumanAnimator : Animator
     {
