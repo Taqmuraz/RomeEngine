@@ -5,21 +5,6 @@ using System.Linq;
 
 namespace RomeEngineCubeWorld
 {
-    public struct CubeCoords
-    {
-        public int x;
-        public int y;
-        public int z;
-
-        public CubeCoords(int x, int y, int z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public static implicit operator Vector3 (CubeCoords coords) => new Vector3(coords.x, coords.y, coords.z);
-    }
     public sealed class CubeChunk : ICubeChunk, IMeshGenerationProvider, IMeshBuilder, IMeshDataDescriptor
     {
         int standardChunkWidth = 16;
@@ -33,7 +18,7 @@ namespace RomeEngineCubeWorld
             for (int i = 0; i < length; i++)
             {
                 GetCorrdsFromIndex(i, out CubeCoords coords);
-                cubes[coords.x, coords.y, coords.z] = new Cube(this);
+                cubes[coords.x, coords.y, coords.z] = new Cube(this, coords);
             }
         }
         public void ModifyCube(ICubeModifier modifier, CubeCoords coords)
