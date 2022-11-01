@@ -15,7 +15,6 @@ namespace RomeEngineCubeWorld
             camera = Camera.ActiveCamera;
             cubeWorld = CubeWorld.Instance;
         }
-        int id = 255;
         [BehaviourEvent]
         void Update()
         {
@@ -33,7 +32,10 @@ namespace RomeEngineCubeWorld
 
             if (Input.GetKeyDown(KeyCode.MouseL))
             {
-                cubeWorld.ModifyCube(new ChangeCubeIdModifier(0), new CubeCoords(0, id--, 0));
+                if (cubeWorld.RaycastCube(new Ray(camera.Transform.Position, camera.Transform.Forward), out CubeCoords coords))
+                {
+                    cubeWorld.ModifyCube(RemoveCubeModifier.Instance, coords);
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))

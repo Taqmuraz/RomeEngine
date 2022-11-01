@@ -1,7 +1,6 @@
 ﻿namespace RomeEngineCubeWorld
 {
-    public interface ICubeWorld
+    public interface ICubeWorld : ICubeSystem
     {
-        void ModifyCube(ICubeModifier modifier, CubeCoords coords);
     }
 }

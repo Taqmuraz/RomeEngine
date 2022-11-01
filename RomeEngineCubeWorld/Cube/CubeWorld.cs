@@ -32,7 +32,7 @@ namespace RomeEngineCubeWorld
         {
             foreach (var chunk in chunks)
             {
-                chunk.RebuildMesh();
+                chunk.Rebuild();
             }
             BuildChunksTree();
         }
@@ -64,5 +64,34 @@ namespace RomeEngineCubeWorld
 
         void IGameEntity.Activate(IGameEntityActivityProvider activityProvider) => activityProvider.Activate(this);
         void IGameEntity.Deactivate(IGameEntityActivityProvider activityProvider) => activityProvider.Activate(this);
+
+        public bool RaycastCube(Ray ray, out CubeCoords cube)
+        {
+            var cubes = RaycastCubes(ray);
+            if (cubes.Length != 0)
+            {
+                cube = cubes[0];
+                return true;
+            }
+            else
+            {
+                cube = new CubeCoords();
+                return false;
+            }
+        }
+        public CubeCoords[] RaycastCubes(Ray ray)
+        {
+            List<CubeCoords> result = new List<CubeCoords>();
+
+            chunksTree.VisitTree(new CustomTreeAcceptor<ICubeChunk>(chunks =>
+            {
+                foreach (var chunk in chunks)
+                {
+                    result.AddRange(chunk.RaycastCubes(new Ray(ray.origin - chunk.Position, ray.direction)).Select(c => c + chunk.Position));
+                }
+            }, box => box.IntersectsRay(ray)));
+
+            return result.ToArray();
+        }
     }
 }

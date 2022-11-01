@@ -221,6 +221,7 @@
     <Compile Include="IO\Serialization\TypesMap.cs" />
     <Compile Include="IO\Serialization\Vector2Serializer.cs" />
     <Compile Include="IO\Serialization\Vector3Serializer.cs" />
+    <Compile Include="Math\3D\Ray.cs" />
     <Compile Include="Math\3D\Bounds.cs" />
     <Compile Include="Math\3D\Matrix4x4.cs" />
     <Compile Include="Math\Color32.cs" />

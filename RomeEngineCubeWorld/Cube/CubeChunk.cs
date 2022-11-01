@@ -15,6 +15,7 @@ namespace RomeEngineCubeWorld
         CubeCoords position;
         CubeCoords size;
         CubeChunkMeshRenderer chunkRenderer;
+        Octotree<ICube> cubesTree;
 
         public int Width => standardChunkWidth;
         public int Height => standardChunkHeight;
@@ -35,6 +36,13 @@ namespace RomeEngineCubeWorld
                 cubes[coords.x, coords.y, coords.z] = new Cube(this, coords);
             }
         }
+
+        void RebuildTree()
+        {
+            cubesTree = new Octotree<ICube>(Bounds, 5, 4);
+            foreach (var cube in EnumerateCubes()) cubesTree.AddLocatable(cube);
+        }
+
         public void ModifyCube(ICubeModifier modifier, CubeCoords coords)
         {
             cubes[coords.x, coords.y, coords.z] = modifier.ModifyCube(cubes[coords.x, coords.y, coords.z]);
@@ -80,7 +88,7 @@ namespace RomeEngineCubeWorld
                 coords.z >= 0 && coords.z < size.z;
         }
 
-        bool ICubeChunk.TryGetCube(CubeCoords coords, out Cube cube)
+        bool ICubeChunk.TryGetCube(CubeCoords coords, out ICube cube)
         {
             bool check = CheckCoords(coords);
             cube = check ? cubes[coords.x, coords.y, coords.z] : null;
@@ -98,11 +106,38 @@ namespace RomeEngineCubeWorld
 
         Bounds ICubeChunk.Bounds { get; }
 
-        void ICubeChunk.RebuildMesh()
+        void ICubeChunk.Rebuild()
         {
             chunkRenderer.UpdateMesh(MeshGenerator.GenerateMesh(this));
+            RebuildTree();
         }
 
         CubeCoords ICubeChunk.Position => position;
+
+        public bool RaycastCube(Ray ray, out CubeCoords cube)
+        {
+            var cubes = RaycastCubes(ray);
+            if (cubes.Length != 0)
+            {
+                cube = cubes[0];
+                return true;
+            }
+            else
+            {
+                cube = new CubeCoords();
+                return false;
+            }
+        }
+        public CubeCoords[] RaycastCubes(Ray ray)
+        {
+            List<CubeCoords> result = new List<CubeCoords>();
+
+            cubesTree.VisitTree(new CustomTreeAcceptor<ICube>(cubes =>
+            {
+                result.AddRange(cubes.Where(c => c.Id != Cube.AirCubeId && c.Bounds.IntersectsRay(ray)).Select(c => c.Location));
+            }, box => box.IntersectsRay(ray)));
+
+            return result.OrderBy(r => (r - ray.origin).length).ToArray();
+        }
     }
 }

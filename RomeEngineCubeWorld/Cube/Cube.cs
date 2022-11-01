@@ -6,7 +6,7 @@ using RomeEngineMeshGeneration;
 
 namespace RomeEngineCubeWorld
 {
-    public class Cube : IMeshElementGenerator
+    public class Cube : ICube, IMeshElementGenerator
     {
         sealed class CubeVertex : IMeshVertex
         {
@@ -69,7 +69,12 @@ namespace RomeEngineCubeWorld
         ICubeChunk chunk;
         CubeCoords coords;
         int cubeId;
-        const int AirCubeId = 0;
+        public const int AirCubeId = 0;
+
+        int ICube.Id => cubeId;
+        CubeCoords ICube.Location => coords;
+        Bounds ICube.Bounds => Bounds.FromMinSize(coords, Vector3.one);
+        ICubeChunk ICube.Chunk => chunk;
 
         public Cube(ICubeChunk chunk, CubeCoords cubeCoords)
         {
@@ -109,7 +114,7 @@ namespace RomeEngineCubeWorld
 
         static bool IsEmptySpace(ICubeChunk chunk, CubeCoords coords)
         {
-            return !chunk.TryGetCube(coords, out Cube cube) || cube.cubeId == AirCubeId;
+            return !chunk.TryGetCube(coords, out ICube cube) || cube.Id == AirCubeId;
         }
 
         void IMeshElementGenerator.WriteElement(IMeshStream stream)
@@ -122,6 +127,11 @@ namespace RomeEngineCubeWorld
             if (IsEmptySpace(chunk, coords + new CubeCoords(1, 0, 0))) WriteSide(stream, this, 1, 2, 6, 5);
             if (IsEmptySpace(chunk, coords + new CubeCoords(0, 0, 1))) WriteSide(stream, this, 2, 3, 7, 6);
             if (IsEmptySpace(chunk, coords + new CubeCoords(-1, 0, 0))) WriteSide(stream, this, 3, 0, 4, 7);
+        }
+
+        bool ILocatable.IsInsideBox(Bounds box)
+        {
+            return box.IntersectsWith(Bounds.FromMinSize(coords, Vector3.one));
         }
     }
 }

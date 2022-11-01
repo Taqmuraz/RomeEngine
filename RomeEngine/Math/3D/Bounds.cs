@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RomeEngine
 {
@@ -105,5 +106,27 @@ namespace RomeEngine
 				return FromPoints(rotationBuffer);
 			}
 		}
+
+		Vector3 PointOnAxis(Vector3 origin, Vector3 direction, float axisValue, int axis)
+		{
+			float length = Mathf.Abs(axisValue - origin[axis]);
+			return origin + direction * length;
+		}
+
+        public bool IntersectsRay(Ray ray)
+        {
+			Vector3 max = Max;
+			Vector3 min = Min;
+			Vector3 minP = ray.origin;
+			Vector3 maxP = ray.origin;
+
+			for (int i = 0; i < 3; i++)
+            {
+				minP = PointOnAxis(minP, ray.direction, min[i], i);
+				maxP = PointOnAxis(maxP, ray.direction, max[i], i);
+			}
+
+			return (minP - maxP).length > Mathf.Epsilon;
+        }
     }
 }

@@ -2,12 +2,11 @@
 
 namespace RomeEngineCubeWorld
 {
-    public interface ICubeChunk : ICubeInfoProvider, ILocatable
+    public interface ICubeChunk : ICubeSystem, ICubeInfoProvider, ILocatable
     {
-        void ModifyCube(ICubeModifier modifier, CubeCoords coords);
-        bool TryGetCube(CubeCoords coords, out Cube cube);
+        bool TryGetCube(CubeCoords coords, out ICube cube);
         Bounds Bounds { get; }
         CubeCoords Position { get; }
-        void RebuildMesh();
+        void Rebuild();
     }
 }
