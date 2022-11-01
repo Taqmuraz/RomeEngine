@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>ae8a87ea-ad0d-4b31-bf2b-a082fbded40c</ProjectGuid>
+    <ProjectGuid>{AE8A87EA-AD0D-4B31-BF2B-A082FBDED40C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RomeEngineEditor</RootNamespace>
@@ -31,24 +31,56 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System"/>
-    
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Xml.Linq"/>
-    <Reference Include="System.Data.DataSetExtensions"/>
-    
-    
-    <Reference Include="Microsoft.CSharp"/>
-    
-    <Reference Include="System.Data"/>
-    
-    <Reference Include="System.Net.Http"/>
-    
-    <Reference Include="System.Xml"/>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Editor\AnimationMenu.cs" />
+    <Compile Include="Editor\ColorSelectMenu.cs" />
+    <Compile Include="Editor\DropdownMenu.cs" />
+    <Compile Include="Editor\Editor.cs" />
+    <Compile Include="Editor\EditorCanvas.cs" />
+    <Compile Include="Editor\EditorMenu.cs" />
+    <Compile Include="Editor\FileSearchMenu.cs" />
+    <Compile Include="Editor\FpsRenderer.cs" />
+    <Compile Include="Editor\HierarchyEditor\HierarchyEditor.cs" />
+    <Compile Include="Editor\HierarchyEditor\ITransformHandle.cs" />
+    <Compile Include="Editor\Inspector\AnimatorInspector.cs" />
+    <Compile Include="Editor\Inspector\ArrayFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\BoolFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\CollectionFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\ColorFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\DefaultFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\DefaultObjectInspector.cs" />
+    <Compile Include="Editor\Inspector\FloatFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\GameObjectInspector.cs" />
+    <Compile Include="Editor\Inspector\IFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\InspectorMenu.cs" />
+    <Compile Include="Editor\Inspector\IntFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\IObjectInspector.cs" />
+    <Compile Include="Editor\Inspector\ListFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\MaterialFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\MeshFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\ObjectInspector.cs" />
+    <Compile Include="Editor\Inspector\PrimitiveTypeFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\SerializableFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\StringFieldInspector.cs" />
+    <Compile Include="Editor\Inspector\Vector2FieldInspector.cs" />
+    <Compile Include="Editor\Inspector\Vector3FieldInspector.cs" />
+    <Compile Include="Editor\StringInputMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RomeEngine\RomeEngine.csproj">
+      <Project>{bfb7b952-3abf-4258-9427-07d40ff4c0e1}</Project>
+      <Name>RomeEngine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
- </Project>
+</Project>

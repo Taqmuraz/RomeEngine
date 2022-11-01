@@ -1,6 +1,7 @@
 ﻿using RomeEngine;
 using RomeEngine.IO;
 using RomeEngine.UI;
+using RomeEngineCubeWorld;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -87,6 +88,27 @@ namespace RomeEngineEditor
                 player.Transform.Position = new Vector3(0f, 0f, 0f);
                 return player;
             }));
+
+            scene.AddGameEntityInstancer(() =>
+            {
+                var chunk = new CubeChunk();
+                chunk.ModifyCube(new CubeCustomModifier(c => c.WithId(1)), new CubeCoords(3, 1, 3));
+                for (int x = 0; x < chunk.Width; x++)
+                {
+                    for (int y = 0; y < chunk.Width; y++)
+                    {
+                        if (((x + y) & 1) == 0) continue;
+
+                        chunk.ModifyCube(new CubeCustomModifier(c => c.WithId(y)), new CubeCoords(x, 0, y));
+                    }
+                }
+                var mesh = chunk.BuildMesh();
+                var rendererEntity = new GameObject("CubeRenderer");
+                var renderer = rendererEntity.AddComponent<GenericMeshRenderer>();
+                renderer.GenericMesh = mesh;
+                renderer.Material = new SingleTextureMaterial("Grass") { TextureFileName = "./Resources/Textures/BlocksMap.jpg" };
+                return rendererEntity;
+            });
 
             for (int i = 0; i < 10; i++)
             {

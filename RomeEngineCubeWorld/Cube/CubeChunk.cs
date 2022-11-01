@@ -5,11 +5,19 @@ using System.Linq;
 
 namespace RomeEngineCubeWorld
 {
+    public interface ICubeInfoProvider
+    {
+        ICubeTextureProvider TextureProvider { get; }
+    }
     public sealed class CubeChunk : ICubeChunk, IMeshGenerationProvider, IMeshBuilder, IMeshDataDescriptor
     {
         int standardChunkWidth = 16;
         int standardChunkHeight = 256;
         Cube[,,] cubes;
+        ICubeTextureProvider defaultProvider = new CubeDefaultTextureProvider(4, 4);
+
+        public int Width => standardChunkWidth;
+        public int Height => standardChunkHeight;
 
         public CubeChunk()
         {
@@ -72,5 +80,12 @@ namespace RomeEngineCubeWorld
             cube = check ? cubes[coords.x, coords.y, coords.z] : null;
             return check;
         }
+
+        public IMesh BuildMesh()
+        {
+            return MeshGenerator.GenerateMesh(this);
+        }
+
+        ICubeTextureProvider ICubeInfoProvider.TextureProvider => defaultProvider;
     }
 }

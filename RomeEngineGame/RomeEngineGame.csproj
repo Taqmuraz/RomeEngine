@@ -41,32 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Editor\DropdownMenu.cs" />
-    <Compile Include="Editor\HierarchyEditor\ITransformHandle.cs" />
-    <Compile Include="Editor\Inspector\AnimatorInspector.cs" />
-    <Compile Include="Editor\Inspector\ArrayFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\BoolFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\CollectionFieldInspector.cs" />
-    <Compile Include="Editor\ColorSelectMenu.cs" />
-    <Compile Include="Editor\Inspector\ColorFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\DefaultFieldInspector.cs" />
-    <Compile Include="Editor\Editor.cs" />
-    <Compile Include="Editor\FpsRenderer.cs" />
-    <Compile Include="Editor\Inspector\DefaultObjectInspector.cs" />
-    <Compile Include="Editor\Inspector\FloatFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\GameObjectInspector.cs" />
-    <Compile Include="Editor\Inspector\IFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\IntFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\IObjectInspector.cs" />
-    <Compile Include="Editor\Inspector\ListFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\MaterialFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\MeshFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\ObjectInspector.cs" />
-    <Compile Include="Editor\Inspector\PrimitiveTypeFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\StringFieldInspector.cs" />
-    <Compile Include="Editor\Inspector\Vector2FieldInspector.cs" />
-    <Compile Include="Editor\HierarchyEditor\HierarchyEditor.cs" />
-    <Compile Include="Editor\Inspector\Vector3FieldInspector.cs" />
     <Compile Include="Samples\TerrainRenderer.cs" />
     <Compile Include="StandardFileSystem.cs" />
     <Compile Include="Samples\EulerRotationAnimation.cs" />
@@ -89,13 +63,6 @@
     <Compile Include="Game\StateMachine\StateMachine.cs" />
     <Compile Include="RomeEngineGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Editor\AnimationMenu.cs" />
-    <Compile Include="Editor\FileSearchMenu.cs" />
-    <Compile Include="Editor\EditorMenu.cs" />
-    <Compile Include="Editor\Inspector\SerializableFieldInspector.cs" />
-    <Compile Include="Editor\StringInputMenu.cs" />
-    <Compile Include="Editor\EditorCanvas.cs" />
-    <Compile Include="Editor\Inspector\InspectorMenu.cs" />
     <Compile Include="Game\HumanState\HumanAnimatedConstantMoveState.cs" />
     <Compile Include="Game\HumanState\HumanRetreatAttackState.cs" />
     <Compile Include="Game\Human\IControlActor.cs" />
@@ -104,6 +71,14 @@
     <Compile Include="Game\Human\EmptyControlAgentAction.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RomeEngineCubeWorld\RomeEngineCubeWorld.csproj">
+      <Project>{03d5c496-b444-44ee-8150-20261cae28f2}</Project>
+      <Name>RomeEngineCubeWorld</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RomeEngineEditor\RomeEngineEditor.csproj">
+      <Project>{ae8a87ea-ad0d-4b31-bf2b-a082fbded40c}</Project>
+      <Name>RomeEngineEditor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RomeEngine\RomeEngine.csproj">
       <Project>{BFB7B952-3ABF-4258-9427-07D40FF4C0E1}</Project>
       <Name>RomeEngine</Name>

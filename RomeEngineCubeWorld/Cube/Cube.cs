@@ -31,13 +31,13 @@ namespace RomeEngineCubeWorld
                         buffer.Write(position.z);
                         break;
                     case 1:
+                        buffer.Write(uv.x);
+                        buffer.Write(uv.y);
+                        break;
+                    case 2:
                         buffer.Write(normal.x);
                         buffer.Write(normal.y);
                         buffer.Write(normal.z);
-                        break;
-                    case 2:
-                        buffer.Write(uv.x);
-                        buffer.Write(uv.y);
                         break;
                 }
             }
@@ -60,7 +60,10 @@ namespace RomeEngineCubeWorld
             new Vector2(0f, 0f),
             new Vector2(1f, 0f),
             new Vector2(1f, 1f),
+
+            new Vector2(1f, 1f),
             new Vector2(0f, 1f),
+            new Vector2(0f, 0f),
         };
 
         ICubeChunk chunk;
@@ -82,26 +85,38 @@ namespace RomeEngineCubeWorld
             this.coords = cubeCoords;
         }
 
-        static void WriteSide(IMeshStream stream, CubeCoords cubeCoords, int a, int b, int c, int d)
+        public Cube WithId(int id)
+        {
+            cubeId = id;
+            return this;
+        }
+
+        static Vector2 TransformUv(Cube cube, Vector2 uv)
+        {
+            Rect rect = cube.chunk.TextureProvider.GetUvRect(cube.cubeId);
+            return rect.min + rect.Size * uv;
+        }
+
+        static void WriteSide(IMeshStream stream, Cube cube, int a, int b, int c, int d)
         {
             stream.PushStartIndex();
-            int[] indices = new int[] { a, b, c, b, c, d };
-            stream.WriteIndices(indices);
+            int[] rawIndices = new int[] { a, b, c, c, d, a };
+            stream.WriteIndices(Enumerable.Range(0, rawIndices.Length));
             Vector3 normal = Vector3.Cross(cubeVertices[b] - cubeVertices[a], cubeVertices[d] - cubeVertices[a]).normalized;
             int uvIndex = 0;
-            stream.WriteVertices(indices.Select(i => new CubeVertex(cubeVertices[i] + cubeCoords, normal, cubeUVs[uvIndex++])));
+            stream.WriteVertices(rawIndices.Select(i => new CubeVertex(cubeVertices[i] + cube.coords, normal, TransformUv(cube, cubeUVs[uvIndex++]))));
         }
 
         void IMeshElementGenerator.WriteElement(IMeshStream stream)
         {
             if (cubeId == AirCubeId) return;
 
-            WriteSide(stream, coords, 0, 1, 2, 3);
-            WriteSide(stream, coords, 0, 4, 5, 1);
-            WriteSide(stream, coords, 1, 5, 6, 2);
-            WriteSide(stream, coords, 2, 6, 7, 3);
-            WriteSide(stream, coords, 3, 7, 4, 0);
-            WriteSide(stream, coords, 4, 5, 6, 7);
+            WriteSide(stream, this, 0, 3, 2, 1);
+            WriteSide(stream, this, 4, 5, 6, 7);
+            WriteSide(stream, this, 0, 1, 5, 4);
+            WriteSide(stream, this, 1, 2, 6, 5);
+            WriteSide(stream, this, 2, 3, 7, 6);
+            WriteSide(stream, this, 3, 0, 4, 7);
         }
     }
 }

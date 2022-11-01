@@ -8,8 +8,8 @@ namespace RomeEngineCubeWorld
         public static IMeshAttributeInfo[] ChunkMeshAttributes { get; } = new IMeshAttributeInfo[]
         {
             new CustomMeshAttribute(3, MeshAttributeType.Float),
-            new CustomMeshAttribute(3, MeshAttributeType.Float),
             new CustomMeshAttribute(2, MeshAttributeType.Float),
+            new CustomMeshAttribute(3, MeshAttributeType.Float),
         };
 
         int[] indices;

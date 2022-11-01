@@ -76,6 +76,7 @@
     <Compile Include="Game\Instancing\SerializableInstancer.cs" />
     <Compile Include="Game\Instancing\SourceObjectInstancer.cs" />
     <Compile Include="Game\ISourceObject.cs" />
+    <Compile Include="Game\Rendering\StaticMesh\GenericMeshRenderer.cs" />
     <Compile Include="Game\Transform\ITransform.cs" />
     <Compile Include="Game\Physics\CollisionInfo.cs" />
     <Compile Include="Game\Physics\ContactInfo.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="Game\Routine\RepeatingActionRoutine.cs" />
     <Compile Include="Game\Routine\SingleCallRoutine.cs" />
     <Compile Include="Game\Transform\Transform.cs" />
+    <Compile Include="Graphics\IVertexBufferCommon.cs" />
+    <Compile Include="Graphics\MeshAttributeTypeExtensions.cs" />
+    <Compile Include="Graphics\VertexBufferCommon.cs" />
     <Compile Include="Input\CursorState.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaAnimation.cs" />
     <Compile Include="IO\Parsing\Collada\ColladaAnimationBlendMode.cs" />
