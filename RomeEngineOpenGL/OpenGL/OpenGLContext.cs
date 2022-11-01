@@ -86,7 +86,7 @@ namespace RomeEngineOpenGL
 
                 UnbindVAO();
 
-                var identifier = new OpenGLMeshIdentifier(indices.Length, vaoID, mesh);
+                var identifier = new OpenGLMeshIdentifier(indices.Length, vaoID, vbos, mesh);
                 meshIdentifiers.Add(mesh, identifier);
                 return identifier;
             }
@@ -137,6 +137,7 @@ namespace RomeEngineOpenGL
             {
                 GL.DeleteVertexArray(oglIdentifier.VertexArrrayObjectIndex);
                 GL.DeleteBuffers(oglIdentifier.VertexBufferObjectIndices.Length, oglIdentifier.VertexBufferObjectIndices);
+                oglIdentifier.Released = true;
             }
         }
     }

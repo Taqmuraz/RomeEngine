@@ -1,28 +1,34 @@
 ﻿using RomeEngine;
+using RomeEngine.IO;
 using RomeEngineMeshGeneration;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace RomeEngineCubeWorld
 {
-    public interface ICubeInfoProvider
-    {
-        ICubeTextureProvider TextureProvider { get; }
-    }
     public sealed class CubeChunk : ICubeChunk, IMeshGenerationProvider, IMeshBuilder, IMeshDataDescriptor
     {
         int standardChunkWidth = 16;
         int standardChunkHeight = 256;
         Cube[,,] cubes;
         ICubeTextureProvider defaultProvider = new CubeDefaultTextureProvider(4, 4);
+        CubeCoords position;
+        CubeCoords size;
+        CubeChunkMeshRenderer chunkRenderer;
 
         public int Width => standardChunkWidth;
         public int Height => standardChunkHeight;
 
-        public CubeChunk()
+        public CubeChunk(CubeCoords position)
         {
-            int length = standardChunkWidth * standardChunkHeight * standardChunkWidth;
-            cubes = new Cube[standardChunkWidth, standardChunkHeight, standardChunkWidth];
+            chunkRenderer = new GameObject($"Chunk {position}").ActivateForActiveScene().AddComponent<CubeChunkMeshRenderer>();
+            chunkRenderer.Material = new SingleTextureMaterial("Grass") { TextureFileName = "./Resources/Textures/BlocksMap.jpg" };
+
+            this.position = position;
+            this.size = new CubeCoords(standardChunkWidth, standardChunkHeight, standardChunkWidth);
+
+            int length = size.x * size.y * size.z;
+            cubes = new Cube[size.x, size.y, size.z];
             for (int i = 0; i < length; i++)
             {
                 GetCorrdsFromIndex(i, out CubeCoords coords);
@@ -38,15 +44,15 @@ namespace RomeEngineCubeWorld
         {
             coords = new CubeCoords()
             {
-                x = index % standardChunkWidth,
-                z = (index / standardChunkWidth) % standardChunkWidth,
-                y = (index / (standardChunkWidth * standardChunkWidth)),
+                x = index % size.x,
+                z = (index / size.x) % size.z,
+                y = (index / (size.x * size.z)),
             };
         }
 
         IEnumerable<Cube> EnumerateCubes()
         {
-            int length = standardChunkWidth * standardChunkHeight * standardChunkWidth;
+            int length = size.x * size.y * size.z;
 
             for (int i = 0; i < length; i++)
             {
@@ -69,9 +75,9 @@ namespace RomeEngineCubeWorld
         bool CheckCoords(CubeCoords coords)
         {
             return 
-                coords.x >= 0 && coords.x < standardChunkWidth &&
-                coords.y >= 0 && coords.y < standardChunkHeight &&
-                coords.z >= 0 && coords.z < standardChunkWidth;
+                coords.x >= 0 && coords.x < size.x &&
+                coords.y >= 0 && coords.y < size.y &&
+                coords.z >= 0 && coords.z < size.z;
         }
 
         bool ICubeChunk.TryGetCube(CubeCoords coords, out Cube cube)
@@ -81,11 +87,22 @@ namespace RomeEngineCubeWorld
             return check;
         }
 
-        public IMesh BuildMesh()
+        ICubeTextureProvider ICubeInfoProvider.TextureProvider => defaultProvider;
+
+        bool ILocatable.IsInsideBox(Bounds box)
         {
-            return MeshGenerator.GenerateMesh(this);
+            return Bounds.IntersectsWith(box);
         }
 
-        ICubeTextureProvider ICubeInfoProvider.TextureProvider => defaultProvider;
+        public Bounds Bounds => Bounds.FromMinSize(position, size);
+
+        Bounds ICubeChunk.Bounds { get; }
+
+        void ICubeChunk.RebuildMesh()
+        {
+            chunkRenderer.UpdateMesh(MeshGenerator.GenerateMesh(this));
+        }
+
+        CubeCoords ICubeChunk.Position => position;
     }
 }

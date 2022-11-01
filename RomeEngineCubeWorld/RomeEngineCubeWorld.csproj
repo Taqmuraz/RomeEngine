@@ -41,15 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cube\ChangeCubeIdModifier.cs" />
     <Compile Include="Cube\Cube.cs" />
     <Compile Include="Cube\CubeChunk.cs" />
     <Compile Include="Cube\CubeChunkMesh.cs" />
+    <Compile Include="Cube\CubeChunkMeshRenderer.cs" />
     <Compile Include="Cube\CubeCoords.cs" />
     <Compile Include="Cube\CubeCustomModifier.cs" />
     <Compile Include="Cube\CubeDefaultTextureProvider.cs" />
+    <Compile Include="Cube\CubeWorld.cs" />
     <Compile Include="Cube\ICubeChunk.cs" />
+    <Compile Include="Cube\ICubeInfoProvider.cs" />
     <Compile Include="Cube\ICubeModifier.cs" />
     <Compile Include="Cube\ICubeTextureProvider.cs" />
+    <Compile Include="Cube\ICubeWorld.cs" />
+    <Compile Include="Cube\PlayerController.cs" />
+    <Compile Include="Cube\RemoveCubeModifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -79,6 +79,10 @@
       <Project>{ae8a87ea-ad0d-4b31-bf2b-a082fbded40c}</Project>
       <Name>RomeEngineEditor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RomeEngineMeshGeneration\RomeEngineMeshGeneration.csproj">
+      <Project>{BA7DD8FF-F68B-48A7-BA8C-DA35D8A0EAA6}</Project>
+      <Name>RomeEngineMeshGeneration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RomeEngine\RomeEngine.csproj">
       <Project>{BFB7B952-3ABF-4258-9427-07D40FF4C0E1}</Project>
       <Name>RomeEngine</Name>

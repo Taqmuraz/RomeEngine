@@ -30,6 +30,10 @@ namespace RomeEngine
 		{
 			return new Bounds((min + max) * 0.5f, max - min);
 		}
+		public static Bounds FromMinSize(Vector3 min, Vector3 size)
+		{
+			return new Bounds(min + size * 0.5f, size);
+		}
 		public static Bounds FromPoints(IEnumerable<Vector3> points)
 		{
 			Bounds bounds = new Bounds();

@@ -2,7 +2,7 @@
 {
 	public class GameEntityInstancer
 	{
-		public delegate IGameObject InstantiateDelegate ();
+		public delegate IGameEntity InstantiateDelegate ();
 
 		InstantiateDelegate instantiateFunc;
 
@@ -12,7 +12,7 @@
 			this.instantiateFunc = instantiateFunc;
 		}
 
-		public IGameObject Instantiate()
+		public IGameEntity Instantiate()
 		{
 			return instantiateFunc();
 		}

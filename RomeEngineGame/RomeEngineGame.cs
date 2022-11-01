@@ -78,39 +78,26 @@ namespace RomeEngineEditor
 
             scene.AddGameEntityInstancer(new GameEntityInstancer(() => new GameObject("Terrain").AddComponent<TerrainRenderer>().GameObject));
 
-            scene.AddGameEntityInstancer(new GameEntityInstancer(() =>
-            {
-                var player = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
-                player.Name = "Player";
-                player.AddComponent<PlayerController>();
-                //var collider = player.AddComponent<SphereCollider>();
-                //collider.PhysicalBody = new SimpleDynamicBody(player.Transform);
-                player.Transform.Position = new Vector3(0f, 0f, 0f);
-                return player;
-            }));
 
             scene.AddGameEntityInstancer(() =>
             {
-                var chunk = new CubeChunk();
-                for (int x = 0; x < chunk.Width; x++)
-                {
-                    for (int y = 0; y < chunk.Width; y++)
-                    {
-                        for (int z = 0; z < chunk.Height; z++)
-                        {
-                            chunk.ModifyCube(new CubeCustomModifier(c => c.WithId(y)), new CubeCoords(x, z, y));
-                        }
-                    }
-                }
-                for (int i = 0; i < 5; i++) chunk.ModifyCube(new CubeCustomModifier(c => c.WithId(0)), new CubeCoords(5, 1 + i, 5));
+                var cubeWorld = new CubeWorld(new[] { new CubeChunk(new CubeCoords()) });
 
-                var mesh = chunk.BuildMesh();
-                var rendererEntity = new GameObject("CubeRenderer");
-                var renderer = rendererEntity.AddComponent<GenericMeshRenderer>();
-                renderer.GenericMesh = mesh;
-                renderer.Material = new SingleTextureMaterial("Grass") { TextureFileName = "./Resources/Textures/BlocksMap.jpg" };
-                return rendererEntity;
+                for (int y = 0; y < 255; y++)
+                {
+                    cubeWorld.ModifyCube(new ChangeCubeIdModifier(1), new CubeCoords(0, y, 0));
+                }
+
+                return cubeWorld;
             });
+
+            scene.AddGameEntityInstancer(new GameEntityInstancer(() =>
+            {
+                var player = new GameObject("Player");
+                player.AddComponent<RomeEngineCubeWorld.PlayerController>();
+                player.Transform.Position = new Vector3(0f, 256f, 0f);
+                return player;
+            }));
 
             for (int i = 0; i < 10; i++)
             {
