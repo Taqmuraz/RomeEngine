@@ -107,16 +107,21 @@ namespace RomeEngineCubeWorld
             stream.WriteVertices(rawIndices.Select(i => new CubeVertex(cubeVertices[i] + cube.coords, normal, TransformUv(cube, cubeUVs[uvIndex++]))));
         }
 
+        static bool IsEmptySpace(ICubeChunk chunk, CubeCoords coords)
+        {
+            return !chunk.TryGetCube(coords, out Cube cube) || cube.cubeId == AirCubeId;
+        }
+
         void IMeshElementGenerator.WriteElement(IMeshStream stream)
         {
             if (cubeId == AirCubeId) return;
 
-            WriteSide(stream, this, 0, 3, 2, 1);
-            WriteSide(stream, this, 4, 5, 6, 7);
-            WriteSide(stream, this, 0, 1, 5, 4);
-            WriteSide(stream, this, 1, 2, 6, 5);
-            WriteSide(stream, this, 2, 3, 7, 6);
-            WriteSide(stream, this, 3, 0, 4, 7);
+            if (IsEmptySpace(chunk, coords + new CubeCoords(0, 1, 0))) WriteSide(stream, this, 0, 3, 2, 1);
+            if (IsEmptySpace(chunk, coords + new CubeCoords(0, -1, 0))) WriteSide(stream, this, 4, 5, 6, 7);
+            if (IsEmptySpace(chunk, coords + new CubeCoords(0, 0, -1))) WriteSide(stream, this, 0, 1, 5, 4);
+            if (IsEmptySpace(chunk, coords + new CubeCoords(1, 0, 0))) WriteSide(stream, this, 1, 2, 6, 5);
+            if (IsEmptySpace(chunk, coords + new CubeCoords(0, 0, 1))) WriteSide(stream, this, 2, 3, 7, 6);
+            if (IsEmptySpace(chunk, coords + new CubeCoords(-1, 0, 0))) WriteSide(stream, this, 3, 0, 4, 7);
         }
     }
 }

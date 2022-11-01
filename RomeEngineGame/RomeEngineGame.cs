@@ -92,16 +92,18 @@ namespace RomeEngineEditor
             scene.AddGameEntityInstancer(() =>
             {
                 var chunk = new CubeChunk();
-                chunk.ModifyCube(new CubeCustomModifier(c => c.WithId(1)), new CubeCoords(3, 1, 3));
                 for (int x = 0; x < chunk.Width; x++)
                 {
                     for (int y = 0; y < chunk.Width; y++)
                     {
-                        if (((x + y) & 1) == 0) continue;
-
-                        chunk.ModifyCube(new CubeCustomModifier(c => c.WithId(y)), new CubeCoords(x, 0, y));
+                        for (int z = 0; z < chunk.Height; z++)
+                        {
+                            chunk.ModifyCube(new CubeCustomModifier(c => c.WithId(y)), new CubeCoords(x, z, y));
+                        }
                     }
                 }
+                for (int i = 0; i < 5; i++) chunk.ModifyCube(new CubeCustomModifier(c => c.WithId(0)), new CubeCoords(5, 1 + i, 5));
+
                 var mesh = chunk.BuildMesh();
                 var rendererEntity = new GameObject("CubeRenderer");
                 var renderer = rendererEntity.AddComponent<GenericMeshRenderer>();

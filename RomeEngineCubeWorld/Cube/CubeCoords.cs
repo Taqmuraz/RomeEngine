@@ -16,5 +16,7 @@ namespace RomeEngineCubeWorld
         }
 
         public static implicit operator Vector3 (CubeCoords coords) => new Vector3(coords.x, coords.y, coords.z);
+        public static CubeCoords operator +(CubeCoords a, CubeCoords b) => new CubeCoords(a.x + b.x, a.y + b.y, a.z + b.z);
+        public static CubeCoords operator -(CubeCoords a, CubeCoords b) => new CubeCoords(a.x - b.x, a.y - b.y, a.z - b.z);
     }
 }
