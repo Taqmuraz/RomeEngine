@@ -5,7 +5,6 @@ namespace RomeEngineCubeWorld
 {
     public interface ICube : IMeshElementGenerator, ILocatable
     {
-        CubeCoords LocalPosition { get; }
         CubeCoords Position { get; }
         Bounds Bounds { get; }
         int Id { get; }

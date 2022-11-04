@@ -33,6 +33,16 @@ namespace RomeEngine
 				default: return new Vector4();
 			}
 		}
+		public void SetColumn(int index, Vector4 value)
+		{
+			switch (index)
+			{
+				case 0: column_0 = value; break;
+				case 1: column_1 = value; break;
+				case 2: column_2 = value; break;
+				case 3: column_3 = value; break;
+			}
+		}
 
 		public Matrix4x4(
 			float m11, float m12, float m13, float m14,

@@ -1,10 +1,10 @@
 ﻿namespace RomeEngineCubeWorld
 {
-    public sealed class ChangeCubeIdModifier : ICubeModifier
+    public sealed class CubeIdModifier : ICubeModifier
     {
         int id;
 
-        public ChangeCubeIdModifier(int id)
+        public CubeIdModifier(int id)
         {
             this.id = id;
         }

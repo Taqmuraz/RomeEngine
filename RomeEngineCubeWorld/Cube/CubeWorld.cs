@@ -92,8 +92,7 @@ namespace RomeEngineCubeWorld
             {
                 foreach (var chunk in chunks)
                 {
-                    var chunkRay = new Ray(ray.origin - chunk.Position, ray.direction);
-                    chunk.RaycastCubesNonAlloc(chunkRay, buffer);
+                    chunk.RaycastCubesNonAlloc(ray, buffer);
                 }
             }, box => box.IntersectsRay(ray)));
         }

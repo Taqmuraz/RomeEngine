@@ -89,6 +89,11 @@ namespace RomeEngine
 			b = temp;
 		}
 
+		public static bool InRange(this float value, float min, float max)
+		{
+			return value < max && value >= min;
+		}
+
 		public static float Min (float a, float b)
 		{
 			if (a > b) return b;

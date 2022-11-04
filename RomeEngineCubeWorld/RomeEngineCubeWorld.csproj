@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cube\ChangeCubeIdModifier.cs" />
+    <Compile Include="Cube\CubeIdModifier.cs" />
     <Compile Include="Cube\Cube.cs" />
     <Compile Include="Cube\CubeChunk.cs" />
     <Compile Include="Cube\CubeChunkMesh.cs" />

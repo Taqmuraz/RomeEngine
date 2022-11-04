@@ -72,10 +72,13 @@ namespace RomeEngine
 		}
 		public void SetColumn(Vector3 column, int index)
 		{
-			row_0[index] = column.x;
-			row_1[index] = column.y;
-			row_2[index] = column.z;
-		}
+            switch (index)
+			{
+				case 0: Column_0 = column; break;
+				case 1: Column_1 = column; break;
+				case 2: Column_2 = column; break;
+			}
+        }
 
 		private Vector3 this[int index]
 		{

@@ -81,13 +81,17 @@ namespace RomeEngineEditor
 
             scene.AddGameEntityInstancer(() =>
             {
-                var cubeWorld = new CubeWorld(new[] { new CubeChunk(new CubeCoords()) });
+                var cubeWorld = new CubeWorld(new[] 
+                {
+                    new CubeChunk(new CubeCoords(0, 0, 0)),
+                    new CubeChunk(new CubeCoords(16, 0, 0)),
+                });
 
-                for (int y = 0; y < 256; y++)
+                for (int y = 0; y < 16; y++)
                 {
                     for (int xz = 0; xz < 256; xz++)
                     {
-                        cubeWorld.ModifyCube(new ChangeCubeIdModifier(1), new CubeCoords(xz / 16, y, xz % 16));
+                        cubeWorld.ModifyCube(new CubeIdModifier(1), new CubeCoords(xz / 16, y, xz % 16));
                     }
                 }
 
@@ -98,7 +102,7 @@ namespace RomeEngineEditor
             {
                 var player = new GameObject("Player");
                 player.AddComponent<RomeEngineCubeWorld.PlayerController>();
-                player.Transform.Position = new Vector3(0f, 16f, 0f);
+                player.Transform.Position = new Vector3(0f, 0f, 0f);
                 return player;
             }));
 

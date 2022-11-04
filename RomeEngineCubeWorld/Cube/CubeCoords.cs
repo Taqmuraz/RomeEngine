@@ -1,4 +1,5 @@
 ﻿using RomeEngine;
+using System;
 
 namespace RomeEngineCubeWorld
 {
@@ -25,5 +26,47 @@ namespace RomeEngineCubeWorld
 
         public static CubeCoords operator +(CubeCoords a, CubeCoords b) => new CubeCoords(a.x + b.x, a.y + b.y, a.z + b.z);
         public static CubeCoords operator -(CubeCoords a, CubeCoords b) => new CubeCoords(a.x - b.x, a.y - b.y, a.z - b.z);
+
+        public int this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    default: return 0;
+                }
+            }
+            set
+            {
+                switch (index)
+                {
+                    case 0: x = value; break;
+                    case 1: y = value; break;
+                    case 2: z = value; break;
+                }
+            }
+        }
+
+        public static CubeCoords CubeDirection(Vector3 normal)
+        {
+            CubeCoords max = new CubeCoords();
+            float maxDot = -1f;
+
+            for (int i = 0; i < 6; i++)
+            {
+                CubeCoords dir = new CubeCoords() { [i % 3] = (((i / 3) & 1) == 0 ? 1 : -1) };
+                float dot = Vector3.Dot(dir, normal);
+                if (dot > maxDot)
+                {
+                    max = dir;
+                    maxDot = dot;
+                }
+            }
+
+            return max;
+        }
     }
 }

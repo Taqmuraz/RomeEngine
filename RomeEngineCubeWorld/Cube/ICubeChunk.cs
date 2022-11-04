@@ -7,6 +7,7 @@ namespace RomeEngineCubeWorld
         bool TryGetCube(CubeCoords coords, out ICube cube);
         Bounds Bounds { get; }
         CubeCoords Position { get; }
+        CubeCoords Size { get; }
         void Rebuild();
     }
 }

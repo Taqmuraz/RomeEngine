@@ -17,13 +17,13 @@ namespace RomeEngineCubeWorld
         CubeChunkMeshRenderer chunkRenderer;
         Octotree<ICube> cubesTree;
 
-        public int Width => standardChunkWidth;
-        public int Height => standardChunkHeight;
+        public CubeCoords Size => size;
 
         public CubeChunk(CubeCoords position)
         {
             chunkRenderer = new GameObject($"Chunk {position}").ActivateForActiveScene().AddComponent<CubeChunkMeshRenderer>();
             chunkRenderer.Material = new SingleTextureMaterial("Grass") { TextureFileName = "./Resources/Textures/BlocksMap.jpg" };
+            chunkRenderer.Transform.Position = position;
 
             this.position = position;
             this.size = new CubeCoords(standardChunkWidth, standardChunkHeight, standardChunkWidth);
@@ -42,7 +42,7 @@ namespace RomeEngineCubeWorld
 
         public void ModifyCube(ICubeModifier modifier, CubeCoords coords)
         {
-            modifier.ModifyCube(cubes[coords.x, coords.y, coords.z]);
+            if (CheckCoords(coords)) modifier.ModifyCube(cubes[coords.x, coords.y, coords.z]);
         }
 
         void GetCorrdsFromIndex(int index, out CubeCoords coords)
@@ -100,8 +100,6 @@ namespace RomeEngineCubeWorld
         }
 
         public Bounds Bounds => Bounds.FromMinSize(position, size);
-
-        Bounds ICubeChunk.Bounds { get; }
 
         IAsyncProcessHandle lastMeshBuildProcess;
         void ICubeChunk.Rebuild()

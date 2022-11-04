@@ -107,34 +107,109 @@ namespace RomeEngine
 			}
 		}
 
-		Vector3 PointOnAxis(Vector3 origin, Vector3 direction, float axisValue, int axis)
-		{
-			float length = Mathf.Abs(axisValue - origin[axis]);
-			return origin + direction * (length / direction[axis]);
-		}
-
 		void ClampRay(Ray ray, int axis, ref float rMin, ref float rMax)
 		{
-			if (ray.direction[axis] != 0f)
-			{
-				float r0 = (Min[axis] - ray.origin[axis]) / ray.direction[axis];
-				float r1 = (Max[axis] - ray.origin[axis]) / ray.direction[axis];
-				rMin = Mathf.Max(rMin, Mathf.Min(r0, r1));
-				rMax = Mathf.Min(rMax, Mathf.Max(r0, r1));
-			}
+			float r0 = (Min[axis] - ray.origin[axis]) / ray.direction[axis];
+			float r1 = (Max[axis] - ray.origin[axis]) / ray.direction[axis];
+			rMin = Mathf.Max(rMin, Mathf.Min(r0, r1));
+			rMax = Mathf.Min(rMax, Mathf.Max(r0, r1));
 		}
 
         public bool IntersectsRay(Ray ray)
         {
+			if (ContainsPoint(ray.origin)) return true;
+
 			float rMin = float.NegativeInfinity;
 			float rMax = float.PositiveInfinity;
+			Vector3 min = Min;
+			Vector3 max = Max;
 
             for (int i = 0; i < 3; i++)
             {
-				ClampRay(ray, i, ref rMin, ref rMax);
+				if (ray.direction[i] != 0f) ClampRay(ray, i, ref rMin, ref rMax);
+				else if (!ray.origin[i].InRange(min[i], max[i])) return false;
             }
 
 			return rMax >= rMin;
         }
+
+		static Vector3[][] boxPoints = new Vector3[][]
+		{
+			new Vector3[] // left
+			{
+				new Vector3(0, 0, 0),
+				new Vector3(0, 0, 1),
+				new Vector3(0, 1, 1),
+				new Vector3(0, 1, 0),
+			},
+			new Vector3[] // right
+			{
+				new Vector3(1, 0, 0),
+				new Vector3(1, 0, 1),
+				new Vector3(1, 1, 1),
+				new Vector3(1, 1, 0),
+			},
+			new Vector3[] // down
+			{
+				new Vector3(0, 0, 0),
+				new Vector3(1, 0, 0),
+				new Vector3(1, 0, 1),
+				new Vector3(0, 0, 1),
+			},
+			new Vector3[] // up
+			{
+				new Vector3(0, 1, 0),
+				new Vector3(1, 1, 0),
+				new Vector3(1, 1, 1),
+				new Vector3(0, 1, 1),
+			},
+			new Vector3[] // back
+			{
+				new Vector3(0, 0, 0),
+				new Vector3(1, 0, 0),
+				new Vector3(1, 1, 0),
+				new Vector3(0, 1, 0),
+			},
+			new Vector3[] // forward
+			{
+				new Vector3(0, 0, 1),
+				new Vector3(1, 0, 1),
+				new Vector3(1, 1, 1),
+				new Vector3(0, 1, 1),
+			},
+		};
+
+		bool CheckNormal(Ray ray, int index, Vector3 normal)
+		{
+			if (Vector3.Dot(ray.direction, normal) >= 0f) return false;
+
+			Matrix3x3 matrixA = new Matrix3x3();
+			Matrix3x3 matrixB = new Matrix3x3();
+			Vector3 min = Min;
+            for (int i = 0; i < 3; i++)
+            {
+				matrixA.SetColumn((boxPoints[index][i] * size + min - ray.origin).normalized, i);
+				matrixB.SetColumn((boxPoints[index][(i + 2) % 4] * size + min - ray.origin).normalized, i);
+			}
+			Vector3 triangleDir = matrixA.GetInversed() * ray.direction;
+			if (triangleDir.x >= 0f && triangleDir.y >= 0f && triangleDir.z >= 0f) return true;
+			triangleDir = matrixB.GetInversed() * ray.direction;
+			if (triangleDir.x >= 0f && triangleDir.y >= 0f && triangleDir.z >= 0f) return true;
+
+			return false;
+		}
+
+		public bool GetNormalForRay(Ray ray, out Vector3 normal)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				normal = new Vector3() { [i] = -1f };
+				if (CheckNormal(ray, i * 2, normal)) return true;
+				normal = new Vector3() { [i] = 1f };
+				if (CheckNormal(ray, i * 2 + 1, normal)) return true;
+			}
+			normal = new Vector3();
+			return false;
+		}
     }
 }

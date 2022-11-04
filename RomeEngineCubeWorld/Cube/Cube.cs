@@ -72,10 +72,9 @@ namespace RomeEngineCubeWorld
         public const int AirCubeId = 0;
 
         int ICube.Id => cubeId;
-        CubeCoords ICube.LocalPosition => coords;
-        Bounds ICube.Bounds => Bounds.FromMinSize(coords, Vector3.one);
         ICubeChunk ICube.Chunk => chunk;
         CubeCoords ICube.Position => coords + chunk.Position;
+        public Bounds Bounds => Bounds.FromMinSize(coords + chunk.Position, Vector3.one);
 
         public Cube(ICubeChunk chunk, CubeCoords cubeCoords)
         {
@@ -131,7 +130,7 @@ namespace RomeEngineCubeWorld
 
         bool ILocatable.IsInsideBox(Bounds box)
         {
-            return box.IntersectsWith(Bounds.FromMinSize(coords, Vector3.one));
+            return box.IntersectsWith(Bounds);
         }
 
         void ICube.ChangeId(int id)
