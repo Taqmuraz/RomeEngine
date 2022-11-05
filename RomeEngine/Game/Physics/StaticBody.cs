@@ -12,6 +12,11 @@
         {
 
         }
+        public void ApplyForce(Vector3 force)
+        {
+        }
+
+        public Vector3 Velocity => new Vector3();
 
         public Vector3 GetVelocityAtPoint(Vector3 point)
         {

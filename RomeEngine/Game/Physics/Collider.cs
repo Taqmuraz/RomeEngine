@@ -46,7 +46,6 @@ namespace RomeEngine
                 var shapesTree = new Octotree<Collider>(bounds, 5, 6);
                 foreach (var collider in colliders)
                 {
-                    if (collider.PhysicalBody != null) collider.PhysicalBody.Update();
                     collider.UpdateShape();
                     shapesTree.AddLocatable(collider);
                 }
@@ -59,7 +58,7 @@ namespace RomeEngine
                         {
                             if (first == second || (first.PhysicalBody == null && second.PhysicalBody == null)) continue;
 
-                            var contactType = (ColliderShapeType)(((int)first.Shape.ShapeType << 16) & (int)second.Shape.ShapeType);
+                            var contactType = (ColliderShapeType)(((int)first.Shape.ShapeType << 16) | (int)second.Shape.ShapeType);
                             if (functions.TryGetValue(contactType, out var func))
                             {
                                 func(first.PhysicalBody ?? DefaultBody, second.PhysicalBody ?? DefaultBody, first.Shape, second.Shape);
@@ -72,22 +71,29 @@ namespace RomeEngine
                         checkList.RemoveAt(0);
                     }
                 }, b => true));
+
+                foreach (var collider in colliders)
+                {
+                    if (collider.PhysicalBody != null) collider.PhysicalBody.Update();
+                }
             }
         }
         static void SphereVsShpere(IPhysicalBody firstBody, IPhysicalBody secondBody, SphereShape firstSphere, SphereShape secondShape)
         {
             Vector3 delta = secondShape.Center - firstSphere.Center;
             float distance = delta.length;
-            if (distance <= (firstSphere.Radius + secondShape.Radius))
+            float doubleR = (firstSphere.Radius + secondShape.Radius);
+            float maxIntersectionDistance = doubleR * 0.1f;
+            if (distance <= doubleR)
             {
                 Vector3 contactPoint = (secondShape.Center + firstSphere.Center) * 0.5f;
-                Vector3 contactLine = delta.normalized;
-                float proj0 = Vector3.Dot(contactLine, firstBody.GetVelocityAtPoint(contactPoint));
-                float proj1 = Vector3.Dot(contactLine, secondBody.GetVelocityAtPoint(contactPoint));
-                float effect0 = (firstBody.Mass - secondBody.Mass * secondBody.RestitutionCoefficient) * proj0 + (1f + secondBody.RestitutionCoefficient) * secondBody.Mass * proj1;
-                float effect1 = (secondBody.Mass - firstBody.Mass * firstBody.RestitutionCoefficient) * proj1 + (1f + firstBody.RestitutionCoefficient) * firstBody.Mass * proj0;
-                firstBody.ApplyForceAtPoint(contactPoint, contactLine * effect0);
-                secondBody.ApplyForceAtPoint(contactPoint, contactLine * effect1);
+                Vector3 contactNormal = delta.normalized;
+                float strength = (doubleR - distance).Clamp(0f, maxIntersectionDistance) / maxIntersectionDistance;
+                float effect0 = Vector3.Dot(firstBody.GetVelocityAtPoint(contactPoint), contactNormal) * strength;
+                float effect1 = Vector3.Dot(secondBody.GetVelocityAtPoint(contactPoint), -contactNormal) * strength;
+
+                firstBody.ApplyForceAtPoint(contactPoint, -contactNormal * effect0);
+                secondBody.ApplyForceAtPoint(contactPoint, contactNormal * effect1);
             }
         }
         static void SphereVsMesh(IPhysicalBody sphereBody, IPhysicalBody meshBody, SphereShape sphereShape, MeshShape meshShape)

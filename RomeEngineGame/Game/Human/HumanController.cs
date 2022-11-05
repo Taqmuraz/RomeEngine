@@ -7,12 +7,14 @@ namespace RomeEngineEditor
     {
         protected HumanStateMachine StateMachine { get; private set; }
         public HumanAnimator HumanAnimator { get; private set; }
+        public Collider Collider { get; private set; }
 
         [BehaviourEvent]
         void Start()
         {
             HumanAnimator = GameObject.AddComponent<HumanAnimator>();
             HumanAnimator.PlaybackSpeed = 1f;
+            Collider = GameObject.GetComponent<Collider>();
             StateMachine = new HumanStateMachine();
             StateMachine.Initialize(this);
         }

@@ -76,65 +76,31 @@ namespace RomeEngineEditor
             scene.AddGameEntityInstancer(camera);
             scene.AddGameEntityInstancer(light);
 
-            scene.AddGameEntityInstancer(() =>
-            {
-                string text = "Writing world...";
-                Canvas canvas = new GameObject("Canvas").AddComponent<Canvas>();
-                Routine.StartRoutine(new ActionRoutine(() => canvas.DrawText(text, new Rect(Screen.Size.x * 0.5f - 150f, 150f, 300f, 75f), Color32.white, TextOptions.Default)));
-
-                new AsyncProcess<int>(() =>
-                {
-                    ICubeChunk[] chunks = new ICubeChunk[256];
-
-                    for (int i = 0; i < 256; i++)
-                    {
-                        chunks[i] = new CubeChunk(new CubeCoords((i % 16) * 16 - 128, 0, (i / 16) * 16 - 128));
-                        text = $"Writing chunk number {i}";
-
-                        for (int y = 0; y < 64; y++)
-                        {
-                            for (int xz = 0; xz < 256; xz++)
-                            {
-                                chunks[i].ModifyCube(new CubeIdModifier(1), new CubeCoords(xz / 16, y, xz % 16));
-                            }
-                        }
-                    }
-                    var cubeWorld = new CubeWorld(chunks);
-
-                    IGameEntityActivityProvider activityProvider = scene;
-                    activityProvider.Deactivate(canvas.GameObject);
-                    activityProvider.Activate(cubeWorld);
-
-                    return 0;
-                }, _ => { }).Start();
-
-                return canvas.GameObject;
-            });
-
             scene.AddGameEntityInstancer(new GameEntityInstancer(() =>
             {
-                var player = new GameObject("Player");
-                player.AddComponent<RomeEngineCubeWorld.PlayerController>();
-                player.Transform.Position = new Vector3(0f, 64f, 0f);
+                var player = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
+                player.Name = "Player";
+                player.AddComponent<PlayerController>();
+                var collider = player.AddComponent<SphereCollider>();
+                collider.PhysicalBody = new SimpleDynamicBody(player.Transform);
+                player.Transform.Position = new Vector3(0f, 0f, -2f);
+
                 return player;
             }));
 
-            for (int i = 0; i < 1; i++)
+            scene.AddGameEntityInstancer(() =>
             {
-                int index = i;
-                scene.AddGameEntityInstancer(new GameEntityInstancer(() =>
-                {
-                    var sphere = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
-                    sphere.Name = "Sphere";
-                    sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
-                    float angle = 36f * index;
-                    sphere.Transform.Position = new Vector3(0f, 64f, 0f);
-                    sphere.Transform.Rotation = new Vector3(0f, -angle + 90f, 0f);
+                var terrainCollider = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
+                terrainCollider.AddComponent<SphereCollider>();
+                terrainCollider.Transform.Position = new Vector3(0f, 0f, 0f);
+                return terrainCollider;
+            });
 
-                    //sphere.AddComponent<SphereCollider>();
-                    return sphere;
-                }));
-            }
+            scene.AddGameEntityInstancer(() =>
+            {
+                var terrain = new GameObject("Terrain").AddComponent<TerrainRenderer>();
+                return terrain.GameObject;
+            });
 
             scene.AddGameEntityInstancer(() =>
             {

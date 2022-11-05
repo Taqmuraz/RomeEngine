@@ -135,7 +135,6 @@ namespace RomeEngine
             }
             instance.Transform = (Transform)entitiesMap[Transform];
             instance.Name = Name;
-            instance.ActivateForActiveScene();
             return instance;
         }
 

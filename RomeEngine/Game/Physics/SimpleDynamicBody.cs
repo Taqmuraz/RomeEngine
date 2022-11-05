@@ -2,7 +2,7 @@
 {
     public sealed class SimpleDynamicBody : IPhysicalBody
     {
-        Vector3 totalForce;
+        Vector3 velocity;
         ITransform transform;
 
         public SimpleDynamicBody(ITransform transform)
@@ -12,12 +12,12 @@
 
         public void ApplyForceAtPoint(Vector3 point, Vector3 force)
         {
-            totalForce += force;
+            velocity += force / Mass;
         }
 
         public Vector3 GetVelocityAtPoint(Vector3 point)
         {
-            return totalForce;
+            return velocity;
         }
 
         public float RestitutionCoefficient { get; set; } = 1f;
@@ -25,8 +25,15 @@
 
         public void Update()
         {
-            transform.Position += totalForce * Time.DeltaTime;
-            totalForce += Physics.Gravity * Time.DeltaTime;
+            transform.Position += velocity * Time.DeltaTime;
+            //velocity += Physics.Gravity * Time.DeltaTime;
         }
+
+        public void ApplyForce(Vector3 force)
+        {
+            velocity += force / Mass;
+        }
+
+        public Vector3 Velocity => velocity;
     }
 }
