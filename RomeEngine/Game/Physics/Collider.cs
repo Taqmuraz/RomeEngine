@@ -88,9 +88,16 @@ namespace RomeEngine
             {
                 Vector3 contactPoint = (secondShape.Center + firstSphere.Center) * 0.5f;
                 Vector3 contactNormal = delta.normalized;
-                float strength = (doubleR - distance).Clamp(0f, maxIntersectionDistance) / maxIntersectionDistance;
+                float strength = 1f;
+
                 float effect0 = Vector3.Dot(firstBody.GetVelocityAtPoint(contactPoint), contactNormal) * strength;
                 float effect1 = Vector3.Dot(secondBody.GetVelocityAtPoint(contactPoint), -contactNormal) * strength;
+
+                effect0 = effect0.Clamp(0f, effect0);
+                effect1 = effect1.Clamp(effect1, 0f);
+
+                effect0 = effect0 + effect1 * (firstBody.Mass / secondBody.Mass);
+                effect1 = effect1 + effect0 * (secondBody.Mass / firstBody.Mass);
 
                 firstBody.ApplyForceAtPoint(contactPoint, -contactNormal * effect0);
                 secondBody.ApplyForceAtPoint(contactPoint, contactNormal * effect1);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RomeEngine
 {
@@ -9,7 +10,7 @@ namespace RomeEngine
 
         public MeshShape(Vector3[] vertices, int[] triangles, Matrix4x4 model)
         {
-            Bounds bounds = Bounds.FromPoints(vertices);
+            bounds = Bounds.FromPoints(vertices);
             trianglesTree = new Octotree<MeshShapeTriangle>(bounds, 5, 5);
             for (int i = 2; i < triangles.Length; i+=3)
             {
@@ -19,6 +20,11 @@ namespace RomeEngine
                 var triangle = new MeshShapeTriangle(vertex0, vertex1, vertex2);
                 trianglesTree.AddLocatable(triangle);
             }
+        }
+
+        public void CheckTriangles(Bounds area, Action<IEnumerable<MeshShapeTriangle>> checkAction)
+        {
+            trianglesTree.VisitTree(new CustomTreeAcceptor<MeshShapeTriangle>(checkAction, box => box.IntersectsWith(area)));
         }
 
         public Bounds Bounds => bounds;

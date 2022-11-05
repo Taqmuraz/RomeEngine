@@ -90,10 +90,11 @@ namespace RomeEngineEditor
 
             scene.AddGameEntityInstancer(() =>
             {
-                var terrainCollider = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
-                terrainCollider.AddComponent<SphereCollider>();
-                terrainCollider.Transform.Position = new Vector3(0f, 0f, 0f);
-                return terrainCollider;
+                var testCollider = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
+                var collider = testCollider.AddComponent<SphereCollider>();
+                collider.PhysicalBody = new SimpleDynamicBody(collider.Transform);
+                testCollider.Transform.Position = new Vector3(0f, 0f, 0f);
+                return testCollider;
             });
 
             scene.AddGameEntityInstancer(() =>
