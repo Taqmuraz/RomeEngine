@@ -65,7 +65,7 @@ namespace RomeEngineCubeWorld
         void IGameEntity.Activate(IGameEntityActivityProvider activityProvider) => activityProvider.Activate(this);
         void IGameEntity.Deactivate(IGameEntityActivityProvider activityProvider) => activityProvider.Activate(this);
 
-        const int BufferSize = 200;
+        const int BufferSize = 8192;
         static IBuffer<ICube> nonAllocRaycastBuffer = new Buffer<ICube>(BufferSize);
 
         public bool RaycastCube(Ray ray, out ICube cube)

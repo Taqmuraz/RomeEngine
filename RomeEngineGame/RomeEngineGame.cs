@@ -76,9 +76,6 @@ namespace RomeEngineEditor
             scene.AddGameEntityInstancer(camera);
             scene.AddGameEntityInstancer(light);
 
-            scene.AddGameEntityInstancer(new GameEntityInstancer(() => new GameObject("Terrain").AddComponent<TerrainRenderer>().GameObject));
-
-
             scene.AddGameEntityInstancer(() =>
             {
                 string text = "Writing world...";
@@ -87,11 +84,11 @@ namespace RomeEngineEditor
 
                 new AsyncProcess<int>(() =>
                 {
-                    ICubeChunk[] chunks = new ICubeChunk[16];
+                    ICubeChunk[] chunks = new ICubeChunk[256];
 
-                    for (int i = 0; i < 16; i++)
+                    for (int i = 0; i < 256; i++)
                     {
-                        chunks[i] = new CubeChunk(new CubeCoords((i % 4) * 16 - 32, 0, (i / 4) * 16 - 32));
+                        chunks[i] = new CubeChunk(new CubeCoords((i % 16) * 16 - 128, 0, (i / 16) * 16 - 128));
                         text = $"Writing chunk number {i}";
 
                         for (int y = 0; y < 64; y++)

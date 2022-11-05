@@ -6,8 +6,7 @@ namespace RomeEngineCubeWorld
     {
         Vector3 euler;
         Camera camera;
-        ICubeWorld cubeWorld;
-        float moveSpeed = 3f;
+        float moveSpeed = 5f;
 
         [BehaviourEvent]
         void Start()
@@ -21,6 +20,10 @@ namespace RomeEngineCubeWorld
             if (cubeWorld == null) return;
 
             if (Input.GetKeyDown(KeyCode.Space)) euler = new Vector3();
+
+            float moveSpeed = this.moveSpeed;
+
+            if (Input.GetKey(KeyCode.ShiftKey)) moveSpeed *= 10f;
 
             Vector2 mouse = Input.MouseDelta * Time.DeltaTime * 15f;
             euler += new Vector3(mouse.y, mouse.x, 0f);

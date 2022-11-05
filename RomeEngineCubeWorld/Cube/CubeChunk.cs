@@ -33,11 +33,15 @@ namespace RomeEngineCubeWorld
         CubeCoords size;
         CubeChunkMeshRenderer chunkRenderer;
         static Octotree<CubeLocator> cubesTree;
-        ICubeWorld world;
         bool hasChanges;
 
         public CubeCoords Size => size;
-        ICubeWorld ICubeChunk.World => world;
+        public ICubeWorld World { get; private set; }
+
+        void ICubeChunk.Initialize(ICubeWorld world)
+        {
+            World = world;
+        }
 
         static CubeChunk()
         {
@@ -72,11 +76,6 @@ namespace RomeEngineCubeWorld
                 GetCorrdsFromIndex(i, out CubeCoords coords);
                 cubes[coords.x, coords.y, coords.z] = new Cube(this, coords);
             }
-        }
-
-        void ICubeChunk.Initialize(ICubeWorld world)
-        {
-            this.world = world;
         }
 
         public void ModifyCube(ICubeModifier modifier, CubeCoords coords)
