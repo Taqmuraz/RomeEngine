@@ -2,3 +2,9 @@
 obj
 packages
 Release
+
+*.pdb
+*.dll
+*.exe
+*.config
+*.xml
