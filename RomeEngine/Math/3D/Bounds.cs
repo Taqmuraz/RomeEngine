@@ -11,8 +11,13 @@ namespace RomeEngine
         public Bounds(Vector3 center, Vector3 size)
         {
             this.center = center;
-            this.size = size;
+            this.size = ProcessSize(size);
         }
+
+		static Vector3 ProcessSize(Vector3 size)
+		{
+			return size.Max(new Vector3(0.01f, 0.01f, 0.01f));
+		}
 
         public Vector3 Center
         {
@@ -37,7 +42,7 @@ namespace RomeEngine
 		}
 		public static Bounds FromPoints(IEnumerable<Vector3> points)
 		{
-			Bounds bounds = new Bounds();
+			Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
 			bool initialized = false;
 			foreach (var point in points)
 			{
@@ -55,7 +60,7 @@ namespace RomeEngine
 		}
 		public static Bounds FromBoxes(IEnumerable<Bounds> boxes)
 		{
-			Bounds bounds = new Bounds();
+			Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
 			bool initialized = false;
 			foreach (var box in boxes)
 			{
@@ -118,7 +123,7 @@ namespace RomeEngine
         public bool IntersectsRay(Ray ray)
         {
 			if (ContainsPoint(ray.origin)) return true;
-			if (Vector3.Dot(ray.direction, (center - ray.origin).normalized) < -0.75f) return false;
+			if (Vector3.Dot(ray.direction, (center - ray.origin).Normalized) < -0.75f) return false;
 
 			float rMin = float.NegativeInfinity;
 			float rMax = float.PositiveInfinity;
@@ -189,8 +194,8 @@ namespace RomeEngine
 			Vector3 min = Min;
             for (int i = 0; i < 3; i++)
             {
-				matrixA.SetColumn((boxPoints[index][i] * size + min - ray.origin).normalized, i);
-				matrixB.SetColumn((boxPoints[index][(i + 2) % 4] * size + min - ray.origin).normalized, i);
+				matrixA.SetColumn((boxPoints[index][i] * size + min - ray.origin).Normalized, i);
+				matrixB.SetColumn((boxPoints[index][(i + 2) % 4] * size + min - ray.origin).Normalized, i);
 			}
 			Vector3 triangleDir = matrixA.GetInversed() * ray.direction;
 			if (triangleDir.x >= 0f && triangleDir.y >= 0f && triangleDir.z >= 0f) return true;

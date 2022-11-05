@@ -106,7 +106,7 @@ namespace RomeEngineCubeWorld
             stream.PushStartIndex();
             int[] rawIndices = new int[] { a, b, c, c, d, a };
             stream.WriteIndices(Enumerable.Range(0, rawIndices.Length));
-            Vector3 normal = Vector3.Cross(cubeVertices[b] - cubeVertices[a], cubeVertices[d] - cubeVertices[a]).normalized;
+            Vector3 normal = Vector3.Cross(cubeVertices[b] - cubeVertices[a], cubeVertices[d] - cubeVertices[a]).Normalized;
             int uvIndex = 0;
             stream.WriteVertices(rawIndices.Select(i => new CubeVertex(cubeVertices[i] + cube.coords, normal, TransformUv(cube, cubeUVs[uvIndex++]))));
         }

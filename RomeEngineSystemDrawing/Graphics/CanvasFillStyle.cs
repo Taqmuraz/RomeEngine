@@ -20,8 +20,8 @@ namespace RomeEngine.SystemDrawing
             var nonAllocLinePoints = AllocPoints(4);
             var lastTransform = Graphics.Transform;
 
-            Vector2 right = (Vector2)Transform.Column_0.normalized;
-            Vector2 up = (Vector2)Transform.Column_1.normalized;
+            Vector2 right = (Vector2)Transform.Column_0.Normalized;
+            Vector2 up = (Vector2)Transform.Column_1.Normalized;
             Vector2 translate = (Vector2)Transform.Column_2;
 
             Graphics.Transform = new System.Drawing.Drawing2D.Matrix(right.x, right.y, up.x, up.y, translate.x, translate.y);

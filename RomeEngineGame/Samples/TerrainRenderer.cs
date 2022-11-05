@@ -26,6 +26,9 @@ namespace RomeEngineEditor
                 );
             Transform.Scale = new Vector3(100f, 100f, 100f);
             terrainMaterial = terrainMaterial ?? new SingleTextureMaterial("Terrain material") { TextureFileName = "./Resources/Textures/Grass.jpg" };
+
+            var collider = GameObject.AddComponent<MeshCollider>();
+            collider.AssignMesh(terrainMesh);
         }
 
         protected override void VisitContext(IGraphicsContext context)

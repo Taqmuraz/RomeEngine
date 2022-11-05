@@ -20,13 +20,12 @@
             return velocity;
         }
 
-        public float RestitutionCoefficient { get; set; } = 1f;
         public float Mass { get; set; } = 1f;
 
         public void Update()
         {
             transform.Position += velocity * Time.DeltaTime;
-            //velocity += Physics.Gravity * Time.DeltaTime;
+            velocity += Physics.Gravity * Time.DeltaTime;
         }
 
         public void ApplyForce(Vector3 force)

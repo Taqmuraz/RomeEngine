@@ -58,7 +58,7 @@ namespace RomeEngine
 
 		public Vector3 GetScale()
 		{
-			return new Vector3(((Vector3)column_0).length, ((Vector3)column_1).length, ((Vector3)column_2).length);
+			return new Vector3(((Vector3)column_0).Length, ((Vector3)column_1).Length, ((Vector3)column_2).Length);
 		}
 
         public Vector3 GetEulerRotation()
@@ -398,9 +398,9 @@ namespace RomeEngine
 		public Matrix4x4 WithoutScale()
 		{
 			Matrix4x4 m = this;
-			m.column_0 = ((Vector3)column_0).normalized;
-			m.column_1 = ((Vector3)column_1).normalized;
-			m.column_2 = ((Vector3)column_2).normalized;
+			m.column_0 = ((Vector3)column_0).Normalized;
+			m.column_1 = ((Vector3)column_1).Normalized;
+			m.column_2 = ((Vector3)column_2).Normalized;
 			return m;
 		}
 

@@ -131,13 +131,13 @@ namespace RomeEngineWindowsFormsApplication
                 Vector3 t0 = ReadVertex(indices[i - 2]);
                 Vector3 t1 = ReadVertex(indices[i - 1]);
                 Vector3 t2 = ReadVertex(indices[i]);
-                Vector3 worldNormal = model.MultiplyDirection(Vector3.Cross(t2 - t1, t0 - t1)).normalized;
+                Vector3 worldNormal = model.MultiplyDirection(Vector3.Cross(t2 - t1, t0 - t1)).Normalized;
 
                 Vector3 vertexA = mvp.MultiplyPoint_With_WDivision(t0);
                 Vector3 vertexB = mvp.MultiplyPoint_With_WDivision(t1);
                 Vector3 vertexC = mvp.MultiplyPoint_With_WDivision(t2);
 
-                Vector3 screenNormal = Vector3.Cross(vertexC - vertexB, vertexA - vertexB).normalized;
+                Vector3 screenNormal = Vector3.Cross(vertexC - vertexB, vertexA - vertexB).Normalized;
                 float cameraDot = Vector3.Dot(Vector3.back, screenNormal);
 
                 brush = new SolidBrush(Color32.white * ((Vector3.Dot(worldNormal, -GlobalLight.LightDirection) + 1f) * 0.5f));

@@ -24,8 +24,8 @@ namespace RomeEngineEditor
             {
                 Vector2 dir = Input.GetWASD();
 
-                Vector3 fwd = Camera.ActiveCamera.Transform.Forward.WithY(0f).normalized;
-                Vector3 right = Camera.ActiveCamera.Transform.Right.WithY(0f).normalized;
+                Vector3 fwd = Camera.ActiveCamera.Transform.Forward.WithY(0f).Normalized;
+                Vector3 right = Camera.ActiveCamera.Transform.Right.WithY(0f).Normalized;
 
                 return right * dir.x + fwd * dir.y;
             }
@@ -40,6 +40,11 @@ namespace RomeEngineEditor
             euler += new Vector3(mouse.y, mouse.x, 0f);
             euler.x = Mathf.Clamp(euler.x, -30f, 80f);
             camera.Transform.Rotation = euler;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Collider.PhysicalBody.ApplyForce(Vector3.up * 5f);
+            }
 
             camera.Transform.Position = Transform.Position - camera.Transform.Forward * 4f + Vector3.up;
             Input.CursorState = CursorState.HiddenAndLocked;

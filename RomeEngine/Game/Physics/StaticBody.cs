@@ -2,9 +2,8 @@
 {
     public sealed class StaticBody : IPhysicalBody
     {
-        public StaticBody(float restitutionCoefficient, float mass)
+        public StaticBody(float mass)
         {
-            RestitutionCoefficient = restitutionCoefficient;
             Mass = mass;
         }
 
@@ -23,7 +22,6 @@
             return new Vector3();
         }
 
-        public float RestitutionCoefficient { get; set; } = 0.5f;
         public float Mass { get; set; } = 1f;
 
         public void Update()

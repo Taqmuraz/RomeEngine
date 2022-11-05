@@ -27,8 +27,8 @@ namespace RomeEngine.SystemDrawing
         }
         public void DrawLine(Vector2 a, Vector2 b, float widthA, float widthB, bool smoothEnding)
         {
-            Vector2 right = (Vector2)Transform.Column_0.normalized;
-            Vector2 up = (Vector2)Transform.Column_1.normalized;
+            Vector2 right = (Vector2)Transform.Column_0.Normalized;
+            Vector2 up = (Vector2)Transform.Column_1.Normalized;
             Vector2 translate = (Vector2)Transform.Column_2;
 
             Graphics.Transform = new System.Drawing.Drawing2D.Matrix(right.x, right.y, up.x, up.y, translate.x, translate.y);
@@ -79,8 +79,8 @@ namespace RomeEngine.SystemDrawing
         {
             center = Transform.MultiplyVector(center);
             size = Transform.MultiplyScale(size);
-            Vector2 right = (Vector2)Transform.Column_0.normalized;
-            Vector2 up = (Vector2)Transform.Column_1.normalized;
+            Vector2 right = (Vector2)Transform.Column_0.Normalized;
+            Vector2 up = (Vector2)Transform.Column_1.Normalized;
             Vector2 translate = (Vector2)Transform.Column_2;
 
             Graphics.Transform = new System.Drawing.Drawing2D.Matrix(right.x, right.y, up.x, up.y, translate.x, translate.y);
@@ -93,8 +93,8 @@ namespace RomeEngine.SystemDrawing
             Vector2 size = rect.Size;
             center = Transform.MultiplyVector(center);
             size = Transform.MultiplyScale(size);
-            Vector2 right = (Vector2)Transform.Column_0.normalized;
-            Vector2 up = (Vector2)Transform.Column_1.normalized;
+            Vector2 right = (Vector2)Transform.Column_0.Normalized;
+            Vector2 up = (Vector2)Transform.Column_1.Normalized;
             Vector2 translate = (Vector2)Transform.Column_2;
 
             Graphics.Transform = new System.Drawing.Drawing2D.Matrix(right.x, right.y, up.x, up.y, translate.x, translate.y);

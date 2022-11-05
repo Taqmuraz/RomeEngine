@@ -76,7 +76,7 @@ namespace RomeEngineCubeWorld
 
             if (nonAllocRaycastBuffer.Position != 0)
             {
-                cube = nonAllocRaycastBuffer.Enumerate().FindMin(c => (c.Position - ray.origin).length);
+                cube = nonAllocRaycastBuffer.Enumerate().FindMin(c => (c.Position - ray.origin).Length);
                 return true;
             }
             else

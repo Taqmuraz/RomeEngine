@@ -29,6 +29,7 @@ namespace RomeEngine
 
 			return mul;
 		}
+
 		public override string ToString ()
 		{
 			return string.Format ("{0} {1} {2}", x.ToString ("F3"), y.ToString ("F3"), z.ToString ("F3"));
@@ -61,11 +62,11 @@ namespace RomeEngine
 
         public static bool operator ==(Vector3 a, Vector3 b)
 		{
-			return (a - b).length <= Mathf.Epsilon;
+			return (a - b).Length <= Mathf.Epsilon;
 		}
 		public static bool operator !=(Vector3 a, Vector3 b)
 		{
-			return (a - b).length >= Mathf.Epsilon;
+			return (a - b).Length >= Mathf.Epsilon;
 		}
 
 
@@ -100,11 +101,11 @@ namespace RomeEngine
 
 		public static void Clamp(ref Vector3 v, float max)
 		{
-			float length = v.length;
-			v = length > max ? v.normalized * max : v;
+			float length = v.Length;
+			v = length > max ? v.Normalized * max : v;
 		}
 
-		public float length
+		public float Length
 		{
 			get
 			{
@@ -112,15 +113,15 @@ namespace RomeEngine
 			}
 		}
 
-		public Vector3 normalized
+		public Vector3 Normalized
 		{
 			get
 			{
-				if (length == 0)
+				if (Length == 0)
 				{
 					return Vector3.zero;
 				}
-				return this / length;
+				return this / Length;
 			}
 		}
 
@@ -136,6 +137,13 @@ namespace RomeEngine
 		public static float Angle (Vector3 a, Vector3 b)
 		{
 			return Dot(a, b).ACos();
+		}
+
+		public Vector3 ProjectOnPlane(Vector3 center, Vector3 normal)
+		{
+			Vector3 delta = this - center;
+			float dist = Dot(normal, delta);
+			return this - normal * dist;
 		}
 
 		public static Vector3 Lerp (Vector3 a, Vector3 b, float t)

@@ -80,6 +80,7 @@
     <Compile Include="Game\Instancing\SerializableInstancer.cs" />
     <Compile Include="Game\Instancing\SourceObjectInstancer.cs" />
     <Compile Include="Game\ISourceObject.cs" />
+    <Compile Include="Game\Physics\MeshCollider.cs" />
     <Compile Include="Game\Rendering\StaticMesh\GenericMeshRenderer.cs" />
     <Compile Include="Game\Transform\ITransform.cs" />
     <Compile Include="Game\Physics\CollisionInfo.cs" />

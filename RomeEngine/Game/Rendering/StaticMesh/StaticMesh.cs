@@ -140,7 +140,7 @@ namespace RomeEngine
         {
             void BlendNormal(Vertex vertex, Vector3 normal)
             {
-                vertex.Normal = ((vertex.Normal + normal) * 0.5f).normalized;
+                vertex.Normal = ((vertex.Normal + normal) * 0.5f).Normalized;
             }
 
             for (int i = 0; i < Vertices.Length; i++) Vertices[i].Normal = Vector3.zero;
@@ -151,7 +151,7 @@ namespace RomeEngine
                 Vector3 t1 = Vertices[Indices[i - 1]].Position;
                 Vector3 t2 = Vertices[Indices[i]].Position;
 
-                Vector3 normal = Vector3.Cross(t2 - t1, t0 - t1).normalized;
+                Vector3 normal = Vector3.Cross(t2 - t1, t0 - t1).Normalized;
 
                 BlendNormal(Vertices[Indices[i - 2]], normal);
                 BlendNormal(Vertices[Indices[i - 1]], normal);

@@ -274,15 +274,15 @@ namespace RomeEngine
 		}
 		public Vector2 MultiplyScale(Vector2 scale)
 		{
-			return new Vector2(Column_0.length * scale.x, Column_1.length * scale.y);
+			return new Vector2(Column_0.Length * scale.x, Column_1.Length * scale.y);
 		}
 		public Vector2 MultiplyDirection(Vector2 direction)
 		{
 			return new Matrix3x3()
 			{
-				Column_0 = this.Column_0.normalized,
-				Column_1 = this.Column_1.normalized,
-				Column_2 = this.Column_2.normalized,
+				Column_0 = this.Column_0.Normalized,
+				Column_1 = this.Column_1.Normalized,
+				Column_2 = this.Column_2.Normalized,
 			}.MultiplyVector(direction);
 		}
 

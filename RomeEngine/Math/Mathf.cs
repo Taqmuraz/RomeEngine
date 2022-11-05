@@ -36,7 +36,7 @@ namespace RomeEngine
 		{
 			return (float)Math.Acos (a) * Rad2Deg;
 		}
-		public static float Sign (this float a)
+		public static int Sign (this float a)
 		{
 			return Math.Sign (a);
 		}

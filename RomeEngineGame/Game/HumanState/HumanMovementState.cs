@@ -11,11 +11,12 @@ namespace RomeEngineEditor
         [BehaviourEvent]
         void Update()
         {
-            var inputMovement = HumanController.GetControlAgent().InputMovement.normalized;
+            var inputMovement = HumanController.GetControlAgent().InputMovement.Normalized;
 
             var body = HumanController.Collider.PhysicalBody;
             Vector3 moveDirection = new Vector3(inputMovement.x, 0f, inputMovement.z);
             Vector3 desiredVelocity = moveDirection * MovementSpeed;
+            desiredVelocity.y = body.Velocity.y;
 
             Vector3 force = (desiredVelocity - body.Velocity) * body.Mass;
             body.ApplyForce(force);

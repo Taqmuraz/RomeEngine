@@ -83,7 +83,9 @@ namespace RomeEngineEditor
                 player.AddComponent<PlayerController>();
                 var collider = player.AddComponent<SphereCollider>();
                 collider.PhysicalBody = new SimpleDynamicBody(player.Transform);
-                player.Transform.Position = new Vector3(0f, 0f, -2f);
+                collider.LocalRadius = 0.25f;
+                collider.LocalCenter = new Vector3(0f, 0.25f, 0f);
+                player.Transform.Position = new Vector3(0f, 10f, -10f);
 
                 return player;
             }));
@@ -93,7 +95,9 @@ namespace RomeEngineEditor
                 var testCollider = Resources.LoadInstance<GameObject>("Models/KnightFemale.bin");
                 var collider = testCollider.AddComponent<SphereCollider>();
                 collider.PhysicalBody = new SimpleDynamicBody(collider.Transform);
-                testCollider.Transform.Position = new Vector3(0f, 0f, 0f);
+                testCollider.Transform.Position = new Vector3(0f, 15f, 0f);
+                collider.LocalRadius = 0.5f;
+                collider.LocalCenter = new Vector3(0f, 1f, 0f);
                 return testCollider;
             });
 
@@ -101,6 +105,20 @@ namespace RomeEngineEditor
             {
                 var terrain = new GameObject("Terrain").AddComponent<TerrainRenderer>();
                 return terrain.GameObject;
+            });
+            scene.AddGameEntityInstancer(() =>
+            {
+                var building = Resources.LoadInstance<GameObject>("Models/Buildings/Building_V_0_1.dae");
+                building.Transform.Rotation = new Vector3(-90f, 0f, 0f);
+
+                foreach (var renderer in building.GetComponentsOfType<StaticBufferMeshRenderer>())
+                {
+                    var collider = building.AddComponent<MeshCollider>();
+                    var mesh = renderer.StaticBufferMesh;
+                    collider.AssignMesh(mesh);
+                }
+
+                return building;
             });
 
             scene.AddGameEntityInstancer(() =>
