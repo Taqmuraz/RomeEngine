@@ -123,9 +123,9 @@ namespace RomeEngine
                             triangleMatrixInv.SetColumn(triangle.VertexB - matrixRoot, 1);
                             triangleMatrixInv.SetColumn(triangle.VertexC - matrixRoot, 2);
                             triangleMatrixInv = triangleMatrixInv.GetInversed();
-                            Vector3 triangleSpace = triangleMatrixInv * (pointOnTriangle - normal);
+                            Vector3 triangleSpace = triangleMatrixInv * (pointOnTriangle - matrixRoot);
 
-                            if (triangleSpace.x + triangleSpace.y + triangleSpace.z <= 3f)
+                            if (triangleSpace.x >= 0f && triangleSpace.y >= 0f && triangleSpace.z >= 0f)
                             {
                                 float dot = -Vector3.Dot(sphereBody.GetVelocityAtPoint(pointOnTriangle), normal);
 
