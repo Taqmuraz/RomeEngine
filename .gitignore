@@ -2,6 +2,7 @@
 obj
 packages
 Release
+log.txt
 
 *.pdb
 *.dll
