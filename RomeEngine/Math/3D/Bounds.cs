@@ -118,6 +118,7 @@ namespace RomeEngine
         public bool IntersectsRay(Ray ray)
         {
 			if (ContainsPoint(ray.origin)) return true;
+			if (Vector3.Dot(ray.direction, (center - ray.origin).normalized) < -0.75f) return false;
 
 			float rMin = float.NegativeInfinity;
 			float rMax = float.PositiveInfinity;

@@ -12,30 +12,29 @@ namespace RomeEngineCubeWorld
         Octotree<ICubeChunk> chunksTree;
         List<ICubeChunk> chunks;
         bool hasChanges;
-
+        
         public CubeWorld(IEnumerable<ICubeChunk> chunks)
         {
             if (Instance != null) throw new System.InvalidOperationException("Cube world can have only one instance");
             Instance = this;
 
             this.chunks = new List<ICubeChunk>(chunks);
-            BuildChunksTree();
+            Bounds bounds = Bounds.FromBoxes(chunks.Select(c => c.Bounds));
+            chunksTree = new Octotree<ICubeChunk>(bounds, 4, 6);
+            foreach (var chunk in chunks)
+            {
+                chunk.Initialize(this);
+                chunksTree.AddLocatable(chunk);
+            }
             hasChanges = true;
         }
 
-        void BuildChunksTree()
-        {
-            Bounds bounds = Bounds.FromBoxes(chunks.Select(c => c.Bounds));
-            chunksTree = new Octotree<ICubeChunk>(bounds, 2, 4);
-            foreach (var chunk in chunks) chunksTree.AddLocatable(chunk);
-        }
         void RebuildWorld()
         {
             foreach (var chunk in chunks)
             {
                 chunk.Rebuild();
             }
-            BuildChunksTree();
         }
 
         [BehaviourEvent]
@@ -124,6 +123,28 @@ namespace RomeEngineCubeWorld
             }, callback);
 
             return process.Start();
+        }
+
+        public bool TryGetCube(CubeCoords coords, out ICube cube)
+        {
+            ICube result = null;
+
+            chunksTree.VisitTree(new CustomTreeAcceptor<ICubeChunk>(chunks =>
+            {
+                if (result != null) return;
+
+                foreach (var chunk in chunks)
+                {
+                    if (chunk.TryGetCube(coords - chunk.Position, out ICube found))
+                    {
+                        result = found;
+                        break;
+                    }
+                }
+            }, box => box.ContainsPoint(coords)));
+
+            cube = result;
+            return result != null;
         }
     }
 }

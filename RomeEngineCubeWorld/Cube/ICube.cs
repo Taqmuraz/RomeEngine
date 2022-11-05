@@ -3,7 +3,7 @@ using RomeEngineMeshGeneration;
 
 namespace RomeEngineCubeWorld
 {
-    public interface ICube : IMeshElementGenerator, ILocatable
+    public interface ICube : IMeshElementGenerator
     {
         CubeCoords Position { get; }
         Bounds Bounds { get; }

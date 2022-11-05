@@ -81,28 +81,44 @@ namespace RomeEngineEditor
 
             scene.AddGameEntityInstancer(() =>
             {
-                var cubeWorld = new CubeWorld(new[] 
-                {
-                    new CubeChunk(new CubeCoords(0, 0, 0)),
-                    new CubeChunk(new CubeCoords(16, 0, 0)),
-                });
+                string text = "Writing world...";
+                Canvas canvas = new GameObject("Canvas").AddComponent<Canvas>();
+                Routine.StartRoutine(new ActionRoutine(() => canvas.DrawText(text, new Rect(Screen.Size.x * 0.5f - 150f, 150f, 300f, 75f), Color32.white, TextOptions.Default)));
 
-                for (int y = 0; y < 16; y++)
+                new AsyncProcess<int>(() =>
                 {
-                    for (int xz = 0; xz < 256; xz++)
+                    ICubeChunk[] chunks = new ICubeChunk[16];
+
+                    for (int i = 0; i < 16; i++)
                     {
-                        cubeWorld.ModifyCube(new CubeIdModifier(1), new CubeCoords(xz / 16, y, xz % 16));
-                    }
-                }
+                        chunks[i] = new CubeChunk(new CubeCoords((i % 4) * 16 - 32, 0, (i / 4) * 16 - 32));
+                        text = $"Writing chunk number {i}";
 
-                return cubeWorld;
+                        for (int y = 0; y < 64; y++)
+                        {
+                            for (int xz = 0; xz < 256; xz++)
+                            {
+                                chunks[i].ModifyCube(new CubeIdModifier(1), new CubeCoords(xz / 16, y, xz % 16));
+                            }
+                        }
+                    }
+                    var cubeWorld = new CubeWorld(chunks);
+
+                    IGameEntityActivityProvider activityProvider = scene;
+                    activityProvider.Deactivate(canvas.GameObject);
+                    activityProvider.Activate(cubeWorld);
+
+                    return 0;
+                }, _ => { }).Start();
+
+                return canvas.GameObject;
             });
 
             scene.AddGameEntityInstancer(new GameEntityInstancer(() =>
             {
                 var player = new GameObject("Player");
                 player.AddComponent<RomeEngineCubeWorld.PlayerController>();
-                player.Transform.Position = new Vector3(0f, 0f, 0f);
+                player.Transform.Position = new Vector3(0f, 64f, 0f);
                 return player;
             }));
 
@@ -115,7 +131,7 @@ namespace RomeEngineEditor
                     sphere.Name = "Sphere";
                     sphere.AddComponent<HumanAnimator>().PlayAnimation("Sword_Idle");
                     float angle = 36f * index;
-                    sphere.Transform.Position = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * 3f;
+                    sphere.Transform.Position = new Vector3(0f, 64f, 0f);
                     sphere.Transform.Rotation = new Vector3(0f, -angle + 90f, 0f);
 
                     //sphere.AddComponent<SphereCollider>();

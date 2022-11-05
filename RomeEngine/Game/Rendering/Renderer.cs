@@ -4,7 +4,7 @@ namespace RomeEngine
 {
     public abstract class Renderer : Component
     {
-        static List<Renderer> renderers = new List<Renderer>();
+        static DynamicLinkedList<Renderer> renderers = new DynamicLinkedList<Renderer>();
 
         [BehaviourEvent]
         void Start()

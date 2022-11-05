@@ -4,10 +4,11 @@ namespace RomeEngineCubeWorld
 {
     public interface ICubeChunk : ICubeSystem, ICubeInfoProvider, ILocatable
     {
-        bool TryGetCube(CubeCoords coords, out ICube cube);
         Bounds Bounds { get; }
         CubeCoords Position { get; }
         CubeCoords Size { get; }
+        ICubeWorld World { get; }
+        void Initialize(ICubeWorld world);
         void Rebuild();
     }
 }

@@ -13,11 +13,13 @@ namespace RomeEngineCubeWorld
         void Start()
         {
             camera = Camera.ActiveCamera;
-            cubeWorld = CubeWorld.Instance;
         }
         [BehaviourEvent]
         void Update()
         {
+            var cubeWorld = CubeWorld.Instance;
+            if (cubeWorld == null) return;
+
             if (Input.GetKeyDown(KeyCode.Space)) euler = new Vector3();
 
             Vector2 mouse = Input.MouseDelta * Time.DeltaTime * 15f;

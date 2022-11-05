@@ -8,16 +8,53 @@ namespace RomeEngineCubeWorld
 {
     public sealed class CubeChunk : ICubeChunk, IMeshGenerationProvider, IMeshBuilder, IMeshDataDescriptor
     {
-        int standardChunkWidth = 16;
-        int standardChunkHeight = 256;
+        sealed class CubeLocator : ILocatable
+        {
+            CubeCoords cubeCoords;
+
+            public CubeLocator(CubeCoords cubeCoords)
+            {
+                this.cubeCoords = cubeCoords;
+            }
+
+            public bool IsInsideBox(Bounds box)
+            {
+                return box.IntersectsWith(Bounds.FromMinSize(cubeCoords, Vector3.one));
+            }
+
+            public ICube GetCube(CubeChunk chunk) => chunk.cubes[cubeCoords.x, cubeCoords.y, cubeCoords.z];
+        }
+
+        const int standardChunkWidth = 16;
+        const int standardChunkHeight = 256;
         ICube[,,] cubes;
         ICubeTextureProvider defaultProvider = new CubeDefaultTextureProvider(4, 4);
         CubeCoords position;
         CubeCoords size;
         CubeChunkMeshRenderer chunkRenderer;
-        Octotree<ICube> cubesTree;
+        static Octotree<CubeLocator> cubesTree;
+        ICubeWorld world;
+        bool hasChanges;
 
         public CubeCoords Size => size;
+        ICubeWorld ICubeChunk.World => world;
+
+        static CubeChunk()
+        {
+            var size = new CubeCoords(standardChunkWidth, standardChunkHeight, standardChunkWidth);
+            cubesTree = new Octotree<CubeLocator>(Bounds.FromMinMax(new Vector3(), size), 4, 4);
+            
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int y = 0; y < size.y; y++)
+                {
+                    for (int z = 0; z < size.z; z++)
+                    {
+                        cubesTree.AddLocatable(new CubeLocator(new CubeCoords(x, y, z)));
+                    }
+                }
+            }
+        }
 
         public CubeChunk(CubeCoords position)
         {
@@ -35,14 +72,20 @@ namespace RomeEngineCubeWorld
                 GetCorrdsFromIndex(i, out CubeCoords coords);
                 cubes[coords.x, coords.y, coords.z] = new Cube(this, coords);
             }
+        }
 
-            cubesTree = new Octotree<ICube>(Bounds, 4, 4);
-            foreach (ICube cube in EnumerateCubes()) cubesTree.AddLocatable(cube);
+        void ICubeChunk.Initialize(ICubeWorld world)
+        {
+            this.world = world;
         }
 
         public void ModifyCube(ICubeModifier modifier, CubeCoords coords)
         {
-            if (CheckCoords(coords)) modifier.ModifyCube(cubes[coords.x, coords.y, coords.z]);
+            if (CheckCoords(coords))
+            {
+                modifier.ModifyCube(cubes[coords.x, coords.y, coords.z]);
+                hasChanges = true;
+            }
         }
 
         void GetCorrdsFromIndex(int index, out CubeCoords coords)
@@ -85,7 +128,7 @@ namespace RomeEngineCubeWorld
                 coords.z >= 0 && coords.z < size.z;
         }
 
-        bool ICubeChunk.TryGetCube(CubeCoords coords, out ICube cube)
+        bool ICubeSystem.TryGetCube(CubeCoords coords, out ICube cube)
         {
             bool check = CheckCoords(coords);
             cube = check ? cubes[coords.x, coords.y, coords.z] : null;
@@ -104,33 +147,39 @@ namespace RomeEngineCubeWorld
         IAsyncProcessHandle lastMeshBuildProcess;
         void ICubeChunk.Rebuild()
         {
-            if (lastMeshBuildProcess != null && lastMeshBuildProcess.IsRunning) lastMeshBuildProcess.Abort();
-
-            var process = new AsyncProcess<int>(() =>
+            if (hasChanges)
             {
-                chunkRenderer.UpdateMesh(MeshGenerator.GenerateMesh(this));
+                hasChanges = false;
 
-                return 0;
-            }, _ => { });
+                if (lastMeshBuildProcess != null && lastMeshBuildProcess.IsRunning) lastMeshBuildProcess.Abort();
 
-            lastMeshBuildProcess = process.Start();
+                var process = new AsyncProcess<int>(() =>
+                {
+                    chunkRenderer.UpdateMesh(MeshGenerator.GenerateMesh(this));
+
+                    return 0;
+                }, _ => { });
+
+                lastMeshBuildProcess = process.Start();
+            }
         }
 
         CubeCoords ICubeChunk.Position => position;
 
         public void RaycastCubesNonAlloc(Ray ray, IBuffer<ICube> buffer)
         {
-            cubesTree.VisitTree(new CustomTreeAcceptor<ICube>(cubes =>
+            cubesTree.VisitTree(new CustomTreeAcceptor<CubeLocator>(locators =>
             {
-                foreach (var cube in cubes)
+                foreach (var locator in locators)
                 {
+                    var cube = locator.GetCube(this);
                     if (cube.Id == Cube.AirCubeId) continue;
                     if (cube.Bounds.IntersectsRay(ray))
                     {
                         if (!buffer.Write(cube)) return;
                     }
                 }
-            }, box => box.IntersectsRay(ray)));
+            }, box => box.IntersectsRay(new Ray(ray.origin - position, ray.direction))));
         }
     }
 }
