@@ -17,7 +17,7 @@ namespace RomeEngineOpenGL
             ShaderPostProcessors = new IOpenGLShaderPostProcessor[]
             {
                 new OpenGLShaderMacro($"#define JOINT_VEC vec{SkinnedMesh.MaxJointsSupported}"),
-                new OpenGLShaderMacro("#version 400 core"),
+                new OpenGLShaderMacro("#version 140"),
             };
         }
 

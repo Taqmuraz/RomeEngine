@@ -1,0 +1,10 @@
+System.TypeLoadException: Could not load type of field 'RomeEngineEditor.LevelSelectMenu:canvas' (0) due to: Could not load file or assembly 'RomeEngineEditor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' or one of its dependencies.
+  at System.Reflection.RuntimeConstructorInfo.InternalInvoke (System.Object obj, System.Object[] parameters, System.Boolean wrapExceptions) [0x00029] in <de882a77e7c14f8ba5d298093dde82b2>:0 
+  at System.Reflection.RuntimeConstructorInfo.DoInvoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00086] in <de882a77e7c14f8ba5d298093dde82b2>:0 
+  at System.Reflection.RuntimeConstructorInfo.Invoke (System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] in <de882a77e7c14f8ba5d298093dde82b2>:0 
+  at System.Reflection.ConstructorInfo.Invoke (System.Object[] parameters) [0x00000] in <de882a77e7c14f8ba5d298093dde82b2>:0 
+  at RomeEngine.GameObject.AddComponent (System.Type type) [0x00052] in /mnt/chromeos/removable/SD Card/Projects/RomeEngine/RomeEngine/Game/GameObject.cs:62 
+  at RomeEngine.GameObject.AddComponent[TComponent] () [0x00001] in /mnt/chromeos/removable/SD Card/Projects/RomeEngine/RomeEngine/Game/GameObject.cs:91 
+  at RomeEngineEditor.RomeEngineGame+<>c.<LevelSelectScene>b__1_1 () [0x00000] in /mnt/chromeos/removable/SD Card/Projects/RomeEngine/RomeEngineGame/RomeEngineGame.cs:42 
+  at RomeEngine.GameEntityInstancer.Instantiate () [0x00001] in /mnt/chromeos/removable/SD Card/Projects/RomeEngine/RomeEngine/Game/GameEntityInstancer.cs:17 
+  at RomeEngine.GameScene.LoadScene () [0x00046] in /mnt/chromeos/removable/SD Card/Projects/RomeEngine/RomeEngine/Game/GameScene.cs:56 
