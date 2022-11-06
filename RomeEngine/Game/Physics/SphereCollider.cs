@@ -1,12 +1,12 @@
 ﻿namespace RomeEngine
 {
-    public sealed class SphereCollider : Collider
+    public sealed class SphereCollider : PhysicalEntity
     {
         [SerializeField] public Vector3 LocalCenter { get; set; }
         [SerializeField] public float LocalRadius { get; set; } = 1f;
 
         SphereShape shape = new SphereShape();
-        protected override IColliderShape Shape => shape;
+        protected override IPhysicalShape Shape => shape;
 
         protected override void UpdateShape()
         {

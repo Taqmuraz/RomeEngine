@@ -247,7 +247,7 @@
     <Compile Include="Graphics\2D\TextOptions.cs" />
     <Compile Include="Game\UI\CanvasCircle.cs" />
     <Compile Include="Graphics\2D\TextAlignment.cs" />
-    <Compile Include="Game\Physics\Collider.cs" />
+    <Compile Include="Game\Physics\PhysicalEntity.cs" />
     <Compile Include="Game\Physics\ColliderShapeType.cs" />
     <Compile Include="Game\Physics\IColliderShape.cs" />
     <Compile Include="Templates\CustomTreeAcceptor.cs" />

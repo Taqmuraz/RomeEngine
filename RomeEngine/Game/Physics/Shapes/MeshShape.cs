@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public sealed class MeshShape : IColliderShape
+    public sealed class MeshShape : IPhysicalShape
     {
         Bounds bounds;
         Octotree<MeshShapeTriangle> trianglesTree;
@@ -31,6 +31,6 @@ namespace RomeEngine
 
         public Bounds Bounds => bounds;
 
-        public ColliderShapeType ShapeType => ColliderShapeType.Mesh;
+        public PhysicalShapeType ShapeType => PhysicalShapeType.Mesh;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace RomeEngine
 {
-    public enum ColliderShapeType : int
+    public enum PhysicalShapeType : int
     {
         Box = 1,
         Sphere = 2,

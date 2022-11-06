@@ -5,7 +5,7 @@ namespace RomeEngine
 {
 	public static class Game
 	{
-		static void SendMessageToActiveScene(string message)
+		public static void SendMessageToActiveScene(string message)
 		{
 			GameScene.ActiveScene?.CallEvent(message);
 		}

@@ -96,8 +96,8 @@ namespace RomeEngineEditor
                 var collider = testCollider.AddComponent<SphereCollider>();
                 collider.PhysicalBody = new SimpleDynamicBody(collider.Transform);
                 testCollider.Transform.Position = new Vector3(0f, 15f, 0f);
-                collider.LocalRadius = 0.5f;
-                collider.LocalCenter = new Vector3(0f, 1f, 0f);
+                collider.LocalRadius = 0.25f;
+                collider.LocalCenter = new Vector3(0f, 0.25f, 0f);
                 return testCollider;
             });
 

@@ -22,7 +22,8 @@ namespace RomeEngine
                 {
                     try
                     {
-                        Collider.UpdatePhysics();
+                        Game.SendMessageToActiveScene("PhysicsUpdate");
+                        PhysicalEntity.UpdatePhysics();
                     }
                     catch (Exception ex)
                     {

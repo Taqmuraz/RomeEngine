@@ -9,7 +9,7 @@ namespace RomeEngineEditor
         protected abstract float MovementSpeed { get; }
 
         [BehaviourEvent]
-        void Update()
+        void PhysicsUpdate()
         {
             var inputMovement = HumanController.GetControlAgent().InputMovement.Normalized;
 
@@ -20,11 +20,17 @@ namespace RomeEngineEditor
 
             Vector3 force = (desiredVelocity - body.Velocity) * body.Mass;
             body.ApplyForce(force);
+        }
+
+        [BehaviourEvent]
+        void Update()
+        {
+            var inputMovement = HumanController.GetControlAgent().InputMovement.Normalized;
 
             if (inputMovement != new Vector2())
             {
                 HumanController.HumanAnimator.PlayAnimationWithTransition(GetMovementAnimationName());
-                HumanController.Transform.Rotation = Matrix4x4.LookRotation(Vector3.Lerp(HumanController.Transform.Forward, moveDirection, Time.DeltaTime * 15f), Vector3.up).GetEulerRotation();
+                HumanController.Transform.Rotation = Matrix4x4.LookRotation(Vector3.Lerp(HumanController.Transform.Forward, inputMovement.WithY(0f).Normalized, Time.DeltaTime * 15f), Vector3.up).GetEulerRotation();
             }
             else
             {

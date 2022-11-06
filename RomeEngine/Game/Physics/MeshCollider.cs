@@ -2,10 +2,10 @@
 
 namespace RomeEngine
 {
-    public sealed class MeshCollider : Collider
+    public sealed class MeshCollider : PhysicalEntity
     {
-        IColliderShape shape;
-        protected override IColliderShape Shape => shape;
+        IPhysicalShape shape;
+        protected override IPhysicalShape Shape => shape;
 
         protected override void UpdateShape()
         {

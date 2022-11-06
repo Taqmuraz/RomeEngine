@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace RomeEngine
 {
-    public abstract class Collider : Component, ILocatable
+    public abstract class PhysicalEntity : Component, ILocatable
     {
         static IPhysicalBody DefaultBody { get; } = new StaticBody(1f);
-        static List<Collider> colliders = new List<Collider>();
+        static List<PhysicalEntity> physicalEntities = new List<PhysicalEntity>();
 
         static DateTime lastUpdate;
         public static float PhysicsDeltaTime { get; private set; }
@@ -15,29 +15,29 @@ namespace RomeEngine
         [BehaviourEvent]
         void Start()
         {
-            lock (colliders)
+            lock (physicalEntities)
             {
-                colliders.Add(this);
+                physicalEntities.Add(this);
             }
         }
         [BehaviourEvent]
         void OnDestroy()
         {
-            lock (colliders)
+            lock (physicalEntities)
             {
 
-                colliders.Remove(this);
+                physicalEntities.Remove(this);
             }
         }
 
-        static Dictionary<ColliderShapeType, Action<IPhysicalBody, IPhysicalBody, IColliderShape, IColliderShape>> functions = new Dictionary<ColliderShapeType, Action<IPhysicalBody, IPhysicalBody, IColliderShape, IColliderShape>>()
+        static Dictionary<PhysicalShapeType, Action<IPhysicalBody, IPhysicalBody, IPhysicalShape, IPhysicalShape>> functions = new Dictionary<PhysicalShapeType, Action<IPhysicalBody, IPhysicalBody, IPhysicalShape, IPhysicalShape>>()
         {
-            [ColliderShapeType.SphereVsSphere] = (p0, p1, s0, s1) => SphereVsShpere(p0, p1, (SphereShape)s0, (SphereShape)s1),
-            [ColliderShapeType.SphereVsMesh] = (p0, p1, s0, s1) => SphereVsMesh(p0, p1, (SphereShape)s0, (MeshShape)s1),
-            [ColliderShapeType.MeshVsSphere] = (p0, p1, s0, s1) => SphereVsMesh(p1, p0, (SphereShape)s1, (MeshShape)s0),
+            [PhysicalShapeType.SphereVsSphere] = (p0, p1, s0, s1) => SphereVsShpere(p0, p1, (SphereShape)s0, (SphereShape)s1),
+            [PhysicalShapeType.SphereVsMesh] = (p0, p1, s0, s1) => SphereVsMesh(p0, p1, (SphereShape)s0, (MeshShape)s1),
+            [PhysicalShapeType.MeshVsSphere] = (p0, p1, s0, s1) => SphereVsMesh(p1, p0, (SphereShape)s1, (MeshShape)s0),
         };
 
-        protected abstract IColliderShape Shape { get; }
+        protected abstract IPhysicalShape Shape { get; }
         public IPhysicalBody PhysicalBody { get; set; }
 
         protected abstract void UpdateShape();
@@ -48,17 +48,17 @@ namespace RomeEngine
             PhysicsDeltaTime = (float)(now - lastUpdate).TotalSeconds;
             lastUpdate = now;
 
-            lock (colliders)
+            lock (physicalEntities)
             {
-                var shapes = colliders.Select(c => c.Shape);
+                var shapes = physicalEntities.Select(c => c.Shape);
                 var bounds = Bounds.FromBoxes(shapes.Select(s => s.Bounds));
-                var shapesTree = new Octotree<Collider>(bounds, 5, 6);
-                foreach (var collider in colliders)
+                var shapesTree = new Octotree<PhysicalEntity>(bounds, 5, 6);
+                foreach (var entity in physicalEntities)
                 {
-                    collider.UpdateShape();
-                    shapesTree.AddLocatable(collider);
+                    entity.UpdateShape();
+                    shapesTree.AddLocatable(entity);
                 }
-                shapesTree.VisitTree(new CustomTreeAcceptor<Collider>(locatables =>
+                shapesTree.VisitTree(new CustomTreeAcceptor<PhysicalEntity>(locatables =>
                 {
                     var checkList = locatables.ToList();
                     foreach (var first in locatables)
@@ -67,7 +67,7 @@ namespace RomeEngine
                         {
                             if (first == second || (first.PhysicalBody == null && second.PhysicalBody == null) || first.Shape == null || second.Shape == null) continue;
 
-                            var contactType = (ColliderShapeType)(((int)first.Shape.ShapeType << 16) | (int)second.Shape.ShapeType);
+                            var contactType = (PhysicalShapeType)(((int)first.Shape.ShapeType << 16) | (int)second.Shape.ShapeType);
                             if (functions.TryGetValue(contactType, out var func))
                             {
                                 func(first.PhysicalBody ?? DefaultBody, second.PhysicalBody ?? DefaultBody, first.Shape, second.Shape);
@@ -81,7 +81,7 @@ namespace RomeEngine
                     }
                 }, b => true));
 
-                foreach (var collider in colliders)
+                foreach (var collider in physicalEntities)
                 {
                     if (collider.PhysicalBody != null) collider.PhysicalBody.FixedUpdate();
                 }
@@ -135,12 +135,10 @@ namespace RomeEngine
                             if (triangleSpace.x >= 0f && triangleSpace.y >= 0f && triangleSpace.z >= 0f)
                             {
                                 float dot = -Vector3.Dot(sphereBody.GetVelocityAtPoint(pointOnTriangle), normal);
-                                float maxP = 0.001f;
-                                float p = ((sphereShape.Radius - delta.Length) / maxP).Clamp(0f, 1f);
                                 
-                                if (Vector3.Dot(delta, normal).Sign() != dot.Sign())
+                                if (dot > 0f)
                                 {
-                                    sphereBody.ApplyForceAtPoint(pointOnTriangle, normal * (dot + p));
+                                    sphereBody.ApplyForceAtPoint(pointOnTriangle, normal * dot);
                                 }
                             }
                         }
