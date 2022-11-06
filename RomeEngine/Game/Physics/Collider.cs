@@ -135,10 +135,12 @@ namespace RomeEngine
                             if (triangleSpace.x >= 0f && triangleSpace.y >= 0f && triangleSpace.z >= 0f)
                             {
                                 float dot = -Vector3.Dot(sphereBody.GetVelocityAtPoint(pointOnTriangle), normal);
-
+                                float maxP = 0.001f;
+                                float p = ((sphereShape.Radius - delta.Length) / maxP).Clamp(0f, 1f);
+                                
                                 if (Vector3.Dot(delta, normal).Sign() != dot.Sign())
                                 {
-                                    sphereBody.ApplyForceAtPoint(pointOnTriangle, normal * dot);
+                                    sphereBody.ApplyForceAtPoint(pointOnTriangle, normal * (dot + p));
                                 }
                             }
                         }
