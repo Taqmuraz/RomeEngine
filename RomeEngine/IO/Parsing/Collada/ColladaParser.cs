@@ -8,9 +8,16 @@ namespace RomeEngine.IO
 {
     public sealed class ColladaParser : IParser
     {
+        IFileSystem fileSystem;
+
+        public ColladaParser(IFileSystem fileSystem)
+        {
+            this.fileSystem = fileSystem;
+        }
+
         public bool CanParse(string fileName)
         {
-            return Engine.Instance.Runtime.FileSystem.GetFileExtension(fileName).ToLower() == ".dae";
+            return fileSystem.GetFileExtension(fileName).ToLower() == ".dae";
         }
 
         public ISerializable ParseObject(string fileName)
@@ -91,7 +98,7 @@ namespace RomeEngine.IO
                 new ColladaMaterialBuilder(),
                 new ColladaAnimationBuilder(),
             };
-            var parsingInfo = new ColladaParsingInfo(fileName);
+            var parsingInfo = new ColladaParsingInfo(fileName, fileSystem);
 
             foreach (var builder in builders)
             {

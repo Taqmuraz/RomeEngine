@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RomeEngine.IO
@@ -7,14 +8,15 @@ namespace RomeEngine.IO
     {
         static Parser()
         {
-            Parsers = new[] { new ColladaParser() };
+            Parsers = new Func<IParser>[] { () => new ColladaParser(Engine.Instance.Runtime.FileSystem) };
         }
 
-        static IEnumerable<IParser> Parsers { get; }
+        static IEnumerable<Func<IParser>> Parsers { get; }
 
         public static bool TryParseFile(string fileName, out ISerializable result)
         {
-            var parser = Parsers.FirstOrDefault(p => p.CanParse(fileName));
+            var parsers = Parsers.Select(p => p()).ToArray();
+            var parser = parsers.FirstOrDefault(p => p.CanParse(fileName));
             if (parser != null)
             {
                 result = parser.ParseObject(fileName);
