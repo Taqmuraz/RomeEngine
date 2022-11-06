@@ -103,8 +103,8 @@ namespace RomeEngine
                 effect0 = effect0.Clamp(0f, effect0);
                 effect1 = effect1.Clamp(effect1, 0f);
 
-                firstBody.ApplyForceAtPoint(contactPoint, -contactNormal * effect0);
-                secondBody.ApplyForceAtPoint(contactPoint, contactNormal * effect1);
+                firstBody.ApplyForceAtPoint(contactPoint, -contactNormal * effect0 * firstBody.Mass);
+                secondBody.ApplyForceAtPoint(contactPoint, contactNormal * effect1 * secondBody.Mass);
             }
         }
         static void SphereVsMesh(IPhysicalBody sphereBody, IPhysicalBody meshBody, SphereShape sphereShape, MeshShape meshShape)
@@ -138,7 +138,7 @@ namespace RomeEngine
                                 
                                 if (dot > 0f)
                                 {
-                                    sphereBody.ApplyForceAtPoint(pointOnTriangle, normal * dot);
+                                    sphereBody.ApplyForceAtPoint(pointOnTriangle, normal * dot * sphereBody.Mass);
                                 }
                             }
                         }

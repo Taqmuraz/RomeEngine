@@ -248,8 +248,8 @@
     <Compile Include="Game\UI\CanvasCircle.cs" />
     <Compile Include="Graphics\2D\TextAlignment.cs" />
     <Compile Include="Game\Physics\PhysicalEntity.cs" />
-    <Compile Include="Game\Physics\ColliderShapeType.cs" />
-    <Compile Include="Game\Physics\IColliderShape.cs" />
+    <Compile Include="Game\Physics\PhysicalShapeType.cs" />
+    <Compile Include="Game\Physics\IPhysicalShape.cs" />
     <Compile Include="Templates\CustomTreeAcceptor.cs" />
     <Compile Include="Templates\ILocatable.cs" />
     <Compile Include="Templates\ITreeAcceptor.cs" />
