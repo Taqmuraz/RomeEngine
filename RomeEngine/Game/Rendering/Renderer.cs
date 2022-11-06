@@ -22,6 +22,9 @@ namespace RomeEngine
         public static void UpdateGraphics(IGraphics graphics, IGraphicsContext context)
         {
             var camera = Camera.ActiveCamera;
+
+            if (camera == null) return;
+
             graphics.Clear(camera.ClearColor);
             graphics.SetProjectionMatrix(camera.Projection);
             graphics.SetViewMatrix(camera.View);

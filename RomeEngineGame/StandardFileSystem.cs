@@ -10,7 +10,7 @@ namespace RomeEngineEditor
         public string RelativePath(string path)
         {
             var absoluteDirectory = Path.GetFullPath("./");
-            return path.Replace(absoluteDirectory.TrimEnd('/', '\\'), ".");
+            return path.Replace(absoluteDirectory.TrimEnd('/', '\\'), ".").Replace('\\', '/');
         }
         public TextReader ReadText(string file)
         {

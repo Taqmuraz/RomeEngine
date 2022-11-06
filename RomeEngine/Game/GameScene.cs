@@ -48,18 +48,29 @@ namespace RomeEngine
 
 			ActiveScene.UnloadScene();
 			ActiveScene = this;
+			List<IGameEntity> activationList = new List<IGameEntity>();
 
-			foreach (var instancer in instancers)
+			new AsyncProcess<int>(() =>
 			{
-				try
+				foreach (var instancer in instancers)
 				{
-					instancer.Instantiate().Activate(this);
+					try
+					{
+						activationList.Add(instancer.Instantiate());
+					}
+					catch (System.Exception ex)
+					{
+						Debug.LogError(ex);
+					}
 				}
-				catch (System.Exception ex)
+				return 0;
+			}, _ => 
+			{
+				foreach (var entity in activationList)
 				{
-					Debug.LogError(ex);
+					entity.Activate(this);
 				}
-			}
+			}).Start();
 		}
 		public void UnloadScene()
 		{
@@ -84,6 +95,6 @@ namespace RomeEngine
 			{
 				gameEntity.CallEvent(name);
 			}
-        }
+		}
     }
 }

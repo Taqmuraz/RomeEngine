@@ -43,7 +43,7 @@ namespace RomeEngineEditor
                 }
                 if (canvas.DrawButton("Import hierarchy", new Rect(0f, elementHeight, elementWidth, elementHeight), TextOptions.Default))
                 {
-                    Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select GameObject file", file => Resources.LoadInstance<GameObject>(file));
+                    Engine.Instance.Runtime.ShowFileOpenDialog("./", "Select GameObject file", file => Resources.LoadInstance<GameObject>(file).ActivateForActiveScene());
                 }
 
                 int transformsCount = GameScene.ActiveScene.GameEntities.Count;
