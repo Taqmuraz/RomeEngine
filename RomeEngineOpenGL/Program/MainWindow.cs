@@ -148,5 +148,13 @@ namespace RomeEngineOpenGL
         {
             Close();
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            IsRunning = false;
+        }
+
+        public bool IsRunning { get; private set; } = true;
     }
 }

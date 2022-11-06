@@ -9,6 +9,9 @@ namespace RomeEngine
         static IPhysicalBody DefaultBody { get; } = new StaticBody(1f);
         static List<Collider> colliders = new List<Collider>();
 
+        static DateTime lastUpdate;
+        public static float PhysicsDeltaTime { get; private set; }
+
         [BehaviourEvent]
         void Start()
         {
@@ -41,6 +44,10 @@ namespace RomeEngine
 
         public static void UpdatePhysics()
         {
+            var now = DateTime.Now;
+            PhysicsDeltaTime = (float)(now - lastUpdate).TotalSeconds;
+            lastUpdate = now;
+
             lock (colliders)
             {
                 var shapes = colliders.Select(c => c.Shape);
@@ -76,7 +83,7 @@ namespace RomeEngine
 
                 foreach (var collider in colliders)
                 {
-                    if (collider.PhysicalBody != null) collider.PhysicalBody.Update();
+                    if (collider.PhysicalBody != null) collider.PhysicalBody.FixedUpdate();
                 }
             }
         }

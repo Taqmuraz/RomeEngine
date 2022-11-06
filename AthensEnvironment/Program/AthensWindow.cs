@@ -1,4 +1,5 @@
 ﻿using RomeEngine;
+using System;
 using System.Windows.Forms;
 
 namespace AthensEnvironment
@@ -21,6 +22,12 @@ namespace AthensEnvironment
         protected override void OnKeyUp(KeyEventArgs e)
         {
             panel.OnKeyUp((KeyCode)(int)e.KeyCode);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            panel.IsRunning = false;
         }
     }
 }

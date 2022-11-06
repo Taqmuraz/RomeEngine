@@ -22,10 +22,10 @@
 
         public float Mass { get; set; } = 1f;
 
-        public void Update()
+        public void FixedUpdate()
         {
-            transform.Position += velocity * Time.DeltaTime;
-            velocity += Physics.Gravity * Time.DeltaTime;
+            transform.Position += velocity * Collider.PhysicsDeltaTime;
+            velocity += Physics.Gravity * Collider.PhysicsDeltaTime;
         }
 
         public void ApplyForce(Vector3 force)

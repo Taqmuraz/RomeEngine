@@ -68,14 +68,7 @@ namespace RomeEngine
 			{
 				foreach (var entity in activationList)
 				{
-					new AsyncProcess<int>(() =>
-					{
-						lock (gameEntities)
-						{
-							entity.Activate(this);
-						}
-						return 0;
-					}, __ => { }).Start();
+					entity.Activate(this);
 				}
 			}).Start();
 		}

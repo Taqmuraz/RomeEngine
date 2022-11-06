@@ -16,7 +16,6 @@ namespace RomeEngine
 
 			SendMessageToActiveScene("EarlyUpdate");
 
-			Collider.UpdatePhysics();
 			Routine.UpdateDelayed();
 
 			SendMessageToActiveScene("Update");

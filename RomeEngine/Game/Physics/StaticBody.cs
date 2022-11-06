@@ -24,7 +24,12 @@
 
         public float Mass { get; set; } = 1f;
 
-        public void Update()
+        public void FixedUpdate()
+        {
+
+        }
+
+        public void UpdateVelocity()
         {
 
         }

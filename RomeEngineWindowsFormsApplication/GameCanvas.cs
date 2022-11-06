@@ -111,5 +111,7 @@ namespace RomeEngineWindowsFormsApplication
             if (visible) Cursor.Show();
             else Cursor.Hide();
         }
+
+        public bool IsRunning { get; set; } = true;
     }
 }

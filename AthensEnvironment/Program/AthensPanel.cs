@@ -91,5 +91,7 @@ namespace AthensEnvironment
         {
             inputHandler.OnKeyUp(key);
         }
+
+        public bool IsRunning { get; set; } = true;
     }
 }

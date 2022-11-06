@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Async\AsyncProcess.cs" />
+    <Compile Include="Async\AsyncProcessPriority.cs" />
     <Compile Include="Async\IAsyncProcessHandle.cs" />
     <Compile Include="Collections\Buffer.cs" />
     <Compile Include="Collections\CollectionsExtensions.cs" />

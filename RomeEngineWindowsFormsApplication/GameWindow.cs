@@ -34,5 +34,11 @@ namespace RomeEngineWindowsFormsApplication
         {
             canvas.InputHandler.OnKeyUp((KeyCode)(int)e.KeyCode);
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            canvas.IsRunning = false;
+        }
     }
 }

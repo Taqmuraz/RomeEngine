@@ -7,6 +7,6 @@
         Vector3 GetVelocityAtPoint(Vector3 point);
         Vector3 Velocity { get; }
         float Mass { get; }
-        void Update();
+        void FixedUpdate();
     }
 }

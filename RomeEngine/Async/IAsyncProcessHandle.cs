@@ -4,5 +4,6 @@
     {
         bool IsRunning { get; }
         void Abort();
+        void Sleep(float milliseconds);
     }
 }

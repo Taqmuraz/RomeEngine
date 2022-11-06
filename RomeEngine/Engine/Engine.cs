@@ -6,6 +6,7 @@ namespace RomeEngine
     {
         public static Engine Instance { get; private set; }
         public IEngineRuntine Runtime { get; private set; }
+        IAsyncProcessHandle physicsProcess;
 
         public void Initialize(IEngineRuntine runtine)
         {
@@ -14,6 +15,22 @@ namespace RomeEngine
 
             Time.StartTime();
             runtine.SetInputHandler(new Input());
+
+            physicsProcess = new AsyncProcess<int>(() =>
+            {
+                while (Runtime.IsRunning)
+                {
+                    try
+                    {
+                        Collider.UpdatePhysics();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError(ex);
+                    }
+                }
+                return 0;
+            }, AsyncProcessPriority.High).Start();
 
             GameScenes.LoadScene(0);
         }
@@ -42,6 +59,7 @@ namespace RomeEngine
 
         public static void Quit()
         {
+            Instance.physicsProcess.Abort();
             Instance.Runtime.Close();
         }
     }
