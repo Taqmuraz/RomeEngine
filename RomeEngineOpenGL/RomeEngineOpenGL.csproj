@@ -63,6 +63,7 @@
     <Compile Include="OpenGL\IOpenGLShaderModel.cs" />
     <Compile Include="OpenGL\OpenGLShaderMacro.cs" />
     <Compile Include="OpenGL\OpenGLShaderModel.cs" />
+    <Compile Include="OpenGL\OpenGLShaderReplaceMacro.cs" />
     <Compile Include="OpenGL\OpenGLTextRenderer.cs" />
     <Compile Include="OpenGL\OutlineStyle2D.cs" />
     <Compile Include="OpenGL\SkinnedOpenGLShaderModel.cs" />
