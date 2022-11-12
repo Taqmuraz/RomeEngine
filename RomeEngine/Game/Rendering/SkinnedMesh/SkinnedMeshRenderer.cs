@@ -36,7 +36,7 @@ namespace RomeEngine
                 bindingsMap = skeleton.Bones.Select(t => (index: SkinnedMesh.JointNames.IndexOf(t.Name), joint: t.Transform))
                     .Where(t => t.index != -1)
                     .ToDictionary<(int index, ITransform joint), int, IJointInfo>
-                    (t => t.index, t => new SkinnedMeshJointInfo(t.joint, SkinnedMesh.BindMatrices[t.index].GetInversed()));
+                    (t => t.index, t => new SkinnedMeshJointInfo(t.joint, SkinnedMesh.BindMatrices[t.index].GetInversedTransform()));
             }
         }
     }

@@ -218,6 +218,10 @@ namespace RomeEngine
 		}
 		public Matrix4x4 GetInversed()
 		{
+			return GetTransponed().GetAdj() * (1f / GetDeterminant());
+		}
+		public Matrix4x4 GetInversedTransform()
+		{
 			Vector3 size = new Vector3(column_0.length, column_1.length, column_2.length);
 			var inv = new Matrix4x4(column_0 / size.x, column_1 / size.y, column_2 / size.z, Identity.column_3).GetTransponed();
 			inv.column_0 *= size.x;

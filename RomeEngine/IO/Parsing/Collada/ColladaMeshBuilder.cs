@@ -113,7 +113,7 @@ namespace RomeEngine.IO
 
                     for (int i = 0; i < matrices.Length; i++)
                     {
-                        matrices[i] = Matrix4x4.FromFloatsArray(bindingPoses, i * 16).GetTransponed().GetInversed();
+                        matrices[i] = Matrix4x4.FromFloatsArray(bindingPoses, i * 16).GetTransponed().GetInversedTransform();
                     }
 
                     renderer = skinnedMeshRenderer;

@@ -13,7 +13,7 @@
         public Matrix4x4 View => Transform.LocalToWorld;
         public Matrix4x4 Viewport => Matrix4x4.CreateViewport(Screen.Size.x, Screen.Size.y);
 
-        public Matrix4x4 WorldToScreenMatrix => Viewport * Projection * View.GetInversed();
+        public Matrix4x4 WorldToScreenMatrix => Viewport * Projection * View.GetInversedTransform();
 
         [BehaviourEvent]
         void Start()

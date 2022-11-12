@@ -49,8 +49,8 @@ namespace RomeEngineWindowsFormsApplication
 
         Matrix4x4 Viewport => Matrix4x4.CreateViewport(Screen.Size.x, Screen.Size.y);
 
-        Matrix4x4 MVP => Viewport * projection * view.GetInversed() * model;
-        Matrix4x4 VP => Viewport * projection * view.GetInversed();
+        Matrix4x4 MVP => Viewport * projection * view.GetInversedTransform() * model;
+        Matrix4x4 VP => Viewport * projection * view.GetInversedTransform();
 
         public void End()
         {

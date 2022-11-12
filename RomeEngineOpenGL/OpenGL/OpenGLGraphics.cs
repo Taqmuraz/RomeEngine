@@ -48,7 +48,7 @@ namespace RomeEngineOpenGL
 
         public void SetViewMatrix(Matrix4x4 view)
         {
-            this.view = view.GetInversed();
+            this.view = view.GetInversedTransform();
         }
 
         public void SetModelMatrix(Matrix4x4 model)
