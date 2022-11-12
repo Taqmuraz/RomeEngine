@@ -18,6 +18,10 @@ namespace RomeEngineEditor
             IGameEntity inspectedEntity = null;
             bool accurateMode = false;
             int scroll = 0;
+            ITransformHandle[] transformHandles = new ITransformHandle[]
+            {
+                new TransformPositionHandle(),
+            };
 
             while (true)
             {
@@ -69,7 +73,7 @@ namespace RomeEngineEditor
 
                 if (Input.GetKeyDown(KeyCode.ShiftKey)) accurateMode = !accurateMode;
 
-                Matrix4x4 worldToScreen = Matrix4x4.CreateViewport(Screen.Size.x, Screen.Size.y) * Camera.ActiveCamera.WorldToScreenMatrix;
+                Matrix4x4 worldToScreen = Camera.ActiveCamera.WorldToScreenMatrix;
 
                 if (inspectedEntity is IGameObject gameObject)
                 {
@@ -78,6 +82,9 @@ namespace RomeEngineEditor
 
                 void DrawTransformLine(ITransform transform)
                 {
+                    transformHandles[0].DrawHandle(transform, sceneCanvas);
+                    return;
+
                     Vector3 pos = transform.Position;
                     Vector2 rightPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos + transform.Right);
                     Vector2 upPos = (Vector2)worldToScreen.MultiplyPoint_With_WDivision(pos + transform.Up);
